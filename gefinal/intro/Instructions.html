@@ -1,0 +1,567 @@
+
+{{ block content }}
+
+<style>
+    caption {
+        caption-side: top;
+    }
+    .tab {
+        margin-top: 1cm;
+        margin-inside: 1.5cm;
+    }
+</style>
+
+
+<h1 id="header">Instructions</h1>
+
+
+<div class="tab" id="instructions_1" style="display: block">
+    <div class="card">
+        <h5 class="card-header">Payoffs</h5>
+        <div class="card-body">
+             <p>At the beginning of the experiment you will receive an initial endowment of 50.
+            During the experiment, you can earn a higher amount of money by accumulating
+            points. The amount of earned points will depend on your decisions and on the other
+            participants’ decisions.
+            </p>
+            <p>
+            All points that you earn during the experiment will be exchanged into Euros at the
+            end of the experiment. The exchange rate will be
+                 <p style="margin-left: 50px;">
+                    <b>1 point = {{ exchange_rate }} Euros</b>.
+                </p>
+            <p>
+                Your initial income of 5 Euros corresponds to 50 points. At the end of the experiment
+                you will be paid by cash and in private.
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+    </p>
+</div>
+
+
+<div class="tab" id="instructions_2" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Overview</h5>
+        <div class="card-body">
+            <p>
+                The experiment consists of {{ C.ROUNDS_OF_MARKET_PLAY }} rounds in total.
+                There will be two parts. This set of instructions describes the rules for part 1.<br>
+                After {{ C.SHOCK_AFTER_PERIODS }} round(s), there will be another short set of instructions to explain the rules for part 2.
+            </p>
+            <p>
+                There will be {{ players_in_your_group }} participants in your group.
+                Of these, {{ employers_in_your_group }} participants will be firms and {{ workers_in_your_group }} participants will be workers.
+                <p style="margin-left: 50px;">
+                    <b>You shall take the role of {{ player.participant.string_role }}</b>. You will keep this role for the entire course of the experiment.
+                </p>
+            </p>
+            <p>
+                 In order to assure anonymity you have been randomly assigned an ID.
+                 You and other participants will keep this ID throughout the entire game. Your ID number is {{ player.participant.playerID }}.
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+    </p>
+</div>
+
+
+<div class="tab" id="instructions_3" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Market stage</h5>
+        <div class="card-body">
+           <p>
+               Each round has two stages, the market stage and the production stage. Here we will describe the market stage.
+            </p>
+            <p>
+                During the market phase, firms can submit public trading offers to workers.
+                An offer consists of a wage and a desired effort level. The wage offer must be a number between 0 and 100,
+             </p>
+                <p style="margin-left: 50px;">
+                    <b>0 ≤ wage ≤ 100</b>.
+                </p>
+            <p>
+            The desired effort level must be a number between 1 and 10,
+             </p>
+                <p style="margin-left: 50px;">
+                    <b>0 ≤ desired effort ≤ 100</b>.
+                </p>
+                <!-- <p>
+                Employers can specify both using a mask as illustrated below <br>
+                <img src="{{ static 'employer_offer_mask.png' }}"/>
+                <br>
+            </p>
+            <p>
+                If firms send an offer, it will be visible to everybody in the market.
+
+                Workers accept the offer using the acceptance mask as diplayed below <br><br>
+                <img src="{{ static 'worker_acceptance_mask.png' }}"/>
+            </p>-->
+
+            <p>
+                If firms send an offer, it will be visible to everybody in the market.
+                Workers can accept one wage offer per round. Firms can employ up to three workers per round.
+
+            </p>
+            <p>
+                The market stage ends when all workers have accepted an offer or when the time limit of {{ market_time}} seconds is reached.
+                Firms have no obligation to submit a trading offer, and workers have no obligation to accept a trading offer during the market stage.
+            </p>
+
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+    </p>
+</div>
+
+<div class="tab" id="instructions_4" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Production Stage</h5>
+        <div class="card-body">
+            <p>
+                Following the market phase, all workers who concluded a work contract, agreement then determine which effort level they will supply to their corresponding firms.
+                The desired effort by the firm is not binding for the worker. <b> The worker can choose the exact effort desired by the firm, but also a higher or lower effort.</b>
+            </p>
+            <p>
+                In order to choose the effort level, the worker must enter the value for in the field “Please choose an effort level:” and press the “next”
+                button to confirm the choice. As long as the worker has not pressed “next” he or she can alter the choice. <br>
+                The effort level must be an integer between 1 and 10,
+            </p>
+                <p style="margin-left: 50px;">
+                    <b>0 ≤ actual effort ≤ 10</b>.
+                </p>
+            <p>
+                Workers pay an effort cost for each unit of effort they exert.
+                The table below shows the effort cost for each effort level, for example if a worker chooses effort level 3, he will pay 2 points.
+            </p>
+
+             <table class="table table-bordered">
+            <caption>Schedule of effort costs</caption>
+                <tr>
+                    <td>Effort level e</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Cost of effort c(e)</td>
+                    <td> 0</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>4</td>
+                    <td>6</td>
+                    <td>8</td>
+                    <td>10</td>
+                    <td>12</td>
+                    <td>15</td>
+                    <td>18</td>
+                </tr>
+        </table>
+        </div>
+    </div>
+    <br>
+  <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+    </p>
+</div>
+
+
+
+<div class="tab" id="instructions_5" style="display: none">
+    <div class="card">
+        <h5 class="card-header">How is the workers' income calculated?</h5>
+        <div class="card-body">
+            <p>
+                The income of a worker is determined by the wage offer of the firm and the effort level chosen by the worker.
+                In a round where was employed, the income is calculated as the difference between the wage and the cost of effort:
+             </p>
+                     <p style="margin-left: 50px;">
+                    <b> Income = wage - cost of effort </b>
+                     </p>
+             <p>
+                Example: if a worker received a wage of 50 and provided 8 units of effort, the income would be 50 - 18 = 32.
+            </p>
+            <p>
+               In a round where the has not accepted any wage offer, he or she will receive unemployment insurance of {{ worker_outside_option }} points.
+            </p>
+        </div>
+    </div>
+    <br>
+  <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+    </p>
+</div>
+
+
+
+<div class="tab" id="instructions_6" style="display: none">
+    <div class="card">
+        <h5 class="card-header">How is the employers' income calculated?</h5>
+        <div class="card-body">
+            <p>
+                The income of a firm is determined by the number of contracts, the total wage paid and the total effort provided by the workers.
+            </p>
+            <ol>
+                <li> If a firm has <b> not employed any worker </b> during a trading phase, they will earn an income of <b> {{ employer_outside_option }} points</b> in this period. </li>
+                <br>
+                <li> If a firm has employed <b> one</b> worker, the income depends on the wage and the effort the worker provided. The income equals 10 times the actual
+                    effort minus the wage. The income thus amounts to:
+                    <ul>
+                        <li> <b> Income  = {{ mpl1 }} * effort - wage </b> </li>
+                    </ul>
+                    Example: If a firm concludes one contract and the wage is {{ ex_1_wage }} and the effort level is {{ ex_1_effort }}, the income is Income = {{ mpl1 }}*{{ ex_1_effort }} - {{ ex_1_wage }} = {{ ex_1_employer_profit }}.
+                </li>
+               <br>
+                <li> If a firm has employed <b> two </b> workers  , the income depends on the wages offered to both workers and the effort levels they provided.
+                    The value of the products in total can be higher if the firm employs two worker, but the productivity of each individual worker is lower in this case. <br>
+                    With two workers, each unit of actual effort is multiplied by a factor of {{ mpl2 }} instead of {{ mpl1 }}. The income is thus calculated as follows:
+                    <ul>
+                        <li> <b> Income  = {{ mpl2 }} * effort 1 + {{ mpl2 }} * effort 2 - wage 1 + wage 2 </b> </li>
+                    </ul></li>
+                Example: If a firm concludes two contracts and the wages are {{ ex_2_wage_1 }} and {{ ex_2_wage_2 }}
+                and the effort levels are {{ ex_2_effort_1 }} and {{ ex_2_effort_2 }}, the income in that round will be
+                Income =  {{ mpl2 }}*{{ ex_2_effort_1 }} + {{ mpl2 }}*{{ ex_2_effort_2 }} - {{ ex_2_wage_1 }} - {{ ex_2_wage_2 }}= {{ ex_2_employer_profit }}.
+                </li><br><br>
+
+                <li> If the firm has employed <b> three </b> workers, the income depends on the wages offered to all three workers and the effort levels they provided.
+                    With three workers, each unit of actual effort is multiplied by a factor of {{ mpl3 }}. The income is thus calculated as follows:
+                    <ul>
+                        <li> <b> Income  = {{ mpl3 }} * effort 1 + {{ mpl3 }} * effort 2 + {{ mpl3 }} * effort 3 - wage 1 + wage 2 - wage 3 </b> </li>
+                    </ul></li>
+                Example: If a firm concludes three contracts and the wages are {{ ex_3_wage_1 }}, {{ ex_3_wage_2 }} and {{ ex_3_wage_3 }}
+                and the effort levels are {{ ex_3_effort_1 }}, {{ ex_3_effort_2 }} and {{ ex_3_effort_3 }}, the income in that round will be
+                Income  \( =  {{ mpl3 }}*({{ ex_3_effort_1 }}+{{ ex_3_effort_2 }}+{{ ex_3_effort_3 }}) - {{ ex_3_wage_1 }} - {{ ex_3_wage_2 }} - {{ ex_3_wage_3 }}= {{ ex_3_employer_profit }} \).
+                </li><br>
+            </ol>
+            To summarize, if \(e\) is effort and \(w\) is wage, then the profit of a firm is calculated as follows:
+            $$
+            Profit =
+            \begin{cases}
+            {{ mpl1 }} *  e_1 - w_1     \qquad  \qquad \quad   \qquad \qquad        \qquad  \text{if one worker}  \\
+            {{ mpl2 }} * (e_1 + e_2) - w_1- w_2   \quad   \qquad  \qquad  \quad \, \, \text{if two workers}  \\
+            {{ mpl3 }} *(e_1 + e_2 + e_3) - w_1 - w_2 - w_3   \quad  \quad    \text{if three workers} \\
+            0                     \qquad  \qquad \qquad  \qquad \qquad \qquad \qquad \quad \, \, \,  \text{if no worker}
+            \end{cases}$$
+            <!-- <img src="{{ static 'firm_income.png' }}"/> -->
+        </div>
+    </div>
+    <br>
+  <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this); ChangeHeader();">Next</button>
+    </p>
+</div>
+
+
+
+<div class="tab" id="are_you_ready_q" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Are you ready?</h5>
+        <div class="card-body">
+            <p>
+                The experiment will not start until all participants are completely familiar with all procedures.
+                To make sure  this is the case we ask you to complete four questions on the following pages. <br><br>
+                Click on the next button below if you feel ready to complete the questions.
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this); ChangeHeaderBack();">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+    </p>
+</div>
+
+
+<div class="tab" id="comprehension_q1" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Question 1/4</h5>
+        <div class="card-body">
+            <p>
+                Suppose an employer employed and a worker did not conclude any contract in a period. <br><br>
+                What would be their income in this period?
+            </p>
+            <table>
+                <tr>
+                    <td>
+                        <input type="number" id="q1_employer_profit" class="form-control" placeholder="Employer profit">
+                    </td>
+                    <td>
+                        <input type="number" id="q1_worker_profit" class="form-control" placeholder="Worker profit">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-secondary" id="q1" onclick="submitAnswer(this.id)"> Submit Answer</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br><br>
+    <p>
+        <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
+    </p>
+</div>
+
+
+
+<div class="tab" id="comprehension_q2" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Question 2/4</h5>
+        <div class="card-body">
+            <p>
+                Suppose an employer employed one worker for a wage of <b>{{ C.Q2_WAGE }}</b>
+                and requested <b>{{ C.Q2_EFFORT_REQUESTED }}</b> effort units.<br>
+                The worker then decided to provide <b>{{ C.Q2_EFFORT_RECEIVED }}</b> effort units. <br><br>
+                 What profits would the worker and the employer make in this case?
+            </p>
+            <table>
+                <tr>
+                    <td>
+                        <input type="number" id="q2_employer_profit" class="form-control" placeholder="Employer profit">
+                    </td>
+                    <td>
+                        <input type="number" id="q2_worker_profit" class="form-control" placeholder="Worker profit">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-secondary" id="q2" onclick="submitAnswer(this.id)"> Submit Answer</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <br><br>
+    <p>
+        <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
+    </p>
+</div>
+
+<div class="tab" id="comprehension_q3" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Question 3/4</h5>
+        <div class="card-body">
+            <p>
+                Suppose an employer employed one worker for a wage of <b>{{ C.Q3_WAGE }}</b>
+                and requested <b>{{ C.Q3_EFFORT_REQUESTED }}</b> effort units. <br>
+                The worker then decided to provide <b>{{ C.Q3_EFFORT_RECEIVED }}</b> effort units. <br><br>
+                 What profits would the worker and the employer make in this case?
+            </p>
+            <table>
+                <tr>
+                    <td>
+                        <input type="number" id="q3_employer_profit" class="form-control" placeholder="Employer profit">
+                    </td>
+                    <td>
+                        <input type="number" id="q3_worker_profit" class="form-control" placeholder="Worker profit">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-secondary" id="q3" onclick="submitAnswer(this.id)"> Submit Answer</button>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+    <br><br>
+        <p>
+                <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
+        </p>
+</div>
+
+
+
+
+
+
+<div class="tab" id="comprehension_q4" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Question 4/4</h5>
+        <div class="card-body">
+            <p>
+                Suppose an employer employed two workers.<br>
+                The first worker receives a wage of <b>{{ C.Q4_WAGE_1 }}</b> and provides <b>{{ C.Q4_EFFORT_RECEIVED_1 }}</b> effort units.<br>
+                The second worker received a wage of <b>{{ C.Q4_WAGE_2 }}</b> and provides <b>{{ C.Q4_EFFORT_RECEIVED_2 }}</b> effort units. <br><br>
+                What profits would the employer and workers make in this case?
+            </p>
+            <table>
+                <tr>
+                    <td>
+                        <input type="number" id="q4_employer_profit" class="form-control" placeholder="Employer profit">
+                    </td>
+                    <td>
+                        <input type="number" id="q4_worker_profit" class="form-control" placeholder="Worker 1 profit">
+                    </td>
+                    <td>
+                        <input type="number" id="q4_worker_profit_2" class="form-control" placeholder="Worker 2 profit">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-secondary" id="q4" onclick="submitAnswer(this.id)"> Submit Answer</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+     <br><br>
+    <p>
+        <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
+    </p>
+</div>
+
+
+
+<br><br>
+
+<button class="otree-btn-next btn otree-next-button invisible" id="to_next_page"></button>
+
+
+
+{{ endblock }}
+
+
+{{ block scripts }}
+
+<script>
+
+    function ChangeHeader() {
+        document.getElementById("header").innerHTML = "Quiz";
+    }
+
+    function ChangeHeaderBack() {
+        document.getElementById("header").innerHTML = "Instructions";
+    }
+
+    function GoBackToInstructions() {
+        document.getElementById("comprehension_q1").style.display = "none";
+        document.getElementById("comprehension_q2").style.display = "none";
+        document.getElementById("comprehension_q3").style.display = "none";
+        document.getElementById("comprehension_q4").style.display = "none";
+        document.getElementById("header").innerHTML = "Instructions";
+        document.getElementById("instructions_1").style.display = "block";
+    }
+
+    function liveRecv(data) {
+        console.log(data);
+        if (data.correct === true) {
+            if (data.question === "q1") {
+                alert("Correct answer. Proceeding to next question.")
+                document.getElementById("comprehension_q1").style.display = "none";
+                document.getElementById("comprehension_q2").style.display = "block";
+            } else if (data.question === "q2") {
+                alert("Correct answer. Proceeding to next question.")
+                document.getElementById("comprehension_q2").style.display = "none";
+                document.getElementById("comprehension_q3").style.display = "block";
+            } else if (data.question === "q3") {
+                alert("Correct answer. Proceeding to next question.")
+                document.getElementById("comprehension_q3").style.display = "none";
+                document.getElementById("comprehension_q4").style.display = "block";
+            } else if (data.question === "q4") {
+                alert("You have successfully completed the quiz. Proceeding to next page.")
+                document.getElementById("comprehension_q4").style.display = "none";
+                document.getElementById("to_next_page").click();
+            }
+        } else {
+            alert("Incorrect answer. Please try again.");
+        }
+    }
+
+
+    function submitAnswer(clicked_id) {
+        let employer_profit = parseInt(document.getElementById(clicked_id + "_employer_profit").value);
+        let worker_profit = parseInt(document.getElementById(clicked_id + "_worker_profit").value);
+        let next_question_id = "q" + (parseInt(clicked_id.slice(-1)) + 1);
+        if (clicked_id === "q4") {                                                                                      // this is the last question.
+            let worker_profit_2 = parseInt(document.getElementById(clicked_id + "_worker_profit_2").value);
+            if (isNaN(employer_profit) || isNaN(worker_profit) || isNaN(worker_profit_2)) {
+                alert("Error: Please enter a number in all fields before submitting.");
+                return;
+            }
+            else {
+                liveSend({
+                    "information_type": "submit_answer",
+                    "from": js_vars.playerID,
+                    "market": js_vars.small_market,
+                    "question": clicked_id,
+                    "employer_profit": employer_profit,
+                    "worker_profit": worker_profit,
+                    "worker_profit_2": worker_profit_2,
+                })
+                document.getElementById(clicked_id + "_employer_profit").value = "";
+                document.getElementById(clicked_id + "_worker_profit").value = "";
+                document.getElementById(clicked_id + "_worker_profit_2").value = "";
+            }
+        }
+        else {
+            if (isNaN(employer_profit) || isNaN(worker_profit)) {
+                alert("Error: Please enter a number in both fields before submitting.");
+                return;
+            }
+            else {
+                liveSend({
+                    "information_type": "submit_answer",
+                    "from": js_vars.playerID,
+                    "market": js_vars.small_market,
+                    "question": clicked_id,
+                    "employer_profit": employer_profit,
+                    "worker_profit": worker_profit,
+                })
+                document.getElementById(clicked_id + "_employer_profit").value = "";
+                document.getElementById(clicked_id + "_worker_profit").value = "";
+            }
+        }
+    }
+
+
+    function MoveToPrevious(btn) {
+        let currentTab = btn.parentElement.parentElement;
+        let previousTab = currentTab.previousElementSibling;
+        currentTab.style.display = "none";
+        previousTab.style.display = "block";
+    }
+
+    function MoveToNext(btn) {
+        let currentTab = btn.parentElement.parentElement;
+        let nextTab = currentTab.nextElementSibling;
+        currentTab.style.display = "none";
+        nextTab.style.display = "block";
+    }
+
+    addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            submitAnswer(this.id)
+        }
+    });
+
+
+
+</script>
+
+
+<!-- MathJax -->
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+    window.MathJax = {
+      loader: {load: ['[tex]/cases']},
+      tex: {packages: {'[+]': ['cases']}}
+    };
+</script>
+
+{{ endblock }}

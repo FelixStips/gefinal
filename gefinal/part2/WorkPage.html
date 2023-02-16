@@ -1,0 +1,66 @@
+
+{% block content %}
+
+<style>
+    caption {
+        caption-side: top;
+        font-weight: 100;
+        font-size: 20px;
+    }
+</style>
+
+
+
+<div class="card" id="work_info_box">
+    <h5 class="card-header">Work Page Info</h5>
+    <div class="card-body">
+        <p class="card-text">
+          You concluded a contract with employer <b>{% matched_with_id %}</b>.
+          You received a wage of <b>{% wage_received %}</b> and are requested to provide <b>{% effort_requested %}</b> effort units. <br>
+
+        </p>
+
+        <p> You need to choose an effort level between 0 and 10. The table below shows how much each effort level costs you.  </p>
+        <p>
+        <table class="table table-bordered">
+            <caption>Schedule of effort costs</caption>
+                <tr>
+                    <td>Effort level e</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Cost of effort c(e)</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>4</td>
+                    <td>6</td>
+                    <td>8</td>
+                    <td>10</td>
+                    <td>12</td>
+                    <td>15</td>
+                    <td>18</td>
+                </tr>
+        </table>
+    </div>
+</div>
+
+<br> <br>
+
+{% formfields %}
+
+<br> <br>
+
+{{ next_button }}
+
+{% endblock %}
+

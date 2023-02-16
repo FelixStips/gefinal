@@ -1,0 +1,106 @@
+{{ block title }}
+    Instructions for Part 2
+{{ endblock }}
+{{ block content }}
+
+    {% if migrant == True %}
+
+    <div class="card">
+        <h5 class="card-header">Overview</h5>
+            <div class="card-body">
+                <p>
+                    The second part of the experiment is very similar to the first part. <br>
+                    There will be {{ num_rounds_left }} more rounds to play.
+                    Each round will comprise a market and production stage like before.
+                </p>
+            </div>
+    </div>
+
+    <br> <br>
+
+    <div class="card">
+        <h5 class="card-header">Differences to Part 1</h5>
+            <div class="card-body">
+                <p>
+                    You have been moved to a different market. This market differs from the market you were in before in two ways:
+                </p>
+                <ol>
+                    <li>
+                        <b> This market is larger than the one you were in before. </b> <br>
+                        There are {{ num_employers_large_market }} employers and {{ num_workers_large_market }} workers in this market. <br><br>
+                    </li>
+                    <li>
+                        <b> Points in this market are worth more </b><br>
+                        The exchange rate for point earned in this market will be <b>1 point = {{ exchange_rate_large_market }} Euros</b>.
+                        This means that you can gain the same amount of money even for a wage offer that is {{ income_differential }} lower.
+                        For example, if you accepted a wage of {{ example_wage }} points in the previous market, or you accept a wage of
+                        {{ example_wage_large_market }} in this market, you will earn the same amount of money.
+                    </li>
+                </ol><br>
+            </div>
+    </div>
+
+
+    {% else %}
+
+        {% if large_market == True %}
+
+        <div class="card">
+            <h5 class="card-header">Overview</h5>
+                <div class="card-body">
+                    <p>
+                        The second part of the experiment is very similar to the first part. <br>
+                        There will be {{ num_rounds_left }} more rounds to play.
+                        Each round will comprise a market and production stage like before.
+                    </p>
+                </div>
+        </div>
+
+        <br> <br>
+
+        <div class="card">
+            <h5 class="card-header">Differences to Part 1</h5>
+                <div class="card-body">
+                    <p>
+                        The difference is that {{ migration_shock_size }} workers from another market have joined this market. <br>
+                        The number of employers is the same as in the first part of the experiment. <br>
+                        This means that there are {{ num_employers_large_market }} employers and {{ num_workers_large_market }} workers in this market.
+                    </p>
+                      <p>
+                        The new workers played in a low-income market before. <br>
+                        This means that points in their previous market were worth less.
+                        The exchange rate for points earned in their previous market was
+                    </p>
+                    <p style="margin-left: 50px;">
+                            <b>1 point = {{ exchange_rate_small_market }} Euros</b>.
+                    </p>
+                    <p>
+                        This means that they can gain the same amount of money as before for wage offers that are {{ income_differential }} higher.
+                        For example, if they accepted a wage of {{ example_wage }} points in the previous market, and now accept a wage of
+                        {{ example_wage_large_market }} in this market, they will earn the same amount of money as before. <br>
+                    </p>
+                </div>
+        </div>
+
+
+        {% else %}
+            <div class="card">
+                <div class="card-body">
+                     <p>
+                        You have been randomly selected to exit the market.
+                        The second part of the experiment will comprise some exercises and a short questionnaire.
+                    </p>
+                     <p>
+                        You will probably finish before the other participants.
+                        Please remain seated and quite until everybody has finished. <br>
+                    </p>
+                </div>
+            </div>
+
+        {% endif %}
+
+    {% endif %}
+
+    {{ next_button }}
+
+{{ endblock }}
