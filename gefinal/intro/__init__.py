@@ -4,10 +4,6 @@ random.seed(10)
 
 
 doc = """
-This app includes the introduction, instructions, and comprehension questions for the experiment.
-It also defines the roles for the players. 
-
-Note: First ignore the exchange rates. First get the migration right
 """
 
 
