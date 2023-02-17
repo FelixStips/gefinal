@@ -1,4 +1,5 @@
 from otree.api import *
+import numpy as np
 
 
 doc = """
@@ -21,7 +22,11 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    pass
+    large_market = models.BooleanField()
+    small_market = models.BooleanField()
+    is_employer = models.BooleanField()
+    playerID = models.IntegerField()
+    string_role = models.StringField()
 
 
 # PAGES
@@ -35,7 +40,19 @@ class Results(Page):
         all_players = player.participant.in_all_rounds()
         return dict(
             total_payoff=sum([p.payoff for p in all_players]),
+            total_euros=np.nansum([p.participant.vars['realpay'] for p in all_players]),
         )
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        player.total_payoff = sum([p.payoff for p in player.participant.in_all_rounds()])
+        player.total_euros = np.nansum([p.participant.vars['realpay'] for p in player.participant.in_all_rounds()])
+        player.large_market = player.participant.vars['large_market']
+        player.small_market = player.participant.vars['small_market']
+        player.is_employer = player.participant.vars['is_employer']
+        player.playerID = player.participant.vars['playerID']
+        player.string_role = player.participant.vars['string_role']
+
 
 
 page_sequence = [WaitForOtherPlayers,

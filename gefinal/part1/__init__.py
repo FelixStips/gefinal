@@ -42,6 +42,24 @@ class Player(BasePlayer):
     matched_with_id = models.IntegerField()                                                                             # ID of the firm the worker is matched with
     wait = models.BooleanField(initial=False)                                                                           # Show wait page if true
     invalid = models.BooleanField(initial=False)                                                                        # Show job acceptance was invalid alert if true
+    happy_effort = models.StringField(
+        label="""<p style="margin-top:1cm;">
+                    How satisfied are you with the effort choice of the workers? <br> 
+                    <i>Please use a scale from 1 to 5, where 1 means you are “completely satisfied” amd 5 means "completely unsatisfied". 
+                    You can also use the values in-between to indicate where you fall on the scale.</i>
+                </p>""",
+        widget=widgets.RadioSelectHorizontal,
+        choices=[1, 2, 3, 4, 5]
+    )
+    happy_wage = models.StringField(
+        label="""<p style="margin-top:1cm;">
+                    How satisfied are you with the wage you received? <br> 
+                    <i>Please use a scale from 1 to 5, where 1 means you are “completely satisfied” amd 5 means "completely unsatisfied". 
+                    You can also use the values in-between to indicate where you fall on the scale.</i>
+                </p>""",
+        widget=widgets.RadioSelectHorizontal,
+        choices=[1, 2, 3, 4, 5]
+    )
 
 
 class Offer(ExtraModel):
@@ -288,26 +306,43 @@ class ResultsWaitPage(WaitPage):
             o.effort_given = [p.effort_choice for p in players if p.participant.playerID == o.worker_id and o.status == 'accepted'][0]
         for p in players:
             session = p.session
+            exchange_rate = session.config['exchange_rate_large_market'] if session.config['large_market'] else session.config['exchange_rate_small_market']
             if p.participant.is_employer is True:
-                p.total_effort_received = sum(
-                    [o.effort_given for o in offers if o.employer_id == p.participant.playerID])
+                p.total_effort_received = sum([o.effort_given for o in offers if o.employer_id == p.participant.playerID])
                 p.total_wage_paid = sum([o.wage for o in offers if o.employer_id == p.participant.playerID])
                 if p.num_workers_employed == 0:
                     p.payoff = 0
+                    real_pay = p.payoff * exchange_rate
+                    p.participant.vars['realpay'].append(real_pay)
                 elif 0 < p.num_workers_employed < 4:
-                    p.payoff = session.config['MPL'][
-                                   p.num_workers_employed - 1] * p.total_effort_received - p.total_wage_paid
+                    p.payoff = session.config['MPL'][p.num_workers_employed - 1] * p.total_effort_received - p.total_wage_paid
+                    real_pay = p.payoff * exchange_rate
+                    p.participant.vars['realpay'].append(real_pay)
                 else:
                     print('Player', p.participant.playerID, 'had too many workers!')
             else:
                 if p.is_employed:
                     effort_cost = effort_costs[p.effort_choice]
                     p.payoff = p.wage_received - effort_cost
+                    real_pay = p.payoff * exchange_rate
+                    p.participant.vars['realpay'].append(real_pay)
                 else:
                     p.payoff = 5
+                    real_pay = p.payoff * exchange_rate
+                    p.participant.vars['realpay'].append(real_pay)
 
 
 class Results(Page):
+    form_model = 'player'
+    form_fields = ['happy_effort', 'happy_wage']
+
+    @staticmethod
+    def get_form_fields(player):
+        if player.participant.vars['is_employer']:
+            return ['happy_effort']
+        else:
+            return ['happy_wage']
+
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
         if player.round_number >= player.session.config['shock_after_rounds']:

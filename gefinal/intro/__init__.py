@@ -67,6 +67,7 @@ def creating_session(subsession: Subsession):
         participant_vars['small_market'] = False
         participant_vars['migrant'] = False
         participant_vars['is_employer'] = False
+        participant_vars['realpay'] = []
         if participant_vars['playerID'] <= C.SIZE_LARGE_MARKET:
             participant_vars['large_market'] = True
             if participant_vars['playerID'] <= C.NUM_EMPLOYERS_LARGE_MARKET:

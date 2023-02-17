@@ -11,7 +11,7 @@ SESSION_CONFIGS = [
                        'questionnaire',
                        'end'],
          num_demo_participants=5,
-         market_timeout_seconds=10,                                               # Duration of market stage in seconds
+         market_timeout_seconds=10,                                                # Duration of market stage in seconds
          size_large_market=3,                                                      # Number of players in large market
          size_small_market=2,                                                      # Number of players in small market
          num_employers_large_market=2,                                             # Number of employers in large market
@@ -40,7 +40,7 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=5.00, doc=""
 )
 
-PARTICIPANT_FIELDS = ['large_market', 'small_market', 'is_employer', 'playerID', 'string_role', 'migrant']
+PARTICIPANT_FIELDS = ['large_market', 'small_market', 'is_employer', 'playerID', 'string_role', 'migrant', 'realpay']
 SESSION_FIELDS = []
 
 # ISO-639 code
