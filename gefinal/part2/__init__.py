@@ -294,23 +294,34 @@ class WorkPage(Page):
             matched_with_id=player.matched_with_id,
         )
 
+
+class ResultsWaitPage(WaitPage):
+    body_text = "Waiting for workers to finish the effort stage."
+
     @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        group = player.group
-        session = player.session
+    def after_all_players_arrive(group: Group):
         players = group.get_players()
-        effort_costs = {1: 0, 2: 1, 3: 2, 4: 4, 5: 6, 6: 8, 7: 10, 8: 12, 9: 15, 10: 18}
         offers = Offer.filter(group=group)
+        effort_costs = {1: 0, 2: 1, 3: 2, 4: 4, 5: 6, 6: 8, 7: 10, 8: 12, 9: 15, 10: 18}
+
+        group.average_wage = sum([p.wage_received for p in players if p.is_employed]) / sum(
+            [p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
+        group.average_effort = sum([p.effort_choice for p in players if p.is_employed]) / sum(
+            [p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
+
         for o in offers:
             o.effort_given = [p.effort_choice for p in players if p.participant.playerID == o.worker_id and o.status == 'accepted'][0]
         for p in players:
+            session = p.session
             if p.participant.is_employer is True:
-                p.total_effort_received = sum([o.effort_given for o in offers if o.employer_id == p.participant.playerID])
-                p.total_wage_paid = sum([o.wage for o in offers if o.employer_id == p.participant.playerI])
+                p.total_effort_received = sum(
+                    [o.effort_given for o in offers if o.employer_id == p.participant.playerID])
+                p.total_wage_paid = sum([o.wage for o in offers if o.employer_id == p.participant.playerID])
                 if p.num_workers_employed == 0:
                     p.payoff = 0
                 elif 0 < p.num_workers_employed < 4:
-                    p.payoff = session.config['MPL'][p.num_workers_employed-1] * p.total_effort_received - p.total_wage_paid
+                    p.payoff = session.config['MPL'][
+                                   p.num_workers_employed - 1] * p.total_effort_received - p.total_wage_paid
                 else:
                     print('Player', p.participant.playerID, 'had too many workers!')
             else:
@@ -319,16 +330,6 @@ class WorkPage(Page):
                     p.payoff = p.wage_received - effort_cost
                 else:
                     p.payoff = 5
-
-class ResultsWaitPage(WaitPage):
-    body_text = "Waiting for workers to finish the effort stage."
-
-    @staticmethod
-    def after_all_players_arrive(group: Group):
-        players = group.get_players()
-        group.average_wage = sum([p.wage_received for p in players if p.is_employed]) / sum([p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
-        group.average_effort = sum([p.effort_choice for p in players if p.is_employed]) / sum([p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
-        group.num_unmatched_workers = sum([p.is_employed is False for p in players]) if sum([p.is_employed is False for p in players]) > 0 else 0
 
     @staticmethod
     def is_displayed(player: Player):

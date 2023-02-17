@@ -122,6 +122,8 @@ class Instructions(Page):
             players_in_your_group=players_in_your_group,
             employers_in_your_group=employers_in_your_group,
             workers_in_your_group=workers_in_your_group,
+            participation_fee=session.config['showup_fee'],
+            initial_points=session.config['showup_fee'] * (1 / exchange_rate),
             market_time=session.config['market_timeout_seconds'],
             worker_outside_option=session.config['worker_outside_option'],
             employer_outside_option=session.config['employer_outside_option'],

@@ -19,7 +19,7 @@
     <div class="card">
         <h5 class="card-header">Payoffs</h5>
         <div class="card-body">
-             <p>At the beginning of the experiment you will receive an initial endowment of 50.
+             <p>At the beginning of the experiment you will receive an initial endowment of {{ participation_fee }} Euros.
             During the experiment, you can earn a higher amount of money by accumulating
             points. The amount of earned points will depend on your decisions and on the other
             participants’ decisions.
@@ -31,7 +31,7 @@
                     <b>1 point = {{ exchange_rate }} Euros</b>.
                 </p>
             <p>
-                Your initial income of 5 Euros corresponds to 50 points. At the end of the experiment
+                Your initial income of {{ participation_fee }}  Euros corresponds to {{ initial_points }} points. At the end of the experiment
                 you will be paid by cash and in private.
             </p>
         </div>
@@ -211,29 +211,27 @@
             <ol>
                 <li> If a firm has <b> not employed any worker </b> during a trading phase, they will earn an income of <b> {{ employer_outside_option }} points</b> in this period. </li>
                 <br>
-                <li> If a firm has employed <b> one</b> worker, the income depends on the wage and the effort the worker provided. The income equals 10 times the actual
-                    effort minus the wage. The income thus amounts to:
+                <li> If a firm has employed <b> one</b> worker, they will gain {{ mpl1 }} times each effort unit and pay the wage. The income thus amounts to:
                     <ul>
                         <li> <b> Income  = {{ mpl1 }} * effort - wage </b> </li>
                     </ul>
                     Example: If a firm concludes one contract and the wage is {{ ex_1_wage }} and the effort level is {{ ex_1_effort }}, the income is Income = {{ mpl1 }}*{{ ex_1_effort }} - {{ ex_1_wage }} = {{ ex_1_employer_profit }}.
                 </li>
                <br>
-                <li> If a firm has employed <b> two </b> workers  , the income depends on the wages offered to both workers and the effort levels they provided.
+                <li> If a firm has employed <b> two </b> workers, each unit of actual effort is multiplied with {{ mpl2 }} instead of {{ mpl1 }}.
                     The value of the products in total can be higher if the firm employs two worker, but the productivity of each individual worker is lower in this case. <br>
-                    With two workers, each unit of actual effort is multiplied by a factor of {{ mpl2 }} instead of {{ mpl1 }}. The income is thus calculated as follows:
+                    With two workers The income is calculated like this:
                     <ul>
-                        <li> <b> Income  = {{ mpl2 }} * effort 1 + {{ mpl2 }} * effort 2 - wage 1 + wage 2 </b> </li>
+                        <li> <b> Income  = {{ mpl2 }} * effort 1 + {{ mpl2 }} * effort 2 - wage 1 - wage 2 </b> </li>
                     </ul></li>
                 Example: If a firm concludes two contracts and the wages are {{ ex_2_wage_1 }} and {{ ex_2_wage_2 }}
                 and the effort levels are {{ ex_2_effort_1 }} and {{ ex_2_effort_2 }}, the income in that round will be
-                Income =  {{ mpl2 }}*{{ ex_2_effort_1 }} + {{ mpl2 }}*{{ ex_2_effort_2 }} - {{ ex_2_wage_1 }} - {{ ex_2_wage_2 }}= {{ ex_2_employer_profit }}.
+                Income =  {{ mpl2 }}*({{ ex_2_effort_1 }} + *{{ ex_2_effort_2 }}) - {{ ex_2_wage_1 }} - {{ ex_2_wage_2 }}= {{ ex_2_employer_profit }}.
                 </li><br><br>
 
-                <li> If the firm has employed <b> three </b> workers, the income depends on the wages offered to all three workers and the effort levels they provided.
-                    With three workers, each unit of actual effort is multiplied by a factor of {{ mpl3 }}. The income is thus calculated as follows:
+                <li> If the firm has employed <b> three </b> workers, each unit of effort is multiplied with {{ mpl3 }}. The income is thus calculated as follows:
                     <ul>
-                        <li> <b> Income  = {{ mpl3 }} * effort 1 + {{ mpl3 }} * effort 2 + {{ mpl3 }} * effort 3 - wage 1 + wage 2 - wage 3 </b> </li>
+                        <li> <b> Income  = {{ mpl3 }} * effort 1 + {{ mpl3 }} * effort 2 + {{ mpl3 }} * effort 3 - wage 1 - wage 2 - wage 3 </b> </li>
                     </ul></li>
                 Example: If a firm concludes three contracts and the wages are {{ ex_3_wage_1 }}, {{ ex_3_wage_2 }} and {{ ex_3_wage_3 }}
                 and the effort levels are {{ ex_3_effort_1 }}, {{ ex_3_effort_2 }} and {{ ex_3_effort_3 }}, the income in that round will be
