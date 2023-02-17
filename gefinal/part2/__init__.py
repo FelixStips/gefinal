@@ -195,7 +195,7 @@ class MarketPage(Page):
                 round_number=player.round_number,
                 job_id=int(str(player.group.id_in_subsession) + str(group.num_job_offers)),
                 employer_id=player.participant.playerID,
-                worker_id='',
+                worker_id=None,
                 wage=data['wage'],
                 effort=data['effort'],
                 effort_given=None,
