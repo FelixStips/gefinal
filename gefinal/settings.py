@@ -25,7 +25,7 @@ SESSION_CONFIGS = [
          MPL=[10, 7, 5],                                                           # Productivity for 1, 2, 3 workers
          employer_outside_option=0,                                                # Outside option for employer
          worker_outside_option=5,                                                  # Outside option for worker
-         final=False                                                               # Displays instructions if true
+         final=True                                                                # Displays instructions if true
     )]
 
 

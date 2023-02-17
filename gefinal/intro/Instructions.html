@@ -240,7 +240,8 @@
                 Income  =  {{ mpl3 }}*({{ ex_3_effort_1 }}+{{ ex_3_effort_2 }}+{{ ex_3_effort_3 }}) - {{ ex_3_wage_1 }} - {{ ex_3_wage_2 }} - {{ ex_3_wage_3 }}= {{ ex_3_employer_profit }}.
                 </li><br>
             </ol>
-    </div>
+        </div>
+      </div>
     <br>
   <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
@@ -264,12 +265,12 @@
     <br>
     <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this); ChangeHeaderBack();">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToComprehension(this)">Next</button>
     </p>
 </div>
 
 
-<div class="tab" id="comprehension_q1" style="display: none">
+<div class="tab" id="comprehension_q1" data-solved="0" style="display: none">
     <div class="card">
         <h5 class="card-header">Question 1/4</h5>
         <div class="card-body">
@@ -333,7 +334,7 @@
 
 
 
-<div class="tab" id="comprehension_q2" style="display: none">
+<div class="tab" id="comprehension_q2" data-solved="0" style="display: none">
     <div class="card">
         <h5 class="card-header">Question 2/4</h5>
         <div class="card-body">
@@ -396,7 +397,7 @@
     </p>
 </div>
 
-<div class="tab" id="comprehension_q3" style="display: none">
+<div class="tab" id="comprehension_q3" data-solved="0" style="display: none">
     <div class="card">
         <h5 class="card-header">Question 3/4</h5>
         <div class="card-body">
@@ -463,9 +464,7 @@
 
 
 
-
-
-<div class="tab" id="comprehension_q4" style="display: none">
+<div class="tab" id="comprehension_q4" data-solved="0" style="display: none">
     <div class="card">
         <h5 class="card-header">Question 4/4</h5>
         <div class="card-body">
@@ -547,6 +546,21 @@
 
 <script>
 
+
+    function MoveToPrevious(btn) {
+        let currentTab = btn.parentElement.parentElement;
+        let previousTab = currentTab.previousElementSibling;
+        currentTab.style.display = "none";
+        previousTab.style.display = "block";
+    }
+
+    function MoveToNext(btn) {
+        let currentTab = btn.parentElement.parentElement;
+        let nextTab = currentTab.nextElementSibling;
+        currentTab.style.display = "none";
+        nextTab.style.display = "block";
+    }
+
     function ChangeHeader() {
         document.getElementById("header").innerHTML = "Quiz";
     }
@@ -564,25 +578,53 @@
         document.getElementById("instructions_1").style.display = "block";
     }
 
+    function MoveToComprehension() {
+        document.getElementById("instructions_1").style.display = "none";
+        document.getElementById("instructions_2").style.display = "none";
+        document.getElementById("instructions_3").style.display = "none";
+        document.getElementById("instructions_4").style.display = "none";
+        document.getElementById("are_you_ready_q").style.display = "none";
+        let q1_solved = document.getElementById("comprehension_q1").getAttribute("data-solved");
+        let q2_solved = document.getElementById("comprehension_q2").getAttribute("data-solved");
+        let q3_solved = document.getElementById("comprehension_q3").getAttribute("data-solved");
+        let q4_solved = document.getElementById("comprehension_q4").getAttribute("data-solved");
+        if (q1_solved === "0") {
+            document.getElementById("comprehension_q1").style.display = "block";
+        } else if (q2_solved === "0") {
+            console.log("showing q2")
+            document.getElementById("comprehension_q2").style.display = "block";
+        } else if (q3_solved === "0") {
+            document.getElementById("comprehension_q3").style.display = "block";
+        } else if (q4_solved === "0") {
+            document.getElementById("comprehension_q4").style.display = "block";
+        } else {
+            document.getElementById("to_next_page").click();
+        }
+        document.getElementById("header").innerHTML = "Quiz";
+    }
+
     function liveRecv(data) {
-        console.log(data);
         if (data.correct === true) {
             if (data.question === "q1") {
                 alert("Correct answer. Proceeding to next question.")
                 document.getElementById("comprehension_q1").style.display = "none";
                 document.getElementById("comprehension_q2").style.display = "block";
+                document.getElementById("comprehension_q1").dataset.solved = "1";
             } else if (data.question === "q2") {
                 alert("Correct answer. Proceeding to next question.")
                 document.getElementById("comprehension_q2").style.display = "none";
                 document.getElementById("comprehension_q3").style.display = "block";
+                document.getElementById("comprehension_q2").dataset.solved = "1";
             } else if (data.question === "q3") {
                 alert("Correct answer. Proceeding to next question.")
                 document.getElementById("comprehension_q3").style.display = "none";
                 document.getElementById("comprehension_q4").style.display = "block";
+                document.getElementById("comprehension_q3").dataset.solved = "1";
             } else if (data.question === "q4") {
                 alert("You have successfully completed the quiz. Proceeding to next page.")
                 document.getElementById("comprehension_q4").style.display = "none";
                 document.getElementById("to_next_page").click();
+                document.getElementById("comprehension_q4").dataset.solved = "1";
             }
         } else {
             alert("Incorrect answer. Please try again.");
@@ -599,8 +641,7 @@
             if (isNaN(employer_profit) || isNaN(worker_profit) || isNaN(worker_profit_2)) {
                 alert("Error: Please enter a number in all fields before submitting.");
                 return;
-            }
-            else {
+            } else {
                 liveSend({
                     "information_type": "submit_answer",
                     "from": js_vars.playerID,
@@ -636,19 +677,6 @@
     }
 
 
-    function MoveToPrevious(btn) {
-        let currentTab = btn.parentElement.parentElement;
-        let previousTab = currentTab.previousElementSibling;
-        currentTab.style.display = "none";
-        previousTab.style.display = "block";
-    }
-
-    function MoveToNext(btn) {
-        let currentTab = btn.parentElement.parentElement;
-        let nextTab = currentTab.nextElementSibling;
-        currentTab.style.display = "none";
-        nextTab.style.display = "block";
-    }
 
     addEventListener("keydown", function (event) {
         if (event.key === "Enter") {

@@ -277,8 +277,10 @@ class WorkPage(Page):
         players = group.get_players()
         effort_costs = {1: 0, 2: 1, 3: 2, 4: 4, 5: 6, 6: 8, 7: 10, 8: 12, 9: 15, 10: 18}
         offers = Offer.filter(group=group)
+        print('offers', offers)
         for o in offers:
             o.effort_given = [p.effort_choice for p in players if p.participant.playerID == o.worker_id and o.status == 'accepted'][0]
+            print('effort given', o.effort_given)
         for p in players:
             if p.participant.is_employer is True:
                 p.total_effort_received = sum([o.effort_given for o in offers if o.employer_id == p.participant.playerID])
@@ -290,10 +292,13 @@ class WorkPage(Page):
                 else:
                     print('Player', p.participant.playerID, 'had too many workers!')
             else:
+                print('Player', p.participant.playerID, 'is a worker!')
                 if p.is_employed:
+                    print('Player', p.participant.playerID, 'is employed!')
                     effort_cost = effort_costs[p.effort_choice]
                     p.payoff = p.wage_received - effort_cost
                 else:
+                    print('Player', p.participant.playerID, 'is unemployed!')
                     p.payoff = 5
 
 class ResultsWaitPage(WaitPage):
