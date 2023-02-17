@@ -39,13 +39,13 @@ class Results(Page):
         all_players = player.participant.in_all_rounds()
         return dict(
             total_payoff=sum([p.payoff for p in all_players]),
-            total_euros=np.nansum([p.participant.vars['realpay'] for p in all_players]),
+            total_euros=sum(e for e in player.participant.vars['realpay'] if e == e),
         )
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         player.total_payoff = sum([p.payoff for p in player.participant.in_all_rounds()])
-        player.total_euros = sum(e for e in p.participant.vars['realpay'] if e == e)
+        player.total_euros = sum(e for e in player.participant.vars['realpay'] if e == e)
         player.large_market = player.participant.vars['large_market']
         player.small_market = player.participant.vars['small_market']
         player.is_employer = player.participant.vars['is_employer']
