@@ -91,19 +91,8 @@
             The desired effort level must be a number between 1 and 10,
              </p>
                 <p style="margin-left: 50px;">
-                    <b>0 ≤ desired effort ≤ 100</b>.
+                    <b>1 ≤ desired effort ≤ 10</b>.
                 </p>
-                <!-- <p>
-                Employers can specify both using a mask as illustrated below <br>
-                <img src="{{ static 'employer_offer_mask.png' }}"/>
-                <br>
-            </p>
-            <p>
-                If firms send an offer, it will be visible to everybody in the market.
-
-                Workers accept the offer using the acceptance mask as diplayed below <br><br>
-                <img src="{{ static 'worker_acceptance_mask.png' }}"/>
-            </p>-->
 
             <p>
                 If firms send an offer, it will be visible to everybody in the market.
@@ -138,13 +127,12 @@
                 The effort level must be an integer between 1 and 10,
             </p>
                 <p style="margin-left: 50px;">
-                    <b>0 ≤ actual effort ≤ 10</b>.
+                    <b>1 ≤ actual effort ≤ 10</b>.
                 </p>
             <p>
                 Workers pay an effort cost for each unit of effort they exert.
                 The table below shows the effort cost for each effort level, for example if a worker chooses effort level 3, he will pay 2 points.
             </p>
-
              <table class="table table-bordered">
             <caption>Schedule of effort costs</caption>
                 <tr>
@@ -197,10 +185,10 @@
                     <b> Income = wage - cost of effort </b>
                      </p>
              <p>
-                Example: if a worker received a wage of 50 and provided 8 units of effort, the income would be 50 - 18 = 32.
+                Example: if a worker received a wage of 50 and provided 8 units of effort, the income would be 50 - 12 = 38.
             </p>
             <p>
-               In a round where the has not accepted any wage offer, he or she will receive unemployment insurance of {{ worker_outside_option }} points.
+               In a round where the worker has not accepted any wage offer, he or she will receive unemployment insurance of {{ worker_outside_option }} points.
             </p>
         </div>
     </div>
@@ -249,20 +237,9 @@
                     </ul></li>
                 Example: If a firm concludes three contracts and the wages are {{ ex_3_wage_1 }}, {{ ex_3_wage_2 }} and {{ ex_3_wage_3 }}
                 and the effort levels are {{ ex_3_effort_1 }}, {{ ex_3_effort_2 }} and {{ ex_3_effort_3 }}, the income in that round will be
-                Income  \( =  {{ mpl3 }}*({{ ex_3_effort_1 }}+{{ ex_3_effort_2 }}+{{ ex_3_effort_3 }}) - {{ ex_3_wage_1 }} - {{ ex_3_wage_2 }} - {{ ex_3_wage_3 }}= {{ ex_3_employer_profit }} \).
+                Income  =  {{ mpl3 }}*({{ ex_3_effort_1 }}+{{ ex_3_effort_2 }}+{{ ex_3_effort_3 }}) - {{ ex_3_wage_1 }} - {{ ex_3_wage_2 }} - {{ ex_3_wage_3 }}= {{ ex_3_employer_profit }}.
                 </li><br>
             </ol>
-            To summarize, if \(e\) is effort and \(w\) is wage, then the profit of a firm is calculated as follows:
-            $$
-            Profit =
-            \begin{cases}
-            {{ mpl1 }} *  e_1 - w_1     \qquad  \qquad \quad   \qquad \qquad        \qquad  \text{if one worker}  \\
-            {{ mpl2 }} * (e_1 + e_2) - w_1- w_2   \quad   \qquad  \qquad  \quad \, \, \text{if two workers}  \\
-            {{ mpl3 }} *(e_1 + e_2 + e_3) - w_1 - w_2 - w_3   \quad  \quad    \text{if three workers} \\
-            0                     \qquad  \qquad \qquad  \qquad \qquad \qquad \qquad \quad \, \, \,  \text{if no worker}
-            \end{cases}$$
-            <!-- <img src="{{ static 'firm_income.png' }}"/> -->
-        </div>
     </div>
     <br>
   <p>
@@ -297,7 +274,7 @@
         <h5 class="card-header">Question 1/4</h5>
         <div class="card-body">
             <p>
-                Suppose an employer employed and a worker did not conclude any contract in a period. <br><br>
+                Suppose an employer did not employ any worker and a worker did not work for any employer. <br><br>
                 What would be their income in this period?
             </p>
             <table>
@@ -315,10 +292,43 @@
             </table>
         </div>
     </div>
+
+    <br><br>
+             <table class="table table-bordered">
+            <caption>Schedule of effort costs</caption>
+                <tr>
+                    <td>Effort level e</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Cost of effort c(e)</td>
+                    <td> 0</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>4</td>
+                    <td>6</td>
+                    <td>8</td>
+                    <td>10</td>
+                    <td>12</td>
+                    <td>15</td>
+                    <td>18</td>
+                </tr>
+        </table>
+
     <br><br>
     <p>
         <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
     </p>
+
 </div>
 
 
@@ -348,6 +358,38 @@
             </table>
         </div>
     </div>
+      <br><br>
+             <table class="table table-bordered">
+            <caption>Schedule of effort costs</caption>
+                <tr>
+                    <td>Effort level e</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Cost of effort c(e)</td>
+                    <td> 0</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>4</td>
+                    <td>6</td>
+                    <td>8</td>
+                    <td>10</td>
+                    <td>12</td>
+                    <td>15</td>
+                    <td>18</td>
+                </tr>
+        </table>
+
+
     <br><br>
     <p>
         <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
@@ -380,6 +422,38 @@
 
         </div>
     </div>
+      <br><br>
+             <table class="table table-bordered">
+            <caption>Schedule of effort costs</caption>
+                <tr>
+                    <td>Effort level e</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Cost of effort c(e)</td>
+                    <td> 0</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>4</td>
+                    <td>6</td>
+                    <td>8</td>
+                    <td>10</td>
+                    <td>12</td>
+                    <td>15</td>
+                    <td>18</td>
+                </tr>
+        </table>
+
+
     <br><br>
         <p>
                 <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
@@ -419,6 +493,39 @@
             </table>
         </div>
     </div>
+
+      <br><br>
+             <table class="table table-bordered">
+            <caption>Schedule of effort costs</caption>
+                <tr>
+                    <td>Effort level e</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td>Cost of effort c(e)</td>
+                    <td> 0</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>4</td>
+                    <td>6</td>
+                    <td>8</td>
+                    <td>10</td>
+                    <td>12</td>
+                    <td>15</td>
+                    <td>18</td>
+                </tr>
+        </table>
+
+
      <br><br>
     <p>
         <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>

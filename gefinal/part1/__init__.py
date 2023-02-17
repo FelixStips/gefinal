@@ -181,7 +181,7 @@ class MarketPage(Page):
                 effort=data['effort'],
                 effort_given=None,
                 status='open',
-                timestamp_created=int(time.time()),
+                timestamp_created=int(time.time()) - group.start_timestamp,
                 timestamp_accepted=None,
                 timestamp_cancelled=None,
             )
@@ -198,7 +198,7 @@ class MarketPage(Page):
                 for o in current_offer:
                     o.status = 'accepted'
                     o.worker_id = player.participant.playerID
-                    o.timestamp_accepted = int(time.time())
+                    o.timestamp_accepted = int(time.time()) - group.start_timestamp
                 for p in group.get_players():
                     if p.participant.playerID == data['employer_id']:
                         p.num_workers_employed += 1
@@ -220,7 +220,7 @@ class MarketPage(Page):
             current_offer = Offer.filter(group=group, job_id=data['job_id'])
             for o in current_offer:
                 o.status = 'cancelled'
-                o.timestamp_cancelled = int(time.time())
+                o.timestamp_cancelled = int(time.time()) - group.start_timestamp
             for p in group.get_players():
                 if p.participant.playerID == data['employer_id']:
                     p.wait = False
