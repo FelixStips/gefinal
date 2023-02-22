@@ -45,20 +45,26 @@ class Player(BasePlayer):
     happy_effort = models.StringField(
         label="""<p style="margin-top:1cm;">
                     How satisfied are you with the effort choice of the workers? <br> 
-                    <i>Please use a scale from 1 to 5, where 1 means you are “completely satisfied” amd 5 means "completely unsatisfied". 
+                    <i>Please use a scale from 1 to 5, where 1 means you are “completely unsatisfied” and 5 means "completely satisfied". 
                     You can also use the values in-between to indicate where you fall on the scale.</i>
                 </p>""",
-        widget=widgets.RadioSelectHorizontal,
-        choices=[1, 2, 3, 4, 5]
+        choices=['1 - completely unsatisfied',
+                 '2 - unsatisfied',
+                 '3 - neutral',
+                 '4 - satisfied',
+                 '5 - completely satisfied']
     )
     happy_wage = models.StringField(
         label="""<p style="margin-top:1cm;">
                     How satisfied are you with the wage you received? <br> 
-                    <i>Please use a scale from 1 to 5, where 1 means you are “completely satisfied” amd 5 means "completely unsatisfied". 
+                    <i>Please use a scale from 1 to 5, where 1 means you are “completely unsatisfied” and 5 means "completely satisfied". 
                     You can also use the values in-between to indicate where you fall on the scale.</i>
                 </p>""",
-        widget=widgets.RadioSelectHorizontal,
-        choices=[1, 2, 3, 4, 5]
+        choices=['1 - completely unsatisfied',
+                 '2 - unsatisfied',
+                 '3 - neutral',
+                 '4 - satisfied',
+                 '5 - completely satisfied']
     )
 
 
@@ -326,12 +332,17 @@ class ResultsWaitPage(WaitPage):
         group.average_effort = sum([p.effort_choice for p in players if p.is_employed]) / sum([p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
 
         for o in offers:
-            o.effort_given = [p.effort_choice for p in players if p.participant.playerID == o.worker_id and o.status == 'accepted'][0]
+            try:
+                o.effort_given = [p.effort_choice for p in players if p.participant.playerID == o.worker_id and o.status == 'accepted'][0]
+            except IndexError:
+                o.effort_given = None
+            else:
+                print('other error with effort')
         for p in players:
             session = p.session
-            exchange_rate = session.config['exchange_rate_large_market'] if session.config['large_market'] or session.config['migrant'] else session.config['exchange_rate_small_market']
+            exchange_rate = session.config['exchange_rate_large_market'] if p.participant.vars['large_market'] or session.config['migrant'] else session.config['exchange_rate_small_market']
             if p.participant.is_employer is True:
-                p.total_effort_received = sum([o.effort_given for o in offers if o.employer_id == p.participant.playerID])
+                p.total_effort_received = sum([o.effort_given or 0 for o in offers if o.employer_id == p.participant.playerID])
                 p.total_wage_paid = sum([o.wage for o in offers if o.employer_id == p.participant.playerID])
                 if p.num_workers_employed == 0:
                     p.payoff = 0
@@ -369,10 +380,12 @@ class Results(Page):
 
     @staticmethod
     def get_form_fields(player):
-        if player.participant.vars['is_employer']:
+        if player.participant.vars['is_employer'] and player.num_workers_employed > 0:
             return ['happy_effort']
-        else:
+        elif player.is_employed:
             return ['happy_wage']
+        else:
+            pass
 
     @staticmethod
     def app_after_this_page(player, upcoming_apps):

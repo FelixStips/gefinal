@@ -5,6 +5,8 @@ Results
 
 {{ block content }}
 
+
+
 <div class="card">
     <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">Your Results</h6>
@@ -21,6 +23,7 @@ Results
                 You paid a wage <b>{{ total_wage_paid }}</b> and received <b>{{ total_effort_received }}</b> effort units.<br>
                 Your profit this round is <b>{{ player.payoff }}</b>. Your total profit in all rounds is <b>{{ total_payoff }}</b>.
             </p>
+
             {% endif %}
 
         {% else %}
@@ -30,6 +33,7 @@ Results
                 You received a wage of <b>{{ wage_received }}</b> and provided <b>{{ effort_choice }}</b> effort units.<br>
                 Your profit this round is <b>{{ player.payoff }}</b>. Your total profit in all rounds is <b>{{ total_payoff }}</b>.
             </p>
+
             {% else %}
             <p>
                 You were not employed this round.<br>
@@ -53,6 +57,8 @@ Results
     </div>
 </div>
 
+
+{{ formfields }}
 
 <br>
 
