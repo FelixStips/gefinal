@@ -10,7 +10,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'part1'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 2
+    NUM_ROUNDS = 1
 
 
 class Subsession(BaseSubsession):
@@ -18,9 +18,11 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
+    marketID = models.IntegerField()
     large_market = models.BooleanField()
     is_finished = models.BooleanField(initial=False)
     num_job_offers = models.IntegerField(initial=0)
+    job_offer_counter = models.IntegerField(initial=0)
     num_unmatched_workers = models.IntegerField()
     start_timestamp = models.FloatField()
     average_wage = models.CurrencyField()
@@ -88,14 +90,10 @@ def creating_session(subsession: Subsession):
     players_in_all_groups = []
     for group in subsession.get_groups():
         players_in_all_groups.extend(group.get_players())
-    #print(players_in_all_groups)
 
     # group matrix numbers are based on player.id_in_subsession
     players_in_large_market = [p.id_in_subsession for p in players_in_all_groups if p.participant.vars['large_market'] is True or p.participant.vars['large_market'] is None]
     players_in_small_market = [p.id_in_subsession for p in players_in_all_groups if p.participant.vars['large_market'] is False]
-
-    #print(players_in_large_market)
-    #print(players_in_small_market)
 
     matrix = []
     if players_in_large_market is not []:
@@ -103,15 +101,16 @@ def creating_session(subsession: Subsession):
     if players_in_small_market is not []:
         matrix.append(players_in_small_market)
 
-    #print(matrix)
     subsession.set_group_matrix(matrix)
 
     session = subsession.session
     for group in subsession.get_groups():
         if group.get_players()[0].participant.vars['large_market'] is True:
+            group.marketID = 1
             group.large_market = True
             group.num_unmatched_workers = session.config['size_large_market'] - session.config['num_employers_large_market']
         else:
+            group.marketID = 2
             group.large_market = False
             group.num_unmatched_workers = session.config['size_small_market'] - session.config['num_employers_small_market']
 
@@ -194,11 +193,12 @@ class MarketPage(Page):
     def live_method(player: Player, data):
         group = player.group
         if data['information_type'] == 'offer':
+            group.job_offer_counter += 1
             group.num_job_offers += 1
             Offer.create(
                 group=group,
                 round_number=player.round_number,
-                job_id=int(str(player.group.id_in_subsession) + str(group.num_job_offers)),
+                job_id=int(str(group.marketID) + str(player.round_number) + str(group.job_offer_counter)),
                 employer_id=player.participant.playerID,
                 worker_id=None,
                 wage=data['wage'],
@@ -308,22 +308,34 @@ class ResultsWaitPage(WaitPage):
         group.average_wage = sum([p.wage_received for p in players if p.is_employed]) / sum([p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
         group.average_effort = sum([p.effort_choice for p in players if p.is_employed]) / sum([p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
 
-        for o in offers:
-            o.effort_given = [p.effort_choice for p in players if p.participant.playerID == o.worker_id and o.status == 'accepted'][0]
-        for p in players:
+        for p in players:                                                                                               # first update the offers
             session = p.session
-            exchange_rate = session.config['exchange_rate_large_market'] if p.participant.vars['large_market'] else session.config['exchange_rate_small_market']
+            exchange_rate = session.config['exchange_rate_large_market'] if p.participant.vars['large_market'] else \
+                session.config['exchange_rate_small_market']
+            for o in offers:
+                if p.participant.playerID == o.worker_id and o.status == 'accepted':
+                    o.effort_given = p.effort_choice
+        for p in players:                                                                                               # then update the players
             if p.participant.is_employer is True:
-                p.total_effort_received = sum([o.effort_given or 0 for o in offers if o.employer_id == p.participant.playerID])
-                p.total_wage_paid = sum([o.wage for o in offers if o.employer_id == p.participant.playerID])
+                for o in offers:
+                    if p.participant.playerID == o.employer_id and o.status == 'accepted':
+                        p.total_effort_received += o.effort_given
+                    else:
+                        pass
                 if p.num_workers_employed == 0:
                     p.payoff = 0
                     real_pay = p.payoff * exchange_rate
-                    p.participant.vars['realpay'].append(real_pay)
+                    p.participant.vars['total_points'].append(int(p.payoff))
+                    p.participant.vars['exrate'].append(exchange_rate)
+                    p.participant.vars['realpay'].append(float(real_pay))
                 elif 0 < p.num_workers_employed < 4:
-                    p.payoff = session.config['MPL'][p.num_workers_employed - 1] * p.total_effort_received - p.total_wage_paid
+                    mpl = session.config['MPL'][p.num_workers_employed - 1]
+                    p.payoff = mpl * p.total_effort_received - p.total_wage_paid
+                    #print('Player', p.participant.playerID, 'had', p.num_workers_employed, 'workers with a total effort of', p.total_effort_received, 'and a total wage of', p.total_wage_paid, 'multipled with an MPL of',  mpl, 'for a payoff of', p.payoff)
                     real_pay = p.payoff * exchange_rate
-                    p.participant.vars['realpay'].append(real_pay)
+                    p.participant.vars['total_points'].append(int(p.payoff))
+                    p.participant.vars['exrate'].append(exchange_rate)
+                    p.participant.vars['realpay'].append(float(real_pay))
                 else:
                     print('Player', p.participant.playerID, 'had too many workers!')
             else:
@@ -331,11 +343,17 @@ class ResultsWaitPage(WaitPage):
                     effort_cost = effort_costs[p.effort_choice]
                     p.payoff = p.wage_received - effort_cost
                     real_pay = p.payoff * exchange_rate
-                    p.participant.vars['realpay'].append(real_pay)
+                    p.participant.vars['total_points'].append(int(p.payoff))
+                    p.participant.vars['exrate'].append(exchange_rate)
+                    p.participant.vars['realpay'].append(float(real_pay))
                 else:
                     p.payoff = 5
                     real_pay = p.payoff * exchange_rate
-                    p.participant.vars['realpay'].append(real_pay)
+                    p.participant.vars['total_points'].append(int(p.payoff))
+                    p.participant.vars['exrate'].append(exchange_rate)
+                    p.participant.vars['realpay'].append(float(real_pay))
+        #for p in players:
+        #    print('Player', p.participant.playerID, 'has had payoffs of', p.participant.vars['total_points'], 'and a real pay of', p.participant.vars['realpay'])
 
 
 class Results(Page):

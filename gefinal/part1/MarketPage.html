@@ -32,7 +32,7 @@
 
 <div class="card">
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Info Box</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Info Box Part 1</h6>
         <p>
             This is round number <b><span id="round_number">{{ round_number }}</span></b>.
             Your group includes <b><span id="employers_total">{{ employers_in_group }}</span> </b> employer(s)
@@ -72,10 +72,10 @@
     <caption>Make an offer</caption>
     <tr>
         <td>
-            <input id="wage_input" class="form-control" placeholder="Wage">
+            <input id="wage_input" class="form-control" placeholder="Wage (0 to 100)">
         </td>
         <td>
-            <input id="effort_input" class="form-control" placeholder="Effort">
+            <input id="effort_input" class="form-control" placeholder="Effort (1 to 10)">
         </td>
         <td>
             <button type="button" class="btn btn-secondary" id="send_offer" onclick="sendOffer()"> Send Offer

@@ -69,6 +69,8 @@ def creating_session(subsession: Subsession):
         participant_vars['migrant'] = False
         participant_vars['is_employer'] = False
         participant_vars['realpay'] = []
+        participant_vars['total_points'] = []
+        participant_vars['exrate'] = []
         if participant_vars['playerID'] <= C.SIZE_LARGE_MARKET:
             participant_vars['large_market'] = True
             if participant_vars['playerID'] <= C.NUM_EMPLOYERS_LARGE_MARKET:
@@ -257,8 +259,9 @@ class WaitToStart(WaitPage):
         return session.config['final']
 
 
-page_sequence = [Instructions, WaitToStart]
-
+page_sequence = [Introduction,
+                 Instructions,
+                 WaitToStart]
 def custom_export(player):
     # top row
     yield ['playerID', 'question', 'correct']

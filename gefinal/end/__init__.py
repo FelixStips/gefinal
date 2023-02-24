@@ -26,6 +26,8 @@ class Player(BasePlayer):
     is_employer = models.BooleanField()
     playerID = models.IntegerField()
     string_role = models.StringField()
+    total_payoff = models.IntegerField()
+    total_euros = models.FloatField()
 
 
 # PAGES
@@ -36,16 +38,17 @@ class WaitForOtherPlayers(WaitPage):
 class Results(Page):
     @staticmethod
     def vars_for_template(player: Player):
-        all_players = player.participant.in_all_rounds()
+        player.total_payoff = int(sum(filter(None, player.participant.vars['total_points'])))
+        player.total_euros = float(sum(filter(None, player.participant.vars['realpay'])))
         return dict(
-            total_payoff=sum([p.payoff for p in all_players]),
-            total_euros=sum(e for e in player.participant.vars['realpay'] if e == e),
+            total_payoff=player.total_payoff,
+            total_euros=player.total_euros,
         )
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
-        player.total_payoff = sum([p.payoff for p in player.participant.in_all_rounds()])
-        player.total_euros = sum(e for e in player.participant.vars['realpay'] if e == e)
+        player.total_payoff = int(sum(filter(None, player.participant.vars['total_points'])))
+        player.total_euros = float(sum(filter(None, player.participant.vars['realpay'])))
         player.large_market = player.participant.vars['large_market']
         player.small_market = player.participant.vars['small_market']
         player.is_employer = player.participant.vars['is_employer']
@@ -54,5 +57,4 @@ class Results(Page):
 
 
 
-page_sequence = [WaitForOtherPlayers,
-                 Results]
+page_sequence = [Results]
