@@ -156,7 +156,7 @@ class WaitToStart(WaitPage):
         return player.participant.vars['large_market'] is True or player.participant.vars['migrant'] is True
 
 class Countdown(Page):
-    timer_text = 'The next market stage will start in:'
+    timer_text = 'The next market phase will start in:'
 
     @staticmethod
     def get_timeout_seconds(player: Player):
@@ -168,7 +168,7 @@ class Countdown(Page):
         return player.participant.vars['large_market'] is True or player.participant.vars['migrant'] is True
 
 class MarketPage(Page):
-    timer_text = 'The market stage will end in:'
+    timer_text = 'The market phase will end in:'
 
     @staticmethod
     def is_displayed(player: Player):
@@ -441,4 +441,15 @@ def custom_export(players):
     offers = Offer.filter()
     for offer in offers:
         yield [offer.group, offer.round_number, offer.job_id, offer.employer_id, offer.worker_id, offer.wage, offer.effort,
+               offer.effort_given, offer.status, offer.timestamp_created, offer.timestamp_accepted, offer.timestamp_cancelled]
+
+def custom_export(players):
+    # top row
+    yield ['session_code' ,'group.id_in_subsession', 'round', 'job_id', 'employer_id', 'worker_id', 'wage', 'effort', 'effort_given',
+           'status', 'timestamp_created', 'timestamp_accepted', 'timestamp_cancelled']
+
+    # data rows
+    offers = Offer.filter()
+    for offer in offers:
+        yield [offer.group.session.code, offer.group.id_in_subsession, offer.round_number, offer.job_id, offer.employer_id, offer.worker_id, offer.wage, offer.effort,
                offer.effort_given, offer.status, offer.timestamp_created, offer.timestamp_accepted, offer.timestamp_cancelled]
