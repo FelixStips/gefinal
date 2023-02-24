@@ -445,7 +445,7 @@ def custom_export(players):
 
 def custom_export(players):
     # top row
-    yield ['session_code' ,'group.id_in_subsession', 'round', 'job_id', 'employer_id', 'worker_id', 'wage', 'effort', 'effort_given',
+    yield ['session_code', 'group.id_in_subsession', 'round', 'job_id', 'employer_id', 'worker_id', 'wage', 'effort', 'effort_given',
            'status', 'timestamp_created', 'timestamp_accepted', 'timestamp_cancelled']
 
     # data rows
