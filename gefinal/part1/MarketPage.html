@@ -44,8 +44,7 @@
 
 
             {% if player.participant.is_employer == True %}
-            You can employ at most three workers in this round. You can send offers in the market.
-            To do so, type in the wage and effort and click "Send Offer".
+            You can employ at most three workers in this round. To send a job offer, type the wage and effort and click "Send Offer".
 
             {% else %}
             You can accept at most one job offer this round.
@@ -207,10 +206,11 @@
             offers_body.innerHTML = "";
             for (let i = 0; i < offers.length; i++) {
                 let {job_id, employer_id, worker_id, wage, effort, status} = offers[i];
+                let worker_id_text = worker_id === null ? "" : worker_id;
                 offers_body.innerHTML += `<tr id="open_row_${job_id}" class="table-light">
                                                     <td id="open_col_job_id_${job_id}"> ${job_id} </td>
                                                     <td id="open_col_employer_id_${job_id}"> ${employer_id} </td>
-                                                    <td id="open_col_worker_id_${job_id}"> ${worker_id} </td>
+                                                    <td id="open_col_worker_id_${job_id}"> ${worker_id_text} </td>
                                                     <td id="open_col_wage_${job_id}"> ${wage} </td>
                                                     <td id="open_col_effort_${job_id}"> ${effort} </td>
                                                     <td id="open_col_status_${job_id}"> ${status} </td>
@@ -263,7 +263,6 @@
 
         function updateWorkerWaitCard(offers) {
             for (let i = 0; i < offers.length; i++) {
-                console.log(offers[i])
                 if (offers[i].status === "accepted" && offers[i].worker_id == js_vars.my_id) {
                     let {job_id, wage, effort, employer_id} = offers[i];
                     document.getElementById("wage_accepted").innerHTML = wage;

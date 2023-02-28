@@ -20,9 +20,9 @@ SESSION_CONFIGS = [
                        'end'],
          num_demo_participants=5,
          market_timeout_seconds=180,                                               # Duration of market stage in seconds
-         size_large_market=3,                                                      # Number of players in large market
+         size_large_market=3,                                                     # Number of players in large market
          size_small_market=2,                                                      # Number of players in small market
-         num_employers_large_market=2,                                             # Number of employers in large market
+         num_employers_large_market=1,                                             # Number of employers in large market
          num_employers_small_market=1,                                             # Number of employers in small market
          migration_shock_size=1,                                                   # Number of migrants in migration shock
          exchange_rate_large_market=0.5,                                           # Exchange rate for large market
@@ -33,7 +33,7 @@ SESSION_CONFIGS = [
          MPL=[10, 7, 5],                                                           # Productivity for 1, 2, 3 workers
          employer_outside_option=0,                                                # Outside option for employer
          worker_outside_option=5,                                                  # Outside option for worker
-         final=True,                                                               # Displays instructions if true
+         final=False,                                                              # Displays instructions if true
          showup_fee=5.0,                                                           # Participation showup fee
          use_browser_bots=False,                                                   # Use browser bots
     )]

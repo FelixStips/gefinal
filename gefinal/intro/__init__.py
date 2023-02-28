@@ -90,7 +90,10 @@ def creating_session(subsession: Subsession):
 
 # PAGES
 class Introduction(Page):
-    pass
+    @staticmethod
+    def is_displayed(player: Player):
+        session = player.session
+        return session.config['final']
 
 
 class Instructions(Page):
