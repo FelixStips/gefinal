@@ -18,13 +18,13 @@ SESSION_CONFIGS = [
                        'part2',
                        'questionnaire',
                        'end'],
-         num_demo_participants=10,
+         num_demo_participants=5,
          market_timeout_seconds=180,                                               # Duration of market stage in seconds
-         size_large_market=6,                                                      # Number of players in large market
-         size_small_market=4,                                                      # Number of players in small market
-         num_employers_large_market=3,                                             # Number of employers in large market
-         num_employers_small_market=2,                                             # Number of employers in small market
-         migration_shock_size=2,                                                   # Number of migrants in migration shock
+         size_large_market=3,                                                      # Number of players in large market
+         size_small_market=2,                                                      # Number of players in small market
+         num_employers_large_market=2,                                             # Number of employers in large market
+         num_employers_small_market=1,                                             # Number of employers in small market
+         migration_shock_size=1,                                                   # Number of migrants in migration shock
          exchange_rate_large_market=0.5,                                           # Exchange rate for large market
          exchange_rate_small_market=0.1,                                           # Exchange rate for small market
          countdown_seconds=3,                                                      # Duration of countdown in seconds

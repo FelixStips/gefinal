@@ -38,7 +38,7 @@
     </div>
     <br>
     <p>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
 
@@ -48,15 +48,14 @@
         <h5 class="card-header">Overview</h5>
         <div class="card-body">
             <p>
-                The experiment consists of {{ C.ROUNDS_OF_MARKET_PLAY }} rounds in total.
-                There will be two parts. This set of instructions describes the rules for part 1.<br>
-                After {{ C.SHOCK_AFTER_PERIODS }} round(s), there will be another short set of instructions to explain the rules for part 2.
+                The experiment consists of two parts. This set of instructions describes the rules for part 1.
+                After {{ shock_after_rounds }} round(s), there will be another short set of instructions to explain the rules for part 2.
             </p>
             <p>
                 There will be {{ players_in_your_group }} participants in your group.
-                Of these, {{ employers_in_your_group }} participants will be firms and {{ workers_in_your_group }} participants will be workers.
+                Of these, {{ employers_in_your_group }} participant(s) will be firms and {{ workers_in_your_group }} participant(s) will be workers.
                 <p style="margin-left: 50px;">
-                    <b>You shall take the role of {{ player.participant.string_role }}</b>. You will keep this role for the entire course of the experiment.
+                    <b>You will take the role of {{ player.participant.string_role }}</b>. You will keep this role for the entire course of the experiment.
                 </p>
             </p>
             <p>
@@ -68,7 +67,7 @@
     <br>
     <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
 
@@ -109,7 +108,7 @@
     <br>
     <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
 
@@ -167,7 +166,7 @@
     <br>
   <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
 
@@ -195,7 +194,7 @@
     <br>
   <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)">Next</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
 
@@ -243,7 +242,7 @@
     <br>
   <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this); ChangeHeader();">Next</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this); ChangeHeader();" style="float: right;">Next</button>
     </p>
 </div>
 
@@ -263,7 +262,7 @@
     <br>
     <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this); ChangeHeaderBack();">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToComprehension(this)">Next</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToComprehension(this)" style="float: right;">Next</button>
     </p>
 </div>
 
@@ -324,6 +323,19 @@
         </table>
 
     <br><br>
+
+    <h6>Firm profits </h6>
+            $$
+            Profit =
+            \begin{cases}
+            10 *  effort_1 - wage_1     \qquad  \qquad \quad   \quad  \quad \qquad \qquad  \qquad \qquad \qquad    \qquad   \qquad  \text{if one worker}  \\
+            7 * (effort_1 + effort_2) - wage_1- wage_2   \quad   \qquad  \qquad  \quad \quad \quad  \qquad  \qquad\, \, \,  \text{if two workers}  \\
+            5 *(effort_1 + effort_2 + effort_3) - wage_1 - wage_2 - wage_3   \quad  \quad   \qquad \,  \,  \text{if three workers} \\
+            0                     \qquad  \qquad \qquad  \qquad \qquad \qquad \qquad \qquad \qquad  \qquad \qquad \qquad  \quad  \quad \qquad \quad \, \, \,  \text{if no worker}
+            \end{cases}$$
+
+    <br><br>
+
     <p>
         <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
     </p>
@@ -387,8 +399,6 @@
                     <td>18</td>
                 </tr>
         </table>
-
-
     <br><br>
     <p>
         <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>

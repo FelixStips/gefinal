@@ -12,15 +12,6 @@ class C(BaseConstants):
     NAME_IN_URL = 'intro'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
-    ROUNDS_OF_MARKET_PLAY = 2
-    SHOCK_AFTER_PERIODS = 1
-    SIZE_LARGE_MARKET = 3
-    SIZE_SMALL_MARKET = 2
-    NUM_EMPLOYERS_LARGE_MARKET = 2
-    NUM_EMPLOYERS_SMALL_MARKET = 1
-    MIGRATION_SHOCK_SIZE = 1
-    EXCHANGE_RATE_LARGE_MARKET = 0.1
-    EXCHANGE_RATE_SMALL_MARKET = 0.1
     Q2_WAGE = 70
     Q2_EFFORT_REQUESTED = 8
     Q2_EFFORT_RECEIVED = 8
@@ -60,6 +51,12 @@ def creating_session(subsession: Subsession):
     players = subsession.get_players()
     num_participants = len(players)
     temp_id_list = random.sample(range(1, num_participants + 1), num_participants)
+    session = subsession.session
+    size_large_market = session.config['size_large_market']
+    size_small_market = session.config['size_small_market']
+    num_employers_large_market = session.config['num_employers_large_market']
+    num_employers_small_market = session.config['num_employers_small_market']
+    migration_shock_size = session.config['migration_shock_size']
 
     for p in players:
         participant_vars = p.participant.vars
@@ -71,9 +68,9 @@ def creating_session(subsession: Subsession):
         participant_vars['realpay'] = []
         participant_vars['total_points'] = []
         participant_vars['exrate'] = []
-        if participant_vars['playerID'] <= C.SIZE_LARGE_MARKET:
+        if participant_vars['playerID'] <= size_large_market:
             participant_vars['large_market'] = True
-            if participant_vars['playerID'] <= C.NUM_EMPLOYERS_LARGE_MARKET:
+            if participant_vars['playerID'] <= num_employers_large_market:
                 participant_vars['is_employer'] = True
                 participant_vars['string_role'] = 'employer'
             else:
@@ -81,13 +78,13 @@ def creating_session(subsession: Subsession):
                 participant_vars['string_role'] = 'worker'
         else:
             participant_vars['small_market'] = True
-            if participant_vars['playerID'] <= C.NUM_EMPLOYERS_SMALL_MARKET + C.SIZE_LARGE_MARKET:
+            if participant_vars['playerID'] <= (num_employers_small_market + size_large_market):
                 participant_vars['is_employer'] = True
                 participant_vars['string_role'] = 'employer'
             else:
                 participant_vars['is_employer'] = False
                 participant_vars['string_role'] = 'worker'
-                if participant_vars['playerID'] >= C.SIZE_LARGE_MARKET + C.SIZE_SMALL_MARKET - C.MIGRATION_SHOCK_SIZE + 1:
+                if participant_vars['playerID'] >= (size_large_market + size_small_market - migration_shock_size + 1):
                     participant_vars['migrant'] = True
 
 
@@ -111,23 +108,25 @@ class Instructions(Page):
     def vars_for_template(player: Player):
         session = player.session
         if player.participant.large_market:
-            exchange_rate = C.EXCHANGE_RATE_LARGE_MARKET
-            players_in_your_group = C.SIZE_LARGE_MARKET
-            employers_in_your_group = C.NUM_EMPLOYERS_LARGE_MARKET
-            workers_in_your_group = C.SIZE_LARGE_MARKET - C.NUM_EMPLOYERS_LARGE_MARKET
+            exchange_rate = session.config['exchange_rate_large_market']
+            players_in_your_group = session.config['size_large_market']
+            employers_in_your_group = session.config['num_employers_large_market']
+            workers_in_your_group = session.config['size_large_market'] - session.config['num_employers_large_market']
         elif player.participant.small_market:
-            exchange_rate = C.EXCHANGE_RATE_LARGE_MARKET
-            players_in_your_group = C.SIZE_SMALL_MARKET
-            employers_in_your_group = C.NUM_EMPLOYERS_SMALL_MARKET
-            workers_in_your_group = C.SIZE_SMALL_MARKET - C.NUM_EMPLOYERS_SMALL_MARKET
+            exchange_rate = session.config['exchange_rate_small_market']
+            players_in_your_group = session.config['size_small_market']
+            employers_in_your_group = session.config['num_employers_small_market']
+            workers_in_your_group = session.config['size_small_market'] - session.config['num_employers_small_market']
 
         return dict(
             exchange_rate=exchange_rate,
             players_in_your_group=players_in_your_group,
             employers_in_your_group=employers_in_your_group,
             workers_in_your_group=workers_in_your_group,
-            participation_fee=session.config['showup_fee'],
-            initial_points=session.config['showup_fee'] * (1 / exchange_rate),
+            shock_after_rounds=session.config['shock_after_rounds'],
+            total_rounds=int(session.config['total_rounds']),
+            participation_fee=int(session.config['showup_fee']),
+            initial_points=int(session.config['showup_fee'] * (1 / exchange_rate)),
             market_time=session.config['market_timeout_seconds'],
             worker_outside_option=session.config['worker_outside_option'],
             employer_outside_option=session.config['employer_outside_option'],
