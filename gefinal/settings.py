@@ -33,7 +33,7 @@ SESSION_CONFIGS = [
          MPL=[10, 7, 5],                                                           # Productivity for 1, 2, 3 workers
          employer_outside_option=0,                                                # Outside option for employer
          worker_outside_option=5,                                                  # Outside option for worker
-         final=True,                                                               # Displays instructions if true
+         final=False,                                                              # Displays instructions if true
          showup_fee=5.0,                                                           # Participation showup fee
          use_browser_bots=False,                                                   # Use browser bots
     )]

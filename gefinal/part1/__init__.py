@@ -42,7 +42,13 @@ class Player(BasePlayer):
                                         label="Please choose an effort level:")
     effort_cost = models.IntegerField()                                                                                 # Effort cost equivalent to the effort level
     matched_with_id = models.IntegerField()                                                                             # ID of the firm the worker is matched with
-    wait = models.BooleanField(initial=False)                                                                           # Show wait page if true
+    wait = models.BooleanField(initial=False)                                                                           # Show wait page if true (workers)+
+    wait1 = models.BooleanField(initial=False)                                                                          # Show wait page if true (employers)
+    wait2 = models.BooleanField(initial=False)                                                                          # Show wait page if true (employers)
+    wait3 = models.BooleanField(initial=False)                                                                          # Show wait page if true (employers)
+    accepted1 = models.BooleanField(initial=False)                                                                      # Show job acceptance page if true (workers)
+    accepted2 = models.BooleanField(initial=False)                                                                      # Show job acceptance page if true (workers)
+    accepted3 = models.BooleanField(initial=False)                                                                      # Show job acceptance page if true (workers)
     invalid = models.BooleanField(initial=False)                                                                        # Show job acceptance was invalid alert if true
     worker_counter = models.IntegerField()
     worker1_id = models.IntegerField()
@@ -92,10 +98,12 @@ class Offer(ExtraModel):
     wage = models.IntegerField()
     effort = models.IntegerField()
     effort_given = models.IntegerField()
+    job_number = models.IntegerField()
     status = models.StringField()
     timestamp_created = models.FloatField()
     timestamp_accepted = models.FloatField()
     timestamp_cancelled = models.FloatField()
+
 
 
 # FUNCTIONS
@@ -139,6 +147,7 @@ def to_dict(offer: Offer):
         effort=offer.effort,
         effort_given=offer.effort_given,
         status=offer.status,
+        job_number=offer.job_number,
         timestamp_created=offer.timestamp_created,
         timestamp_accepted=offer.timestamp_accepted,
         timestamp_cancelled=offer.timestamp_cancelled,
@@ -206,6 +215,7 @@ class MarketPage(Page):
     def live_method(player: Player, data):
         group = player.group
         player.invalid = False
+        print('Received', data)
         if data['information_type'] == 'offer':
             group.job_offer_counter += 1
             group.num_job_offers += 1
@@ -219,13 +229,22 @@ class MarketPage(Page):
                 effort=data['effort'],
                 effort_given=None,
                 status='open',
+                job_number=data["job_number"],
                 timestamp_created=int(time.time()) - group.start_timestamp,
                 timestamp_accepted=None,
                 timestamp_cancelled=None,
             )
             for p in group.get_players():
                 if p.participant.playerID == data['employer_id']:
-                    p.wait = True
+                    if data["job_number"] == 1:
+                        p.wait1 = True
+                        p.accepted1 = False
+                    elif data["job_number"] == 2:
+                        p.wait2 = True
+                        p.accepted2 = False
+                    elif data["job_number"] == 3:
+                        p.wait3 = True
+                        p.accepted3 = False
         elif data['information_type'] == 'accept':
             current_offer = Offer.filter(group=group, job_id=data['job_id'])
             if current_offer[0].status == 'open':
@@ -241,9 +260,15 @@ class MarketPage(Page):
                     if p.participant.playerID == data['employer_id']:
                         p.num_workers_employed += 1
                         p.total_wage_paid += data['wage']
-                        p.wait = False
-                        if p.num_workers_employed == 3:
-                            p.max_workers = True
+                        if data["job_number"] == 1:
+                            p.wait1 = False
+                            p.accepted1 = True
+                        elif data["job_number"] == 2:
+                            p.wait2 = False
+                            p.accepted2 = True
+                        elif data["job_number"] == 3:
+                            p.wait3 = False
+                            p.accepted3 = True
                     if p.participant.playerID == data['worker_id']:
                         p.is_employed = True
                         p.wait = True
@@ -261,7 +286,15 @@ class MarketPage(Page):
                 o.timestamp_cancelled = int(time.time()) - group.start_timestamp
             for p in group.get_players():
                 if p.participant.playerID == data['employer_id']:
-                    p.wait = False
+                    if data["job_number"] == 1:
+                        p.wait1 = False
+                        p.accepted1 = False
+                    elif data["job_number"] == 2:
+                        p.wait2 = False
+                        p.accepted2 = False
+                    elif data["job_number"] == 3:
+                        p.wait3 = False
+                        p.accepted3 = False
         elif data['information_type'] == 'load':
             pass
         else:
@@ -281,6 +314,12 @@ class MarketPage(Page):
                 page_information=dict(is_finished=group.is_finished,
                                       max_workers=p.max_workers,
                                       wait=p.wait,
+                                      wait1=p.wait1,
+                                      wait2=p.wait2,
+                                      wait3=p.wait3,
+                                      accepted1=p.accepted1,
+                                      accepted2=p.accepted2,
+                                      accepted3=p.accepted3,
                                       invalid=p.invalid,
                                       ),
                 market_information=market_information,
