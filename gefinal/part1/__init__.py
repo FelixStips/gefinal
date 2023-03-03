@@ -100,6 +100,7 @@ class Offer(ExtraModel):
     effort_given = models.IntegerField()
     job_number = models.IntegerField()
     status = models.StringField()
+    show = models.BooleanField()
     timestamp_created = models.FloatField()
     timestamp_accepted = models.FloatField()
     timestamp_cancelled = models.FloatField()
@@ -147,6 +148,7 @@ def to_dict(offer: Offer):
         effort=offer.effort,
         effort_given=offer.effort_given,
         status=offer.status,
+        show=offer.show,
         job_number=offer.job_number,
         timestamp_created=offer.timestamp_created,
         timestamp_accepted=offer.timestamp_accepted,
@@ -229,6 +231,7 @@ class MarketPage(Page):
                 effort=data['effort'],
                 effort_given=None,
                 status='open',
+                show=True,
                 job_number=data["job_number"],
                 timestamp_created=int(time.time()) - group.start_timestamp,
                 timestamp_accepted=None,
@@ -254,6 +257,7 @@ class MarketPage(Page):
                     group.is_finished = True
                 for o in current_offer:
                     o.status = 'accepted'
+                    o.show = True
                     o.worker_id = player.participant.playerID
                     o.timestamp_accepted = int(time.time()) - group.start_timestamp
                 for p in group.get_players():
@@ -283,6 +287,7 @@ class MarketPage(Page):
             current_offer = Offer.filter(group=group, job_id=data['job_id'])
             for o in current_offer:
                 o.status = 'cancelled'
+                o.show = False
                 o.timestamp_cancelled = int(time.time()) - group.start_timestamp
             for p in group.get_players():
                 if p.participant.playerID == data['employer_id']:
@@ -300,7 +305,7 @@ class MarketPage(Page):
         else:
             print('unknown message type: ', data['information_type'])
 
-        offers_to_show = sorted(Offer.filter(group=group), key=lambda o: o.job_id, reverse=True)
+        offers_to_show = sorted(Offer.filter(group=group, show=True), key=lambda o: o.job_id, reverse=True)
         offers_list = [to_dict(o) for o in offers_to_show]
 
         market_information = dict(workers_left=group.num_unmatched_workers,

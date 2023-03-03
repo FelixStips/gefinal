@@ -37,25 +37,25 @@ Results
                 You paid a wage <b>{{ total_wage_paid }}</b> and received <b>{{ total_effort_received }}</b> effort units.<br>
                 Your profit this round is <b>{{ player.payoff }}</b>. Your total profit in all rounds is <b>{{ total_payoff }}</b>. <br>
             </p>
-                You employed:
+                Your contracts were as follows:
                 <ol>
                     <li>
-                        Worker {{ worker1_id }} for {{ worker1_effort }} effort units and a wage of {{ worker1_wage }}.
-                        They provided {{ worker1_effort_given }} effort units.
+                        A wage of {{ worker1_wage }} for {{ worker1_effort }} effort units.
+                        The worker provided {{ worker1_effort_given }} effort units.
                     </li>
 
                     {% if num_workers == 2 %}
 
                     <li>
-                        Worker {{ worker2_id }} for {{ worker2_effort }} effort units and a wage of {{ worker2_wage }}.
-                        They provided {{ worker2_effort_given }} effort units.
+                         A wage of {{ worker2_wage }} for {{ worker2_effort }} effort units.
+                        The worker provided {{ worker2_effort_given }} effort units.
                     </li>
                     {% else %}
                         {% if num_workers == 3 %}
 
                     <li>
-                        Worker {{ worker3_id }} for {{ worker3_effort }} effort units and a wage of {{ worker3_wage }}.
-                        They provided {{ worker3_effort_given }} effort units.
+                         A wage of {{ worker3_wage }} for {{ worker3_effort }} effort units.
+                        The worker provided {{ worker3_effort_given }} effort units.
                     </li>
 
                     {% endif %}
