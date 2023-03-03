@@ -8,6 +8,7 @@
     }
 
     table {
+        align-items: center;
         border-collapse: separate;
         border-spacing: 0 15px;
     }
@@ -15,6 +16,10 @@
     body {
         margin: 0;
         padding: 0;
+    }
+
+    h5 {
+        margin-bottom: 15px;
     }
 
     #open_offers_table_t {
@@ -32,24 +37,21 @@
 
 <div class="card">
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Info Box Part 2</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Info Box Part 1</h6>
         <p>
             This is round number <b><span id="round_number">{{ round_number }}</span></b>.
             Your group includes <b><span id="employers_total">{{ employers_in_group }}</span> </b> employer(s)
-            and <b><span id="workers_total">{{ num_workers }}</span> </b> worker(s).
-            Your player ID is <b>{{ playerID }}</b>. <br>
+            and <b><span id="workers_total">{{ num_workers }}</span> </b> worker(s). <br>
         </p>
         <p>
             You are in the role of <b><span id="your_role_string">{{ string_role }}</span></b>.
 
 
             {% if player.participant.is_employer == True %}
-            You can employ at most three workers in this round. To send a job offer, type the wage and effort and click "Send Offer".
+            You can employ at most three workers in this round.
 
             {% else %}
-            You can accept at most one job offer this round.
-            Only job offers whose status is "open" can be accepted.
-            To do so, type in the job ID and click "Accept Offer".
+            You can accept at most one job offer this round. <br>
 
             {% endif %} <br>
         </p>
@@ -62,52 +64,147 @@
     </div>
 </div>
 
-<br><br>
+<br>
+
 
 <button class="otree-btn-next btn otree-next-button invisible" id = "to_next_page"></button>
 
 
-<table id="offer_mask" style="display: none">
-    <caption>Make an offer</caption>
-    <tr>
-        <td>
-            <input id="wage_input" class="form-control" placeholder="Wage (0 to 100)">
-        </td>
-        <td>
-            <input id="effort_input" class="form-control" placeholder="Effort (1 to 10)">
-        </td>
-        <td>
-            <button type="button" class="btn btn-secondary" id="send_offer" onclick="sendOffer()"> Send Offer
-            </button>
-        </td>
-    </tr>
-</table>
-
-
-<div class="card" id="employer_wait" style="display: none">
-    <h5 class="card-header">Your current offer</h5>
+<div class="card" id="trading_mask">
+    <h5 class="card-header">Trading mask</h5>
     <div class="card-body">
-        <p class="card-text">
-            You offered a wage <b><span id="wage_offered"></span></b> for an effort <b><span
-                    id="effort_offered"></span></b>. The status of your offer is <b><span
-                    id="status_offered"></span></b>. To cancel the offer, click the button below.
-            <span hidden id="job_id_offered"></span>
-        </p>
-        <button type="button" class="btn btn-secondary" id="cancel_offer" onclick="cancelOffer()"> Cancel Offer
-        </button>
+        You can make up to three job offers at a time. Use the masks below to send offers.  <br><br>
+    <div class="row">
+        <div class="col-md-4 col-12">
+            <div class="card" id="offer_mask_1" style="display: none">
+                <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">First job offer</h6>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="wage-addon1">Wage</span>
+                        </div>
+                        <input id="wage_input_1" class="form-control" placeholder="0 - 100" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="effort-addon1">Effort</span>
+                        </div>
+                        <input id="effort_input_1" class="form-control" placeholder="0 - 10" aria-describedby="basic-addon1">
+                    </div>
+                <button type="button" class="btn btn-secondary" id="send_offer_1" onclick="sendOffer(this.id)"> Send Offer</button>
+                </div>
+            </div>
+            <div class="card" id="employer_wait_1" style="display: none">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Your first offer </h6>
+                    <p class="card-text">
+                        You offered a wage of <b><span id="employer_wage_offered_1"></span></b>
+                        for a desired effort of <b><span id="employer_effort_offered_1"></span></b>.
+                        The job ID is <b><span id="employer_job_id_offered_1"></span></b>.
+                        To cancel the offer, click the button below.
+                    </p>
+                    <button type="button" class="btn btn-secondary" id="cancel_offer_1" onclick="cancelOffer(this.id)"> Cancel Offer
+                    </button>
+                </div>
+            </div>
+            <div class="card" id="employer_accepted_1" style="display: none">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Your first offer was accepted!</h6>
+                    <p class="card-text">
+                        The offer with ID <b><span id="employer_job_id_accepted_1"></span></b> was accepted.
+                        You offered a wage <b><span id="employer_wage_accepted_1"></span></b>
+                        for a desired effort of <b><span id="employer_effort_accepted_1"></span></b>.
+                    </p>
+                </div>
+            </div>
+      </div>
+      <div class="col-md-4 col-12">
+        <div class="card" id="offer_mask_2" style="display: none">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Second job offer</h6>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" id="wage-addon2">Wage</span>
+                        </div>
+                        <input id="wage_input_2" class="form-control" placeholder="0 - 100" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text" id="effort-addon2">Effort</span>
+                            </div>
+                            <input id="effort_input_2" class="form-control" placeholder="0 - 10" aria-describedby="basic-addon1">
+                        </div>
+                <button type="button" class="btn btn-secondary" id="send_offer_2" onclick="sendOffer(this.id)"> Send Offer</button>
+            </div>
+        </div>
+        <div class="card" id="employer_wait_2" style="display: none">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Your second offer</h6>
+                <p class="card-text">
+                    You offered a wage of <b><span id="employer_wage_offered_2"></span></b>
+                    for a desired effort of <b><span id="employer_effort_offered_2"></span></b>.
+                    The job ID is <b><span id="employer_job_id_offered_2"></span></b>.
+                    To cancel the offer, click the button below.
+                </p>
+                    <button type="button" class="btn btn-secondary" id="cancel_offer_2" onclick="cancelOffer(this.id)"> Cancel Offer</button>
+            </div>
+        </div>
+        <div class="card" id="employer_accepted_2" style="display: none">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Your first offer was accepted!</h6>
+                <p class="card-text">
+                    The offer with ID <b><span id="employer_job_id_accepted_2"></span></b> was accepted.
+                    You offered a wage <b><span id="employer_wage_accepted_2"></span></b>
+                    for a desired effort of <b><span id="employer_effort_accepted_2"></span></b>.
+                </p>
+            </div>
+        </div>
+      </div>
+        <div class="col-md-4 col-12">
+            <div class="card" id="offer_mask_3" style="display: none">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Third job offer</h6>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text" id="wage-addon3">Wage</span>
+                            </div>
+                            <input id="wage_input_3" class="form-control" placeholder="0 - 100" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                <span class="input-group-text" id="effort-addon3">Effort</span>
+                                </div>
+                                <input id="effort_input_3" class="form-control" placeholder="0 - 10" aria-describedby="basic-addon1">
+                            </div>
+                    <button type="button" class="btn btn-secondary" id="send_offer_3" onclick="sendOffer(this.id)"> Send Offer</button>
+                </div>
+            </div>
+            <div class="card" id="employer_wait_3" style="display: none">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Your first offer</h6>
+                    <p class="card-text">
+                        You offered a wage of <b><span id="employer_wage_offered_3"></span></b>
+                        for a desired effort of <b><span id="employer_effort_offered_3"></span></b>.
+                        The job ID is <b><span id="employer_job_id_offered_3"></span></b>.
+                        To cancel the offer, click the button below.
+                    </p>
+                    <button type="button" class="btn btn-secondary" id="cancel_offer_3" onclick="cancelOffer(this.id)"> Cancel Offer</button>
+                </div>
+            </div>
+            <div class="card" id="employer_accepted_3" style="display: none">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Your first offer was accepted!</h6>
+                    <p class="card-text">
+                        The offer with ID <b><span id="employer_job_id_accepted_3"></span></b> was accepted.
+                        You offered a wage <b><span id="employer_wage_accepted_3"></span></b>
+                        for a desired effort of <b><span id="employer_effort_accepted_3"></span></b>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </div>
-
-
-<div class="card" id="max_workers" style="display: none">
-    <h5 class="card-header">Your current Offer</h5>
-    <div class="card-body">
-        <p class="card-text">
-            You employed 3 workers. You cannot send more offers.
-        </p>
-    </div>
-</div>
-
 
 <table id="accept_mask" style="display: none">
     <caption>Accept an offer</caption>
@@ -129,9 +226,9 @@
     <h5 class="card-header">You accepted the following offer </h5>
     <div class="card-body">
         <p class="card-text">
-          A wage of <b><span id="wage_accepted"></span> </b>
-            for <b><span id="effort_accepted"></span></b> effort units
-        from employer <b><span id="employer_id_accepted"></span></b>.
+          A wage of <b><span id="worker_wage_accepted"></span> </b>
+            for <b><span id="worker_effort_accepted"></span></b> effort units.
+            The job ID is <b><span id="worker_job_id_accepted"></span></b>.
         Please wait until the round ends.
     </div>
 </div>
@@ -139,47 +236,49 @@
 
 <br><br>
 
+<div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="table-responsive col-lg-6" id="open_offers_table">
+                    <div class="text-center">
+                    <h5 style="color: #696969">Open offers</h5>
+                                    <table class="table table-bordered table-sm" id="open_offers_table_t">
+                                        <thead class="thead-light">
+                                            <tr class="table-light">
+                                                <th scope="col">Job ID</th>
+                                                <th scope="col">Wage</th>
+                                                <th scope="col">Effort</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="open_offers_body">
+                                        </tbody>
+                                    </table>
+                            </div>
+                </div>
+                <div class="table-responsive col-lg-6" id="accepted_offers_table">
+                    <div class="text-center">
+                    <h5 style="color: #696969">Accepted offers</h5>
+                           <table class="table table-bordered table-sm" id="accepted_offers_table_t">
+                                <thead class="thead-light">
+                                    <tr class="table-light">
+                                        <th scope="col">Job ID</th>
+                                        <th scope="col">Wage</th>
+                                        <th scope="col">Effort</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="accepted_offers_body">
+                                </tbody>
+                           </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
 
-    <div class="table-responsive" id="open_offers_table" style="display: none">
-        <table class="table table-bordered" id="open_offers_table_t">
-            <caption>Offers in the market</caption>
-            <thead class="thead-dark">
-                <tr class="table-secondary">
-                    <th scope="col">Job ID</th>
-                    <th scope="col">Employer ID</th>
-                    <th scope="col">Worker ID</th>
-                    <th scope="col">Wage</th>
-                    <th scope="col">Effort</th>
-                    <th scope="col">Status</th>
-                </tr>
-            </thead>
-            <tbody id="open_offers_body" class="thead-light">
-            </tbody>
-        </table>
-    </div>
-
-    <br>
-
-    <div class="table-responsive" id="accepted_offers_table" style="display: none">
-        <table class="table table-bordered" id="accepted_offers_table_t">
-            <caption>Your accepted offers</caption>
-            <thead class="table-success">
-                <tr class="table-success">
-                    <th scope="col">Job ID</th>
-                    <th scope="col">Employer ID</th>
-                    <th scope="col">Worker ID</th>
-                    <th scope="col">Wage</th>
-                    <th scope="col">Effort</th>
-                    <th scope="col">Status</th>
-                </tr>
-            </thead>
-            <tbody id="accepted_offers_body" class="thead-light">
-            </tbody>
-        </table>
-    </div>
 
 
-<button type="button" id="trigger" onclick="acceptancePopup()" style="display: none"></button>
 
 
 
@@ -191,85 +290,65 @@
             renderPage(page_information);
             updateInfobox(market_information);
             updateOffersTable(offers);
-            updateAcceptedTable(offers);
-            updateEmployerWaitCard(offers);
+            updateEmployerCards(offers);
             updateWorkerWaitCard(offers);
         }
 
-        // Clickable
-
-        // onclick... function (this)...  ... livesend , basically: <tr onclick="accept(this)">, highlight the row
-        // button: function to check highlighted row, if there is extract data and sending
-
         function updateOffersTable(offers) {
-            let offers_body = document.getElementById("open_offers_body");
-            offers_body.innerHTML = "";
+            let open_offers_body = document.getElementById("open_offers_body");
+            let accepted_offers_body = document.getElementById("accepted_offers_body");
+            open_offers_body.innerHTML = "";
+            accepted_offers_body.innerHTML = "";
             for (let i = 0; i < offers.length; i++) {
-                let {job_id, employer_id, worker_id, wage, effort, status} = offers[i];
-                let worker_id_text = worker_id === null ? "" : worker_id;
-                offers_body.innerHTML += `<tr id="open_row_${job_id}" class="table-light">
+                let {job_id, wage, effort, status, employer_id, job_number} = offers[i];
+                if (status === "open") {
+                    open_offers_body.innerHTML += `<tr id="open_row_${job_id}">
                                                     <td id="open_col_job_id_${job_id}"> ${job_id} </td>
-                                                    <td id="open_col_employer_id_${job_id}"> ${employer_id} </td>
-                                                    <td id="open_col_worker_id_${job_id}"> ${worker_id_text} </td>
                                                     <td id="open_col_wage_${job_id}"> ${wage} </td>
                                                     <td id="open_col_effort_${job_id}"> ${effort} </td>
-                                                    <td id="open_col_status_${job_id}"> ${status} </td>
+                                                    <td id="open_col_status_${job_id}" style="color: #008000;"> ${status} </td>
+                                                    <td id="open_col_employer_id_${job_id}" style="display: none"> ${employer_id} </td>
+                                                    <td id="open_col_job_number_${job_id}" style="display: none"> ${job_number} </td>
                                                 </tr>`;
-            }
-        }
-
-        function updateAcceptedTable(offers) {
-            let accepted_body = document.getElementById("accepted_offers_body");
-            accepted_body.innerHTML = "";
-            for (let i = 0; i < offers.length; i++) {
-                if (offers[i].status === "accepted" && offers[i].employer_id == js_vars.my_id) {
-                    let {job_id, employer_id, worker_id, wage, effort, status} = offers[i];
-                    let row = document.createElement("tr");
-                    let job_id_col = document.createElement("td");
-                    let employer_id_col = document.createElement("td");
-                    let worker_id_col = document.createElement("td");
-                    let wage_col = document.createElement("td");
-                    let effort_col = document.createElement("td");
-                    let status_col = document.createElement("td");
-                    job_id_col.innerHTML = job_id;
-                    employer_id_col.innerHTML = employer_id;
-                    worker_id_col.innerHTML = worker_id;
-                    wage_col.innerHTML = wage;
-                    effort_col.innerHTML = effort;
-                    status_col.innerHTML = status;
-                    row.appendChild(job_id_col);
-                    row.appendChild(employer_id_col);
-                    row.appendChild(worker_id_col);
-                    row.appendChild(wage_col);
-                    row.appendChild(effort_col);
-                    row.appendChild(status_col);
-                    accepted_body.appendChild(row);
+                } else if (status === "accepted") {
+                    accepted_offers_body.innerHTML += `<tr id="accepted_row_${job_id}">
+                                                    <td id="accepted_col_job_id_${job_id}"> ${job_id} </td>
+                                                    <td id="accepted_col_wage_${job_id}"> ${wage} </td>
+                                                    <td id="accepted_col_effort_${job_id}"> ${effort} </td>
+                                                    <td id="accepted_col_status_${job_id}" style="color: #0000CD;"> ${status} </td>
+                                                </tr>`;
                 }
             }
         }
 
 
-        function updateEmployerWaitCard(offers) {
+        function updateEmployerCards(offers) {
             for (let i = 0; i < offers.length; i++) {
                 if (offers[i].status === "open" && offers[i].employer_id == js_vars.my_id) {
-                    let {job_id, wage, effort, status} = offers[i];
-                    document.getElementById("wage_offered").innerHTML = wage;
-                    document.getElementById("effort_offered").innerHTML = effort;
-                    document.getElementById("status_offered").innerHTML = status;
-                    document.getElementById("job_id_offered").innerHTML = job_id;
+                    let {job_id, wage, effort, job_number} = offers[i];
+                    document.getElementById(`employer_wage_offered_${job_number}`).innerHTML = wage;
+                    document.getElementById(`employer_effort_offered_${job_number}`).innerHTML = effort;
+                    document.getElementById(`employer_job_id_offered_${job_number}`).innerHTML = job_id;
+                }
+                if (offers[i].status === "accepted" && offers[i].employer_id == js_vars.my_id) {
+                    let {job_id, wage, effort, job_number} = offers[i];
+                    document.getElementById(`employer_wage_accepted_${job_number}`).innerHTML = wage;
+                    document.getElementById(`employer_effort_accepted_${job_number}`).innerHTML = effort;
+                    document.getElementById(`employer_job_id_accepted_${job_number}`).innerHTML = job_id;
                 }
             }
         }
+
 
         function updateWorkerWaitCard(offers) {
             for (let i = 0; i < offers.length; i++) {
-                console.log(offers[i])
+                console.log(offers[i]);
                 if (offers[i].status === "accepted" && offers[i].worker_id == js_vars.my_id) {
-                    let {job_id, wage, effort, employer_id} = offers[i];
-                    document.getElementById("wage_accepted").innerHTML = wage;
-                    document.getElementById("effort_accepted").innerHTML = effort;
-                    document.getElementById("employer_id_accepted").innerHTML = employer_id;
-                    document.getElementById("job_id_accepted").innerHTML = job_id;
+                    let {job_id, wage, effort} = offers[i];
+                    console.log(job_id, wage, effort)
+                    document.getElementById("worker_wage_accepted").innerHTML = wage;
+                    document.getElementById("worker_effort_accepted").innerHTML = effort;
+                    document.getElementById("worker_job_id_accepted").innerHTML = job_id;
                 }
             }
         }
@@ -282,42 +361,68 @@
             document.getElementById("average_effort").innerHTML = average_effort;
         }
 
-        function acceptancePopup() {
-            window.alert("Your offer has been accepted!");
-        }
 
-         function renderPage(page_information) {
-            let {is_finished, max_workers, wait, invalid} = page_information;
-            if (document.getElementById("employer_wait").style.display === "block" && !wait) {
-                    document.getElementById("trigger").click();
-                }
+        function renderPage(page_information) {
+            let {is_finished, wait, wait1, wait2, wait3, accepted1, accepted2, accepted3, invalid} = page_information;
             if (is_finished) {
                 document.getElementById("to_next_page").click();
             } else {
+                document.getElementById("accepted_offers_table").style.display = "block";
+                document.getElementById("open_offers_table").style.display = "block";
                 if (js_vars.is_employer==true) {
-                    document.getElementById("accepted_offers_table").style.display = "block";
-                    document.getElementById("open_offers_table").style.display = "block";
+                    document.getElementById("trading_mask").style.display = "block";
                     document.getElementById("worker_wait").style.display = "none";
                     document.getElementById("accept_mask").style.display = "none";
-                    if (wait) {
-                        document.getElementById("offer_mask").style.display = "none";
-                        document.getElementById("employer_wait").style.display = "block";
-                        document.getElementById("max_workers").style.display = "none";
-                    } else if (max_workers) {
-                        document.getElementById("offer_mask").style.display = "none";
-                        document.getElementById("employer_wait").style.display = "none";
-                        document.getElementById("max_workers").style.display = "block";
-                    } else {
-                        document.getElementById("offer_mask").style.display = "block";
-                        document.getElementById("employer_wait").style.display = "none";
-                        document.getElementById("max_workers").style.display = "none";
+                    if (wait1) {
+                          document.getElementById("employer_wait_1").style.display = "block";
+                          document.getElementById("offer_mask_1").style.display = "none";
+                          document.getElementById("employer_accepted_1").style.display = "none";
+                        } else if (accepted1) {
+                          document.getElementById("employer_accepted_1").style.display = "block";
+                          document.getElementById("employer_wait_1").style.display = "none";
+                          document.getElementById("offer_mask_1").style.display = "none";
+                        } else {
+                          document.getElementById("offer_mask_1").style.display = "block";
+                          document.getElementById("employer_wait_1").style.display = "none";
+                          document.getElementById("employer_accepted_1").style.display = "none";
+                    }
+                    if (wait2) {
+                        document.getElementById("employer_wait_2").style.display = "block";
+                        document.getElementById("offer_mask_2").style.display = "none";
+                        document.getElementById("employer_accepted_2").style.display = "none";
+                        } else if (accepted2) {
+                        document.getElementById("employer_accepted_2").style.display = "block";
+                        document.getElementById("employer_wait_2").style.display = "none";
+                        document.getElementById("offer_mask_2").style.display = "none";
+                        } else {
+                        document.getElementById("offer_mask_2").style.display = "block";
+                        document.getElementById("employer_wait_2").style.display = "none";
+                        document.getElementById("employer_accepted_2").style.display = "none";
+                    }
+                    if (wait3) {
+                        document.getElementById("employer_wait_3").style.display = "block";
+                        document.getElementById("offer_mask_3").style.display = "none";
+                        document.getElementById("employer_accepted_3").style.display = "none";
+                        } else if (accepted3) {
+                        document.getElementById("employer_accepted_3").style.display = "block";
+                        document.getElementById("employer_wait_3").style.display = "none";
+                        document.getElementById("offer_mask_3").style.display = "none";
+                        } else {
+                        document.getElementById("offer_mask_3").style.display = "block";
+                        document.getElementById("employer_wait_3").style.display = "none";
+                        document.getElementById("employer_accepted_3").style.display = "none";
                     }
                 } else {
-                    document.getElementById("open_offers_table").style.display = "block";
-                    document.getElementById("accepted_offers_table").style.display = "none";
-                    document.getElementById("employer_wait").style.display = "none";
-                    document.getElementById("offer_mask").style.display = "none";
-                    document.getElementById("max_workers").style.display = "none";
+                    document.getElementById("trading_mask").style.display = "none";
+                    document.getElementById("employer_wait_1").style.display = "none";
+                    document.getElementById("employer_wait_2").style.display = "none";
+                    document.getElementById("employer_wait_3").style.display = "none";
+                    document.getElementById("employer_accepted_1").style.display = "none";
+                    document.getElementById("employer_accepted_2").style.display = "none";
+                    document.getElementById("employer_accepted_3").style.display = "none";
+                    document.getElementById("offer_mask_1").style.display = "none";
+                    document.getElementById("offer_mask_2").style.display = "none";
+                    document.getElementById("offer_mask_3").style.display = "none";
                     if (wait) {
                         document.getElementById("accept_mask").style.display = "none";
                         document.getElementById("worker_wait").style.display = "block";
@@ -333,50 +438,52 @@
             }
         }
 
-    function cancelOffer() {
-        let cancel_job_id = parseInt(document.getElementById("job_id_offered").innerHTML);
+    function cancelOffer(offer_cancelled) {
+        let job_offer_number = parseInt(offer_cancelled.slice(-1));
+        let cancel_job_id = parseInt(document.getElementById(`employer_job_id_offered_${job_offer_number}`).innerHTML);
+        let cancel_wage = parseInt(document.getElementById(`employer_wage_offered_${job_offer_number}`).innerHTML);
+        let cancel_effort = parseInt(document.getElementById(`employer_effort_offered_${job_offer_number}`).innerHTML);
         let cancel_employer_id = js_vars.my_id;
-        let cancel_wage = parseInt(document.getElementById("wage_offered").innerHTML);
-        let cancel_effort = parseInt(document.getElementById("effort_offered").innerHTML);
         liveSend({
             "information_type": "cancel",
             "employer_id": cancel_employer_id,
             "job_id": cancel_job_id,
             "wage": cancel_wage,
             "effort": cancel_effort,
+            "job_number": job_offer_number,
         })
     }
 
     function acceptOffer() {
         let accepted_job_id = parseInt(document.getElementById("input_job_id_accept").value);
         try {
-            let accepted_employer_id = parseInt(document.getElementById(`open_col_employer_id_${accepted_job_id}`).innerHTML);
             let accepted_wage = parseInt(document.getElementById(`open_col_wage_${accepted_job_id}`).innerHTML);
             let accepted_effort = parseInt(document.getElementById(`open_col_effort_${accepted_job_id}`).innerHTML);
+            let accepted_employer_id = parseInt(document.getElementById(`open_col_employer_id_${accepted_job_id}`).innerHTML);
+            let accepted_job_number = parseInt(document.getElementById(`open_col_job_number_${accepted_job_id}`).innerHTML);
             let worker_id = js_vars.my_id;
             liveSend({
                 "information_type": "accept",
                 "job_id": accepted_job_id,
                 "employer_id": accepted_employer_id,
                 "worker_id": worker_id,
+                "employer_id": accepted_employer_id,
+                "job_number": accepted_job_number,
                 "wage": accepted_wage,
                 "effort": accepted_effort
             })
-        }
-        catch {
-            alert("The job id you have entered is not valid!");
+        } catch {
+            alert("Error: Please enter a valid job ID.");
             return;
-        }
-        finally {
+        } finally {
             document.getElementById("input_job_id_accept").value = "";
         }
     }
 
-    function sendOffer() {
-        let effort_inputted = parseInt(document.getElementById("effort_input").value);
-        let wage_inputted = parseInt(document.getElementById("wage_input").value);
-        let status = 'open';
-        let my_id = js_vars.my_id;
+    function sendOffer(offer_sent) {
+        let job_offer_number = parseInt(offer_sent.slice(-1));
+        let effort_inputted = parseInt(document.getElementById(`effort_input_${job_offer_number}`).value);
+        let wage_inputted = parseInt(document.getElementById(`wage_input_${job_offer_number}`).value);
         if (isNaN(wage_inputted) || isNaN(effort_inputted)) {
             alert("Error: Please enter a number in both fields before sending offer.");
             return;
@@ -387,16 +494,19 @@
             alert("Error: Please specify a requested effort between 0 and 10.");
             return;
         } else {
+            let status = 'open';
+            let my_id = js_vars.my_id;
             liveSend({
                 "information_type": "offer",
                 "employer_id": my_id,
-                "status": status,
                 "wage": wage_inputted,
-                "effort": effort_inputted
+                "effort": effort_inputted,
+                "status": status,
+                "job_number": job_offer_number
             });
-            document.getElementById("effort_input").value = "";
-            document.getElementById("wage_input").value = "";
         }
+        document.getElementById(`effort_input_${job_offer_number}`).value = "";
+        document.getElementById(`wage_input_${job_offer_number}`).value = "";
     }
 
     window.onload = function() {

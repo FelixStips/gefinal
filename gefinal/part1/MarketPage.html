@@ -52,7 +52,6 @@
 
             {% else %}
             You can accept at most one job offer this round. <br>
-            To do so, type in the job ID and click "Accept Offer".
 
             {% endif %} <br>
         </p>
@@ -152,7 +151,7 @@
         </div>
         <div class="card" id="employer_accepted_2" style="display: none">
             <div class="card-body">
-                <h6 class="card-subtitle mb-2 text-muted">Your first offer was accepted!</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Your second offer was accepted!</h6>
                 <p class="card-text">
                     The offer with ID <b><span id="employer_job_id_accepted_2"></span></b> was accepted.
                     You offered a wage <b><span id="employer_wage_accepted_2"></span></b>
@@ -182,7 +181,7 @@
             </div>
             <div class="card" id="employer_wait_3" style="display: none">
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Your first offer</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Your third offer</h6>
                     <p class="card-text">
                         You offered a wage of <b><span id="employer_wage_offered_3"></span></b>
                         for a desired effort of <b><span id="employer_effort_offered_3"></span></b>.
@@ -194,7 +193,7 @@
             </div>
             <div class="card" id="employer_accepted_3" style="display: none">
                 <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Your first offer was accepted!</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Your third offer was accepted!</h6>
                     <p class="card-text">
                         The offer with ID <b><span id="employer_job_id_accepted_3"></span></b> was accepted.
                         You offered a wage <b><span id="employer_wage_accepted_3"></span></b>
@@ -316,7 +315,7 @@
                                                     <td id="accepted_col_job_id_${job_id}"> ${job_id} </td>
                                                     <td id="accepted_col_wage_${job_id}"> ${wage} </td>
                                                     <td id="accepted_col_effort_${job_id}"> ${effort} </td>
-                                                    <td id="accepted_col_status_${job_id}" style="color: #FFE4B5;"> ${status} </td>
+                                                    <td id="accepted_col_status_${job_id}" style="color: #0000CD;"> ${status} </td>
                                                 </tr>`;
                 }
             }
@@ -362,9 +361,6 @@
             document.getElementById("average_effort").innerHTML = average_effort;
         }
 
-        function acceptancePopup() {
-            window.alert("Your offer has been accepted!");
-        }
 
         function renderPage(page_information) {
             let {is_finished, wait, wait1, wait2, wait3, accepted1, accepted2, accepted3, invalid} = page_information;
@@ -442,17 +438,19 @@
             }
         }
 
-    function cancelOffer() {
-        let cancel_job_id = parseInt(document.getElementById("job_id_offered").innerHTML);
+    function cancelOffer(offer_cancelled) {
+        let job_offer_number = parseInt(offer_cancelled.slice(-1));
+        let cancel_job_id = parseInt(document.getElementById(`employer_job_id_offered_${job_offer_number}`).innerHTML);
+        let cancel_wage = parseInt(document.getElementById(`employer_wage_offered_${job_offer_number}`).innerHTML);
+        let cancel_effort = parseInt(document.getElementById(`employer_effort_offered_${job_offer_number}`).innerHTML);
         let cancel_employer_id = js_vars.my_id;
-        let cancel_wage = parseInt(document.getElementById("wage_offered").innerHTML);
-        let cancel_effort = parseInt(document.getElementById("effort_offered").innerHTML);
         liveSend({
             "information_type": "cancel",
             "employer_id": cancel_employer_id,
             "job_id": cancel_job_id,
             "wage": cancel_wage,
             "effort": cancel_effort,
+            "job_number": job_offer_number,
         })
     }
 
