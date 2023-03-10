@@ -10,7 +10,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'part1'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1
+    NUM_ROUNDS = 10
 
 
 class Subsession(BaseSubsession):
@@ -476,7 +476,7 @@ class Results(Page):
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
         if player.round_number >= player.session.config['shock_after_rounds']:
-            return "midbreak"
+            return "quiz"
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -524,7 +524,7 @@ page_sequence = [WaitToStart,
 
 def custom_export(players):
     # top row
-    yield ['session_code' ,'group.id_in_subsession', 'round', 'job_id', 'employer_id', 'worker_id', 'wage', 'effort', 'effort_given',
+    yield ['session_code', 'group.id_in_subsession', 'round', 'job_id', 'employer_id', 'worker_id', 'wage', 'effort', 'effort_given',
            'status', 'timestamp_created', 'timestamp_accepted', 'timestamp_cancelled']
 
     # data rows

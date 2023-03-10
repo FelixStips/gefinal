@@ -10,7 +10,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'part2'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1
+    NUM_ROUNDS = 10
 
 
 class Subsession(BaseSubsession):
@@ -475,8 +475,8 @@ class Results(Page):
 
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
-        if player.round_number >= player.session.config['shock_after_rounds']:
-            return "midbreak"
+        if player.round_number >= player.session.config['rounds_part_2']:
+            return "questionnaire"
 
     @staticmethod
     def vars_for_template(player: Player):

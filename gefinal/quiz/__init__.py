@@ -17,15 +17,26 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     offer_fair_1 = models.StringField(
-        label="""<p style="margin-top:1cm;">
+        label="""<p style="margin-top:0cm;">
                     How fair do you find this job offer?<br> 
-                    <ul class="list-group">
-                      <li class="list-group-item">Job 3</li>
-                      <li class="list-group-item">Wage: 20</li>
-                      <li class="list-group-item">Effort requested: 10</li>
-                    </ul>
                     <i>Please use a scale from 1 to 5, where 1 means you are “completely unfair” and 5 means "completely fair". 
                     You can also use the values in-between to indicate where you fall on the scale.</i>
+                    <table class="table table-bordered table-sm">
+                        <thead class="thead-light">
+                            <tr class="table-light">
+                                <th class="col-3">Job ID</th>
+                                <th class="col-3">Wage</th>
+                                <th class="col-3">Effort</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="col-3"> 1 </td>
+                                <td class="col-3"> 20 </td>
+                                <td class="col-3"> 10 </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </p>""",
         choices=['1 - completely unfair',
                  '2 - unfair',
@@ -34,15 +45,26 @@ class Player(BasePlayer):
                  '5 - completely fair']
     )
     offer_fair_2 = models.StringField(
-        label="""<p style="margin-top:1cm;">
+        label="""<p style="margin-top:0cm;">
                     How fair do you find this job offer? <br> 
-                    <ul class="list-group">
-                      <li class="list-group-item">Job 3</li>
-                      <li class="list-group-item">Wage: 50</li>
-                      <li class="list-group-item">Effort requested: 10</li>
-                    </ul>
                     <i>Please use a scale from 1 to 5, where 1 means you are “completely unfair” and 5 means "completely fair". 
                     You can also use the values in-between to indicate where you fall on the scale.</i>
+                    <table class="table table-bordered table-sm">
+                        <thead class="thead-light">
+                            <tr class="table-light">
+                                <th scope="col">Job ID</th>
+                                <th scope="col">Wage</th>
+                                <th scope="col">Effort</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> 1 </td>
+                                <td> 50 </td>
+                                <td> 10 </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </p>""",
         choices=['1 - completely unfair',
                  '2 - unfair',
@@ -51,16 +73,27 @@ class Player(BasePlayer):
                  '5 - completely fair']
     )
     offer_fair_3 = models.StringField(
-        label="""<p style="margin-top:1cm;">
+        label="""<p style="margin-top:0cm;">
                     How fair do you find this job offer? <br> 
-                    <ul class="list-group">
-                      <li class="list-group-item">Job 3</li>
-                      <li class="list-group-item">Wage: 80</li>
-                      <li class="list-group-item">Effort requested: 10</li>
-                    </ul>
                     <i>Please use a scale from 1 to 5, where 1 means you are “completely unfair” and 5 means "completely fair". 
                     You can also use the values in-between to indicate where you fall on the scale.</i>
-                </p>""",
+                    <table class="table table-bordered table-sm">
+                        <thead class="thead-light">
+                            <tr class="table-light">
+                                <th scope="col">Job ID</th>
+                                <th scope="col">Wage</th>
+                                <th scope="col">Effort</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> 1 </td>
+                                <td> 80 </td>
+                                <td> 10 </td>
+                            </tr>
+                        </tbody>
+                    </table>    
+                 </p>""",
         choices=['1 - completely unfair',
                  '2 - unfair',
                  '3 - neutral',
@@ -71,14 +104,29 @@ class Player(BasePlayer):
 
 # PAGES
 class QuestionsIntro(Page):
-    pass
+    @staticmethod
+    def vars_for_template(player: Player):
+        session = player.session
+        return dict(
+            rounds_played=session.config['shock_after_rounds'],
+        )
 
-class Questions(Page):
+class Question1(Page):
     form_model = 'player'
-    form_fields = ['offer_fair_1', 'offer_fair_2', 'offer_fair_3']
+    form_fields = ['offer_fair_1']
+
+class Question2(Page):
+    form_model = 'player'
+    form_fields = ['offer_fair_2']
+
+class Question3(Page):
+    form_model = 'player'
+    form_fields = ['offer_fair_3']
 
 
 
 page_sequence = [QuestionsIntro,
-                 Questions]
+                 Question1,
+                 Question2,
+                 Question3,]
 

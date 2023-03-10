@@ -46,12 +46,11 @@
         <p>
             You are in the role of <b><span id="your_role_string">{{ string_role }}</span></b>.
 
-
             {% if player.participant.is_employer == True %}
             You can employ at most three workers in this round.
 
             {% else %}
-            You can accept at most one job offer this round. <br>
+            You can accept at most one job offer this round.
 
             {% endif %} <br>
         </p>

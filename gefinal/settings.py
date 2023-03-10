@@ -31,6 +31,7 @@ SESSION_CONFIGS = [
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          total_rounds=2,                                                           # Number of market rounds
          shock_after_rounds=1,                                                     # Number of rounds before migration shock
+         rounds_part_2=1,                                                          # Number of rounds in part 2
          MPL=[10, 7, 5],                                                           # Productivity for 1, 2, 3 workers
          employer_outside_option=0,                                                # Outside option for employer
          worker_outside_option=5,                                                  # Outside option for worker
