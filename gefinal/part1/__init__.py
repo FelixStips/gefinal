@@ -10,7 +10,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'part1'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 2
+    NUM_ROUNDS = 1
 
 
 class Subsession(BaseSubsession):
@@ -91,6 +91,7 @@ class Player(BasePlayer):
 
 class Offer(ExtraModel):
     group = models.Link(Group)
+    marketID = models.IntegerField()
     round_number = models.IntegerField()
     job_id = models.IntegerField()
     employer_id = models.IntegerField()
@@ -114,12 +115,15 @@ def creating_session(subsession: Subsession):
         players_in_all_groups.extend(group.get_players())
 
     # group matrix numbers are based on player.id_in_subsession
-    players_in_large_market = [p.id_in_subsession for p in players_in_all_groups if p.participant.vars['large_market'] is True or p.participant.vars['large_market'] is None]
+    players_in_large_market_1 = [p.id_in_subsession for p in players_in_all_groups if p.participant.vars['large_market_1'] is True or p.participant.vars['large_market_1'] is None]
+    players_in_large_market_2 = [p.id_in_subsession for p in players_in_all_groups if p.participant.vars['large_market_2'] is True or p.participant.vars['large_market_2'] is None]
     players_in_small_market = [p.id_in_subsession for p in players_in_all_groups if p.participant.vars['large_market'] is False]
 
     matrix = []
-    if players_in_large_market is not []:
-        matrix.append(players_in_large_market)
+    if players_in_large_market_1 is not []:
+        matrix.append(players_in_large_market_1)
+    if players_in_large_market_2 is not []:
+        matrix.append(players_in_large_market_2)
     if players_in_small_market is not []:
         matrix.append(players_in_small_market)
 
@@ -127,12 +131,16 @@ def creating_session(subsession: Subsession):
 
     session = subsession.session
     for group in subsession.get_groups():
-        if group.get_players()[0].participant.vars['large_market'] is True:
+        if group.get_players()[0].participant.vars['large_market_1'] is True:
             group.marketID = 1
             group.large_market = True
             group.num_unmatched_workers = session.config['size_large_market'] - session.config['num_employers_large_market']
-        else:
+        elif group.get_players()[0].participant.vars['large_market_2'] is True:
             group.marketID = 2
+            group.large_market = True
+            group.num_unmatched_workers = session.config['size_large_market'] - session.config['num_employers_large_market']
+        else:
+            group.marketID = 3
             group.large_market = False
             group.num_unmatched_workers = session.config['size_small_market'] - session.config['num_employers_small_market']
 
@@ -140,6 +148,7 @@ def creating_session(subsession: Subsession):
 def to_dict(offer: Offer):
     return dict(
         group_id=offer.group_id,
+        marketID=offer.marketID,
         round_number=offer.round_number,
         job_id=offer.job_id,
         employer_id=offer.employer_id,
@@ -223,6 +232,7 @@ class MarketPage(Page):
             group.num_job_offers += 1
             Offer.create(
                 group=group,
+                marketID=group.marketID,
                 round_number=player.round_number,
                 job_id=int(str(group.marketID) + str(player.round_number) + str(group.job_offer_counter)),
                 employer_id=player.participant.playerID,

@@ -49,7 +49,7 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=5.00, doc=""
 )
 
-PARTICIPANT_FIELDS = ['large_market', 'small_market', 'is_employer', 'playerID', 'string_role', 'migrant', 'total_points', 'realpay', 'exrate']
+PARTICIPANT_FIELDS = ['large_market', 'large_market_1', 'large_market_2', 'small_market', 'is_employer', 'playerID', 'string_role', 'migrant', 'move_to_market_1', 'move_to_market_2', 'total_points', 'realpay', 'exrate']
 SESSION_FIELDS = []
 
 # ISO-639 code

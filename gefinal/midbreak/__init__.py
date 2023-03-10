@@ -21,10 +21,49 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    pass
+    offer_fair_1 = models.StringField(
+        label="""<p style="margin-top:1cm;">
+                    How fair do you find this job offer? Wage=20 and Effort=10. <br> 
+                    <i>Please use a scale from 1 to 5, where 1 means you are “completely unfair” and 5 means "completely fair". 
+                    You can also use the values in-between to indicate where you fall on the scale.</i>
+                </p>""",
+        choices=['1 - completely unfair',
+                 '2 - unfair',
+                 '3 - neutral',
+                 '4 - fair',
+                 '5 - completely fair']
+    )
+    offer_fair_2 = models.StringField(
+        label="""<p style="margin-top:1cm;">
+                    How fair do you find this job offer? Wage=50 and Effort=10. <br> 
+                    <i>Please use a scale from 1 to 5, where 1 means you are “completely unfair” and 5 means "completely fair". 
+                    You can also use the values in-between to indicate where you fall on the scale.</i>
+                </p>""",
+        choices=['1 - completely unfair',
+                 '2 - unfair',
+                 '3 - neutral',
+                 '4 - fair',
+                 '5 - completely fair']
+    )
+    offer_fair_3 = models.StringField(
+        label="""<p style="margin-top:1cm;">
+                    How fair do you find this job offer? Wage=80 and Effort=10. <br> 
+                    <i>Please use a scale from 1 to 5, where 1 means you are “completely unfair” and 5 means "completely fair". 
+                    You can also use the values in-between to indicate where you fall on the scale.</i>
+                </p>""",
+        choices=['1 - completely unfair',
+                 '2 - unfair',
+                 '3 - neutral',
+                 '4 - fair',
+                 '5 - completely fair']
+    )
 
 
 # PAGES
+class Question(Page):
+    form_model = 'player'
+    form_fields = ['offer_fair_1', 'offer_fair_2', 'offer_fair_3']
+
 class AnotherIntroduction(Page):
     pass
 
@@ -58,6 +97,7 @@ class AnotherWaitPage(WaitPage):
     body_text = "Please wait, part 2 will begin shortly."
 
 
-page_sequence = [AnotherIntroduction,
+page_sequence = [Question,
+                 AnotherIntroduction,
                  AnotherInstruction,
                  AnotherWaitPage]

@@ -46,7 +46,7 @@ class QuizResponses(ExtraModel):
 # FUNCTIONS
 def creating_session(subsession: Subsession):
     """
-    This function defines which market players will be in, whether they will workers or employers.
+    This function defines which market players will be in, whether they will workers or employers, and which market they will be moved to.
     """
     players = subsession.get_players()
     num_participants = len(players)
@@ -62,14 +62,28 @@ def creating_session(subsession: Subsession):
         participant_vars = p.participant.vars
         participant_vars['playerID'] = temp_id_list[(p.id_in_group - 1)]
         participant_vars['large_market'] = False
+        participant_vars['large_market_1'] = False
+        participant_vars['large_market_2'] = False
         participant_vars['small_market'] = False
         participant_vars['migrant'] = False
+        participant_vars['move_to_market_1'] = False
+        participant_vars['move_to_market_2'] = False
         participant_vars['is_employer'] = False
         participant_vars['realpay'] = []
         participant_vars['total_points'] = []
         participant_vars['exrate'] = []
         if participant_vars['playerID'] <= size_large_market:
             participant_vars['large_market'] = True
+            participant_vars['large_market_1'] = True
+            if participant_vars['playerID'] <= num_employers_large_market:
+                participant_vars['is_employer'] = True
+                participant_vars['string_role'] = 'employer'
+            else:
+                participant_vars['is_employer'] = False
+                participant_vars['string_role'] = 'worker'
+        elif participant_vars['playerID'] <= (2 * size_large_market):
+            participant_vars['large_market'] = True
+            participant_vars['large_market_2'] = True
             if participant_vars['playerID'] <= num_employers_large_market:
                 participant_vars['is_employer'] = True
                 participant_vars['string_role'] = 'employer'
