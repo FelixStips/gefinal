@@ -14,22 +14,23 @@ SESSION_CONFIGS = [
          display_name="Main",
          app_sequence=['intro',
                        'part1',
-                       'midbreak',
+                       'quiz',
                        'part2',
                        'questionnaire',
                        'end'],
-         num_demo_participants=8,
-         market_timeout_seconds=180,                                               # Duration of market stage in seconds
+         num_demo_participants=9,
+         market_timeout_seconds=30,                                               # Duration of market stage in seconds
          size_large_market=3,                                                      # Number of players in large market
-         size_small_market=2,                                                      # Number of players in small market
+         size_small_market=3,                                                      # Number of players in small market
          num_employers_large_market=1,                                             # Number of employers in large market
          num_employers_small_market=1,                                             # Number of employers in small market
-         migration_shock_size=1,                                                   # Number of migrants in migration shock
+         migration_small_shock_size=1,                                             # Number of migrants in small migration shock
+         migration_large_shock_size=1,                                             # Number of migrants in large migration shock
          exchange_rate_large_market=0.5,                                           # Exchange rate for large market
          exchange_rate_small_market=0.1,                                           # Exchange rate for small market
          countdown_seconds=3,                                                      # Duration of countdown in seconds
-         total_rounds=4,                                                           # Number of market rounds
-         shock_after_rounds=2,                                                     # Number of rounds before migration shock
+         total_rounds=2,                                                           # Number of market rounds
+         shock_after_rounds=1,                                                     # Number of rounds before migration shock
          MPL=[10, 7, 5],                                                           # Productivity for 1, 2, 3 workers
          employer_outside_option=0,                                                # Outside option for employer
          worker_outside_option=5,                                                  # Outside option for worker

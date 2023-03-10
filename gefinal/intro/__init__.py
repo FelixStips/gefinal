@@ -53,17 +53,17 @@ def creating_session(subsession: Subsession):
     temp_id_list = random.sample(range(1, num_participants + 1), num_participants)
     session = subsession.session
     size_large_market = session.config['size_large_market']
-    size_small_market = session.config['size_small_market']
     num_employers_large_market = session.config['num_employers_large_market']
     num_employers_small_market = session.config['num_employers_small_market']
-    migration_shock_size = session.config['migration_shock_size']
+    migration_small_shock_size = session.config['migration_small_shock_size']
+    migration_large_shock_size = session.config['migration_large_shock_size']
 
     for p in players:
         participant_vars = p.participant.vars
         participant_vars['playerID'] = temp_id_list[(p.id_in_group - 1)]
         participant_vars['large_market'] = False
-        participant_vars['large_market_1'] = False
-        participant_vars['large_market_2'] = False
+        participant_vars['large_market_1'] = False                                                                      # 1st large market will receive small shock
+        participant_vars['large_market_2'] = False                                                                      # 2nd large market will receive large shock
         participant_vars['small_market'] = False
         participant_vars['migrant'] = False
         participant_vars['move_to_market_1'] = False
@@ -79,27 +79,40 @@ def creating_session(subsession: Subsession):
                 participant_vars['is_employer'] = True
                 participant_vars['string_role'] = 'employer'
             else:
-                participant_vars['is_employer'] = False
                 participant_vars['string_role'] = 'worker'
         elif participant_vars['playerID'] <= (2 * size_large_market):
             participant_vars['large_market'] = True
             participant_vars['large_market_2'] = True
-            if participant_vars['playerID'] <= num_employers_large_market:
+            if participant_vars['playerID'] <= (size_large_market + num_employers_large_market):
                 participant_vars['is_employer'] = True
                 participant_vars['string_role'] = 'employer'
             else:
-                participant_vars['is_employer'] = False
                 participant_vars['string_role'] = 'worker'
         else:
             participant_vars['small_market'] = True
-            if participant_vars['playerID'] <= (num_employers_small_market + size_large_market):
+            if participant_vars['playerID'] <= (num_employers_small_market + size_large_market + size_large_market):
                 participant_vars['is_employer'] = True
                 participant_vars['string_role'] = 'employer'
             else:
-                participant_vars['is_employer'] = False
                 participant_vars['string_role'] = 'worker'
-                if participant_vars['playerID'] >= (size_large_market + size_small_market - migration_shock_size + 1):
+                if participant_vars['playerID'] <= (num_employers_small_market + size_large_market + size_large_market + migration_small_shock_size):
                     participant_vars['migrant'] = True
+                    participant_vars['move_to_market_1'] = True
+                elif participant_vars['playerID'] <= (num_employers_small_market + size_large_market + size_large_market + migration_small_shock_size + migration_large_shock_size):
+                    participant_vars['migrant'] = True
+                    participant_vars['move_to_market_2'] = True
+
+    """ Proportions seem right at least...
+    size_large_1 = [p.participant.vars['large_market_1'] for p in players].count(True)
+    size_large_2 = [p.participant.vars['large_market_2'] for p in players].count(True)
+    size_small = [p.participant.vars['small_market'] for p in players].count(True)
+    move_to_1 = [p.participant.vars['move_to_market_1'] for p in players].count(True)
+    move_to_2 = [p.participant.vars['move_to_market_2'] for p in players].count(True)
+
+    print('Large market 1 will have', size_large_1, 'players and will receive', move_to_1, 'migrants')
+    print('Large market 2 will have', size_large_2, 'players and will receive', move_to_2, 'migrants')
+    print('Small market will have', size_small, 'players')
+    """
 
 
 # PAGES

@@ -21,48 +21,10 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    offer_fair_1 = models.StringField(
-        label="""<p style="margin-top:1cm;">
-                    How fair do you find this job offer? Wage=20 and Effort=10. <br> 
-                    <i>Please use a scale from 1 to 5, where 1 means you are “completely unfair” and 5 means "completely fair". 
-                    You can also use the values in-between to indicate where you fall on the scale.</i>
-                </p>""",
-        choices=['1 - completely unfair',
-                 '2 - unfair',
-                 '3 - neutral',
-                 '4 - fair',
-                 '5 - completely fair']
-    )
-    offer_fair_2 = models.StringField(
-        label="""<p style="margin-top:1cm;">
-                    How fair do you find this job offer? Wage=50 and Effort=10. <br> 
-                    <i>Please use a scale from 1 to 5, where 1 means you are “completely unfair” and 5 means "completely fair". 
-                    You can also use the values in-between to indicate where you fall on the scale.</i>
-                </p>""",
-        choices=['1 - completely unfair',
-                 '2 - unfair',
-                 '3 - neutral',
-                 '4 - fair',
-                 '5 - completely fair']
-    )
-    offer_fair_3 = models.StringField(
-        label="""<p style="margin-top:1cm;">
-                    How fair do you find this job offer? Wage=80 and Effort=10. <br> 
-                    <i>Please use a scale from 1 to 5, where 1 means you are “completely unfair” and 5 means "completely fair". 
-                    You can also use the values in-between to indicate where you fall on the scale.</i>
-                </p>""",
-        choices=['1 - completely unfair',
-                 '2 - unfair',
-                 '3 - neutral',
-                 '4 - fair',
-                 '5 - completely fair']
-    )
+    pass
 
 
 # PAGES
-class Question(Page):
-    form_model = 'player'
-    form_fields = ['offer_fair_1', 'offer_fair_2', 'offer_fair_3']
 
 class AnotherIntroduction(Page):
     pass
@@ -80,7 +42,8 @@ class AnotherInstruction(Page):
             num_employers_small_market=session.config['num_employers_small_market'],
             num_workers_large_market=session.config['size_large_market'] - session.config['num_employers_large_market'],
             num_workers_small_market=session.config['size_small_market'] - session.config['num_employers_small_market'],
-            migration_shock_size=session.config['migration_shock_size'],
+            migration_small_shock_size=session.config['migration_small_shock_size'],
+            migration_large_shock_size=session.config['migration_large_shock_size'],
             exchange_rate_large_market=session.config['exchange_rate_large_market'],
             exchange_rate_small_market=session.config['exchange_rate_small_market'],
             income_differential=session.config['exchange_rate_small_market']/session.config['exchange_rate_large_market'],
@@ -88,6 +51,8 @@ class AnotherInstruction(Page):
             example_wage_large_market=50*(session.config['exchange_rate_small_market']/session.config['exchange_rate_large_market']),
             num_rounds_left=session.config['total_rounds'] - session.config['shock_after_rounds'],
             migrant=player.participant.vars['migrant'],
+            move_to_market_1=player.participant.vars['move_to_market_1'],
+            move_to_market_2=player.participant.vars['move_to_market_2'],
             large_market=player.participant.vars['large_market'],
         )
 
@@ -97,7 +62,6 @@ class AnotherWaitPage(WaitPage):
     body_text = "Please wait, part 2 will begin shortly."
 
 
-page_sequence = [Question,
-                 AnotherIntroduction,
+page_sequence = [AnotherIntroduction,
                  AnotherInstruction,
                  AnotherWaitPage]

@@ -20,12 +20,16 @@ class Subsession(BaseSubsession):
 class Group(BaseGroup):
     marketID = models.IntegerField()
     large_market = models.BooleanField()
+    large_market_1 = models.BooleanField()
+    large_market_2 = models.BooleanField()
     is_finished = models.BooleanField(initial=False)
     num_job_offers = models.IntegerField(initial=0)
     job_offer_counter = models.IntegerField(initial=0)
+    players_in_group = models.IntegerField()
+    employers_in_group = models.IntegerField()
     num_unmatched_workers = models.IntegerField()
     start_timestamp = models.FloatField()
-    average_wage = models.CurrencyField()
+    average_wage = models.FloatField()
     average_effort = models.FloatField()
 
 
@@ -127,6 +131,7 @@ def creating_session(subsession: Subsession):
     if players_in_small_market is not []:
         matrix.append(players_in_small_market)
 
+    print(matrix)
     subsession.set_group_matrix(matrix)
 
     session = subsession.session
@@ -134,15 +139,28 @@ def creating_session(subsession: Subsession):
         if group.get_players()[0].participant.vars['large_market_1'] is True:
             group.marketID = 1
             group.large_market = True
-            group.num_unmatched_workers = session.config['size_large_market'] - session.config['num_employers_large_market']
+            group.large_market_1 = True
+            group.large_market_2 = False
+            group.players_in_group = session.config['size_large_market']
+            group.employers_in_group = session.config['num_employers_large_market']
+            group.num_unmatched_workers = group.players_in_group - session.config['num_employers_large_market']
         elif group.get_players()[0].participant.vars['large_market_2'] is True:
             group.marketID = 2
             group.large_market = True
-            group.num_unmatched_workers = session.config['size_large_market'] - session.config['num_employers_large_market']
+            group.large_market_1 = False
+            group.large_market_2 = True
+            group.players_in_group = session.config['size_large_market']
+            group.employers_in_group = session.config['num_employers_large_market']
+            group.num_unmatched_workers = group.players_in_group - session.config['num_employers_large_market']
         else:
             group.marketID = 3
             group.large_market = False
-            group.num_unmatched_workers = session.config['size_small_market'] - session.config['num_employers_small_market']
+            group.large_market_1 = False
+            group.large_market_2 = False
+            group.players_in_group = session.config['size_small_market']
+            group.employers_in_group = session.config['num_employers_small_market']
+            group.num_unmatched_workers = group.players_in_group - session.config['num_employers_small_market']
+
 
 
 def to_dict(offer: Offer):
@@ -197,13 +215,11 @@ class MarketPage(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        session = player.session
-        if player.participant.vars['large_market'] is True:
-            players_in_group = session.config['size_large_market']
-            employers_in_group = session.config['num_employers_large_market']
-        else:
-            players_in_group = session.config['size_small_market']
-            employers_in_group = session.config['num_employers_small_market']
+        group = player.group
+
+        players_in_group = group.players_in_group
+        employers_in_group = group.employers_in_group
+
         return dict(players_in_group=players_in_group,
                     employers_in_group=employers_in_group,
                     num_workers=players_in_group - employers_in_group,
