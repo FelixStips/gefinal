@@ -44,7 +44,7 @@ class Player(BasePlayer):
         label="""Are you a person who is generally willing to take risks, or do you try avoid taking risks? <br>
                 <i> Please answer on a scale from 0 to 10, where 0 means you are "completely unwilling to take risks"
                  and 10 means you are "very willing to take risks". You can also use any numbers in between 0 and 10 
-                 to indicate your willingness to take risks, for 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10.""",
+                 to indicate your willingness to take risks.""",
         widget=widgets.RadioSelectHorizontal,
         choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     )
