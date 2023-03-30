@@ -43,22 +43,14 @@ Results
                         A wage of {{ worker1_wage }} for {{ worker1_effort }} effort units.
                         The worker provided {{ worker1_effort_given }} effort units.
                     </li>
-
+                    {% else %}
                     {% if num_workers == 2 %}
 
                     <li>
                          A wage of {{ worker2_wage }} for {{ worker2_effort }} effort units.
                         The worker provided {{ worker2_effort_given }} effort units.
                     </li>
-                    {% else %}
-                        {% if num_workers == 3 %}
 
-                    <li>
-                         A wage of {{ worker3_wage }} for {{ worker3_effort }} effort units.
-                        The worker provided {{ worker3_effort_given }} effort units.
-                    </li>
-
-                    {% endif %}
                    {% endif %}
                 </ol>
             </p>

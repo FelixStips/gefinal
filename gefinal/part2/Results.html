@@ -9,6 +9,19 @@ Results
 
 <div class="card">
     <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Group Results</h6>
+            <p>
+                The average wage level was <b>{{ average_wage }}</b>.
+                The average effort level was <b>{{ average_effort }}</b>.
+                There were <b>{{ num_unmatched_workers }}</b> unmatched workers.
+            </p>
+    </div>
+</div>
+
+<br>
+
+<div class="card">
+    <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">Your Results</h6>
 
         {% if is_employer == True %}
@@ -16,23 +29,42 @@ Results
             <p>
                 You did not employ any workers this round.<br>
                 You received a payoff of <b>{{ player.payoff }}</b>. Your total profit in all rounds is <b>{{ total_payoff }}</b>.
-            <p>
+            </p>
+
             {% else %}
             <p>
                 You employed <b>{{ num_workers }}</b> worker(s) this round.
                 You paid a wage <b>{{ total_wage_paid }}</b> and received <b>{{ total_effort_received }}</b> effort units.<br>
-                Your profit this round is <b>{{ player.payoff }}</b>. Your total profit in all rounds is <b>{{ total_payoff }}</b>.
+                Your profit this round is <b>{{ player.payoff }}</b>. Your total profit in all rounds is <b>{{ total_payoff }}</b>. <br>
             </p>
+                Your contracts were as follows:
+                <ol>
+                    <li>
+                        A wage of {{ worker1_wage }} for {{ worker1_effort }} effort units.
+                        The worker provided {{ worker1_effort_given }} effort units.
+                    </li>
+                    {% else %}
+                    {% if num_workers == 2 %}
+
+                    <li>
+                         A wage of {{ worker2_wage }} for {{ worker2_effort }} effort units.
+                        The worker provided {{ worker2_effort_given }} effort units.
+                    </li>
+
+                   {% endif %}
+                </ol>
+            </p>
+
 
             {% endif %}
 
+
         {% else %}
             {% if is_employed == True %}
-            <p>
+
                 You were employed this round.
                 You received a wage of <b>{{ wage_received }}</b> and provided <b>{{ effort_choice }}</b> effort units.<br>
                 Your profit this round is <b>{{ player.payoff }}</b>. Your total profit in all rounds is <b>{{ total_payoff }}</b>.
-            </p>
 
             {% else %}
             <p>
@@ -44,19 +76,6 @@ Results
     </div>
 </div>
 
-<br>
-
-<div class="card">
-    <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Group Results</h6>
-            <p>
-                The average wage level was <b>{{ average_wage }}</b>.
-                The average effort level was <b>{{ average_effort }}</b>.
-                There were <b>{{ num_unmatched_workers }}</b> unmatched workers.
-            </p>
-    </div>
-</div>
-
 {{ formfields }}
 
 <br>
@@ -65,5 +84,6 @@ Results
 
 
 {{ endblock }}
+
 
 

@@ -49,24 +49,18 @@ class Player(BasePlayer):
     wait = models.BooleanField(initial=False)                                                                           # Show wait page if true (workers)+
     wait1 = models.BooleanField(initial=False)                                                                          # Show wait page if true (employers)
     wait2 = models.BooleanField(initial=False)                                                                          # Show wait page if true (employers)
-    wait3 = models.BooleanField(initial=False)                                                                          # Show wait page if true (employers)
     accepted1 = models.BooleanField(initial=False)                                                                      # Show job acceptance page if true (workers)
     accepted2 = models.BooleanField(initial=False)                                                                      # Show job acceptance page if true (workers)
-    accepted3 = models.BooleanField(initial=False)                                                                      # Show job acceptance page if true (workers)
     invalid = models.BooleanField(initial=False)                                                                        # Show job acceptance was invalid alert if true
     worker_counter = models.IntegerField()
     worker1_id = models.IntegerField()
     worker2_id = models.IntegerField()
-    worker3_id = models.IntegerField()
     worker1_wage = models.IntegerField()
     worker2_wage = models.IntegerField()
-    worker3_wage = models.IntegerField()
     worker1_effort = models.IntegerField()
     worker2_effort = models.IntegerField()
-    worker3_effort = models.IntegerField()
     worker1_effort_given = models.IntegerField()
     worker2_effort_given = models.IntegerField()
-    worker3_effort_given = models.IntegerField()
     happy_effort = models.StringField(
         label="""<p style="margin-top:1cm;">
                     How satisfied are you with the effort choice of the workers? <br> 
@@ -271,9 +265,6 @@ class MarketPage(Page):
                     elif data["job_number"] == 2:
                         p.wait2 = True
                         p.accepted2 = False
-                    elif data["job_number"] == 3:
-                        p.wait3 = True
-                        p.accepted3 = False
         elif data['information_type'] == 'accept':
             current_offer = Offer.filter(group=group, job_id=data['job_id'])
             if current_offer[0].status == 'open':
@@ -296,9 +287,6 @@ class MarketPage(Page):
                         elif data["job_number"] == 2:
                             p.wait2 = False
                             p.accepted2 = True
-                        elif data["job_number"] == 3:
-                            p.wait3 = False
-                            p.accepted3 = True
                     if p.participant.playerID == data['worker_id']:
                         p.is_employed = True
                         p.wait = True
@@ -323,9 +311,6 @@ class MarketPage(Page):
                     elif data["job_number"] == 2:
                         p.wait2 = False
                         p.accepted2 = False
-                    elif data["job_number"] == 3:
-                        p.wait3 = False
-                        p.accepted3 = False
         elif data['information_type'] == 'load':
             pass
         else:
@@ -347,10 +332,8 @@ class MarketPage(Page):
                                       wait=p.wait,
                                       wait1=p.wait1,
                                       wait2=p.wait2,
-                                      wait3=p.wait3,
                                       accepted1=p.accepted1,
                                       accepted2=p.accepted2,
-                                      accepted3=p.accepted3,
                                       invalid=p.invalid,
                                       ),
                 market_information=market_information,
@@ -419,11 +402,6 @@ class ResultsWaitPage(WaitPage):
                             p.worker2_effort = o.effort
                             p.worker2_effort_given = o.effort_given
                             p.worker2_id = o.worker_id
-                        elif p.worker_counter == 3:
-                            p.worker3_wage = o.wage
-                            p.worker3_effort_given = o.effort_given
-                            p.worker3_effort = o.effort
-                            p.worker3_id = o.worker_id
                     else:
                         pass
                 if p.num_workers_employed == 0:
@@ -506,10 +484,6 @@ class Results(Page):
             worker2_effort=player.field_maybe_none('worker2_effort'),
             worker2_effort_given=player.field_maybe_none('worker2_effort_given'),
             worker2_id=player.field_maybe_none('worker2_id'),
-            worker3_wage=player.field_maybe_none('worker3_wage'),
-            worker3_effort=player.field_maybe_none('worker3_effort'),
-            worker3_effort_given=player.field_maybe_none('worker3_effort_given'),
-            worker3_id=player.field_maybe_none('worker3_id'),
         )
 
 

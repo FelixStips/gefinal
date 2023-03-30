@@ -46,12 +46,11 @@
         <p>
             You are in the role of <b><span id="your_role_string">{{ string_role }}</span></b>.
 
-
             {% if player.participant.is_employer == True %}
-            You can employ at most three workers in this round.
+            You can employ at most two workers in this round.
 
             {% else %}
-            You can accept at most one job offer this round. <br>
+            You can accept at most one job offer this round.
 
             {% endif %} <br>
         </p>
@@ -70,12 +69,12 @@
 <button class="otree-btn-next btn otree-next-button invisible" id = "to_next_page"></button>
 
 
-<div class="card" id="trading_mask">
+<div class="card" id="trading_mask" style="display: none">
     <h5 class="card-header">Trading mask</h5>
     <div class="card-body">
-        You can make up to three job offers at a time. Use the masks below to send offers.  <br><br>
+        You can make up to two job offers at a time. Use the masks below to send offers.  <br><br>
     <div class="row">
-        <div class="col-md-4 col-12">
+        <div class="col">
             <div class="card" id="offer_mask_1" style="display: none">
                 <div class="card-body">
                 <h6 class="card-subtitle mb-2 text-muted">First job offer</h6>
@@ -118,7 +117,7 @@
                 </div>
             </div>
       </div>
-      <div class="col-md-4 col-12">
+      <div class="col">
         <div class="card" id="offer_mask_2" style="display: none">
             <div class="card-body">
                 <h6 class="card-subtitle mb-2 text-muted">Second job offer</h6>
@@ -151,7 +150,7 @@
         </div>
         <div class="card" id="employer_accepted_2" style="display: none">
             <div class="card-body">
-                <h6 class="card-subtitle mb-2 text-muted">Your first offer was accepted!</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Your second offer was accepted!</h6>
                 <p class="card-text">
                     The offer with ID <b><span id="employer_job_id_accepted_2"></span></b> was accepted.
                     You offered a wage <b><span id="employer_wage_accepted_2"></span></b>
@@ -160,48 +159,6 @@
             </div>
         </div>
       </div>
-        <div class="col-md-4 col-12">
-            <div class="card" id="offer_mask_3" style="display: none">
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Third job offer</h6>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                            <span class="input-group-text" id="wage-addon3">Wage</span>
-                            </div>
-                            <input id="wage_input_3" class="form-control" placeholder="0 - 100" aria-describedby="basic-addon1">
-                        </div>
-                        <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                <span class="input-group-text" id="effort-addon3">Effort</span>
-                                </div>
-                                <input id="effort_input_3" class="form-control" placeholder="0 - 10" aria-describedby="basic-addon1">
-                            </div>
-                    <button type="button" class="btn btn-secondary" id="send_offer_3" onclick="sendOffer(this.id)"> Send Offer</button>
-                </div>
-            </div>
-            <div class="card" id="employer_wait_3" style="display: none">
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Your first offer</h6>
-                    <p class="card-text">
-                        You offered a wage of <b><span id="employer_wage_offered_3"></span></b>
-                        for a desired effort of <b><span id="employer_effort_offered_3"></span></b>.
-                        The job ID is <b><span id="employer_job_id_offered_3"></span></b>.
-                        To cancel the offer, click the button below.
-                    </p>
-                    <button type="button" class="btn btn-secondary" id="cancel_offer_3" onclick="cancelOffer(this.id)"> Cancel Offer</button>
-                </div>
-            </div>
-            <div class="card" id="employer_accepted_3" style="display: none">
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Your first offer was accepted!</h6>
-                    <p class="card-text">
-                        The offer with ID <b><span id="employer_job_id_accepted_3"></span></b> was accepted.
-                        You offered a wage <b><span id="employer_wage_accepted_3"></span></b>
-                        for a desired effort of <b><span id="employer_effort_accepted_3"></span></b>.
-                    </p>
-                </div>
-            </div>
-        </div>
     </div>
     </div>
 </div>
@@ -399,30 +356,14 @@
                         document.getElementById("employer_wait_2").style.display = "none";
                         document.getElementById("employer_accepted_2").style.display = "none";
                     }
-                    if (wait3) {
-                        document.getElementById("employer_wait_3").style.display = "block";
-                        document.getElementById("offer_mask_3").style.display = "none";
-                        document.getElementById("employer_accepted_3").style.display = "none";
-                        } else if (accepted3) {
-                        document.getElementById("employer_accepted_3").style.display = "block";
-                        document.getElementById("employer_wait_3").style.display = "none";
-                        document.getElementById("offer_mask_3").style.display = "none";
-                        } else {
-                        document.getElementById("offer_mask_3").style.display = "block";
-                        document.getElementById("employer_wait_3").style.display = "none";
-                        document.getElementById("employer_accepted_3").style.display = "none";
-                    }
                 } else {
                     document.getElementById("trading_mask").style.display = "none";
                     document.getElementById("employer_wait_1").style.display = "none";
                     document.getElementById("employer_wait_2").style.display = "none";
-                    document.getElementById("employer_wait_3").style.display = "none";
                     document.getElementById("employer_accepted_1").style.display = "none";
                     document.getElementById("employer_accepted_2").style.display = "none";
-                    document.getElementById("employer_accepted_3").style.display = "none";
                     document.getElementById("offer_mask_1").style.display = "none";
                     document.getElementById("offer_mask_2").style.display = "none";
-                    document.getElementById("offer_mask_3").style.display = "none";
                     if (wait) {
                         document.getElementById("accept_mask").style.display = "none";
                         document.getElementById("worker_wait").style.display = "block";
