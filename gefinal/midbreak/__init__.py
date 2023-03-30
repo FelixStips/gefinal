@@ -30,20 +30,36 @@ class AnotherIntroduction(Page):
     pass
 
 class AnotherInstruction(Page):
-
+    @staticmethod
+    def app_after_this_page(player, upcoming_apps):
+        if player.participant.vars['small_market'] and not player.participant.vars['migrant']:
+            return "questionnaire"
 
     @staticmethod
     def vars_for_template(player: Player):
         session = player.session
+
+        if player.participant.vars['large_market_1'] or player.participant.vars['move_to_market_1']:
+            size_market = session.config['size_large_market'] + session.config['migration_small_shock_size']
+            num_employers = session.config['num_employers_large_market']
+            num_workers = session.config['size_large_market'] + session.config['migration_small_shock_size'] - session.config['num_employers_large_market']
+            shock_size = session.config['migration_small_shock_size']
+        elif player.participant.vars['large_market_2'] or player.participant.vars['move_to_market_2']:
+            size_market = session.config['size_small_market'] + session.config['migration_large_shock_size']
+            num_employers = session.config['num_employers_large_market']
+            num_workers = session.config['size_small_market'] + session.config['migration_large_shock_size'] - session.config['num_employers_large_market']
+            shock_size = session.config['migration_large_shock_size']
+        else:
+            size_market = session.config['size_small_market']
+            num_employers = session.config['num_employers_small_market']
+            num_workers = session.config['size_small_market'] - session.config['num_employers_small_market'] - session.config['migration_large_shock_size'] - session.config['migration_large_shock_size']
+            shock_size = 0
+
         return dict(
-            size_large_market=session.config['size_large_market'],
-            size_small_market=session.config['size_small_market'],
-            num_employers_large_market=session.config['num_employers_large_market'],
-            num_employers_small_market=session.config['num_employers_small_market'],
-            num_workers_large_market=session.config['size_large_market'] - session.config['num_employers_large_market'],
-            num_workers_small_market=session.config['size_small_market'] - session.config['num_employers_small_market'],
-            migration_small_shock_size=session.config['migration_small_shock_size'],
-            migration_large_shock_size=session.config['migration_large_shock_size'],
+            size_market=size_market,
+            num_employers=num_employers,
+            num_workers=num_workers,
+            shock_size=shock_size,
             exchange_rate_large_market=session.config['exchange_rate_large_market'],
             exchange_rate_small_market=session.config['exchange_rate_small_market'],
             income_differential=session.config['exchange_rate_small_market']/session.config['exchange_rate_large_market'],
@@ -51,8 +67,6 @@ class AnotherInstruction(Page):
             example_wage_large_market=50*(session.config['exchange_rate_small_market']/session.config['exchange_rate_large_market']),
             num_rounds_left=session.config['total_rounds'] - session.config['shock_after_rounds'],
             migrant=player.participant.vars['migrant'],
-            move_to_market_1=player.participant.vars['move_to_market_1'],
-            move_to_market_2=player.participant.vars['move_to_market_2'],
             large_market=player.participant.vars['large_market'],
         )
 

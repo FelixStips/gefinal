@@ -15,6 +15,7 @@ SESSION_CONFIGS = [
          app_sequence=['intro',
                        'part1',
                        'quiz',
+                       'midbreak',
                        'part2',
                        'questionnaire',
                        'end'],

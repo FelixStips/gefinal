@@ -115,13 +115,28 @@ class Question1(Page):
     form_model = 'player'
     form_fields = ['offer_fair_1']
 
+    @staticmethod
+    def is_displayed(player: Player):
+        session = player.session
+        return session.config['final']
+
 class Question2(Page):
     form_model = 'player'
     form_fields = ['offer_fair_2']
 
+    @staticmethod
+    def is_displayed(player: Player):
+        session = player.session
+        return session.config['final']
+
 class Question3(Page):
     form_model = 'player'
     form_fields = ['offer_fair_3']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        session = player.session
+        return session.config['final']
 
 
 
