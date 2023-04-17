@@ -69,12 +69,14 @@ def creating_session(subsession: Subsession):
         participant_vars['move_to_market_1'] = False
         participant_vars['move_to_market_2'] = False
         participant_vars['is_employer'] = False
+        participant_vars['currency_is_points'] = False
         participant_vars['realpay'] = []
         participant_vars['total_points'] = []
         participant_vars['exrate'] = []
         if participant_vars['playerID'] <= size_large_market:
             participant_vars['large_market'] = True
             participant_vars['large_market_1'] = True
+            participant_vars['currency_is_points'] = True
             if participant_vars['playerID'] <= num_employers_large_market:
                 participant_vars['is_employer'] = True
                 participant_vars['string_role'] = 'employer'
@@ -83,6 +85,7 @@ def creating_session(subsession: Subsession):
         elif participant_vars['playerID'] <= (2 * size_large_market):
             participant_vars['large_market'] = True
             participant_vars['large_market_2'] = True
+            participant_vars['currency_is_points'] = True
             if participant_vars['playerID'] <= (size_large_market + num_employers_large_market):
                 participant_vars['is_employer'] = True
                 participant_vars['string_role'] = 'employer'
@@ -90,6 +93,7 @@ def creating_session(subsession: Subsession):
                 participant_vars['string_role'] = 'worker'
         else:
             participant_vars['small_market'] = True
+            participant_vars['currency_is_points'] = False
             if participant_vars['playerID'] <= (num_employers_small_market + size_large_market + size_large_market):
                 participant_vars['is_employer'] = True
                 participant_vars['string_role'] = 'employer'
@@ -101,6 +105,7 @@ def creating_session(subsession: Subsession):
                 elif participant_vars['playerID'] <= (num_employers_small_market + size_large_market + size_large_market + migration_small_shock_size + migration_large_shock_size):
                     participant_vars['migrant'] = True
                     participant_vars['move_to_market_2'] = True
+        #print(participant_vars['currency_is_points'])
 
     """ Proportions seem right at least...
     size_large_1 = [p.participant.vars['large_market_1'] for p in players].count(True)
@@ -113,6 +118,8 @@ def creating_session(subsession: Subsession):
     print('Large market 2 will have', size_large_2, 'players and will receive', move_to_2, 'migrants')
     print('Small market will have', size_small, 'players')
     """
+
+
 
 
 # PAGES
