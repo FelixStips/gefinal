@@ -21,35 +21,67 @@
 
         <p> You need to choose an effort level between 0 and 10. The table below shows how much each effort level costs you.  </p>
         <p>
-        <table class="table table-bordered">
-            <caption>Schedule of effort costs</caption>
-                <tr>
-                    <td>Effort level</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                    <td>10</td>
-                </tr>
-                <tr>
-                    <td>Cost of effort</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>4</td>
-                    <td>6</td>
-                    <td>8</td>
-                    <td>10</td>
-                    <td>12</td>
-                    <td>15</td>
-                    <td>18</td>
-                </tr>
-        </table>
+
+         {% if player.participant.currency_is_points == True %}
+            <table class="table table-bordered">
+                    <caption>Schedule of effort costs</caption>
+                        <tr>
+                            <td>Effort level</td>
+                            <td> 1 </td>
+                            <td> 2 </td>
+                            <td> 3 </td>
+                            <td> 4 </td>
+                            <td> 5 </td>
+                            <td> 6 </td>
+                            <td> 7 </td>
+                            <td> 8 </td>
+                            <td> 9 </td>
+                            <td> 10 </td>
+                        </tr>
+                        <tr>
+                            <td>Cost of effort</td>
+                            <td> {{ effort_cost_points_1 }} </td>
+                            <td> {{ effort_cost_points_2 }} </td>
+                            <td> {{ effort_cost_points_3 }} </td>
+                            <td> {{ effort_cost_points_4 }} </td>
+                            <td> {{ effort_cost_points_5 }} </td>
+                            <td> {{ effort_cost_points_6 }} </td>
+                            <td> {{ effort_cost_points_7 }} </td>
+                            <td> {{ effort_cost_points_8 }} </td>
+                            <td> {{ effort_cost_points_9 }} </td>
+                            <td> {{ effort_cost_points_10 }} </td>
+                        </tr>
+                </table>
+            {% else %}
+                <caption>Schedule of effort costs</caption>
+                        <tr>
+                            <td> Effort level </td>
+                            <td> 1 </td>
+                            <td> 2 </td>
+                            <td> 3 </td>
+                            <td> 4 </td>
+                            <td> 5 </td>
+                            <td> 6 </td>
+                            <td> 7 </td>
+                            <td> 8 </td>
+                            <td> 9 </td>
+                            <td> 10 </td>
+                        </tr>
+                        <tr>
+                            <td> Cost of effort </td>
+                            <td> {{ effort_cost_tokens_1 }} </td>
+                            <td> {{ effort_cost_tokens_2 }} </td>
+                            <td> {{ effort_cost_tokens_3 }} </td>
+                            <td> {{ effort_cost_tokens_4 }} </td>
+                            <td> {{ effort_cost_tokens_5 }} </td>
+                            <td> {{ effort_cost_tokens_6 }} </td>
+                            <td> {{ effort_cost_tokens_7 }} </td>
+                            <td> {{ effort_cost_tokens_8 }} </td>
+                            <td> {{ effort_cost_tokens_9 }} </td>
+                            <td> {{ effort_cost_tokens_10 }} </td>
+                        </tr>
+                </table>
+            {% endif %}
     </div>
 </div>
 

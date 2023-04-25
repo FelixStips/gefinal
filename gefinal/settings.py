@@ -27,8 +27,7 @@ SESSION_CONFIGS = [
          num_employers_small_market=1,                                             # Number of employers in small market
          migration_small_shock_size=1,                                             # Number of migrants in small migration shock
          migration_large_shock_size=1,                                             # Number of migrants in large migration shock
-         exchange_rate_large_market=0.5,                                           # Exchange rate for large market
-         exchange_rate_small_market=0.1,                                           # Exchange rate for small market
+         payout_rate=0.1,                                                          # Exchange rate points to Euros
          exchange_rate=0.5,                                                        # Exchange rate from points to tokens (points is high income)
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          total_rounds=2,                                                           # Number of market rounds
@@ -40,8 +39,8 @@ SESSION_CONFIGS = [
          final=False,                                                              # Displays instructions if true
          showup_fee=5.0,                                                           # Participation showup fee
          use_browser_bots=False,                                                   # Use browser bots
+         effort_costs_points=[0, 1, 2, 4, 6, 8, 10, 12, 15, 18],                   # Effort costs for 1 - 10 choices, in points
     )]
-
 
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

@@ -221,6 +221,7 @@ class MarketPage(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
+        session = player.session
         group = player.group
         players_in_group = group.players_in_group
         employers_in_group = group.employers_in_group
@@ -386,12 +387,33 @@ class WorkPage(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
+        session = player.session
         return dict(
             is_employer=player.participant.vars['is_employer'],
             string_role=player.participant.vars['string_role'],
             wage_received=player.wage_received,
             effort_requested=player.effort_requested,
             matched_with_id=player.matched_with_id,
+            effort_cost_points_1=session.config['effort_costs_points'][0],
+            effort_cost_points_2=session.config['effort_costs_points'][1],
+            effort_cost_points_3=session.config['effort_costs_points'][2],
+            effort_cost_points_4=session.config['effort_costs_points'][3],
+            effort_cost_points_5=session.config['effort_costs_points'][4],
+            effort_cost_points_6=session.config['effort_costs_points'][5],
+            effort_cost_points_7=session.config['effort_costs_points'][6],
+            effort_cost_points_8=session.config['effort_costs_points'][7],
+            effort_cost_points_9=session.config['effort_costs_points'][8],
+            effort_cost_points_10=session.config['effort_costs_points'][9],
+            effort_cost_tokens_1=session.config['effort_costs_points'][0] * (1 / session.config['exchange_rate']),
+            effort_cost_tokens_2=session.config['effort_costs_points'][1] * (1 / session.config['exchange_rate']),
+            effort_cost_tokens_3=session.config['effort_costs_points'][2] * (1 / session.config['exchange_rate']),
+            effort_cost_tokens_4=session.config['effort_costs_points'][3] * (1 / session.config['exchange_rate']),
+            effort_cost_tokens_5=session.config['effort_costs_points'][4] * (1 / session.config['exchange_rate']),
+            effort_cost_tokens_6=session.config['effort_costs_points'][5] * (1 / session.config['exchange_rate']),
+            effort_cost_tokens_7=session.config['effort_costs_points'][6] * (1 / session.config['exchange_rate']),
+            effort_cost_tokens_8=session.config['effort_costs_points'][7] * (1 / session.config['exchange_rate']),
+            effort_cost_tokens_9=session.config['effort_costs_points'][8] * (1 / session.config['exchange_rate']),
+            effort_cost_tokens_10=session.config['effort_costs_points'][9] * (1 / session.config['exchange_rate']),
         )
 
 
@@ -403,7 +425,6 @@ class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(group: Group):
         players = group.get_players()
         offers = Offer.filter(group=group)
-        effort_costs = {1: 0, 2: 1, 3: 2, 4: 4, 5: 6, 6: 8, 7: 10, 8: 12, 9: 15, 10: 18}
 
         group.average_wage_points = sum([p.wage_received_points for p in players if p.is_employed]) / sum([p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
         group.average_wage_tokens = sum([p.wage_received_tokens for p in players if p.is_employed]) / sum([p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
@@ -411,8 +432,7 @@ class ResultsWaitPage(WaitPage):
 
         for p in players:                                                                                               # first update the offers
             session = p.session
-            exchange_rate = session.config['exchange_rate_large_market'] if p.participant.vars['large_market'] else \
-                session.config['exchange_rate_small_market']
+            exchange_rate = session.config['payout_rate'] * session.config['exchange_rate'] if p.participant.vars['currency_is_points'] is False else session.config['payout_rate']
             for o in offers:
                 if p.participant.playerID == o.worker_id and o.status == 'accepted':
                     o.effort_given = p.effort_choice
@@ -424,23 +444,36 @@ class ResultsWaitPage(WaitPage):
                         p.worker_counter += 1
                         p.total_effort_received += o.effort_given
                         if p.worker_counter == 1:
-                            p.worker1_wage = o.wage
+                            p.worker1_wage_points = o.wage_points
+                            p.worker1_wage_tokens = o.wage_tokens
+                            p.worker1_wage = p.worker1_wage_points if p.participant.vars['currency_is_points'] is True else p.worker1_wage_tokens
                             p.worker1_effort_given = o.effort_given
                             p.worker1_effort = o.effort
                             p.worker1_id = o.worker_id
                         elif p.worker_counter == 2:
-                            p.worker2_wage = o.wage
+                            p.worker2_wage_points = o.wage_points
+                            p.worker2_wage_tokens = o.wage_tokens
+                            p.worker2_wage = p.worker2_wage_points if p.participant.vars['currency_is_points'] is True else p.worker2_wage_tokens
                             p.worker2_effort = o.effort
                             p.worker2_effort_given = o.effort_given
                             p.worker2_id = o.worker_id
                     else:
                         pass
                 if p.num_workers_employed == 0:
+                    p.payoff_points = 0
+                    p.payoff_tokens = 0
+                    p.participant.vars['total_points'].append(int(p.payoff_points))
+                    p.participant.vars['total_tokens'].append(int(p.payoff_tokens))
+                    if p.participant.vars['currency_is_points'] is True:
+                        p.payoff = p.payoff_points
+                        
+                        p.participant.vars['realpay'].append(float(real_pay))
+                    else:
+                        p.payoff = p.payoff_tokens
+
                     p.payoff = 0
                     real_pay = p.payoff * exchange_rate
-                    p.participant.vars['total_points'].append(int(p.payoff))
                     p.participant.vars['exrate'].append(exchange_rate)
-                    p.participant.vars['realpay'].append(float(real_pay))
                 elif 0 < p.num_workers_employed < 3:
                     mpl = session.config['MPL'][p.num_workers_employed - 1]
                     p.payoff = mpl * p.total_effort_received - p.total_wage_paid
@@ -453,14 +486,21 @@ class ResultsWaitPage(WaitPage):
                     print('Player', p.participant.playerID, 'had too many workers!')
             else:
                 if p.is_employed:
-                    effort_cost = effort_costs[p.effort_choice]
+                    effort_cost_points = session.config['effort_costs_points'][p.effort_choice - 1]
+                    effort_cost_tokens = session.config['effort_costs_points'][p.effort_choice - 1] * (1 / session.config['exchange_rate'])
+                    effort_cost = effort_cost_points if p.participant.vars['currency_is_points'] is True else effort_cost_tokens
+                    p.payoff_tokens = p.wage_received_tokens - effort_cost_tokens
+                    p.payoff_points = p.wage_received_points - effort_cost_points
+
+                    if p.participant.vars['currency_is_points']:
+                        p.wage_received_points = p.wage_received
                     p.payoff = p.wage_received - effort_cost
                     real_pay = p.payoff * exchange_rate
                     p.participant.vars['total_points'].append(int(p.payoff))
                     p.participant.vars['exrate'].append(exchange_rate)
                     p.participant.vars['realpay'].append(float(real_pay))
                 else:
-                    p.payoff = 5
+                    p.payoff = 0
                     real_pay = p.payoff * exchange_rate
                     p.participant.vars['total_points'].append(int(p.payoff))
                     p.participant.vars['exrate'].append(exchange_rate)
