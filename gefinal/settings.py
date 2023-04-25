@@ -20,7 +20,7 @@ SESSION_CONFIGS = [
                        'questionnaire',
                        'end'],
          num_demo_participants=9,
-         market_timeout_seconds=180,                                               # Duration of market stage in seconds
+         market_timeout_seconds=60,                                               # Duration of market stage in seconds
          size_large_market=3,                                                      # Number of players in large market
          size_small_market=3,                                                      # Number of players in small market
          num_employers_large_market=1,                                             # Number of employers in large market
@@ -33,7 +33,7 @@ SESSION_CONFIGS = [
          total_rounds=2,                                                           # Number of market rounds
          shock_after_rounds=1,                                                     # Number of rounds before migration shock
          rounds_part_2=1,                                                          # Number of rounds in part 2
-         MPL=[10, 7, 5],                                                           # Productivity for 1, 2, 3 workers
+         MPL=[10, 7],                                                              # Productivity for 1 or 2 workers
          employer_outside_option=0,                                                # Outside option for employer
          worker_outside_option=5,                                                  # Outside option for worker
          final=False,                                                              # Displays instructions if true
@@ -52,7 +52,21 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=5.00, doc=""
 )
 
-PARTICIPANT_FIELDS = ['large_market', 'large_market_1', 'large_market_2', 'small_market', 'is_employer', 'playerID', 'string_role', 'migrant', 'move_to_market_1', 'move_to_market_2', 'total_points', 'realpay', 'exrate', 'currency_is_points']
+PARTICIPANT_FIELDS = ['large_market',
+                      'large_market_1',
+                      'large_market_2',
+                      'small_market',
+                      'is_employer',
+                      'playerID',
+                      'string_role',
+                      'migrant',
+                      'move_to_market_1',
+                      'move_to_market_2',
+                      'total_points',
+                      'total_tokens',
+                      'currency_is_points',
+                      'round_for_points',
+                      ]
 SESSION_FIELDS = []
 
 # ISO-639 code

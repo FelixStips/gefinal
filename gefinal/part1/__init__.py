@@ -40,8 +40,9 @@ class Player(BasePlayer):
     total_wage_paid_tokens = models.IntegerField(initial=0)                                                             # Total wage paid by the firm (in tokens)
     total_wage_paid_points = models.IntegerField(initial=0)                                                             # Total wage paid by the firm (in points)
     total_effort_received = models.IntegerField(initial=0)                                                              # Total effort received by the firm
+    payoff_points = models.IntegerField(initial=0)                                                                      # Payoff of the firm (in points)
+    payoff_tokens = models.IntegerField(initial=0)                                                                      # Payoff of the firm (in tokens)
     is_employed = models.BooleanField(initial=False)                                                                    # Boolean for whether the worker is employed
-    wage_received = models.IntegerField(min=0)                                                                          # Wage the worker received by the firm
     wage_received_tokens = models.IntegerField(min=0)                                                                   # Wage the worker received by the firm (in tokens)
     wage_received_points = models.IntegerField(min=0)                                                                   # Wage the worker received by the firm (in points)
     effort_requested = models.IntegerField(min=1, max=10)                                                               # Effort level the firm requested from the worker
@@ -391,7 +392,8 @@ class WorkPage(Page):
         return dict(
             is_employer=player.participant.vars['is_employer'],
             string_role=player.participant.vars['string_role'],
-            wage_received=player.wage_received,
+            wage_received_points=player.wage_received_points,
+            wage_received_tokens=player.wage_received_tokens,
             effort_requested=player.effort_requested,
             matched_with_id=player.matched_with_id,
             effort_cost_points_1=session.config['effort_costs_points'][0],
@@ -443,17 +445,17 @@ class ResultsWaitPage(WaitPage):
                     if p.participant.playerID == o.employer_id and o.status == 'accepted':
                         p.worker_counter += 1
                         p.total_effort_received += o.effort_given
+                        p.total_wage_paid_points += o.wage_points
+                        p.total_wage_paid_tokens += o.wage_tokens
                         if p.worker_counter == 1:
                             p.worker1_wage_points = o.wage_points
                             p.worker1_wage_tokens = o.wage_tokens
-                            p.worker1_wage = p.worker1_wage_points if p.participant.vars['currency_is_points'] is True else p.worker1_wage_tokens
                             p.worker1_effort_given = o.effort_given
                             p.worker1_effort = o.effort
                             p.worker1_id = o.worker_id
                         elif p.worker_counter == 2:
                             p.worker2_wage_points = o.wage_points
                             p.worker2_wage_tokens = o.wage_tokens
-                            p.worker2_wage = p.worker2_wage_points if p.participant.vars['currency_is_points'] is True else p.worker2_wage_tokens
                             p.worker2_effort = o.effort
                             p.worker2_effort_given = o.effort_given
                             p.worker2_id = o.worker_id
@@ -462,51 +464,45 @@ class ResultsWaitPage(WaitPage):
                 if p.num_workers_employed == 0:
                     p.payoff_points = 0
                     p.payoff_tokens = 0
+                    print('This is print for 0 workers')
+                    print(p.payoff_points)
+                    print(p.payoff_tokens)
+                    print('total tokens are', p.participant.vars['total_tokens'])
+                    print('total points are', p.participant.vars['total_points'])
                     p.participant.vars['total_points'].append(int(p.payoff_points))
                     p.participant.vars['total_tokens'].append(int(p.payoff_tokens))
-                    if p.participant.vars['currency_is_points'] is True:
-                        p.payoff = p.payoff_points
-                        
-                        p.participant.vars['realpay'].append(float(real_pay))
-                    else:
-                        p.payoff = p.payoff_tokens
-
-                    p.payoff = 0
-                    real_pay = p.payoff * exchange_rate
-                    p.participant.vars['exrate'].append(exchange_rate)
+                    p.participant.vars['round_for_points'].append(p.participant.vars['currency_is_points'])
                 elif 0 < p.num_workers_employed < 3:
                     mpl = session.config['MPL'][p.num_workers_employed - 1]
-                    p.payoff = mpl * p.total_effort_received - p.total_wage_paid
-                    #print('Player', p.participant.playerID, 'had', p.num_workers_employed, 'workers with a total effort of', p.total_effort_received, 'and a total wage of', p.total_wage_paid, 'multipled with an MPL of',  mpl, 'for a payoff of', p.payoff)
-                    real_pay = p.payoff * exchange_rate
-                    p.participant.vars['total_points'].append(int(p.payoff))
-                    p.participant.vars['exrate'].append(exchange_rate)
-                    p.participant.vars['realpay'].append(float(real_pay))
+                    p.payoff_points = mpl * p.total_effort_received - p.total_wage_paid_points
+                    p.payoff_tokens = mpl * p.total_effort_received - p.total_wage_paid_tokens
+                    print('This is print for 0-3 workers')
+                    print(p.payoff_points)
+                    print(p.payoff_tokens)
+                    print('total tokens are', p.participant.vars['total_tokens'])
+                    print('total points are', p.participant.vars['total_points'])
+                    p.participant.vars['total_points'].append(int(p.payoff_points))
+                    p.participant.vars['total_tokens'].append(int(p.payoff_tokens))
+                    p.participant.vars['round_for_points'].append(p.participant.vars['currency_is_points'])
                 else:
                     print('Player', p.participant.playerID, 'had too many workers!')
             else:
                 if p.is_employed:
                     effort_cost_points = session.config['effort_costs_points'][p.effort_choice - 1]
                     effort_cost_tokens = session.config['effort_costs_points'][p.effort_choice - 1] * (1 / session.config['exchange_rate'])
-                    effort_cost = effort_cost_points if p.participant.vars['currency_is_points'] is True else effort_cost_tokens
                     p.payoff_tokens = p.wage_received_tokens - effort_cost_tokens
                     p.payoff_points = p.wage_received_points - effort_cost_points
-
-                    if p.participant.vars['currency_is_points']:
-                        p.wage_received_points = p.wage_received
-                    p.payoff = p.wage_received - effort_cost
-                    real_pay = p.payoff * exchange_rate
-                    p.participant.vars['total_points'].append(int(p.payoff))
-                    p.participant.vars['exrate'].append(exchange_rate)
-                    p.participant.vars['realpay'].append(float(real_pay))
+                    p.participant.vars['total_points'].append(int(p.payoff_points))
+                    p.participant.vars['total_tokens'].append(int(p.payoff_tokens))
+                    p.participant.vars['round_for_points'].append(p.participant.vars['currency_is_points'])
                 else:
-                    p.payoff = 0
-                    real_pay = p.payoff * exchange_rate
-                    p.participant.vars['total_points'].append(int(p.payoff))
-                    p.participant.vars['exrate'].append(exchange_rate)
-                    p.participant.vars['realpay'].append(float(real_pay))
-        #for p in players:
-        #    print('Player', p.participant.playerID, 'has had payoffs of', p.participant.vars['total_points'], 'and a real pay of', p.participant.vars['realpay'])
+                    p.payoff_tokens = 0
+                    p.payoff_points = 0
+                    p.participant.vars['total_points'].append(int(p.payoff_points))
+                    p.participant.vars['total_tokens'].append(int(p.payoff_tokens))
+                    p.participant.vars['round_for_points'].append(p.participant.vars['currency_is_points'])
+        for p in players:
+            print('Player', p.participant.playerID, 'has had point payoffs of', p.participant.vars['total_points'], 'and token payoffs of', p.participant.vars['total_tokens'], 'and played for', p.participant.vars['round_for_points'])
 
 
 class Results(Page):

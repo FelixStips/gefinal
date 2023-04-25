@@ -58,7 +58,7 @@
             There are currently <b><span id="workers_left">{{ num_workers }}</span> </b> unmatched worker(s)
             and <b><span id="offers_left">0</span> </b> open offer(s) in the market. <br>
             The average wage level is <b><span id="average_wage">0</span></b>.
-            The average effort level is <b><span id="average_effort">0</span></b>.
+            The average requested effort level is <b><span id="average_effort">0</span></b>.
         </p>
     </div>
 </div>
@@ -421,10 +421,23 @@
         }
     }
 
+     function isNumeric(input) {
+        const regex = /^[0-9]+$/;
+        return regex.test(input);
+    }
+
     function sendOffer(offer_sent) {
-        let job_offer_number = parseInt(offer_sent.slice(-1));
-        let effort_inputted = parseInt(document.getElementById(`effort_input_${job_offer_number}`).value);
-        let wage_inputted = parseInt(document.getElementById(`wage_input_${job_offer_number}`).value);
+         let job_offer_number = parseInt(offer_sent.slice(-1));
+          let effort_input_element = document.getElementById(`effort_input_${job_offer_number}`);
+          let wage_input_element = document.getElementById(`wage_input_${job_offer_number}`);
+
+          if (!isNumeric(effort_input_element.value) || !isNumeric(wage_input_element.value)) {
+            alert("Error: Please enter a valid number in both fields before sending offer.");
+            return;
+          }
+
+        let effort_inputted = parseInt(effort_input_element.value);
+        let wage_inputted = parseInt(wage_input_element.value);
         if (isNaN(wage_inputted) || isNaN(effort_inputted)) {
             alert("Error: Please enter a number in both fields before sending offer.");
             return;
@@ -437,13 +450,15 @@
         } else {
             let status = 'open';
             let my_id = js_vars.my_id;
+            let currency_is_points = js_vars.currency_is_points;
             liveSend({
                 "information_type": "offer",
                 "employer_id": my_id,
                 "wage": wage_inputted,
                 "effort": effort_inputted,
                 "status": status,
-                "job_number": job_offer_number
+                "job_number": job_offer_number,
+                "currency_is_points": currency_is_points,
             });
         }
         document.getElementById(`effort_input_${job_offer_number}`).value = "";
