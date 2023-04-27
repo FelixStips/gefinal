@@ -70,9 +70,9 @@ def creating_session(subsession: Subsession):
         participant_vars['move_to_market_2'] = False
         participant_vars['is_employer'] = False
         participant_vars['currency_is_points'] = False
-        participant_vars['realpay'] = []
         participant_vars['total_points'] = []
-        participant_vars['exrate'] = []
+        participant_vars['total_tokens'] = []
+        participant_vars['round_for_points'] = []
         if participant_vars['playerID'] <= size_large_market:
             participant_vars['large_market'] = True
             participant_vars['large_market_1'] = True

@@ -20,7 +20,7 @@ SESSION_CONFIGS = [
                        'questionnaire',
                        'end'],
          num_demo_participants=9,
-         market_timeout_seconds=60,                                               # Duration of market stage in seconds
+         market_timeout_seconds=60,                                                # Duration of market stage in seconds
          size_large_market=3,                                                      # Number of players in large market
          size_small_market=3,                                                      # Number of players in small market
          num_employers_large_market=1,                                             # Number of employers in large market
@@ -28,17 +28,16 @@ SESSION_CONFIGS = [
          migration_small_shock_size=1,                                             # Number of migrants in small migration shock
          migration_large_shock_size=1,                                             # Number of migrants in large migration shock
          payout_rate=0.1,                                                          # Exchange rate points to Euros
-         exchange_rate=0.5,                                                        # Exchange rate from points to tokens (points is high income)
+         exchange_rate=2,                                                          # Exchange rate: 1 point = X tokens
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          total_rounds=2,                                                           # Number of market rounds
          shock_after_rounds=1,                                                     # Number of rounds before migration shock
          rounds_part_2=1,                                                          # Number of rounds in part 2
          MPL=[10, 7],                                                              # Productivity for 1 or 2 workers
          employer_outside_option=0,                                                # Outside option for employer
-         worker_outside_option=5,                                                  # Outside option for worker
+         worker_outside_option=0,                                                  # Outside option for worker
          final=False,                                                              # Displays instructions if true
          showup_fee=5.0,                                                           # Participation showup fee
-         use_browser_bots=False,                                                   # Use browser bots
          effort_costs_points=[0, 1, 2, 4, 6, 8, 10, 12, 15, 18],                   # Effort costs for 1 - 10 choices, in points
     )]
 
