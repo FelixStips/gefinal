@@ -4,7 +4,9 @@ random.seed(10)
 
 
 doc = """
-Your app description
+TO-DO's:
+    - Add setting of whether there is income difference
+    - Make two pages out of the midbreak instructions
 """
 
 

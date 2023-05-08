@@ -20,7 +20,7 @@ SESSION_CONFIGS = [
                        'questionnaire',
                        'end'],
          num_demo_participants=9,
-         market_timeout_seconds=60,                                                # Duration of market stage in seconds
+         market_timeout_seconds=180,                                                # Duration of market stage in seconds
          size_large_market=3,                                                      # Number of players in large market
          size_small_market=3,                                                      # Number of players in small market
          num_employers_large_market=1,                                             # Number of employers in large market
@@ -29,8 +29,9 @@ SESSION_CONFIGS = [
          migration_large_shock_size=1,                                             # Number of migrants in large migration shock
          payout_rate=0.1,                                                          # Exchange rate points to Euros
          exchange_rate=2,                                                          # Exchange rate: 1 point = X tokens
+         exchange_to_euros=0.1,                                                    # Exchange rate: 1 point = X Euros
          countdown_seconds=3,                                                      # Duration of countdown in seconds
-         total_rounds=2,                                                           # Number of market rounds
+         total_rounds=1,                                                           # Number of market rounds
          shock_after_rounds=1,                                                     # Number of rounds before migration shock
          rounds_part_2=1,                                                          # Number of rounds in part 2
          MPL=[10, 7],                                                              # Productivity for 1 or 2 workers

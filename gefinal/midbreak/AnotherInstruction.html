@@ -3,104 +3,94 @@
 {{ endblock }}
 {{ block content }}
 
-    {% if migrant == True %}
+<!--  CASE 4: REMAINERS -->
 
+{% if migrant == False and large_market == False %}
     <div class="card">
-        <h5 class="card-header">Overview</h5>
-            <div class="card-body">
-                <p>
-                    The second part of the experiment is very similar to the first part. <br>
-                    There will be {{ num_rounds_left }} more rounds to play.
-                    Each round will comprise a market and production stage like before.
-                </p>
-            </div>
-    </div>
-
-    <br> <br>
-        <div class="card">
-            <h5 class="card-header">Differences to Part 1</h5>
-                <div class="card-body">
-                    <p>
-                        You have been moved to a different market. This market differs from the market you were in before in two ways:
-                    </p>
-                    <ol>
-                        <li>
-                            <b> This market is larger than the one you were in before. </b> <br>
-                            There are {{ num_employers }} employers and {{ num_workers }} workers in this market. <br><br>
-                        </li>
-                        <li>
-                            <b> Points in this market are worth more </b><br>
-                            The exchange rate for point earned in this market will be <b>1 point = {{ exchange_rate_large_market }} Euros</b>.
-                            This means that you can gain the same amount of money even for a wage offer that is {{ income_differential }} lower.
-                            For example, if you accepted a wage of {{ example_wage }} points in the previous market, or you accept a wage of
-                            {{ example_wage_large_market }} in this market, you will earn the same amount of money.
-                        </li>
-                    </ol><br>
-                </div>
+        <div class="card-body">
+            <p>
+                You have been randomly selected to exit the market.
+                The second part of the experiment will comprise only a short questionnaire for you.
+            </p>
+            <p>
+                You will finish before the other participants.
+                Please remain seated and quiet until everybody has finished. <br>
+            </p>
         </div>
+    </div>
+<br>
+
+{% else %}
+
+<div class="card">
+    <h5 class="card-header">Overview</h5>
+    <div class="card-body">
+        <p>
+            The second part of the experiment is very similar to the first part. <br>
+            There will be {{ num_rounds_left }} more rounds to play.
+            Each round will comprise a market and production stage like before.
+        </p>
+    </div>
+</div>
 
 
-    {% else %}
+{% endif %}
+
+<!--  CASE 1: MIGRANTS -->
+{% if migrant == True %}
+
+<br> <br>
+<div class="card">
+    <h5 class="card-header">Differences to Part 1</h5>
+     <div class="card-body">
+         <p>
+            You have been moved to a different market.
+            This market is different to the market you were in before.
+            There are {{ num_employers }} employers and {{ num_workers }} workers in this market.<br>
+         </p>
+   </div>
+</div>
+ <br><br>
+
+{% else %}
 
         {% if large_market == True %}
 
-        <div class="card">
-            <h5 class="card-header">Overview</h5>
-                <div class="card-body">
-                    <p>
-                        The second part of the experiment is very similar to the first part. <br>
-                        There will be {{ num_rounds_left }} more rounds to play.
-                        Each round will comprise a market and production stage like before.
-                    </p>
-                </div>
-        </div>
-
-        <br> <br>
-
-        <div class="card">
-            <h5 class="card-header">Differences to Part 1</h5>
-                <div class="card-body">
-                    <p>
-                        The difference is that {{ shock_size }} workers from another market have joined this market.
-                        The number of employers is the same as in the first part of the experiment.
-                        This means that there are {{ num_employers }} employers and {{ num_workers }} workers in this market.
-                    </p>
-                      <p>
-                        The new workers played in a low-income market before. <br>
-                        This means that points in their previous market were worth less.
-                        The exchange rate for points earned in their previous market was
-                    </p>
-                    <p style="margin-left: 50px;">
-                            <b>1 point = {{ exchange_rate_small_market }} Euros</b>.
-                    </p>
-                    <p>
-                        This means that they can gain the same amount of money as before for wage offers that are {{ income_differential }} higher.
-                        For example, if they accepted a wage of {{ example_wage }} points in the previous market, and now accept a wage of
-                        {{ example_wage_large_market }} in this market, they will earn the same amount of money as before. <br>
-                    </p>
-                </div>
-        </div>
+                <!--  CASE 2: EMPLOYERS IN THE LARGE MARKET -->
+               {% if is_employer == True %}
+                    <div class="card">
+                        <h5 class="card-header">Differences to Part 1</h5>
+                            <div class="card-body">
+                                <p>
+                                    The difference is that {{ shock_size }} worker(s) from another market have joined this market.
+                                    The new workers played in a low-income market before. This means that they provided similar effort levels for lower wages.
+                                    For example, the average in your market was X for an average effort of Y. For this wage,workers in the low-income market provided on average an effort of Z. <br><br>
+                                 </p>
+                                <p>
+                                    The number of employers is the same as in the first part of the experiment.
+                                    This means that there are {{ num_employers }} employers and {{ num_workers }} workers in this market.<br>
+                                </p>
+                            </div>
+                    </div>
+                <br><br>
 
 
-        {% else %}
-            <div class="card">
-                <div class="card-body">
-                     <p>
-                        You have been randomly selected to exit the market.
-                        The second part of the experiment will comprise only a short questionnaire.
-                    </p>
-                     <p>
-                        You will finish before the other participants.
-                        Please remain seated and quiet until everybody has finished. <br>
-                    </p>
-                </div>
-            </div>
-
+                <!--  CASE 3: Workers IN THE LARGE MARKET -->
+               {% else %}
+                    <div class="card">
+                        <h5 class="card-header">Differences to Part 1</h5>
+                            <div class="card-body">
+                                <p>
+                                    The difference is that {{ shock_size }} worker(s) from another market have joined this market.
+                                    The number of employers is the same as in the first part of the experiment.
+                                    This means that there are {{ num_employers }} employers and {{ num_workers }} workers in this market.<br>
+                                </p>
+                            </div>
+                    </div>
+                <br><br>
         {% endif %}
-
     {% endif %}
-
-    <br>
+{% endif %}
 
     {{ next_button }}
 

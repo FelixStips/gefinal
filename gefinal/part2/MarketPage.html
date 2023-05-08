@@ -47,17 +47,21 @@
             You are in the role of <b><span id="your_role_string">{{ string_role }}</span></b>.
 
             {% if player.participant.is_employer == True %}
-            You can employ at most two workers in this round.
-
+                You can employ at most two workers in this round.
             {% else %}
-            You can accept at most one job offer this round.
-
+                You can accept at most one job offer this round.
             {% endif %} <br>
         </p>
         <p>
             There are currently <b><span id="workers_left">{{ num_workers }}</span> </b> unmatched worker(s)
             and <b><span id="offers_left">0</span> </b> open offer(s) in the market. <br>
-            The average wage level is <b><span id="average_wage">0</span></b>.
+
+            {% if player.participant.currency_is_points == True %}
+                The average wage level is <b><span id="average_wage_points">0</span></b> points.
+            {% else %}
+                The average wage level is <b><span id="average_wage_tokens">0</span></b> tokens.
+            {% endif %}
+
             The average requested effort level is <b><span id="average_effort">0</span></b>.
         </p>
     </div>
@@ -257,11 +261,12 @@
             open_offers_body.innerHTML = "";
             accepted_offers_body.innerHTML = "";
             for (let i = 0; i < offers.length; i++) {
-                let {job_id, wage, effort, status, employer_id, job_number} = offers[i];
+                let {job_id, wage_points, wage_tokens, effort, status, employer_id, job_number} = offers[i];
+                let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
                 if (status === "open") {
                     open_offers_body.innerHTML += `<tr id="open_row_${job_id}">
                                                     <td id="open_col_job_id_${job_id}"> ${job_id} </td>
-                                                    <td id="open_col_wage_${job_id}"> ${wage} </td>
+                                                    <td id="open_col_wage_${job_id}"> ${wage_displayed} </td>
                                                     <td id="open_col_effort_${job_id}"> ${effort} </td>
                                                     <td id="open_col_status_${job_id}" style="color: #008000;"> ${status} </td>
                                                     <td id="open_col_employer_id_${job_id}" style="display: none"> ${employer_id} </td>
@@ -270,7 +275,7 @@
                 } else if (status === "accepted") {
                     accepted_offers_body.innerHTML += `<tr id="accepted_row_${job_id}">
                                                     <td id="accepted_col_job_id_${job_id}"> ${job_id} </td>
-                                                    <td id="accepted_col_wage_${job_id}"> ${wage} </td>
+                                                    <td id="accepted_col_wage_${job_id}"> ${wage_displayed} </td>
                                                     <td id="accepted_col_effort_${job_id}"> ${effort} </td>
                                                     <td id="accepted_col_status_${job_id}" style="color: #0000CD;"> ${status} </td>
                                                 </tr>`;
@@ -282,14 +287,16 @@
         function updateEmployerCards(offers) {
             for (let i = 0; i < offers.length; i++) {
                 if (offers[i].status === "open" && offers[i].employer_id == js_vars.my_id) {
-                    let {job_id, wage, effort, job_number} = offers[i];
-                    document.getElementById(`employer_wage_offered_${job_number}`).innerHTML = wage;
+                    let {job_id, wage_points, wage_tokens, effort, job_number} = offers[i];
+                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                    document.getElementById(`employer_wage_offered_${job_number}`).innerHTML = wage_displayed;
                     document.getElementById(`employer_effort_offered_${job_number}`).innerHTML = effort;
                     document.getElementById(`employer_job_id_offered_${job_number}`).innerHTML = job_id;
                 }
                 if (offers[i].status === "accepted" && offers[i].employer_id == js_vars.my_id) {
-                    let {job_id, wage, effort, job_number} = offers[i];
-                    document.getElementById(`employer_wage_accepted_${job_number}`).innerHTML = wage;
+                    let {job_id, wage, wage_points, wage_tokens, effort, job_number} = offers[i];
+                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                    document.getElementById(`employer_wage_accepted_${job_number}`).innerHTML = wage_displayed;
                     document.getElementById(`employer_effort_accepted_${job_number}`).innerHTML = effort;
                     document.getElementById(`employer_job_id_accepted_${job_number}`).innerHTML = job_id;
                 }
@@ -301,9 +308,9 @@
             for (let i = 0; i < offers.length; i++) {
                 console.log(offers[i]);
                 if (offers[i].status === "accepted" && offers[i].worker_id == js_vars.my_id) {
-                    let {job_id, wage, effort} = offers[i];
-                    console.log(job_id, wage, effort)
-                    document.getElementById("worker_wage_accepted").innerHTML = wage;
+                    let {job_id, wage_points, wage_tokens, effort} = offers[i];
+                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                    document.getElementById("worker_wage_accepted").innerHTML = wage_displayed;
                     document.getElementById("worker_effort_accepted").innerHTML = effort;
                     document.getElementById("worker_job_id_accepted").innerHTML = job_id;
                 }
@@ -311,16 +318,23 @@
         }
 
         function updateInfobox(market_information) {
-            let {workers_left, open_offers, average_wage, average_effort} = market_information;
+            console.log(market_information);
+            let {workers_left, open_offers, average_wage_tokens, average_wage_points, average_effort} = market_information;
             document.getElementById("workers_left").innerHTML = workers_left;
             document.getElementById("offers_left").innerHTML = open_offers;
-            document.getElementById("average_wage").innerHTML = average_wage;
             document.getElementById("average_effort").innerHTML = average_effort;
+            if (document.getElementById("average_wage_tokens")) {
+                document.getElementById("average_wage_tokens").innerHTML = average_wage_tokens.toFixed(1);
+            } else if (document.getElementById("average_wage_points")) {
+                document.getElementById("average_wage_points").innerHTML = average_wage_points.toFixed(1);
+            } else {
+                console.log("no average_wage_tokens")
+            }
         }
 
 
         function renderPage(page_information) {
-            let {is_finished, wait, wait1, wait2, wait3, accepted1, accepted2, accepted3, invalid} = page_information;
+            let {is_finished, wait, wait1, wait2, accepted1, accepted2, invalid} = page_information;
             if (is_finished) {
                 document.getElementById("to_next_page").click();
             } else {
@@ -403,15 +417,17 @@
             let accepted_employer_id = parseInt(document.getElementById(`open_col_employer_id_${accepted_job_id}`).innerHTML);
             let accepted_job_number = parseInt(document.getElementById(`open_col_job_number_${accepted_job_id}`).innerHTML);
             let worker_id = js_vars.my_id;
+            let currency_is_points = js_vars.currency_is_points;
             liveSend({
                 "information_type": "accept",
-                "job_id": accepted_job_id,
                 "employer_id": accepted_employer_id,
+                "wage": accepted_wage,
+                "effort": accepted_effort,
+                "job_number": accepted_job_number,
+                "job_id": accepted_job_id,
                 "worker_id": worker_id,
                 "employer_id": accepted_employer_id,
-                "job_number": accepted_job_number,
-                "wage": accepted_wage,
-                "effort": accepted_effort
+                "currency_is_points": currency_is_points,
             })
         } catch {
             alert("Error: Please enter a valid job ID.");
@@ -421,11 +437,10 @@
         }
     }
 
-     function isNumeric(input) {
+    function isNumeric(input) {
         const regex = /^[0-9]+$/;
         return regex.test(input);
     }
-
     function sendOffer(offer_sent) {
          let job_offer_number = parseInt(offer_sent.slice(-1));
           let effort_input_element = document.getElementById(`effort_input_${job_offer_number}`);
