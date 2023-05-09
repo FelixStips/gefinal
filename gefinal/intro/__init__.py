@@ -288,6 +288,9 @@ class Instructions_firms(Page):
         else:
             print('received wrong information type')
 
+class Instructions_workers(Page):
+    pass
+
 class WaitToStart(WaitPage):
     body_text = "Waiting for other participants to finish the quiz."
 
