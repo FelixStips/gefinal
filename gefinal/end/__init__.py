@@ -47,6 +47,7 @@ class Results(Page):
             total_points=player.total_points,
             total_tokens=player.total_tokens,
             total_euros=player.total_euros,
+            currency_is_points=player.participant.vars['currency_is_points'],
         )
 
     @staticmethod

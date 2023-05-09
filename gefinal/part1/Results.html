@@ -39,7 +39,7 @@ Results
             {% else %}
             <p>
                 You employed <b>{{ num_workers }}</b> worker(s) this round.
-                In total, you paid a wage <b>{{ total_wage_paid_points }}</b> points. You received <b>{{ total_effort_received }}</b> effort units, which are worth {{ effort_worth }}.<br>
+                In total, you paid a wage <b>{{ total_wage_paid_points }}</b> points. You received <b>{{ total_effort_received }}</b> effort units, which are worth <b>{{ effort_worth }}</b> points.<br>
                 Your profit this round is <b>{{ player.payoff_points }}</b>. Your total profit in all rounds is <b>{{ total_payoff_points }}</b>. <br>
             </p>
                 Your contracts were as follows:
@@ -86,7 +86,7 @@ Results
             {% else %}
             <p>
                 You employed <b>{{ num_workers }}</b> worker(s) this round. In total, you paid a wage <b>{{ total_wage_paid_tokens }}</b> tokens.
-                You received <b>{{ total_effort_received }}</b> effort units, which are worth {{ effort_worth }}.<br>
+                You received <b>{{ total_effort_received }}</b> effort units, which are worth <b>{{ effort_worth }}</b> points.<br>
                 Your profit this round is <b>{{ player.payoff_tokens }}</b>. Your total profit in all rounds is <b>{{ total_payoff_tokens }}</b>. <br>
             </p>
                 Your contracts were as follows:

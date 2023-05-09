@@ -7,7 +7,13 @@
 
         The experiment is now complete. <br><br>
 
-        Your total profit in all rounds is <b>{{ total_payoff }}</b>. This is equivalent to {{ total_euros }} Euros. <br><br>
+        {% if currency_is_points == True %}
+            Your total profit in all rounds is <b>{{ total_points }}</b> points. Together with the show-up fee, your final payoff will be <b>{{ total_euros }}</b> Euros. <br><br>
+
+        {% else %}
+            Your total profit in all rounds is <b>{{ total_tokens }}</b> tokens. Together with the show-up fee, your final payoff will be <b>{{ total_euros }}</b> Euros. <br><br>
+
+        {% endif %}
 
         Please remain at your desk until all participants have completed the experiment. <br><br>
 

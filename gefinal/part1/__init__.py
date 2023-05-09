@@ -29,6 +29,7 @@ class Group(BaseGroup):
     players_in_group = models.IntegerField()
     employers_in_group = models.IntegerField()
     num_unmatched_workers = models.IntegerField()
+    num_unmatched_jobs = models.IntegerField()
     start_timestamp = models.FloatField()
     average_wage_points = models.FloatField()
     average_wage_tokens = models.FloatField()
@@ -148,6 +149,7 @@ def creating_session(subsession: Subsession):
             group.players_in_group = session.config['size_large_market']
             group.employers_in_group = session.config['num_employers_large_market']
             group.num_unmatched_workers = group.players_in_group - session.config['num_employers_large_market']
+            group.num_unmatched_jobs = session.config['num_employers_large_market'] * 2
         elif group.get_players()[0].participant.vars['large_market_2'] is True:
             group.marketID = 2
             group.large_market = True
@@ -156,6 +158,7 @@ def creating_session(subsession: Subsession):
             group.players_in_group = session.config['size_large_market']
             group.employers_in_group = session.config['num_employers_large_market']
             group.num_unmatched_workers = group.players_in_group - session.config['num_employers_large_market']
+            group.num_unmatched_jobs = session.config['num_employers_large_market'] * 2
         else:
             group.marketID = 3
             group.large_market = False
@@ -164,6 +167,7 @@ def creating_session(subsession: Subsession):
             group.players_in_group = session.config['size_small_market']
             group.employers_in_group = session.config['num_employers_small_market']
             group.num_unmatched_workers = group.players_in_group - session.config['num_employers_small_market']
+            group.num_unmatched_jobs = session.config['num_employers_small_market'] * 2
 
 
 
@@ -290,7 +294,8 @@ class MarketPage(Page):
             if current_offer[0].status == 'open':
                 group.num_job_offers -= 1
                 group.num_unmatched_workers -= 1
-                if group.num_unmatched_workers == 0:
+                group.num_unmatched_jobs -= 1
+                if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
                     group.is_finished = True
                 for o in current_offer:
                     o.status = 'accepted'

@@ -7,6 +7,7 @@ doc = """
 TO-DO's:
     - Add setting of whether there is income difference
     - Make two pages out of the midbreak instructions
+    - Finish market phase if all rounds were accepted
 """
 
 
