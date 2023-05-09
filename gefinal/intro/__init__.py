@@ -132,7 +132,7 @@ class Introduction(Page):
         return session.config['final']
 
 
-class Instructions_firms(Page):
+class InstructionsFirms(Page):
     @staticmethod
     def is_displayed(player: Player):
         session = player.session
@@ -288,7 +288,7 @@ class Instructions_firms(Page):
         else:
             print('received wrong information type')
 
-class Instructions_workers(Page):
+class InstructionsWorkers(Page):
     pass
 
 class WaitToStart(WaitPage):
@@ -301,8 +301,8 @@ class WaitToStart(WaitPage):
 
 
 page_sequence = [Introduction,
-                 Instructions_firms,
-                 Instructions_workers,
+                 InstructionsFirms,
+                 InstructionsWorkers,
                  WaitToStart]
 def custom_export(player):
     # top row
