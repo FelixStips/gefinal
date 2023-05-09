@@ -20,7 +20,7 @@ SESSION_CONFIGS = [
                        'questionnaire',
                        'end'],
          num_demo_participants=9,
-         market_timeout_seconds=180,                                                # Duration of market stage in seconds
+         market_timeout_seconds=180,                                               # Duration of market stage in seconds
          size_large_market=3,                                                      # Number of players in large market
          size_small_market=3,                                                      # Number of players in small market
          num_employers_large_market=1,                                             # Number of employers in large market
@@ -37,7 +37,7 @@ SESSION_CONFIGS = [
          MPL=[10, 7],                                                              # Productivity for 1 or 2 workers
          employer_outside_option=0,                                                # Outside option for employer
          worker_outside_option=0,                                                  # Outside option for worker
-         final=False,                                                              # Displays instructions if true
+         final=True,                                                               # Displays instructions if true
          showup_fee=5.0,                                                           # Participation showup fee
          effort_costs_points=[0, 1, 2, 4, 6, 8, 10, 12, 15, 18],                   # Effort costs for 1 - 10 choices, in points
     )]
