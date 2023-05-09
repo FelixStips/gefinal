@@ -132,11 +132,11 @@ class Introduction(Page):
         return session.config['final']
 
 
-class Instructions(Page):
+class Instructions_firms(Page):
     @staticmethod
     def is_displayed(player: Player):
         session = player.session
-        return session.config['final']
+        return session.config['final'] and player.participant.vars['is_employer']
 
     @staticmethod
     def js_vars(player: Player):
@@ -298,7 +298,8 @@ class WaitToStart(WaitPage):
 
 
 page_sequence = [Introduction,
-                 Instructions,
+                 Instructions_firms,
+                 Instructions_workers,
                  WaitToStart]
 def custom_export(player):
     # top row
