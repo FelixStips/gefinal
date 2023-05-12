@@ -19,21 +19,43 @@
     <div class="card">
         <h5 class="card-header">Payoffs</h5>
         <div class="card-body">
-             <p>At the beginning of the experiment you will receive an initial endowment of {{ participation_fee }} Euros.
-            During the experiment, you can earn a higher amount of money by accumulating
-            points. The amount of earned points will depend on your decisions and on the other
-            participants’ decisions.
-            </p>
-            <p>
-            All points that you earn during the experiment will be exchanged into Euros at the
-            end of the experiment. The exchange rate will be
-                 <p style="margin-left: 50px;">
-                    <b>1 point = {{ exchange_rate }} Euros</b>.
+             {% if player.participant.currency_is_points == True %}
+                 <p>
+                     At the beginning of the experiment, you will receive an initial endowment of {{ participation_fee }} Euros.
+                     During the experiment, you can earn a higher amount of money by accumulating points.
+                    The amount of earned points will depend on your decisions and on the other participants’ decisions.
                 </p>
-            <p>
-                Your initial income of {{ participation_fee }}  Euros corresponds to {{ initial_points }} points. At the end of the experiment
-                you will be paid by cash and in private.
-            </p>
+                <p>
+                All points you earn will be converted to Euros at the end of the experiment. The exchange rate will be
+                     <p style="margin-left: 50px;">
+                        <b>1 point = {{ exchange_rate }} Euros</b>.
+                    </p>
+                <p>
+                    Your initial income of {{ participation_fee }}  Euros corresponds to {{ initial_points_tokens }} tokens.
+                    <b>At the end of the experiment, you will receive the sum of money that you earned in addition to your 5 Euro initial sum.</b>
+                    You will be paid with cash and in private.
+                </p>
+
+            {% else %}
+                 <p>
+                     At the beginning of the experiment, you will receive an initial endowment of {{ participation_fee }} Euros.
+                     During the experiment, you can earn a higher amount of money by accumulating tokens.
+                    The amount of earned tokens will depend on your decisions and on the other participants’ decisions.
+                </p>
+                <p>
+                    All tokens you earn will be converted to Euros at the end of the experiment. The exchange rate will be
+                </p>
+                     <p style="margin-left: 50px;">
+                        <b>1 token = {{ exchange_rate }} Euros</b>.
+                    </p>
+                <p>
+                    Your initial income of {{ participation_fee }}  Euros corresponds to {{ initial_points_tokens }} tokens.
+                    <b>At the end of the experiment, you will receive the sum of money that you earned in addition to your 5 Euro initial sum.</b>
+                    You will be paid with cash and in private.
+                </p>
+
+            {% endif %}
+
         </div>
     </div>
     <br>
@@ -167,7 +189,7 @@
   <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
-    </p>
+  </p>
 </div>
 
 
@@ -227,15 +249,6 @@
                 and the effort levels are {{ ex_2_effort_1 }} and {{ ex_2_effort_2 }}, the income in that round will be
                 Income =  {{ mpl2 }}*({{ ex_2_effort_1 }} + *{{ ex_2_effort_2 }}) - {{ ex_2_wage_1 }} - {{ ex_2_wage_2 }}= {{ ex_2_employer_profit }}.
                 </li><br><br>
-
-                <li> If the firm has employed <b> three </b> workers, each unit of effort is multiplied with {{ mpl3 }}. The income is thus calculated as follows:
-                    <ul>
-                        <li> <b> Income  = {{ mpl3 }} * effort 1 + {{ mpl3 }} * effort 2 + {{ mpl3 }} * effort 3 - wage 1 - wage 2 - wage 3 </b> </li>
-                    </ul></li>
-                Example: If a firm concludes three contracts and the wages are {{ ex_3_wage_1 }}, {{ ex_3_wage_2 }} and {{ ex_3_wage_3 }}
-                and the effort levels are {{ ex_3_effort_1 }}, {{ ex_3_effort_2 }} and {{ ex_3_effort_3 }}, the income in that round will be
-                Income  =  {{ mpl3 }}*({{ ex_3_effort_1 }}+{{ ex_3_effort_2 }}+{{ ex_3_effort_3 }}) - {{ ex_3_wage_1 }} - {{ ex_3_wage_2 }} - {{ ex_3_wage_3 }}= {{ ex_3_employer_profit }}.
-                </li><br>
             </ol>
         </div>
       </div>

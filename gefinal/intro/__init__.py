@@ -136,7 +136,7 @@ class InstructionsFirms(Page):
     @staticmethod
     def is_displayed(player: Player):
         session = player.session
-        return session.config['final'] and player.participant.vars['is_employer']
+        return session.config['final']
 
     @staticmethod
     def js_vars(player: Player):
@@ -147,31 +147,33 @@ class InstructionsFirms(Page):
     def vars_for_template(player: Player):
         session = player.session
         if player.participant.large_market:
-            exchange_rate = session.config['exchange_rate_large_market']
+            exchange_rate = session.config['payout_rate']
             players_in_your_group = session.config['size_large_market']
             employers_in_your_group = session.config['num_employers_large_market']
             workers_in_your_group = session.config['size_large_market'] - session.config['num_employers_large_market']
+            initial_points_tokens = int(session.config['showup_fee'] * (1/session.config['payout_rate']))
         elif player.participant.small_market:
-            exchange_rate = session.config['exchange_rate_small_market']
+            exchange_rate =  session.config['payout_rate'] * (1/session.config['exchange_rate'])
             players_in_your_group = session.config['size_small_market']
             employers_in_your_group = session.config['num_employers_small_market']
             workers_in_your_group = session.config['size_small_market'] - session.config['num_employers_small_market']
+            initial_points_tokens = int(session.config['showup_fee'] * (1 / session.config['payout_rate'])) * session.config['exchange_rate']
 
         return dict(
             exchange_rate=exchange_rate,
             players_in_your_group=players_in_your_group,
             employers_in_your_group=employers_in_your_group,
             workers_in_your_group=workers_in_your_group,
+            currency_is_points=player.participant.currency_is_points,
+            initial_points_tokens=initial_points_tokens,
             shock_after_rounds=session.config['shock_after_rounds'],
             total_rounds=int(session.config['total_rounds']),
             participation_fee=int(session.config['showup_fee']),
-            initial_points=int(session.config['showup_fee'] * (1 / exchange_rate)),
             market_time=session.config['market_timeout_seconds'],
             worker_outside_option=session.config['worker_outside_option'],
             employer_outside_option=session.config['employer_outside_option'],
             mpl1=session.config['MPL'][0],
             mpl2=session.config['MPL'][1],
-            mpl3=session.config['MPL'][2],
             ex_1_wage=50,
             ex_1_effort=7,
             ex_1_employer_profit=session.config['MPL'][0] * 7 - 50,
@@ -180,13 +182,6 @@ class InstructionsFirms(Page):
             ex_2_wage_2=40,
             ex_2_effort_2=6,
             ex_2_employer_profit=session.config['MPL'][1] * (8 + 6) - (60 + 40),
-            ex_3_wage_1=60,
-            ex_3_effort_1=8,
-            ex_3_wage_2=40,
-            ex_3_effort_2=6,
-            ex_3_wage_3=50,
-            ex_3_effort_3=7,
-            ex_3_employer_profit=session.config['MPL'][2] * (8 + 6 + 7) - (60 + 40 + 50),
         )
 
     @staticmethod
@@ -289,7 +284,10 @@ class InstructionsFirms(Page):
             print('received wrong information type')
 
 class InstructionsWorkers(Page):
-    pass
+    @staticmethod
+    def is_displayed(player: Player):
+        session = player.session
+        return session.config['final']
 
 class WaitToStart(WaitPage):
     body_text = "Waiting for other participants to finish the quiz."

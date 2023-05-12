@@ -30,13 +30,13 @@ class Player(BasePlayer):
         choices=['Less than high school', 'High school', 'Some college', 'Bachelor’s degree', 'Master’s degree', 'Doctorate', 'Other', 'Prefer not to say'])
     education_field = models.StringField(
         label="What is your field of study?",
-        choices=['Arts','Business','Economics','Finance','Law','Mathematics','Medicine','Psychology','Natural Sciences','Engineering','Not applicable','Other'])
+        choices=['Arts','Business','Economics','Finance','Law','Mathematics','Medicine','Psychology','Natural Sciences','Engineering','Not applicable','Other','Prefer not to say'])
     country_of_birth = models.StringField(
         label="What is your country of birth?",
-        choices=['Luxembourg','Belgium','France','Germany','Other European','Other non-European'])
+        choices=['Luxembourg','Belgium','France','Germany','Other European','Other non-European','Prefer not to say'])
     country_of_residence = models.StringField(
         label="What is your country of residence?",
-        choices=['Luxembourg','Belgium','France','Germany','Other European','Other non-European'])
+        choices=['Luxembourg','Belgium','France','Germany','Other European','Other non-European','Prefer not to say'])
     parents_education = models.StringField(
         label="What is the highest level of education one or both of your parents completed?",
         choices=['Less than high school', 'High school', 'Some college', 'Bachelor’s degree', 'Master’s degree', 'Doctorate', 'Other', 'Prefer not to say'])
@@ -49,7 +49,7 @@ class Player(BasePlayer):
         choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     )
     bat_question = models.FloatField(
-        label="A bat and a ball cost $1.10 in total. The bat costs $1 more than the ball. <br> How much does the ball cost?",
+        label="A bat and a ball cost $1.10 in total. The bat costs $1 more than the ball. <br> How much does the ball cost? Please type only the number, without the dollar sign.",
         min=0,
     )
     widgets_question = models.IntegerField(

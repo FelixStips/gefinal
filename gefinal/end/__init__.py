@@ -42,7 +42,7 @@ class Results(Page):
         session = player.session
         player.total_points = sum(filter(None, player.participant.vars['total_points']))
         player.total_tokens = sum(filter(None, player.participant.vars['total_tokens']))
-        player.total_euros = session.config['exchange_to_euros'] * player.total_points + session.config['showup_fee'] if player.total_points > 0 else session.config['showup_fee']
+        player.total_euros = session.config['payout_rate'] * player.total_points + session.config['showup_fee'] if player.total_points > 0 else session.config['showup_fee']
         return dict(
             total_points=player.total_points,
             total_tokens=player.total_tokens,
@@ -55,7 +55,7 @@ class Results(Page):
         session = player.session
         player.total_points = sum(filter(None, player.participant.vars['total_points']))
         player.total_tokens = sum(filter(None, player.participant.vars['total_tokens']))
-        player.total_euros = session.config['exchange_to_euros'] * player.total_points + session.config['showup_fee'] if player.total_points > 0 else session.config['showup_fee']
+        player.total_euros = session.config['payout_rate'] * player.total_points + session.config['showup_fee'] if player.total_points > 0 else session.config['showup_fee']
         player.large_market = player.participant.vars['large_market']
         player.small_market = player.participant.vars['small_market']
         player.is_employer = player.participant.vars['is_employer']
