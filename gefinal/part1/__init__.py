@@ -47,7 +47,7 @@ class Player(BasePlayer):
     is_employed = models.BooleanField(initial=False)                                                                    # Boolean for whether the worker is employed
     wage_received_tokens = models.FloatField(min=0)                                                                   # Wage the worker received by the firm (in tokens)
     wage_received_points = models.FloatField(min=0)                                                                   # Wage the worker received by the firm (in points)
-    effort_requested = models.IntegerField(min=1, max=10)                                                               # Effort level the firm requested from the worker
+    effort_requested = models.IntegerField(min=0, max=1)                                                               # Effort level the firm requested from the worker
     effort_choice = models.IntegerField(choices=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10],                                        # Effort choice of the worker
                                         widget=widgets.RadioSelectHorizontal,
                                         label="Please choose an effort level:")
@@ -395,28 +395,12 @@ class WorkPage(Page):
             string_role=player.participant.vars['string_role'],
             wage_received_points=player.wage_received_points,
             wage_received_tokens=player.wage_received_tokens,
-            effort_requested=player.effort_requested,
+            effort_requested=player.field_maybe_none('effort_requested'),
             matched_with_id=player.matched_with_id,
-            effort_cost_points_1=session.config['effort_costs_points'][0],
-            effort_cost_points_2=session.config['effort_costs_points'][1],
-            effort_cost_points_3=session.config['effort_costs_points'][2],
-            effort_cost_points_4=session.config['effort_costs_points'][3],
-            effort_cost_points_5=session.config['effort_costs_points'][4],
-            effort_cost_points_6=session.config['effort_costs_points'][5],
-            effort_cost_points_7=session.config['effort_costs_points'][6],
-            effort_cost_points_8=session.config['effort_costs_points'][7],
-            effort_cost_points_9=session.config['effort_costs_points'][8],
-            effort_cost_points_10=session.config['effort_costs_points'][9],
-            effort_cost_tokens_1=session.config['effort_costs_points'][0] * session.config['exchange_rate'],
-            effort_cost_tokens_2=session.config['effort_costs_points'][1] * session.config['exchange_rate'],
-            effort_cost_tokens_3=session.config['effort_costs_points'][2] * session.config['exchange_rate'],
-            effort_cost_tokens_4=session.config['effort_costs_points'][3] * session.config['exchange_rate'],
-            effort_cost_tokens_5=session.config['effort_costs_points'][4] * session.config['exchange_rate'],
-            effort_cost_tokens_6=session.config['effort_costs_points'][5] * session.config['exchange_rate'],
-            effort_cost_tokens_7=session.config['effort_costs_points'][6] * session.config['exchange_rate'],
-            effort_cost_tokens_8=session.config['effort_costs_points'][7] * session.config['exchange_rate'],
-            effort_cost_tokens_9=session.config['effort_costs_points'][8] * session.config['exchange_rate'],
-            effort_cost_tokens_10=session.config['effort_costs_points'][9] * session.config['exchange_rate'],
+            effort_cost_points_0=session.config['effort_costs_points'][0],
+            effort_cost_points_1=session.config['effort_costs_points'][1],
+            effort_cost_tokens_0=session.config['effort_costs_points'][0] * session.config['exchange_rate'],
+            effort_cost_tokens_1=session.config['effort_costs_points'][1] * session.config['exchange_rate'],
         )
 
 

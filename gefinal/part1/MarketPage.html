@@ -62,12 +62,13 @@
                 The average wage level is <b><span id="average_wage_tokens">0</span></b> tokens.
             {% endif %}
 
-            The average requested effort level is <b><span id="average_effort">0</span></b>.
+            The share of offers requesting high effort is <b><span id="average_effort">0</span></b>%.
         </p>
     </div>
 </div>
 
 <br>
+
 
 
 <button class="otree-btn-next btn otree-next-button invisible" id = "to_next_page"></button>
@@ -92,7 +93,11 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="effort-addon1">Effort</span>
                         </div>
-                        <input id="effort_input_1" class="form-control" placeholder="0 - 10" aria-describedby="basic-addon1">
+                        <select id="effort_input_1" class="form-select" aria-label="Default select example">
+                          <option selected>Choose effort</option>
+                          <option value="1">high</option>
+                          <option value="0">low</option>
+                        </select>
                     </div>
                 <button type="button" class="btn btn-secondary" id="send_offer_1" onclick="sendOffer(this.id)"> Send Offer</button>
                 </div>
@@ -102,7 +107,7 @@
                     <h6 class="card-subtitle mb-2 text-muted">Your first offer </h6>
                     <p class="card-text">
                         You offered a wage of <b><span id="employer_wage_offered_1"></span></b>
-                        for a desired effort of <b><span id="employer_effort_offered_1"></span></b>.
+                        for <b><span id="employer_effort_offered_1"></span></b> desired effort.
                         The job ID is <b><span id="employer_job_id_offered_1"></span></b>.
                         To cancel the offer, click the button below.
                     </p>
@@ -116,7 +121,7 @@
                     <p class="card-text">
                         The offer with ID <b><span id="employer_job_id_accepted_1"></span></b> was accepted.
                         You offered a wage <b><span id="employer_wage_accepted_1"></span></b>
-                        for a desired effort of <b><span id="employer_effort_accepted_1"></span></b>.
+                        for <b><span id="employer_effort_accepted_1"></span></b> desired effort.
                     </p>
                 </div>
             </div>
@@ -135,7 +140,11 @@
                             <div class="input-group-prepend">
                             <span class="input-group-text" id="effort-addon2">Effort</span>
                             </div>
-                            <input id="effort_input_2" class="form-control" placeholder="0 - 10" aria-describedby="basic-addon1">
+                            <select id="effort_input_2" class="form-select" aria-label="Default select example">
+                              <option selected>Choose effort</option>
+                              <option value="1">high</option>
+                              <option value="0">low</option>
+                            </select>
                         </div>
                 <button type="button" class="btn btn-secondary" id="send_offer_2" onclick="sendOffer(this.id)"> Send Offer</button>
             </div>
@@ -145,7 +154,7 @@
                 <h6 class="card-subtitle mb-2 text-muted">Your second offer</h6>
                 <p class="card-text">
                     You offered a wage of <b><span id="employer_wage_offered_2"></span></b>
-                    for a desired effort of <b><span id="employer_effort_offered_2"></span></b>.
+                    for <b><span id="employer_effort_offered_2"></span></b> desired effort.
                     The job ID is <b><span id="employer_job_id_offered_2"></span></b>.
                     To cancel the offer, click the button below.
                 </p>
@@ -158,7 +167,7 @@
                 <p class="card-text">
                     The offer with ID <b><span id="employer_job_id_accepted_2"></span></b> was accepted.
                     You offered a wage <b><span id="employer_wage_accepted_2"></span></b>
-                    for a desired effort of <b><span id="employer_effort_accepted_2"></span></b>.
+                    for <b><span id="employer_effort_accepted_2"></span></b> desired effort.
                 </p>
             </div>
         </div>
@@ -188,7 +197,7 @@
     <div class="card-body">
         <p class="card-text">
           A wage of <b><span id="worker_wage_accepted"></span> </b>
-            for <b><span id="worker_effort_accepted"></span></b> effort units.
+            for <b><span id="worker_effort_accepted"></span></b> desired effort.
             The job ID is <b><span id="worker_job_id_accepted"></span></b>.
         Please wait until the round ends.
     </div>
@@ -262,12 +271,20 @@
             accepted_offers_body.innerHTML = "";
             for (let i = 0; i < offers.length; i++) {
                 let {job_id, wage_points, wage_tokens, effort, status, employer_id, job_number} = offers[i];
-                let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens
+                if (effort === 1) {
+                    var effort_displayed = "high";
+                } else if (effort === 0) {
+                    var effort_displayed = "low";
+                } else {
+                    var effort_displayed = "";
+                    console.log("effort_displayed is wrong");
+                }
                 if (status === "open") {
                     open_offers_body.innerHTML += `<tr id="open_row_${job_id}">
                                                     <td id="open_col_job_id_${job_id}"> ${job_id} </td>
                                                     <td id="open_col_wage_${job_id}"> ${wage_displayed} </td>
-                                                    <td id="open_col_effort_${job_id}"> ${effort} </td>
+                                                    <td id="open_col_effort_${job_id}"> ${effort_displayed} </td>
                                                     <td id="open_col_status_${job_id}" style="color: #008000;"> ${status} </td>
                                                     <td id="open_col_employer_id_${job_id}" style="display: none"> ${employer_id} </td>
                                                     <td id="open_col_job_number_${job_id}" style="display: none"> ${job_number} </td>
@@ -276,7 +293,7 @@
                     accepted_offers_body.innerHTML += `<tr id="accepted_row_${job_id}">
                                                     <td id="accepted_col_job_id_${job_id}"> ${job_id} </td>
                                                     <td id="accepted_col_wage_${job_id}"> ${wage_displayed} </td>
-                                                    <td id="accepted_col_effort_${job_id}"> ${effort} </td>
+                                                    <td id="accepted_col_effort_${job_id}"> ${effort_displayed} </td>
                                                     <td id="accepted_col_status_${job_id}" style="color: #0000CD;"> ${status} </td>
                                                 </tr>`;
                 }
@@ -289,15 +306,31 @@
                 if (offers[i].status === "open" && offers[i].employer_id == js_vars.my_id) {
                     let {job_id, wage_points, wage_tokens, effort, job_number} = offers[i];
                     let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                    if (effort === 1) {
+                        var effort_displayed = "high";
+                    } else if (effort === 0) {
+                        var effort_displayed = "low";
+                    } else {
+                        var effort_displayed = "";
+                        console.log("effort_displayed is wrong");
+                    }
                     document.getElementById(`employer_wage_offered_${job_number}`).innerHTML = wage_displayed;
-                    document.getElementById(`employer_effort_offered_${job_number}`).innerHTML = effort;
+                    document.getElementById(`employer_effort_offered_${job_number}`).innerHTML = effort_displayed;
                     document.getElementById(`employer_job_id_offered_${job_number}`).innerHTML = job_id;
                 }
                 if (offers[i].status === "accepted" && offers[i].employer_id == js_vars.my_id) {
                     let {job_id, wage, wage_points, wage_tokens, effort, job_number} = offers[i];
                     let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                      if (effort === 1) {
+                        var effort_displayed = "high";
+                    } else if (effort === 0) {
+                        var effort_displayed = "low";
+                    } else {
+                        var effort_displayed = "";
+                        console.log("effort_displayed is wrong");
+                    }
                     document.getElementById(`employer_wage_accepted_${job_number}`).innerHTML = wage_displayed;
-                    document.getElementById(`employer_effort_accepted_${job_number}`).innerHTML = effort;
+                    document.getElementById(`employer_effort_accepted_${job_number}`).innerHTML = effort_displayed;
                     document.getElementById(`employer_job_id_accepted_${job_number}`).innerHTML = job_id;
                 }
             }
@@ -310,8 +343,16 @@
                 if (offers[i].status === "accepted" && offers[i].worker_id == js_vars.my_id) {
                     let {job_id, wage_points, wage_tokens, effort} = offers[i];
                     let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                      if (effort === 1) {
+                        var effort_displayed = "high";
+                    } else if (effort === 0) {
+                        var effort_displayed = "low";
+                    } else {
+                        var effort_displayed = "";
+                        console.log("effort_displayed is wrong");
+                    }
                     document.getElementById("worker_wage_accepted").innerHTML = wage_displayed;
-                    document.getElementById("worker_effort_accepted").innerHTML = effort;
+                    document.getElementById("worker_effort_accepted").innerHTML = effort_displayed;
                     document.getElementById("worker_job_id_accepted").innerHTML = job_id;
                 }
             }
@@ -322,7 +363,8 @@
             let {workers_left, open_offers, average_wage_tokens, average_wage_points, average_effort} = market_information;
             document.getElementById("workers_left").innerHTML = workers_left;
             document.getElementById("offers_left").innerHTML = open_offers;
-            document.getElementById("average_effort").innerHTML = average_effort;
+            let share_high = average_effort * 100;
+            document.getElementById("average_effort").innerHTML = share_high;
             if (document.getElementById("average_wage_tokens")) {
                 document.getElementById("average_wage_tokens").innerHTML = average_wage_tokens.toFixed(1);
             } else if (document.getElementById("average_wage_points")) {
@@ -445,12 +487,10 @@
          let job_offer_number = parseInt(offer_sent.slice(-1));
           let effort_input_element = document.getElementById(`effort_input_${job_offer_number}`);
           let wage_input_element = document.getElementById(`wage_input_${job_offer_number}`);
-
           if (!isNumeric(effort_input_element.value) || !isNumeric(wage_input_element.value)) {
-            alert("Error: Please enter a valid number in both fields before sending offer.");
+            alert("Error: Please choose a wage and an effort level before sending the offer.");
             return;
           }
-
         let effort_inputted = parseInt(effort_input_element.value);
         let wage_inputted = parseInt(wage_input_element.value);
         if (isNaN(wage_inputted) || isNaN(effort_inputted)) {
@@ -459,8 +499,8 @@
         } else if (wage_inputted < 0 || wage_inputted > 100) {
             alert("Error: Please specify a wage between 0 and 100.");
             return;
-        } else if (effort_inputted < 0 || effort_inputted > 10) {
-            alert("Error: Please specify a requested effort between 0 and 10.");
+        } else if (effort_inputted < 0 || effort_inputted > 1) {
+            alert("Error: Please choose either high or low effort.");
             return;
         } else {
             let status = 'open';
