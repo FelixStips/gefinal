@@ -21,7 +21,7 @@ SESSION_CONFIGS = [
                        'end'],
          num_demo_participants=9,
          final=False,                                                              # Display instructions
-         market_timeout_seconds=180,                                               # Duration of market stage in seconds
+         market_timeout_seconds=120,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          showup_fee=5.0,                                                           # Participation show-up fee
          payout_rate=0.1,                                                          # Payout rate: 1 point = X Euros

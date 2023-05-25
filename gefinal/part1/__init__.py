@@ -390,12 +390,19 @@ class WorkPage(Page):
     @staticmethod
     def vars_for_template(player: Player):
         session = player.session
+        if player.field_maybe_none('effort_requested') == 1:
+            effort_requested = "high"
+        elif player.field_maybe_none('effort_requested') == 0:
+            effort_requested = "low"
+        else:
+            print('error: effort_requested not 0 or 1')
+            effort_requested = "error"
         return dict(
             is_employer=player.participant.vars['is_employer'],
             string_role=player.participant.vars['string_role'],
             wage_received_points=player.wage_received_points,
             wage_received_tokens=player.wage_received_tokens,
-            effort_requested=player.field_maybe_none('effort_requested'),
+            effort_requested=effort_requested,
             matched_with_id=player.matched_with_id,
             effort_cost_points_0=session.config['effort_costs_points'][0],
             effort_cost_points_1=session.config['effort_costs_points'][1],

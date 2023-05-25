@@ -455,7 +455,16 @@
         let accepted_job_id = parseInt(document.getElementById("input_job_id_accept").value);
         try {
             let accepted_wage = parseInt(document.getElementById(`open_col_wage_${accepted_job_id}`).innerHTML);
-            let accepted_effort = parseInt(document.getElementById(`open_col_effort_${accepted_job_id}`).innerHTML);
+            let effort = document.getElementById(`open_col_effort_${accepted_job_id}`).innerHTML.trim();
+            console.log(effort)
+            if (effort === "high") {
+                var accepted_effort = 1;
+            } else if (effort === "low") {
+                var accepted_effort = 0;
+            } else {
+                console.log("error. effort neither high nor low")
+            }
+            console.log(accepted_effort)
             let accepted_employer_id = parseInt(document.getElementById(`open_col_employer_id_${accepted_job_id}`).innerHTML);
             let accepted_job_number = parseInt(document.getElementById(`open_col_job_number_${accepted_job_id}`).innerHTML);
             let worker_id = js_vars.my_id;
