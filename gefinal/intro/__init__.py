@@ -75,6 +75,7 @@ def creating_session(subsession: Subsession):
         participant_vars['total_points'] = []
         participant_vars['total_tokens'] = []
         participant_vars['round_for_points'] = []
+        participant_vars['round_number'] = 0
         if participant_vars['playerID'] <= size_large_market:
             participant_vars['large_market'] = True
             participant_vars['large_market_1'] = True

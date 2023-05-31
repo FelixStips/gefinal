@@ -21,15 +21,17 @@ SESSION_CONFIGS = [
                        'end'],
          num_demo_participants=9,
          final=False,                                                              # Display instructions
-         market_timeout_seconds=120,                                               # Duration of market stage in seconds
+         market_timeout_seconds=180,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          showup_fee=5.0,                                                           # Participation show-up fee
+         min_pay=11.0,                                                             # Minimum payment
          payout_rate=0.1,                                                          # Payout rate: 1 point = X Euros
          exchange_rate=2,                                                          # Exchange rate: 1 point = X tokens
          employer_outside_option=0,                                                # Outside option for employer
          worker_outside_option=0,                                                  # Outside option for worker
-         MPL=[10, 7],                                                              # Productivity for 1 or 2 workers
-         effort_costs_points=[5, 15],                                              # Effort costs for low and high effort, in points
+         MPL_high=[160, 140],                                                      # Revenue high effort for 1 or 2 workers
+         MPL_low=[16, 14],                                                         # Revenue low effort for 1 or 2 workers
+         effort_costs_points=[10, 20],                                             # Effort costs for low and high effort, in points
          total_rounds=2,                                                           # Total number of market rounds
          shock_after_rounds=1,                                                     # Number of rounds before migration shock
          size_large_market=3,                                                      # Number of players in each large market (note: large and small does not mean anything)
@@ -64,7 +66,7 @@ PARTICIPANT_FIELDS = ['large_market',
                       'total_tokens',
                       'currency_is_points',
                       'round_for_points',
-                      ]
+                      'round_number',]
 SESSION_FIELDS = []
 
 # ISO-639 code
