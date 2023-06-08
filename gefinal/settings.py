@@ -20,15 +20,15 @@ SESSION_CONFIGS = [
                        'questionnaire',
                        'end'],
          num_demo_participants=9,
-         final=False,                                                              # Display instructions
+         final=False,                                                               # Display instructions
          market_timeout_seconds=180,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          showup_fee=5.0,                                                           # Participation show-up fee
          min_pay=11.0,                                                             # Minimum payment
          payout_rate=0.1,                                                          # Payout rate: 1 point = X Euros
          exchange_rate=2,                                                          # Exchange rate: 1 point = X tokens
-         employer_outside_option=0,                                                # Outside option for employer
-         worker_outside_option=0,                                                  # Outside option for worker
+         employer_outside_option=0,                                                # Outside option for employers in points
+         worker_outside_option=0,                                                  # Outside option for workers in points
          MPL_high=[160, 140],                                                      # Revenue high effort for 1 or 2 workers
          MPL_low=[16, 14],                                                         # Revenue low effort for 1 or 2 workers
          effort_costs_points=[10, 20],                                             # Effort costs for low and high effort, in points

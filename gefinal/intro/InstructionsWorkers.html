@@ -2,43 +2,53 @@
 {{ block content }}
 
 <style>
-    caption {
-        caption-side: top;
-    }
     .tab {
-        margin-top: 1cm;
-        margin-inside: 1.5cm;
+        margin-top: 0.5cm;
+        margin-inside: 1cm;
     }
-         body {
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
-    color: #333;
-    padding: 20px;
-  }
+    body {
+        background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
+        color: #333;
+        padding: 10px;
+    }
+    p {
+        margin-bottom: 15px;
+        margin-top: 5px;
+    }
+    .list {
+      margin-top: 0;
+        margin-bottom: 0;
+        padding-left: 30px;
+    }
+    .block-sentence {
+        display: block;
+        text-align: justify;
+      }
 
 </style>
 
 
-<h1 id="header">Instructions</h1>
 
 
 <div class="tab" id="instructions_1" style="display: block">
     <div class="card">
-        <h5 class="card-header">Payoffs</h5>
+        <h5 class="card-header">Payment</h5>
         <div class="card-body">
-             <p>At the beginning of the experiment you will receive an initial endowment of {{ participation_fee }} Euros.
-            During the experiment, you can earn a higher amount of money by accumulating
-            points. The amount of earned points will depend on your decisions and on the other
-            participants’ decisions.
+             <p class="block-sentence">
+                 At the beginning of the experiment you will receive an <b>initial endowment of {{ participation_fee }} Euros</b>.
+                During the experiment, you can earn a higher amount of money by accumulating {{ currency_plural }}.
+                 The amount of earned {{ currency_plural }} will depend on your decisions and those of the other participants’ decisions.
+             </p>
+            <p class="block-sentence">
+                            All {{ currency_plural }} you earn will be converted to Euros at the end of the experiment. The exchange rate will be
             </p>
-            <p>
-            All points that you earn during the experiment will be exchanged into Euros at the
-            end of the experiment. The exchange rate will be
-                 <p style="margin-left: 50px;">
-                    <b>1 point = {{ exchange_rate }} Euros</b>.
-                </p>
-            <p>
-                Your initial income of {{ participation_fee }}  Euros corresponds to {{ initial_points }} points. At the end of the experiment
+             <p style="margin-left: 50px;">
+                    <b>1 {{ currency }} = {{ exchange_rate }} Euros</b>.
+
+             </p>
+            <p class="block-sentence">
+                Your initial income of {{ participation_fee }}  Euros corresponds to {{ initial_points_tokens }} points. At the end of the experiment
                 you will be paid by cash and in private.
             </p>
         </div>
@@ -52,22 +62,20 @@
 
 <div class="tab" id="instructions_2" style="display: none">
     <div class="card">
-        <h5 class="card-header">Overview</h5>
+        <h5 class="card-header">Instructions - Part 1</h5>
         <div class="card-body">
-            <p>
-                The experiment consists of two parts. This set of instructions describes the rules for part 1.
-                After {{ shock_after_rounds }} round(s), there will be another short set of instructions to explain the rules for part 2.
+            <p class="block-sentence">
+                This set of instructions describes the first part.
+                After you finished the first part of the experiment, there will be another short set of instructions for the second part.
+                The second part of the experiment is very similar to the first part.
             </p>
-            <p>
-                There will be {{ players_in_your_group }} participants in your group.
-                Of these, {{ employers_in_your_group }} participant(s) will be firms and {{ workers_in_your_group }} participant(s) will be workers.
-                <p style="margin-left: 50px;">
-                    <b>You will take the role of {{ player.participant.string_role }}</b>. You will keep this role for the entire course of the experiment.
-                </p>
+            <p class="block-sentence">
+                Please read the following instructions carefully. You can move a page forward or backward by clicking with your mouse on "previous" or "next".
+                After the instructions, you will need to answer a <b>set of questions to be sure that you understand the instructions</b>.
+                The experiment will begin after every participant has answered all questions correctly.
             </p>
-            <p>
-                 In order to assure anonymity you have been randomly assigned an ID.
-                 You and other participants will keep this ID throughout the entire game. Your ID number is {{ player.participant.playerID }}.
+            <p class="block-sentence">
+                Should you have any difficulties or <b>questions, please raise your hand</b>. We will answer your questions at your cubicle.
             </p>
         </div>
     </div>
@@ -81,35 +89,25 @@
 
 <div class="tab" id="instructions_3" style="display: none">
     <div class="card">
-        <h5 class="card-header">Market stage</h5>
+        <h5 class="card-header">General Information</h5>
         <div class="card-body">
-           <p>
-               Each round has two stages, the market stage and the production stage. Here we will describe the market stage.
+          <p class="block-sentence">
+               The experiment is divided into rounds.
+               In each round you make decisions, which you will enter in a computer.
+               There will be {{ total_rounds }} rounds in total, {{ shock_after_rounds }} rounds in the first part and {{ rounds_part_two }} rounds in the second part.
             </p>
-            <p>
-                During the market phase, firms can submit public trading offers to workers.
-                An offer consists of a wage and a desired effort level. The wage offer must be a number between 0 and 100,
-             </p>
-                <p style="margin-left: 50px;">
-                    <b>0 ≤ wage ≤ 100</b>.
+            <p class="block-sentence">
+                Prior to the experiment, the {{ players_in_your_group }} participants in your group were divided into 2 roles: firms and workers.
+                There are {{ employers_in_your_group }} firms and {{ workers_in_your_group }} workers in your group.
+            </p>
+            <p style="margin-left: 50px;">
+                    <b>You will take the role of {{ player.participant.string_role }}</b>.
+                    You will keep this role for the entire course of the experiment.
                 </p>
-            <p>
-            The desired effort level must be a number between 1 and 10,
-             </p>
-                <p style="margin-left: 50px;">
-                    <b>1 ≤ desired effort ≤ 10</b>.
-                </p>
-
-            <p>
-                If firms send an offer, it will be visible to everybody in the market.
-                Workers can accept one wage offer per round. Firms can employ up to three workers per round.
-
+            <p class="block-sentence">
+                All participants have received an identification number, which they will keep for the entire experiment.
+                Your ID number is {{ player.participant.playerID }}.
             </p>
-            <p>
-                The market stage ends when all workers have accepted an offer or when the time limit of {{ market_time}} seconds is reached.
-                Firms have no obligation to submit a trading offer, and workers have no obligation to accept a trading offer during the market stage.
-            </p>
-
         </div>
     </div>
     <br>
@@ -121,53 +119,57 @@
 
 <div class="tab" id="instructions_4" style="display: none">
     <div class="card">
-        <h5 class="card-header">Production Stage</h5>
+        <h5 class="card-header">Short Overview of the Experimental Procedures</h5>
         <div class="card-body">
-            <p>
-                Following the market phase, all workers who concluded a work contract, agreement then determine which effort level they will supply to their corresponding firms.
-                The desired effort by the firm is not binding for the worker. <b> The worker can choose the exact effort desired by the firm, but also a higher or lower effort.</b>
+           <p class="block-sentence">
+                In each round, firms can choose to employ zero, one, or two workers.
+                To employ a worker, a firm needs to pay a wage.
+                In return, employed workers provide effort to make products.
+                You choose how much effort they will provide after they accept a job offer.
+                Effort is costly to you, so that you will receive a positive payout in a round if you choose an effort with a cost that is lower than the wage you receive.
+            </p>
+            <p class="block-sentence">
+                On the other end, the firms' profits will depend on the:
+                <ol class="list" style="margin-top: -10px">
+                    <li>	Number of workers they employ </li>
+                    <li>	Wages they pay  </li>
+                    <li>	Effort you provide  </li>
+                </ol>
+            </p>
+            <p class="block-sentence">
+                Here is how: the workers’ productivity is a combination of the effort they choose to provide and the number of other workers.
+                Two workers can be jointly more productive than one, but not twice as much as one worker.
+                The more workers the firm employs, the less productive each of them becomes.
             </p>
             <p>
-                In order to choose the effort level, the worker must enter the value for in the field “Please choose an effort level:” and press the “next”
-                button to confirm the choice. As long as the worker has not pressed “next” he or she can alter the choice. <br>
-                The effort level must be an integer between 1 and 10,
+                The first part lasts for {{ shock_after_rounds }} rounds. In each round, procedures are as follows: <br>
             </p>
-                <p style="margin-left: 50px;">
-                    <b>1 ≤ actual effort ≤ 10</b>.
-                </p>
-            <p>
-                Workers pay an effort cost for each unit of effort they exert.
-                The table below shows the effort cost for each effort level, for example if a worker chooses effort level 3, he will pay 2 points.
+            <p class="block-sentence">
+                1. Each round starts with a <b>market phase</b> that lasts for {{ market_time }} seconds.
+                During this phase, firms can submit job offers, which workers can accept.
+                When submitting a job offer, a firm has to specify two things:
+                <ul class="list" style="margin-top: -10px">
+                    <li>	Which wage she offers to pay </li>
+                    <li>	Which effort she desired the worker to exert  </li>
+                </ul>
             </p>
-             <table class="table table-bordered">
-            <caption>Schedule of effort costs</caption>
-                <tr>
-                    <td>Effort level e</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                    <td>10</td>
-                </tr>
-                <tr>
-                    <td>Cost of effort c(e)</td>
-                    <td> 0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>4</td>
-                    <td>6</td>
-                    <td>8</td>
-                    <td>10</td>
-                    <td>12</td>
-                    <td>15</td>
-                    <td>18</td>
-                </tr>
-        </table>
+            <p class="block-sentence">
+            Once a firm submits an offer, she has to wait and see if a worker will accept the offer.
+                Else, she can cancel the offer and submit a new one. Workers view the offers submitted and decide which to accept.
+                The first worker to accept the offer will get it. <b>Each worker can accept at most one job offer in each round.
+                Each firm can employ at most two workers.</b>
+                As there are 6 firms and 6 workers, each worker can be employed by a firm if they want to.
+                All unaccepted offers are deleted at the end of the market phase.
+            </p>
+            <p class="block-sentence">
+                2. After the market phase, every worker who accepted a job offer enters the <b>production phase</b>, and has to determine the amount of effort to put into the work.
+                </b>The worker does not have to provide the effort level desired by the firm</b>, but can also choose to provide a lower or higher effort level.
+            </p>
+            <p class="block-sentence">
+                Once every worker has chosen her effort, earnings of all participants for the given round are determined.
+                Subsequently, the next round starts.
+                Earnings of all rounds will be summed up at the end of the experiment, converted into euros and paid out in cash together with your initial endowment.
+            </p>
         </div>
     </div>
     <br>
@@ -176,25 +178,68 @@
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
+
 
 
 
 <div class="tab" id="instructions_5" style="display: none">
     <div class="card">
-        <h5 class="card-header">How is the workers' income calculated?</h5>
+        <h5 class="card-header">The Market Phase in Detail</h5>
         <div class="card-body">
-            <p>
-                The income of a worker is determined by the wage offer of the firm and the effort level chosen by the worker.
-                In a round where was employed, the income is calculated as the difference between the wage and the cost of effort:
-             </p>
-                     <p style="margin-left: 50px;">
-                    <b> Income = wage - cost of effort </b>
-                     </p>
-             <p>
-                Example: if a worker received a wage of 50 and provided 8 units of effort, the income would be 50 - 12 = 38.
+           <p class="block-sentence">
+            Each round begins with a market phase. The market phase in each round lasts for a maximum of {{ market_time }} seconds.
+               It ends earlier if all workers have accepted a work contract or all firms filled their jobs.
+               When the market phase is over, no further offers can be submitted or accepted.
+               The time left in the current round will be displayed in a yellow box at the top of the page.
+               See the figure below for a preview of the screen you will see during the market phase.
+           </p>
+            <p class="block-sentence">
+                The white box below the timer gives <b>useful information</b> about the state of the market.
+                This information includes the round number, the number of workers and number of firms in the market, the number of open offers in the market and the number of workers who have not yet accepted a job offer.
+                The box provides the share of offers requesting high effort and average wage of all open and accepted offers in the market.
             </p>
             <p>
-               In a round where the worker has not accepted any wage offer, he or she will receive unemployment insurance of {{ worker_outside_option }} points.
+                Add picture <br>
+            </p>
+            <p class="block-sentence">
+               Firms w ill send job offers to the market.
+                They can send up to two offers at a time and employ up to two workers in a given round.
+                They will specify a wage level and a desired effort level.
+                The wage must be a number between 0 and 100 {{ currency_plural }}:
+            </p>
+            <p style="margin-left: 50px;">
+                <b>0 ≤ wage ≤ 100</b>.
+            </p>
+            <p class="block-sentence">
+                The desired effort level can be either <b>"high"</b> or <b>"low"</b> effort.
+                Your revenue will depend on whether you exert high or low effort. This will be explained in more detail later.
+            </p>
+            <p class="block-sentence">
+                Once they submitted a job offer, it will appear in the table "Open offers" table at the bottom of the page and visible to everyone in the market.
+            </p>
+            <p class="block-sentence">
+                Each job offer can only be accepted by one worker. The first worker to accept the offer will get the job.
+                If a job offer is accepted, it will appear in the "Accepted Offers" table.
+                <b>An offer which has been accepted may not be accepted by another worker</b>. Sometimes firms may also cancel job offers.
+                In that case, the job offer will disappear from both tables. Cancelled offers can not be accepted by workers.
+            </p>
+            <p class="block-sentence">
+                <b>You can accept at most one offer during each round</b>. You can choose among the open offers in the "Open Offers" table.
+                Each job offer has its unique ID. You will use this to indicate which job offer you want to accept.
+                <b>To accept a job offer, type the job ID in the "Enter Job ID" field and confirm your choice by clicking on "Accept Offer"</b>.
+                You can change your choice as long as you have not yet confirmed your choice. Once you click on "Accept Offer", you can no longer change your selection.
+            </p>
+            <p class="block-sentence">
+                You will see an error message in case you type the wrong job ID or the job you requested is no longer available.
+                Otherwise, you will receive the job you have accepted and see the following waiting screen.
+                The waiting screen shows you which job offer along with its wage and desired effort.
+            </p>
+            <p>
+                Add picture
+            </p>
+            <p class="block-sentence">
+                The market phase is over when all workers have accepted an offer, all firms have employed two workers, or when the time limit of {{ market_time }} seconds is reached.
+                Firms have no obligation to submit a job offer, and workers have no obligation to accept a trading offer during the market phase.
             </p>
         </div>
     </div>
@@ -206,343 +251,176 @@
 </div>
 
 
-
 <div class="tab" id="instructions_6" style="display: none">
     <div class="card">
-        <h5 class="card-header">How is the employers' income calculated?</h5>
+        <h5 class="card-header">The Production Phase in Detail</h5>
         <div class="card-body">
-            <p>
-                The income of a firm is determined by the number of contracts, the total wage paid and the total effort provided by the workers.
+           <p class="block-sentence">
+            What you see after the market phase depends on whether you have accepted a job offer.
+               If you have not accepted any job offer, you will see a waiting screen to wait for other workers to make their decision.
+           </p>
+            <p class="block-sentence">
+                If you have accepted a job offer, you will need to choose the effort to put in to work for the firm.
+                <b>The effort level requested by the firm is not binding</b>. The more effort you provide the lower will your income in this round.
             </p>
-            <ol>
-                <li> If a firm has <b> not employed any worker </b> during a trading phase, they will earn an income of <b> {{ employer_outside_option }} points</b> in this period. </li>
-                <br>
-                <li> If a firm has employed <b> one</b> worker, they will gain {{ mpl1 }} times each effort unit and pay the wage. The income thus amounts to:
-                    <ul>
-                        <li> <b> Income  = {{ mpl1 }} * effort - wage </b> </li>
-                    </ul>
-                    Example: If a firm concludes one contract and the wage is {{ ex_1_wage }} and the effort level is {{ ex_1_effort }}, the income is Income = {{ mpl1 }}*{{ ex_1_effort }} - {{ ex_1_wage }} = {{ ex_1_employer_profit }}.
-                </li>
-               <br>
-                <li> If a firm has employed <b> two </b> workers, each unit of actual effort is multiplied with {{ mpl2 }} instead of {{ mpl1 }}.
-                    The value of the products in total can be higher if the firm employs two worker, but the productivity of each individual worker is lower in this case. <br>
-                    With two workers The income is calculated like this:
-                    <ul>
-                        <li> <b> Income  = {{ mpl2 }} * effort 1 + {{ mpl2 }} * effort 2 - wage 1 - wage 2 </b> </li>
-                    </ul></li>
-                Example: If a firm concludes two contracts and the wages are {{ ex_2_wage_1 }} and {{ ex_2_wage_2 }}
-                and the effort levels are {{ ex_2_effort_1 }} and {{ ex_2_effort_2 }}, the income in that round will be
-                Income =  {{ mpl2 }}*({{ ex_2_effort_1 }} + *{{ ex_2_effort_2 }}) - {{ ex_2_wage_1 }} - {{ ex_2_wage_2 }}= {{ ex_2_employer_profit }}.
-                </li><br><br>
-
-                <li> If the firm has employed <b> three </b> workers, each unit of effort is multiplied with {{ mpl3 }}. The income is thus calculated as follows:
-                    <ul>
-                        <li> <b> Income  = {{ mpl3 }} * effort 1 + {{ mpl3 }} * effort 2 + {{ mpl3 }} * effort 3 - wage 1 - wage 2 - wage 3 </b> </li>
-                    </ul></li>
-                Example: If a firm concludes three contracts and the wages are {{ ex_3_wage_1 }}, {{ ex_3_wage_2 }} and {{ ex_3_wage_3 }}
-                and the effort levels are {{ ex_3_effort_1 }}, {{ ex_3_effort_2 }} and {{ ex_3_effort_3 }}, the income in that round will be
-                Income  =  {{ mpl3 }}*({{ ex_3_effort_1 }}+{{ ex_3_effort_2 }}+{{ ex_3_effort_3 }}) - {{ ex_3_wage_1 }} - {{ ex_3_wage_2 }} - {{ ex_3_wage_3 }}= {{ ex_3_employer_profit }}.
-                </li><br>
-            </ol>
+            <p class="block-sentence">
+              The page to make your effort choice looks as shown below.
+                At the top of the page, there is a box with some information to make your choice.
+                You will see the wage you received and effort your employer requested you to exert.
+                Below that is a list that shows the cost they have to pay for each effort choice.
+                If you choose "Low effort" they have to pay {{ low_effort_points_tokens }} {{ currency_plural }}.
+                If you choose "High effort" they will pay an effort cost of {{ high_effort_points_tokens }} {{ currency_plural }}.
+                This will affect your payoffs, in ways we will describe in detail later.
+            </p>
+            <p class="block-sentence">
+                Add picture.
+            </p>
+            <p class="block-sentence">
+                In order to choose the effort level, you will click one of the buttons below the question "What effort level do you choose?".
+                You can change your selection. Once you made on your final decision, you can click "Next" to finish the production phase.
+            </p>
         </div>
-      </div>
+    </div>
     <br>
   <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this); ChangeHeader();" style="float: right;">Next</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+
+<div class="tab" id="instructions_7" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Results Screen</h5>
+        <div class="card-body">
+           <p class="block-sentence">
+            After each period, you will be informed about the results of that round. The following  information will be displayed on the results screen
+              <ol>
+                <li>The wage you received</li>
+                <li>The effort you were requested</li>
+                <li>The effort you provided</li>
+                <li>Your profit in this round</li>
+                <li>Your employers profit in this round</li>
+                <li>The average wage level in your group</li>
+                <li>The share of workers providing high effort</li>
+                <li>Your profit in all rounds</li>
+                <li>The number of rounds left</li>
+              </ol>
+           </p>
+        </div>
+    </div>
+    <br>
+  <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
 
 
 
-<div class="tab" id="are_you_ready_q" style="display: none">
+<div class="tab" id="instructions_8" style="display: none">
     <div class="card">
-        <h5 class="card-header">Are you ready?</h5>
+        <h5 class="card-header">How is your income calculated?</h5>
         <div class="card-body">
+           <p class="block-sentence">
+            Your income is determined by whether you are employed, by the wage you receive and the effort level you choose.
+               In a round where you have not accepted any wage offer, your will receive {{ outside_option_workers_points_tokens }} {{ currency_plural }}.
+           </p>
+            <p class="block-sentence">
+                In a round where you accept a job, your income is calculated as the difference between the wage and the cost of effort:
+            </p>
+            <p style="margin-left: 50px;">
+                <b>Profit = wage - cost of effort</b>.
+            </p>
+            <p class="block-sentence">
+                As you can see from the above formula, your income is larger the higher the wage you receive.
+                Your income is also higher, the lower the effort you put in during the production phase.
+                You can also <b>make a loss</b> if the effort cost is above the wage you receive.
+                This loss will have to be paid from the initial endowment or from earnings in other rounds.
+            </p>
+            <p class="block-sentence">
+                The cost of effort is higher if you choose a high effort level.
+                You will have to pay {{ high_effort_points_tokens }} {{ currency_plural }} if you choose provide high effort,
+                and {{ low_effort_points_tokens }} {{ currency_plural }} if you choose low effort.
+            </p>
+            <p class="block-sentence">
+                <u>Example</u>: If you received a wage of 50 and provided high effort, your profit in this round would be
+            </p>
+            <p style="margin-left: 50px;">
+                Income = 50 –  20 = 30.
+            </p>
+            <p class="block-sentence">
+                The table below can help you get an intuition the profit you can make.
+                The horizontal axis gives you the wage you get and the horizontal axis gives the effort you choose.
+                The numbers in the table are your profit per round.
+            </p>
             <p>
-                The experiment will not start until all participants are completely familiar with all procedures.
-                To make sure  this is the case we ask you to complete four questions on the following pages. <br><br>
-                Click on the next button below if you feel ready to complete the questions.
+                Insert table
             </p>
         </div>
     </div>
     <br>
-    <p>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this); ChangeHeaderBack();">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToComprehension(this)" style="float: right;">Next</button>
+  <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
 
 
-<div class="tab" id="comprehension_q1" data-solved="0" style="display: none">
+<div class="tab" id="instructions_9" style="display: none">
     <div class="card">
-        <h5 class="card-header">Question 1/4</h5>
+        <h5 class="card-header">How is the firms' profit calculated?</h5>
         <div class="card-body">
-            <p>
-                Suppose an employer did not employ any worker and a worker did not work for any employer. <br><br>
-                What would be their income in this period?
+           <p class="block-sentence">
+                The firms' profit in each round is determined by the wage they pay to all their workers, the effort you provide to them, the effort other workers provide, and the number of workers they employ.
+               If they <b>do not employ any workers</b> in a round, they will earn a profit of {{ outside_option_employers_points_tokens }} {{ currency_plural }} in that round.
+           </p>
+            <p class="block-sentence">
+                If they employ at least one worker, their profit will be the difference between the revenue they gain from worker effort choices and the wage they pay to all workers:
             </p>
-            <table>
-                <tr>
-                    <td>
-                        <input type="number" id="q1_employer_profit" class="form-control" placeholder="Employer profit">
-                    </td>
-                    <td>
-                        <input type="number" id="q1_worker_profit" class="form-control" placeholder="Worker profit">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-secondary" id="q1" onclick="submitAnswer(this.id)"> Submit Answer</button>
-                    </td>
-                </tr>
-            </table>
+            <p style="margin-left: 50px;">
+                <b>Profit = Total revenue – total wage payments</b>.
+            </p>
+            <p class="block-sentence">
+                The total revenue depends on the number of workers they employ and what effort the workers choose to provide.
+                The total value and profits can still be higher with more workers, but each individual unit of effort is worth less.
+            </p>
+            <p class="block-sentence">
+                If they employ one worker, they receive a revenue of {{ gain_high_effort_1_worker }} {{ currency_plural }} in case the worker chooses high effort
+                and a revenue of {{ gain_low_effort_1_worker  }} {{ currency_plural }} in case the worker chooses low effort.
+                The profit will be this revenue minus the wage they paid to that worker.
+            </p>
+            <p style="margin-left: 50px;">
+                Profit = {{ gain_high_effort_1_worker }} – wage if the worker chooses high effort.<br>
+	            Profit = {{ gain_low_effort_1_worker  }} – wage if the worker chooses low effort.
+            </p>
+            <p class="block-sentence">
+                If they employ <b>two workers</b>, they receive a revenue of {{  gain_high_effort_2_workers }} points/tokens for each worker that chooses high effort
+                and a revenue of {{ gain_low_effort_2_workers }} points/tokens for each worker that chooses low effort.
+                The profit is this revenue minus the wage they paid both workers.
+            </p>
+            <p style="margin-left: 50px;">
+                Profit = (140 + 140) – wage 1 – wage 2 if both workers chooses high effort.<br>
+                Profit = (140 + 14) – wage 1 – wage 2 if both workers chooses high effort.<br>
+                Profit = (14 + 14) – wage 1 – wage 2 if both workers chooses low effort.
+            </p>
+
+
+
+            <p class="block-sentence">
+                The table below can help you get an intuition the profit you can make.
+                The horizontal axis gives you the wage you get and the horizontal axis gives the effort you choose.
+                The numbers in the table are your profit per round.
+            </p>
+            <p>
+                Insert table
+            </p>
         </div>
     </div>
-
-    <br><br>
-             <table class="table table-bordered">
-            <caption>Schedule of effort costs</caption>
-                <tr>
-                    <td>Effort level e</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                    <td>10</td>
-                </tr>
-                <tr>
-                    <td>Cost of effort c(e)</td>
-                    <td> 0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>4</td>
-                    <td>6</td>
-                    <td>8</td>
-                    <td>10</td>
-                    <td>12</td>
-                    <td>15</td>
-                    <td>18</td>
-                </tr>
-        </table>
-
-    <br><br>
-
-    <h6>Firm profits </h6>
-            $$
-            Profit =
-            \begin{cases}
-            10 *  effort_1 - wage_1     \qquad  \qquad \quad   \quad  \quad \qquad \qquad  \qquad \qquad \qquad    \qquad   \qquad  \text{if one worker}  \\
-            7 * (effort_1 + effort_2) - wage_1- wage_2   \quad   \qquad  \qquad  \quad \quad \quad  \qquad  \qquad\, \, \,  \text{if two workers}  \\
-            5 *(effort_1 + effort_2 + effort_3) - wage_1 - wage_2 - wage_3   \quad  \quad   \qquad \,  \,  \text{if three workers} \\
-            0                     \qquad  \qquad \qquad  \qquad \qquad \qquad \qquad \qquad \qquad  \qquad \qquad \qquad  \quad  \quad \qquad \quad \, \, \,  \text{if no worker}
-            \end{cases}$$
-
-    <br><br>
-
-    <p>
-        <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
-    </p>
-
-</div>
-
-
-
-<div class="tab" id="comprehension_q2" data-solved="0" style="display: none">
-    <div class="card">
-        <h5 class="card-header">Question 2/4</h5>
-        <div class="card-body">
-            <p>
-                Suppose an employer employed one worker for a wage of <b>{{ C.Q2_WAGE }}</b>
-                and requested <b>{{ C.Q2_EFFORT_REQUESTED }}</b> effort units.<br>
-                The worker then decided to provide <b>{{ C.Q2_EFFORT_RECEIVED }}</b> effort units. <br><br>
-                 What profits would the worker and the employer make in this case?
-            </p>
-            <table>
-                <tr>
-                    <td>
-                        <input type="number" id="q2_employer_profit" class="form-control" placeholder="Employer profit">
-                    </td>
-                    <td>
-                        <input type="number" id="q2_worker_profit" class="form-control" placeholder="Worker profit">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-secondary" id="q2" onclick="submitAnswer(this.id)"> Submit Answer</button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-      <br><br>
-             <table class="table table-bordered">
-            <caption>Schedule of effort costs</caption>
-                <tr>
-                    <td>Effort level e</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                    <td>10</td>
-                </tr>
-                <tr>
-                    <td>Cost of effort c(e)</td>
-                    <td> 0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>4</td>
-                    <td>6</td>
-                    <td>8</td>
-                    <td>10</td>
-                    <td>12</td>
-                    <td>15</td>
-                    <td>18</td>
-                </tr>
-        </table>
-    <br><br>
-    <p>
-        <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
-    </p>
-</div>
-
-<div class="tab" id="comprehension_q3" data-solved="0" style="display: none">
-    <div class="card">
-        <h5 class="card-header">Question 3/4</h5>
-        <div class="card-body">
-            <p>
-                Suppose an employer employed one worker for a wage of <b>{{ C.Q3_WAGE }}</b>
-                and requested <b>{{ C.Q3_EFFORT_REQUESTED }}</b> effort units. <br>
-                The worker then decided to provide <b>{{ C.Q3_EFFORT_RECEIVED }}</b> effort units. <br><br>
-                 What profits would the worker and the employer make in this case?
-            </p>
-            <table>
-                <tr>
-                    <td>
-                        <input type="number" id="q3_employer_profit" class="form-control" placeholder="Employer profit">
-                    </td>
-                    <td>
-                        <input type="number" id="q3_worker_profit" class="form-control" placeholder="Worker profit">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-secondary" id="q3" onclick="submitAnswer(this.id)"> Submit Answer</button>
-                    </td>
-                </tr>
-            </table>
-
-        </div>
-    </div>
-      <br><br>
-             <table class="table table-bordered">
-            <caption>Schedule of effort costs</caption>
-                <tr>
-                    <td>Effort level e</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                    <td>10</td>
-                </tr>
-                <tr>
-                    <td>Cost of effort c(e)</td>
-                    <td> 0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>4</td>
-                    <td>6</td>
-                    <td>8</td>
-                    <td>10</td>
-                    <td>12</td>
-                    <td>15</td>
-                    <td>18</td>
-                </tr>
-        </table>
-
-
-    <br><br>
-        <p>
-                <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
-        </p>
-</div>
-
-
-
-
-<div class="tab" id="comprehension_q4" data-solved="0" style="display: none">
-    <div class="card">
-        <h5 class="card-header">Question 4/4</h5>
-        <div class="card-body">
-            <p>
-                Suppose an employer employed two workers.<br>
-                The first worker receives a wage of <b>{{ C.Q4_WAGE_1 }}</b> and provides <b>{{ C.Q4_EFFORT_RECEIVED_1 }}</b> effort units.<br>
-                The second worker received a wage of <b>{{ C.Q4_WAGE_2 }}</b> and provides <b>{{ C.Q4_EFFORT_RECEIVED_2 }}</b> effort units. <br><br>
-                What profits would the employer and workers make in this case?
-            </p>
-            <table>
-                <tr>
-                    <td>
-                        <input type="number" id="q4_employer_profit" class="form-control" placeholder="Employer profit">
-                    </td>
-                    <td>
-                        <input type="number" id="q4_worker_profit" class="form-control" placeholder="Worker 1 profit">
-                    </td>
-                    <td>
-                        <input type="number" id="q4_worker_profit_2" class="form-control" placeholder="Worker 2 profit">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-secondary" id="q4" onclick="submitAnswer(this.id)"> Submit Answer</button>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-      <br><br>
-             <table class="table table-bordered">
-            <caption>Schedule of effort costs</caption>
-                <tr>
-                    <td>Effort level e</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
-                    <td>8</td>
-                    <td>9</td>
-                    <td>10</td>
-                </tr>
-                <tr>
-                    <td>Cost of effort c(e)</td>
-                    <td> 0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>4</td>
-                    <td>6</td>
-                    <td>8</td>
-                    <td>10</td>
-                    <td>12</td>
-                    <td>15</td>
-                    <td>18</td>
-                </tr>
-        </table>
-
-
-     <br><br>
-    <p>
-        <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
+    <br>
+  <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
 
