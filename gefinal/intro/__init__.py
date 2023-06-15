@@ -175,7 +175,7 @@ class InstructionsWorkers(Page):
             employer_1_img_path = 'instructions/employer_1_points.PNG'
             employer_2_img_path = 'instructions/employer_2_points.PNG'
             employer_3_img_path = 'instructions/employer_3_points.PNG'
-            worker_1_img_path = 'instructions/worker_1_points.PNG'
+            worker_1_img_path = 'instructions/worker_1_points.png'
             worker_2_img_path = 'instructions/worker_2_points.PNG'
         else:
             exchange_rate = session.config['payout_rate'] * (1/session.config['exchange_rate'])
@@ -191,7 +191,7 @@ class InstructionsWorkers(Page):
             employer_1_img_path = 'instructions/employer_1_tokens.PNG'
             employer_2_img_path = 'instructions/employer_2_tokens.PNG'
             employer_3_img_path = 'instructions/employer_3_tokens.PNG'
-            worker_1_img_path = 'instructions/worker_1_tokens.PNG'
+            worker_1_img_path = 'instructions/worker_1_tokens.png'
             worker_2_img_path = 'instructions/worker_2_tokens.PNG'
 
         if player.participant.large_market:
@@ -206,11 +206,6 @@ class InstructionsWorkers(Page):
             initial_points_tokens = int(session.config['showup_fee'] * (1 / session.config['payout_rate'])) * session.config['exchange_rate']
 
         return dict(
-            employer_1_img_path=employer_1_img_path,
-            employer_2_img_path=employer_2_img_path,
-            employer_3_img_path=employer_3_img_path,
-            worker_1_img_path=worker_1_img_path,
-            worker_2_img_path=worker_2_img_path,
             gain_high_effort_1_worker=gain_high_effort_1_worker,
             gain_high_effort_2_workers=gain_high_effort_2_workers,
             gain_low_effort_1_worker=gain_low_effort_1_worker,

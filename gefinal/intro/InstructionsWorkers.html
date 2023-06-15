@@ -195,57 +195,65 @@
                 the number of workers who have not accepted a job offer, the share of offers requesting high effort,
                 and the average wage of all open and accepted offers in the market.
             </p>
-            <p>
-                <img src="{{ static 'instructions/worker_points_1.jpg' }}"/>
+            <p class="block-sentence">
+                Employers will send job offers to the market.
+                They can submit up two open job offers at a time.
+                They can also submit no offer at all or cancel open offer.
+                The offers employers send will appear in the "<b>Open offers</b>" table in the left-bottom of the page.
+                An offer includes a wage between 0 and 100 {{ currency_plural }}, a desired effort level which is either "high" or "low", and a unique Job ID for each job.
+            </p>
+            {% if player.participant.currency_is_points == True %}
+                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
+                    <img src="{{ static 'instructions/worker_points_1.PNG' }}"/>
+                </div>
+            {% else %}
+                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
+                    <img src="{{ static 'instructions/worker_tokens_1.PNG' }}"/>
+                </div>
+            {% endif %}
+            <p class="block-sentence">
+            To <b>accept a job</b> offer, you must:
+                <ol class="list" style="margin-top: -10px">
+                    <li>whether you are employed</li>
+                    <li>the wage you receive</li>
+                    <li>the effort you provide</li>
+                </ol>
+            </p>
+            <p class="block-sentence; padding-bottom: 5px;">
+            You can accept an offer as long as it is "open".
+            The first worker to accept an offer will get the job.
+            You will see an error message in case you type a wrong job ID or the job is no longer open.
             </p>
             <p class="block-sentence">
-               Firms w ill send job offers to the market.
-                They can send up to two offers at a time and employ up to two workers in a given round.
-                They will specify a wage level and a desired effort level.
-                The wage must be a number between 0 and 100 {{ currency_plural }}:
+                <b>You can accept at most one offer during each round</b>, and each job offer can only be accepted by one worker.
+                If you accept an offer, you will see a notification and the offer will appear in the "Accepted Offers" table.
+                You can no longer accept other offers in this round.
+                See the figure below for an example of how the screen will look after you accepted a job offer.
             </p>
-            <p style="margin-left: 50px;">
-                <b>0 ≤ wage ≤ 100</b>.
-            </p>
+            {% if player.participant.currency_is_points == True %}
+                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
+                    <img src="{{ static 'instructions/worker_points_2.PNG' }}"/>
+                </div>
+            {% else %}
+                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
+                    <img src="{{ static 'instructions/worker_tokens_2.PNG' }}"/>
+                </div>
+            {% endif %}
             <p class="block-sentence">
-                The desired effort level can be either <b>"high"</b> or <b>"low"</b> effort.
-                Your revenue will depend on whether you exert high or low effort. This will be explained in more detail later.
-            </p>
-            <p class="block-sentence">
-                Once they submitted a job offer, it will appear in the table "Open offers" table at the bottom of the page and visible to everyone in the market.
-            </p>
-            <p class="block-sentence">
-                Each job offer can only be accepted by one worker. The first worker to accept the offer will get the job.
-                If a job offer is accepted, it will appear in the "Accepted Offers" table.
-                <b>An offer which has been accepted may not be accepted by another worker</b>. Sometimes firms may also cancel job offers.
-                In that case, the job offer will disappear from both tables. Cancelled offers can not be accepted by workers.
-            </p>
-            <p class="block-sentence">
-                <b>You can accept at most one offer during each round</b>. You can choose among the open offers in the "Open Offers" table.
-                Each job offer has its unique ID. You will use this to indicate which job offer you want to accept.
-                <b>To accept a job offer, type the job ID in the "Enter Job ID" field and confirm your choice by clicking on "Accept Offer"</b>.
-                You can change your choice as long as you have not yet confirmed your choice. Once you click on "Accept Offer", you can no longer change your selection.
-            </p>
-            <p class="block-sentence">
-                You will see an error message in case you type the wrong job ID or the job you requested is no longer available.
-                Otherwise, you will receive the job you have accepted and see the following waiting screen.
-                The waiting screen shows you which job offer along with its wage and desired effort.
-            </p>
-            <p>
-                Add picture
-            </p>
-            <p class="block-sentence">
-                The market phase is over when all workers have accepted an offer, all firms have employed two workers, or when the time limit of {{ market_time }} seconds is reached.
-                Firms have no obligation to submit a job offer, and workers have no obligation to accept a trading offer during the market phase.
+                The market phase <b>ends</b> when all workers have accepted an offer or when the time limit of {{ market_time }} seconds is reached.
+                The time left in the current round will be displayed in a yellow box at the top of the page.
+                When the market phase is over, no offers cannot be submitted or accepted.
             </p>
         </div>
     </div>
     <br>
-  <p>
+    <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
+
+
 
 
 <div class="tab" id="instructions_6" style="display: none">
@@ -253,21 +261,22 @@
         <h5 class="card-header">The Production Phase in Detail</h5>
         <div class="card-body">
            <p class="block-sentence">
-            What you see after the market phase depends on whether you have accepted a job offer.
-               If you have not accepted any job offer, you will see a waiting screen to wait for other workers to make their decision.
+               Following the market phase, all workers who have accepted a job offer enter the production phase.
+               In this phase, workers choose their effort. <b>The effort requested by employers is not binding</b>.
+               Hence, you can choose <b>high</b> or <b>low</b> effort irrespective of the effort indicated in the job offer.
            </p>
             <p class="block-sentence">
                 If you have accepted a job offer, you will need to choose the effort to put in to work for the firm.
                 <b>The effort level requested by the firm is not binding</b>. The more effort you provide the lower will your income in this round.
             </p>
             <p class="block-sentence">
-              The page to make your effort choice looks as shown below.
-                At the top of the page, there is a box with some information to make your choice.
-                You will see the wage you received and effort your employer requested you to exert.
-                Below that is a list that shows the cost they have to pay for each effort choice.
-                If you choose "Low effort" they have to pay {{ low_effort_points_tokens }} {{ currency_plural }}.
-                If you choose "High effort" they will pay an effort cost of {{ high_effort_points_tokens }} {{ currency_plural }}.
-                This will affect your payoffs, in ways we will describe in detail later.
+              The page you see looks like the one shown below.
+                At the top of the page, you will see the wage you accepted and the effort requested by the employer.
+                Below, you see the cost of each effort choice.
+                <ul class="list" style="margin-top: -10px">
+                    <li> <b> The cost of Low effort is 10 {{ currency_plural }} </b></li>
+                    <li> <b> The cost of High effort is 20 {{ currency_plural }}  </b></li>
+                </ul>
             </p>
             <p class="block-sentence">
                 Add picture.
