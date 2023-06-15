@@ -27,12 +27,17 @@
     <div class="card">
         <h5 class="card-header">Payoffs</h5>
         <div class="card-body">
+
+            <img src="{{ static employer_1_img_path }}"/>
+
              {% if player.participant.currency_is_points == True %}
                  <p>
                      At the beginning of the experiment, you will receive an initial endowment of {{ participation_fee }} Euros.
                      During the experiment, you can earn a higher amount of money by accumulating points.
                     The amount of earned points will depend on your decisions and on the other participants’ decisions.
                 </p>
+
+            <img src="{{ static 'instructions/employer_points_1.PNG' }}"/>
                 <p>
                 All points you earn will be converted to Euros at the end of the experiment. The exchange rate will be
                      <p style="margin-left: 50px;">
