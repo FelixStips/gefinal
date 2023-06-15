@@ -36,20 +36,19 @@
         <h5 class="card-header">Payment</h5>
         <div class="card-body">
              <p class="block-sentence">
-                 At the beginning of the experiment you will receive an <b>initial endowment of {{ participation_fee }} Euros</b>.
-                During the experiment, you can earn a higher amount of money by accumulating {{ currency_plural }}.
-                 The amount of earned {{ currency_plural }} will depend on your decisions and those of the other participants’ decisions.
+                 At the beginning of the experiment, you will receive an  <b>initial endowment of {{ participation_fee }} Pound</b>.
+                 During the experiment, you can earn more money by accumulating {{ currency_plural }}.
+                 The amount earned will depend on your decisions and those of the other participants.
              </p>
             <p class="block-sentence">
-                            All {{ currency_plural }} you earn will be converted to Euros at the end of the experiment. The exchange rate will be
+                All {{ currency_plural }} you earn will be converted to Pounds at the end of the experiment. The exchange rate will be
             </p>
              <p style="margin-left: 50px;">
-                    <b>1 {{ currency }} = {{ exchange_rate }} Euros</b>.
-
+                    <b>1 {{ currency }} = {{ exchange_rate }} Pounds </b>.
              </p>
             <p class="block-sentence">
-                Your initial income of {{ participation_fee }}  Euros corresponds to {{ initial_points_tokens }} points. At the end of the experiment
-                you will be paid by cash and in private.
+                At the end of the experiment, you will receive the money you earned during the experiment in addition to your {{ participation_fee }}-Pound initial endowment.
+                You will be paid in cash and in private.
             </p>
         </div>
     </div>
@@ -65,17 +64,18 @@
         <h5 class="card-header">Instructions - Part 1</h5>
         <div class="card-body">
             <p class="block-sentence">
-                This set of instructions describes the first part.
-                After you finished the first part of the experiment, there will be another short set of instructions for the second part.
-                The second part of the experiment is very similar to the first part.
+                This set of instructions describes the first part of the experiment.
+                After you finish the first part, there will be another set of instructions for the second part.
+                The second part is very similar to the first part.
             </p>
             <p class="block-sentence">
-                Please read the following instructions carefully. You can move a page forward or backward by clicking with your mouse on "previous" or "next".
-                After the instructions, you will need to answer a <b>set of questions to be sure that you understand the instructions</b>.
-                The experiment will begin after every participant has answered all questions correctly.
+                Please read the following instructions carefully.
+                After the instructions, you will be asked a <b>set of questions to ensure you understand</b> the instructions.
+                The experiment will begin after every participant has answered all questions.
             </p>
             <p class="block-sentence">
-                Should you have any difficulties or <b>questions, please raise your hand</b>. We will answer your questions at your cubicle.
+                If you have any <b>questions, please raise your hand</b>.
+                We will answer your questions at your cubicle.
             </p>
         </div>
     </div>
@@ -92,21 +92,23 @@
         <h5 class="card-header">General Information</h5>
         <div class="card-body">
           <p class="block-sentence">
-               The experiment is divided into rounds.
-               In each round you make decisions, which you will enter in a computer.
-               There will be {{ total_rounds }} rounds in total, {{ shock_after_rounds }} rounds in the first part and {{ rounds_part_two }} rounds in the second part.
+              The experiment is divided into {{ total_rounds }} rounds, {{ shock_after_rounds }} rounds in the first part and {{ rounds_part_two }} rounds in the second part.
             </p>
             <p class="block-sentence">
-                Prior to the experiment, the {{ players_in_your_group }} participants in your group were divided into 2 roles: firms and workers.
-                There are {{ employers_in_your_group }} firms and {{ workers_in_your_group }} workers in your group.
+                You have been randomly assigned to one of two roles: either an employer or a worker.
             </p>
             <p style="margin-left: 50px;">
                     <b>You will take the role of {{ player.participant.string_role }}</b>.
                     You will keep this role for the entire course of the experiment.
-                </p>
+            </p>
+            <p class="block-sentence">
+                In the first part, you will interact in a group of {{ players_in_your_group }} randomly assigned participants.
+                Each group has {{ employers_in_your_group }} employers and {{ workers_in_your_group }} workers.
+            </p>
             <p class="block-sentence">
                 All participants have received an identification number, which they will keep for the entire experiment.
                 Your ID number is {{ player.participant.playerID }}.
+                Please write the ID number on the paper in front of you.
             </p>
         </div>
     </div>
@@ -122,53 +124,50 @@
         <h5 class="card-header">Short Overview of the Experimental Procedures</h5>
         <div class="card-body">
            <p class="block-sentence">
-                In each round, firms can choose to employ zero, one, or two workers.
-                To employ a worker, a firm needs to pay a wage.
-                In return, employed workers provide effort to make products.
-                You choose how much effort they will provide after they accept a job offer.
-                Effort is costly to you, so that you will receive a positive payout in a round if you choose an effort with a cost that is lower than the wage you receive.
+               In each round, employers choose to employ zero, one, or two workers.
+               To employ a worker, an employer needs to pay a wage. In return, employed workers provide effort.
+               Employers' profits depend on the number of workers they employ, the wages they pay, and the effort each worker provides.
+               They will make profits if the wage they pay is lower than the effort worth they receive.
             </p>
             <p class="block-sentence">
-                On the other end, the firms' profits will depend on the:
-                <ol class="list" style="margin-top: -10px">
-                    <li>	Number of workers they employ </li>
-                    <li>	Wages they pay  </li>
-                    <li>	Effort you provide  </li>
+            On the other hand, your profits will depend on
+            <ol class="list" style="margin-top: -10px">
+                    <li>whether you are employed</li>
+                    <li>the wage you receive</li>
+                    <li>the effort you provide</li>
                 </ol>
             </p>
             <p class="block-sentence">
-                Here is how: the workers’ productivity is a combination of the effort they choose to provide and the number of other workers.
-                Two workers can be jointly more productive than one, but not twice as much as one worker.
-                The more workers the firm employs, the less productive each of them becomes.
+                Effort is costly to you, so you make profits only if your effort cost is lower than the wage you receive.
             </p>
             <p>
-                The first part lasts for {{ shock_after_rounds }} rounds. In each round, procedures are as follows: <br>
+               The first part lasts for {{ shock_after_rounds }} rounds. Each round has two phases:
             </p>
             <p class="block-sentence">
-                1. Each round starts with a <b>market phase</b> that lasts for {{ market_time }} seconds.
-                During this phase, firms can submit job offers, which workers can accept.
-                When submitting a job offer, a firm has to specify two things:
+                1. First, a <b>market phase</b> lasting for {{ market_time }} seconds.
+                During this phase, employers can submit job offers, which workers can accept.
+                When submitting a job offer, an employer specifies two things
                 <ul class="list" style="margin-top: -10px">
-                    <li>	Which wage she offers to pay </li>
-                    <li>	Which effort she desired the worker to exert  </li>
+                    <li>	The wage they will pay  </li>
+                    <li>	The effort they want the worker to choose </li>
                 </ul>
             </p>
             <p class="block-sentence">
-            Once a firm submits an offer, she has to wait and see if a worker will accept the offer.
-                Else, she can cancel the offer and submit a new one. Workers view the offers submitted and decide which to accept.
-                The first worker to accept the offer will get it. <b>Each worker can accept at most one job offer in each round.
-                Each firm can employ at most two workers.</b>
-                As there are 6 firms and 6 workers, each worker can be employed by a firm if they want to.
-                All unaccepted offers are deleted at the end of the market phase.
+           Once employers submit offers, workers get to see them and decide which to accept.
+                The first worker to accept an offer will get it.
+                <b>Each worker can accept at most one job offer in each round.
+                Each employer can employ at most two workers.</b>
+                Unaccepted offers are deleted at the end of the market phase.
             </p>
             <p class="block-sentence">
-                2. After the market phase, every worker who accepted a job offer enters the <b>production phase</b>, and has to determine the amount of effort to put into the work.
-                </b>The worker does not have to provide the effort level desired by the firm</b>, but can also choose to provide a lower or higher effort level.
+                2. After the market phase, workers who accepted a job offer enter the <b>production phase</b>.
+                In this phase, workers decide their effort.
+                <b>Workers are not forced to provide the effort desired by the employer.
+                They are free to choose any effort.</b>
             </p>
             <p class="block-sentence">
-                Once every worker has chosen her effort, earnings of all participants for the given round are determined.
-                Subsequently, the next round starts.
-                Earnings of all rounds will be summed up at the end of the experiment, converted into euros and paid out in cash together with your initial endowment.
+                Once all workers have chosen their effort, everyone's profits are calculated and the next round starts.
+                The sum of profits across all rounds will determine your earnings for the experiment.
             </p>
         </div>
     </div>
@@ -187,19 +186,17 @@
         <h5 class="card-header">The Market Phase in Detail</h5>
         <div class="card-body">
            <p class="block-sentence">
-            Each round begins with a market phase. The market phase in each round lasts for a maximum of {{ market_time }} seconds.
-               It ends earlier if all workers have accepted a work contract or all firms filled their jobs.
-               When the market phase is over, no further offers can be submitted or accepted.
-               The time left in the current round will be displayed in a yellow box at the top of the page.
-               See the figure below for a preview of the screen you will see during the market phase.
+            Each round begins with a <b>market phase</b>.
            </p>
             <p class="block-sentence">
-                The white box below the timer gives <b>useful information</b> about the state of the market.
-                This information includes the round number, the number of workers and number of firms in the market, the number of open offers in the market and the number of workers who have not yet accepted a job offer.
-                The box provides the share of offers requesting high effort and average wage of all open and accepted offers in the market.
+                The figure below shows a preview of the market phase screen.
+                The white box below the timer gives <b>information</b> about the market, including the round number,
+                the number of workers and employers, the number of open offers,
+                the number of workers who have not accepted a job offer, the share of offers requesting high effort,
+                and the average wage of all open and accepted offers in the market.
             </p>
             <p>
-                Add picture <br>
+                <img src="{{ static 'instructions/worker_points_1.jpg' }}"/>
             </p>
             <p class="block-sentence">
                Firms w ill send job offers to the market.
