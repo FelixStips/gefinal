@@ -298,13 +298,13 @@
                     <li> <b> The cost of Low effort is {{ low_effort_points_tokens }} {{ currency_plural }} </b></li>
                     <li> <b> The cost of High effort is {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
                 </ul>
-
+            <br>
             {% if player.participant.currency_is_points == True %}
-                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
+                <div style="justify-content: center; padding-top: -15px; padding-bottom: 15px; width: 60%; max-width: 60%;">
                         <img src="{{ static 'instructions/worker_points_3.jpg' }}" alt="Worker 3 points"/>
                 </div>
             {% else %}
-                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
+                <div style="justify-content: center; padding-top: -15px; padding-bottom: 15px; width: 60%; max-width: 60%;">
                         <img src="{{ static 'instructions/worker_tokens_3.jpg' }}" alt="Worker 3 tokens"/>
                 </div>
             {% endif %}
