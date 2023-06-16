@@ -150,12 +150,13 @@
             </p>
             <p class="block-sentence">
             On the other hand, your profits will depend on
+            </p>
             <ol class="list" style="margin-top: -10px">
                     <li>whether you are employed</li>
                     <li>the wage you receive</li>
                     <li>the effort you provide</li>
                 </ol>
-            </p>
+
             <p class="block-sentence">
                 Effort is costly to you, so you make profits only if your effort cost is lower than the wage you receive.
             </p>
@@ -166,11 +167,12 @@
                 1. First, a <b>market phase</b> lasting for {{ market_time }} seconds.
                 During this phase, employers can submit job offers, which workers can accept.
                 When submitting a job offer, an employer specifies two things
+            </p>
                 <ul class="list" style="margin-top: -10px">
                     <li>	The wage they will pay  </li>
                     <li>	The effort they want the worker to choose </li>
                 </ul>
-            </p>
+
             <p class="block-sentence">
            Once employers submit offers, workers get to see them and decide which to accept.
                 The first worker to accept an offer will get it.
@@ -198,8 +200,6 @@
 </div>
 
 
-
-
 <div class="tab" id="instructions_5" style="display: none">
     <div class="card">
         <h5 class="card-header">The Market Phase in Detail</h5>
@@ -223,21 +223,21 @@
             </p>
             {% if player.participant.currency_is_points == True %}
                 <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                    <img src="{{ static 'instructions/worker_points_1.PNG' }}"/>
+                    <img src="{{ static 'instructions/worker_points_1.PNG' }}" alt="Worker 1 points"/>
                 </div>
             {% else %}
                 <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                    <img src="{{ static 'instructions/worker_tokens_1.PNG' }}"/>
+                    <img src="{{ static 'instructions/worker_tokens_1.PNG' }}" alt="Worker 1 tokens"/>
                 </div>
             {% endif %}
             <p class="block-sentence">
             To <b>accept a job</b> offer, you must:
+            </p>
                 <ol class="list" style="margin-top: -10px">
                     <li>whether you are employed</li>
                     <li>the wage you receive</li>
                     <li>the effort you provide</li>
                 </ol>
-            </p>
             <p class="block-sentence; padding-bottom: 5px;">
             You can accept an offer as long as it is "open".
             The first worker to accept an offer will get the job.
@@ -251,11 +251,11 @@
             </p>
             {% if player.participant.currency_is_points == True %}
                 <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                    <img src="{{ static 'instructions/worker_points_2.PNG' }}"/>
+                    <img src="{{ static 'instructions/worker_points_2.PNG' }}" alt="Worker 2 points"/>
                 </div>
             {% else %}
                 <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                    <img src="{{ static 'instructions/worker_tokens_2.PNG' }}"/>
+                    <img src="{{ static 'instructions/worker_tokens_2.PNG' }}" alt="Worker 2 tokens"/>
                 </div>
             {% endif %}
             <p class="block-sentence">
@@ -279,35 +279,35 @@
     <div class="card">
         <h5 class="card-header">The Production Phase in Detail</h5>
         <div class="card-body">
-           <p class="block-sentence">
-               Following the market phase, all workers who have accepted a job offer enter the production phase.
+            <p class="block-sentence">
+                Following the market phase, all workers who have accepted a job offer enter the production phase.
                In this phase, workers choose their effort. <b>The effort requested by employers is not binding</b>.
                Hence, you can choose <b>high</b> or <b>low</b> effort irrespective of the effort indicated in the job offer.
-           </p>
+            </p>
             <p class="block-sentence">
                 If you have accepted a job offer, you will need to choose the effort to put in to work for the firm.
-                <b>The effort level requested by the firm is not binding</b>. The more effort you provide the lower will your income in this round.
+                <b>The effort level requested by the firm is not binding</b>.
+                The more effort you provide the lower will your income in this round.
             </p>
             <p class="block-sentence">
               The page you see looks like the one shown below.
                 At the top of the page, you will see the wage you accepted and the effort requested by the employer.
                 Below, you see the cost of each effort choice.
+            </p>
                 <ul class="list" style="margin-top: -10px">
                     <li> <b> The cost of Low effort is {{ low_effort_points_tokens }} {{ currency_plural }} </b></li>
                     <li> <b> The cost of High effort is {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
                 </ul>
-            </p>
-            <p class="block-sentence">
-               {% if player.participant.currency_is_points == True %}
-                    <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                        <img src="{{ static 'instructions/worker_points_3.PNG' }}"/>
-                    </div>
-                {% else %}
-                    <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                        <img src="{{ static 'instructions/worker_tokens_3.PNG' }}"/>
-                    </div>
-                {% endif %}
-            </p>
+
+            {% if player.participant.currency_is_points == True %}
+                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
+                        <img src="{{ static 'instructions/worker_points_3.PNG' }}" alt="Worker 3 points"/>
+                </div>
+            {% else %}
+                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
+                        <img src="{{ static 'instructions/worker_tokens_3.PNG' }}" alt="Worker 3 tokens"/>
+                </div>
+            {% endif %}
             <h5 style="padding-bottom: 15px">How are your profits calculated?</h5>
             <p class="block-sentence">
                 In each round, your profits depend on whether you are employed, you wage, and your effort level.
@@ -335,8 +335,7 @@
     </p>
 </div>
 
-
-<div class="tab" id="instructions_8" style="display: none">
+<div class="tab" id="instructions_7" style="display: none">
     <div class="card">
         <h5 class="card-header">How are the employers profits calculated?</h5>
         <div class="card-body">
@@ -384,67 +383,6 @@
 </div>
 
 
-<div class="tab" id="instructions_9" style="display: none">
-    <div class="card">
-        <h5 class="card-header">How is the firms' profit calculated?</h5>
-        <div class="card-body">
-           <p class="block-sentence">
-                The firms' profit in each round is determined by the wage they pay to all their workers, the effort you provide to them, the effort other workers provide, and the number of workers they employ.
-               If they <b>do not employ any workers</b> in a round, they will earn a profit of {{ outside_option_employers_points_tokens }} {{ currency_plural }} in that round.
-           </p>
-            <p class="block-sentence">
-                If they employ at least one worker, their profit will be the difference between the revenue they gain from worker effort choices and the wage they pay to all workers:
-            </p>
-            <p style="margin-left: 50px;">
-                <b>Profit = Total revenue – total wage payments</b>.
-            </p>
-
-            <div class="container">
-              <table>
-                <tr>
-                  <th colspan="3">Worker Effort and Revenue</th>
-                </tr>
-                <tr>
-                  <th>Case</th>
-                  <th>Revenue per worker</th>
-                  <th>Total revenue</th>
-                </tr>
-                <tr>
-                  <td>Employ two workers. Both workers chose High effort</td>
-                  <td>140</td>
-                  <td>280</td>
-                </tr>
-                <tr>
-                  <td>Employ two workers. One worker chooses High effort and the other chooses Low effort</td>
-                  <td>77</td>
-                  <td>154</td>
-                    </div>
-                </div>
-                </tr>
-            <tr>
-              <td>Employ two workers. Both workers chose Low effort</td>
-              <td>14</td>
-              <td>28</td>
-            </tr>
-            <tr>
-              <td>Employ one worker. The worker chooses High effort</td>
-              <td>160</td>
-              <td>160</td>
-            </tr>
-            <tr>
-              <td>Employ one worker. The worker chooses Low effort</td>
-              <td>16</td>
-              <td>16</td>
-            </tr>
-          </table>
-        </div>
-
-    <br>
-  <p>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this); ChangeHeader();" style="float: right;">Next</button>
-    </p>
-</div>
 
 
 <div class="tab" id="are_you_ready_q" style="display: none">
