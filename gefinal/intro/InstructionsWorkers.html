@@ -25,6 +25,25 @@
         display: block;
         text-align: justify;
       }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
 
 </style>
 
@@ -274,75 +293,67 @@
                 At the top of the page, you will see the wage you accepted and the effort requested by the employer.
                 Below, you see the cost of each effort choice.
                 <ul class="list" style="margin-top: -10px">
-                    <li> <b> The cost of Low effort is 10 {{ currency_plural }} </b></li>
-                    <li> <b> The cost of High effort is 20 {{ currency_plural }}  </b></li>
+                    <li> <b> The cost of Low effort is {{ low_effort_points_tokens }} {{ currency_plural }} </b></li>
+                    <li> <b> The cost of High effort is {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
                 </ul>
             </p>
             <p class="block-sentence">
-                Add picture.
+               {% if player.participant.currency_is_points == True %}
+                    <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
+                        <img src="{{ static 'instructions/worker_points_3.PNG' }}"/>
+                    </div>
+                {% else %}
+                    <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
+                        <img src="{{ static 'instructions/worker_tokens_3.PNG' }}"/>
+                    </div>
+                {% endif %}
+            </p>
+            <h5 style="padding-bottom: 15px">How are your profits calculated?</h5>
+            <p class="block-sentence">
+                In each round, your profits depend on whether you are employed, you wage, and your effort level.
+            </p>
+            <ul class="list" style="margin-top: -10px">
+                <li> If you do not accept any job offer, you earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b></li>
+                <li> If you accept a job offer and choose Low effort, your profits equal the wage minus the low cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b></li>
+                <li> If you accept a job offer and choose High effort, your profits equal the wage minus the high cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
+            </ul>
+            <p class="block-sentence">
+                <u>Example</u>: if you receive a wage of {{ worker_example_wage }}  {{ currency_plural }} and choose high effort, your profits in this round are {{ worker_example_wage }} –  {{ high_effort_points_tokens }} = {{ worker_example_profit_high_effort }} {{ currency_plural }}.
+                If, instead, you choose Low effort, the profits are  {{ worker_example_wage }} – {{ low_effort_points_tokens }} = {{ worker_example_profit_low_effort }}  {{ currency_plural }}.
             </p>
             <p class="block-sentence">
-                In order to choose the effort level, you will click one of the buttons below the question "What effort level do you choose?".
-                You can change your selection. Once you made on your final decision, you can click "Next" to finish the production phase.
+               As you can see, your profits are larger the higher the wage you receive.
+                Your profits are also higher if you choose Low effort.
+                Note that you can make a loss if the effort costs are higher than your wage.
             </p>
         </div>
     </div>
     <br>
-  <p>
+    <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
-
-
-<div class="tab" id="instructions_7" style="display: none">
-    <div class="card">
-        <h5 class="card-header">Results Screen</h5>
-        <div class="card-body">
-           <p class="block-sentence">
-            After each period, you will be informed about the results of that round. The following  information will be displayed on the results screen
-              <ol>
-                <li>The wage you received</li>
-                <li>The effort you were requested</li>
-                <li>The effort you provided</li>
-                <li>Your profit in this round</li>
-                <li>Your employers profit in this round</li>
-                <li>The average wage level in your group</li>
-                <li>The share of workers providing high effort</li>
-                <li>Your profit in all rounds</li>
-                <li>The number of rounds left</li>
-              </ol>
-           </p>
-        </div>
-    </div>
-    <br>
-  <p>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
-    </p>
-</div>
-
 
 
 <div class="tab" id="instructions_8" style="display: none">
     <div class="card">
-        <h5 class="card-header">How is your income calculated?</h5>
+        <h5 class="card-header">How are the employers profits calculated?</h5>
         <div class="card-body">
            <p class="block-sentence">
-            Your income is determined by whether you are employed, by the wage you receive and the effort level you choose.
-               In a round where you have not accepted any wage offer, your will receive {{ outside_option_workers_points_tokens }} {{ currency_plural }}.
+                The employers' profits in each round are determined by number of workers they employ, the wages they pay, and the effort their workers choose.
            </p>
             <p class="block-sentence">
-                In a round where you accept a job, your income is calculated as the difference between the wage and the cost of effort:
-            </p>
-            <p style="margin-left: 50px;">
-                <b>Profit = wage - cost of effort</b>.
+                If they <b>do not employ any workers</b> in a round, they earn <b>0 {{ currency_plural }}</b> in that round.
             </p>
             <p class="block-sentence">
-                As you can see from the above formula, your income is larger the higher the wage you receive.
-                Your income is also higher, the lower the effort you put in during the production phase.
-                You can also <b>make a loss</b> if the effort cost is above the wage you receive.
-                This loss will have to be paid from the initial endowment or from earnings in other rounds.
+                If they employ one or two workers, their profits are the difference between the total revenue and the wages they pay:
+            </p>
+            <p style="margin-left: 50px;">
+                <b>Profit = Total revenue - total wage payments</b>.
+            </p>
+            <p class="block-sentence">
+                The total revenue depends on the number of workers they employ and the effort workers choose, according to the table below.
             </p>
             <p class="block-sentence">
                 The cost of effort is higher if you choose a high effort level.
@@ -387,49 +398,74 @@
             <p style="margin-left: 50px;">
                 <b>Profit = Total revenue – total wage payments</b>.
             </p>
-            <p class="block-sentence">
-                The total revenue depends on the number of workers they employ and what effort the workers choose to provide.
-                The total value and profits can still be higher with more workers, but each individual unit of effort is worth less.
-            </p>
-            <p class="block-sentence">
-                If they employ one worker, they receive a revenue of {{ gain_high_effort_1_worker }} {{ currency_plural }} in case the worker chooses high effort
-                and a revenue of {{ gain_low_effort_1_worker  }} {{ currency_plural }} in case the worker chooses low effort.
-                The profit will be this revenue minus the wage they paid to that worker.
-            </p>
-            <p style="margin-left: 50px;">
-                Profit = {{ gain_high_effort_1_worker }} – wage if the worker chooses high effort.<br>
-	            Profit = {{ gain_low_effort_1_worker  }} – wage if the worker chooses low effort.
-            </p>
-            <p class="block-sentence">
-                If they employ <b>two workers</b>, they receive a revenue of {{  gain_high_effort_2_workers }} points/tokens for each worker that chooses high effort
-                and a revenue of {{ gain_low_effort_2_workers }} points/tokens for each worker that chooses low effort.
-                The profit is this revenue minus the wage they paid both workers.
-            </p>
-            <p style="margin-left: 50px;">
-                Profit = (140 + 140) – wage 1 – wage 2 if both workers chooses high effort.<br>
-                Profit = (140 + 14) – wage 1 – wage 2 if both workers chooses high effort.<br>
-                Profit = (14 + 14) – wage 1 – wage 2 if both workers chooses low effort.
-            </p>
+
+            <div class="container">
+              <table>
+                <tr>
+                  <th colspan="3">Worker Effort and Revenue</th>
+                </tr>
+                <tr>
+                  <th>Case</th>
+                  <th>Revenue per worker</th>
+                  <th>Total revenue</th>
+                </tr>
+                <tr>
+                  <td>Employ two workers. Both workers chose High effort</td>
+                  <td>140</td>
+                  <td>280</td>
+                </tr>
+                <tr>
+                  <td>Employ two workers. One worker chooses High effort and the other chooses Low effort</td>
+                  <td>77</td>
+                  <td>154</td>
+                    </div>
+                </div>
+                </tr>
+            <tr>
+              <td>Employ two workers. Both workers chose Low effort</td>
+              <td>14</td>
+              <td>28</td>
+            </tr>
+            <tr>
+              <td>Employ one worker. The worker chooses High effort</td>
+              <td>160</td>
+              <td>160</td>
+            </tr>
+            <tr>
+              <td>Employ one worker. The worker chooses Low effort</td>
+              <td>16</td>
+              <td>16</td>
+            </tr>
+          </table>
+        </div>
+
+    <br>
+  <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this); ChangeHeader();" style="float: right;">Next</button>
+    </p>
+</div>
 
 
-
+<div class="tab" id="are_you_ready_q" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Are you ready?</h5>
+        <div class="card-body">
             <p class="block-sentence">
-                The table below can help you get an intuition the profit you can make.
-                The horizontal axis gives you the wage you get and the horizontal axis gives the effort you choose.
-                The numbers in the table are your profit per round.
+               The experiment will not start until all participants are familiar with the instructions.
+                To ensure this is the case, we ask you to <b>answer three questions</b> on the following pages.
             </p>
-            <p>
-                Insert table
+            <p class="block-sentence">
+                Click on the next button below when you are ready to answer these questions.
             </p>
         </div>
     </div>
     <br>
-  <p>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this); ChangeHeaderBack();">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToComprehension(this)" style="float: right;">Next</button>
     </p>
 </div>
-
 
 
 <br><br>

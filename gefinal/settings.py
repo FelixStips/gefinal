@@ -20,7 +20,7 @@ SESSION_CONFIGS = [
                        'questionnaire',
                        'end'],
          num_demo_participants=9,
-         final=False,                                                              # Display instructions
+         final=True,                                                              # Display instructions
          market_timeout_seconds=180,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          showup_fee=5.0,                                                           # Participation show-up fee
@@ -40,6 +40,7 @@ SESSION_CONFIGS = [
          num_employers_small_market=1,                                             # Number of employers in small market
          migration_small_shock_size=1,                                             # Number of migrants in small migration shock
          migration_large_shock_size=1,                                             # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
+         worker_example_wage=50,                                                   # Wage in the worker example in points
     )]
 
 
