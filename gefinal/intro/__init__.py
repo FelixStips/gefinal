@@ -6,17 +6,15 @@ random.seed(10)
 doc = """
 TO-DO's:
     - Add setting of whether there is income difference --> is this needed? can set exchange rate to 1.
-    - Make two pages out of the midbreak instructions
-    - Adjust instructions to new word version
     - Adjust quiz questions
-    - Add images to instructions
-    - Change welcome to part 2 to have a card
+    - Improve employer table instructions
     - Add minimum payment
     - Improve design of payment screen
 TO-TEST:    
     - Database
     - Payment storage
     - Points & tokens
+    - How much money people get
 """
 
 

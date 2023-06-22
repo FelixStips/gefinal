@@ -124,4 +124,6 @@ class Behavioral(Page):
     form_fields = ['R3', 'NR1', 'PR9']
 
 
-page_sequence = [SocioDemographic, CognitiveReflection, Behavioral]
+page_sequence = [SocioDemographic,
+                 CognitiveReflection,
+                 Behavioral]

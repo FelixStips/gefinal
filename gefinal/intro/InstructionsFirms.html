@@ -187,15 +187,13 @@
                 the number of workers who have not accepted a job offer, the share of offers requesting high effort,
                 and the average wage of all open and accepted offers in the market.
             </p>
-            {% if player.participant.currency_is_points == True %}
-                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                    <img src="{{ static 'employer_points_1.jpg' }}" alt="Employer 1 points"/>
-                </div>
-            {% else %}
-                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                    <img src="{{ static 'employer_tokens_1.jpg' }}" alt="Employer 1 tokens"/>
-                </div>
-            {% endif %}
+            <div style="display: flex; justify-content: center;">
+                {% if player.participant.currency_is_points == True %}
+                    <img src="{% static 'instructions/employer_points_1.jpg' %}" alt="Employer 1 points" style="max-width: 80%;"/>
+                {% else %}
+                    <img src="{% static 'instructions/employer_tokens_1.jpg' %}" alt="Employer 1 tokens" style="max-width: 80%;"/>
+                {% endif %}
+            </div>
             <p class="block-sentence">
                 To <b>make a job offer</b>, use "Trading box" in the middle of the page.
                 You can send up to two job offers at the same time.
@@ -212,14 +210,13 @@
                 Once you <b>submit a job offer</b>, it will appear in the table "Open offers" at the bottom of the page. S
                 ee the figure below for an example of how the screen will look.
             </p>
-            {% if player.participant.currency_is_points == True %}
-                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                    <img src="{{ static 'employer_points_2.jpg' }}" alt="Employer 2 points"/>
-                </div>
-            {% else %}
-                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                    <img src="{{ static 'employer_tokens_2.jpg' }}" alt="Employer 2 tokens"/>
-                </div>
+            <div style="display: flex; justify-content: center;">
+                {% if player.participant.currency_is_points == True %}
+                    <img src="{% static 'instructions/employer_points_2.jpg' %}" alt="Employer 2 points" style="max-width: 80%;"/>
+                {% else %}
+                    <img src="{% static 'instructions/employer_tokens_2.jpg' %}" alt="Employer 2 tokens" style="max-width: 80%;"/>
+                {% endif %}
+            </div>
             {% endif %}
             <p class="block-sentence">
                 Workers can accept an offer as long as it is "open".
@@ -279,16 +276,14 @@
                     <li> <b> The cost of High effort is {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
                 </ul>
             <br>
-            {% if player.participant.currency_is_points == True %}
-                <div style="justify-content: center; padding-top: -15px; padding-bottom: 15px; width: 60%; max-width: 60%;">
-                        <img src="{{ static 'worker_points_3.jpg' }}" alt="Worker 3 points"/>
-                </div>
-            {% else %}
-                <div style="justify-content: center; padding-top: -15px; padding-bottom: 15px; width: 60%; max-width: 60%;">
-                        <img src="{{ static 'worker_tokens_3.jpg' }}" alt="Worker 3 tokens"/>
-                </div>
-            {% endif %}
-   </div>
+            <div style="display: flex; justify-content: center;">
+                {% if player.participant.currency_is_points == True %}
+                    <img src="{% static 'instructions/employer_points_3.jpg' %}" alt="Employer 3 points" style="max-width: 80%;"/>
+                {% else %}
+                    <img src="{% static 'instructions/employer_tokens_3.jpg' %}" alt="Employer 3 tokens" style="max-width: 80%;"/>
+                {% endif %}
+            </div>
+        </div>
     </div>
     <br>
     <p>

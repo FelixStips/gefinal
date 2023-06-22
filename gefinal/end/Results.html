@@ -11,21 +11,43 @@
 </style>
 
 
+    <div class="card">
+        <h5 class="card-header">Final Results</h5>
+        <div class="card-body">
+             <p class="block-sentence">
+                 The experiment is now complete. Your ID number is {{ player.participant.playerID }}.
+             </p>
+            <p class="block-sentence">
+                {% if currency_is_points == True %}
+                    Your total profit in all rounds is <b>{{ total_points }}</b> points.
+                    Together with the show-up fee, your final payoff will be <b>{{ total_euros }}</b> Pounds. <br><br>
+                {% else %}
+                    Your total profit in all rounds is <b>{{ total_tokens }}</b> tokens.
+                    Together with the show-up fee, your final payoff will be <b>{{ total_euros }}</b> Pounds. <br><br>
+                {% endif %}
+            </p>
+            <p class="block-sentence">
+                Please remain at your desk until all participants have completed the experiment.
+            </p>
+        </div>
+    </div>
+
+
+
 <div class="card">
     <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">Final Results</h6>
+        <p class="block-sentence">
+                 At the beginning of the experiment, you will receive an  <b>initial endowment of {{ participation_fee }} Pound</b>.
+                 During the experiment, you can earn more money by accumulating {{ currency_plural }}.
+                 The amount earned will depend on your decisions and those of the other participants.
+             </p>
 
-        The experiment is now complete. <br><br>
+        <br><br>
 
-        {% if currency_is_points == True %}
-            Your total profit in all rounds is <b>{{ total_points }}</b> points. Together with the show-up fee, your final payoff will be <b>{{ total_euros }}</b> Euros. <br><br>
 
-        {% else %}
-            Your total profit in all rounds is <b>{{ total_tokens }}</b> tokens. Together with the show-up fee, your final payoff will be <b>{{ total_euros }}</b> Euros. <br><br>
 
-        {% endif %}
-
-        Please remain at your desk until all participants have completed the experiment. <br><br>
+         <br><br>
 
     </div>
 </div>
