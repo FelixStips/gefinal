@@ -25,15 +25,12 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
     Q2_WAGE = 70
-    Q2_EFFORT_REQUESTED = 8
-    Q2_EFFORT_RECEIVED = 8
-    Q3_WAGE = 60
-    Q3_EFFORT_REQUESTED = 8
-    Q3_EFFORT_RECEIVED = 3
-    Q4_WAGE_1 = 30
-    Q4_WAGE_2 = 40
-    Q4_EFFORT_RECEIVED_1 = 4
-    Q4_EFFORT_RECEIVED_2 = 6
+    Q2_EFFORT_REQUESTED = "high"
+    Q2_EFFORT_RECEIVED = "high"
+    Q3_WAGE_1 = 30
+    Q3_WAGE_2 = 50
+    Q3_EFFORT_RECEIVED_1 = "low"
+    Q3_EFFORT_RECEIVED_2 = "high"
 
 
 class Subsession(BaseSubsession):
@@ -150,11 +147,6 @@ class InstructionsWorkers(Page):
         return session.config['final']
 
     @staticmethod
-    def js_vars(player: Player):
-        return dict(playerID=player.participant.playerID,
-                    small_market=player.participant.small_market,)
-
-    @staticmethod
     def vars_for_template(player: Player):
         session = player.session
 
@@ -173,6 +165,9 @@ class InstructionsWorkers(Page):
             gain_low_effort_1_worker = session.config['MPL_low'][0]
             gain_low_effort_2_workers = session.config['MPL_low'][1]
             worker_example_wage = session.config['worker_example_wage']
+            q2_wage = C.Q2_WAGE
+            q3_wage_1 = C.Q3_WAGE_1
+            q3_wage_2 = C.Q3_WAGE_2
         else:
             exchange_rate = session.config['payout_rate'] * (1/session.config['exchange_rate'])
             initial_points_tokens = session.config['showup_fee'] * (1/session.config['payout_rate']) * session.config['exchange_rate']
@@ -185,9 +180,16 @@ class InstructionsWorkers(Page):
             gain_low_effort_1_worker = session.config['MPL_low'][0] * session.config['exchange_rate']
             gain_low_effort_2_workers = session.config['MPL_low'][1] * session.config['exchange_rate']
             worker_example_wage = session.config['worker_example_wage'] * session.config['exchange_rate']
+            q2_wage = C.Q2_WAGE * session.config['exchange_rate']
+            q3_wage_1 = C.Q3_WAGE_1 * session.config['exchange_rate']
+            q3_wage_2 = C.Q3_WAGE_2 * session.config['exchange_rate']
 
         worker_example_profit_low_effort = worker_example_wage - low_effort_points_tokens
         worker_example_profit_high_effort = worker_example_wage - high_effort_points_tokens
+        total_gain_low_effort_2_workers = 2 * gain_low_effort_2_workers
+        total_gain_high_effort_2_workers = 2 * gain_high_effort_2_workers
+        total_gain_mix_effort_2_workers = gain_low_effort_2_workers + gain_high_effort_2_workers
+        gain_mix_effort_2_workers = int(total_gain_mix_effort_2_workers / 2) if total_gain_mix_effort_2_workers % 2 == 0 else total_gain_mix_effort_2_workers / 2
 
         if player.participant.large_market:
             players_in_your_group = session.config['size_large_market']
@@ -199,8 +201,21 @@ class InstructionsWorkers(Page):
             employers_in_your_group = session.config['num_employers_small_market']
             workers_in_your_group = session.config['size_small_market'] - session.config['num_employers_small_market']
             initial_points_tokens = int(session.config['showup_fee'] * (1 / session.config['payout_rate'])) * session.config['exchange_rate']
+        else:
+            print('error: no market type')
 
         return dict(
+            q2_effort_requested=C.Q2_EFFORT_REQUESTED,
+            q2_effort_received=C.Q2_EFFORT_RECEIVED,
+            q3_effort_received_1=C.Q3_EFFORT_RECEIVED_1,
+            q3_effort_received_2=C.Q3_EFFORT_RECEIVED_2,
+            q2_wage=q2_wage,
+            q3_wage_1=q3_wage_1,
+            q3_wage_2=q3_wage_2,
+            total_gain_mix_effort_2_workers=total_gain_mix_effort_2_workers,
+            gain_mix_effort_2_workers=gain_mix_effort_2_workers,
+            total_gain_high_effort_2_workers=total_gain_high_effort_2_workers,
+            total_gain_low_effort_2_workers=total_gain_low_effort_2_workers,
             worker_example_profit_high_effort=worker_example_profit_high_effort,
             worker_example_profit_low_effort=worker_example_profit_low_effort,
             worker_example_wage=worker_example_wage,
@@ -227,8 +242,114 @@ class InstructionsWorkers(Page):
             market_time=session.config['market_timeout_seconds'],
             worker_outside_option=session.config['worker_outside_option'],
             employer_outside_option=session.config['employer_outside_option'],
-
         )
+
+    @staticmethod
+    def live_method(player: Player, data):
+        session = player.session
+
+        q2_effort_worth = session.config['MPL_high'][0] if C.Q2_EFFORT_RECEIVED == "high" else session.config['MPL_low'][0]
+        q3_effort_worth_1 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['MPL_low'][1]
+        q3_effort_worth_2 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['MPL_low'][1]
+        q2_effort_cost = session.config['effort_costs_points'][0] if C.Q2_EFFORT_RECEIVED == "high" else session.config['effort_costs_points'][1]
+        q3_effort_cost_1 = session.config['effort_costs_points'][0] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['effort_costs_points'][1]
+        q3_effort_cost_2 = session.config['effort_costs_points'][0] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['effort_costs_points'][1]
+
+        if player.participant.currency_is_points:
+            q1_employer_profit = session.config['employer_outside_option']
+            q1_worker_profit = session.config['worker_outside_option']
+            q2_wage = C.Q2_WAGE
+            q2_worker_profit = q2_wage - q2_effort_cost
+            q2_employer_profit = q2_effort_worth - q2_wage
+            q3_wage_1 = C.Q3_WAGE_1
+            q3_wage_2 = C.Q3_WAGE_2
+            q3_employer_profit = q3_effort_worth_1 + q3_effort_worth_2 - q3_wage_1 - q3_wage_2
+            q3_worker_profit_1 = q3_wage_1 - q3_effort_cost_1
+            q3_worker_profit_2 = q3_wage_2 - q3_effort_cost_2
+        else:
+            q1_employer_profit = session.config['employer_outside_option']
+            q1_worker_profit = session.config['worker_outside_option']
+            q2_wage = C.Q2_WAGE * session.config['exchange_rate']
+            q2_worker_profit = (q2_wage - q2_effort_cost) * session.config['exchange_rate']
+            q2_employer_profit = (q2_effort_worth - q2_wage) * session.config['exchange_rate']
+            q3_wage_1 = C.Q3_WAGE_1 * session.config['exchange_rate']
+            q3_wage_2 = C.Q3_WAGE_2 * session.config['exchange_rate']
+            q3_employer_profit = (q3_effort_worth_1 + q3_effort_worth_2 - q3_wage_1 - q3_wage_2) * session.config['exchange_rate']
+            q3_worker_profit_1 = (q3_wage_1 - q3_effort_cost_1) * session.config['exchange_rate']
+            q3_worker_profit_2 = (q3_wage_2 - q3_effort_cost_2) * session.config['exchange_rate']
+
+        if data['information_type'] == 'submit_answer':
+            my_id = player.id_in_group
+            print('Received', data)
+            if data['question'] == 'q1':
+                print('Correct employer profit:', q1_employer_profit, 'Correct worker profit:', q1_worker_profit)
+                print('Received employer profit:', data['employer_profit'], 'Received worker profit:',
+                      data['worker_profit'])
+                if int(data['employer_profit']) == q1_employer_profit and int(
+                        data['worker_profit']) == q1_worker_profit:
+                    print('correct!')
+                    QuizResponses.create(
+                        playerID=player.participant.playerID,
+                        question=data['question'],
+                        correct=True,
+                    )
+                    return {my_id: dict(correct=True, question=data['question'])}
+                else:
+                    print('False')
+                    QuizResponses.create(
+                        playerID=player.participant.playerID,
+                        question=data['question'],
+                        correct=False,
+                    )
+                    return {my_id: dict(correct=False, question=data['question'])}
+            elif data['question'] == 'q2':
+                print('Correct employer profit:', q2_employer_profit, 'Correct worker profit:', q2_worker_profit)
+                print('Received employer profit:', data['employer_profit'], 'Received worker profit:',
+                      data['worker_profit'])
+                if int(data['employer_profit']) == q2_employer_profit and int(
+                        data['worker_profit']) == q2_worker_profit:
+                    print('correct!')
+                    QuizResponses.create(
+                        playerID=player.participant.playerID,
+                        question=data['question'],
+                        correct=True,
+                    )
+                    return {my_id: dict(correct=True, question=data['question'])}
+                else:
+                    print('False')
+                    QuizResponses.create(
+                        playerID=player.participant.playerID,
+                        question=data['question'],
+                        correct=False,
+                    )
+                    return {my_id: dict(correct=False, question=data['question'])}
+            elif data['question'] == 'q3':
+                    print('Correct employer profit:', q3_employer_profit, 'Correct worker 1 profit:',
+                          q3_worker_profit_1, 'Correct worker 2 profit:', q3_worker_profit_2)
+                    print('Received employer profit:', data['employer_profit'], 'Received worker 1 profit:',
+                          data['worker_profit'], 'Received worker 2 profit:', data['worker_profit_2'])
+                    if int(data['employer_profit']) == q3_employer_profit and int(
+                            data['worker_profit']) == q3_worker_profit_1 and int(
+                            data['worker_profit_2']) == q3_worker_profit_2:
+                        QuizResponses.create(
+                            playerID=player.participant.playerID,
+                            question=data['question'],
+                            correct=True,
+                        )
+                        return {my_id: dict(correct=True, question=data['question'])}
+                    else:
+                        QuizResponses.create(
+                            playerID=player.participant.playerID,
+                            question=data['question'],
+                            correct=False,
+                        )
+                        return {my_id: dict(correct=False, question=data['question'])}
+            else:
+                print('received wrong question')
+        elif data['information_type'] == 'page_loaded':
+            pass
+        else:
+            print('received wrong information type')
 
 
 
