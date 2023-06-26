@@ -249,9 +249,9 @@ class InstructionsWorkers(Page):
         q2_effort_worth = session.config['MPL_high'][0] if C.Q2_EFFORT_RECEIVED == "high" else session.config['MPL_low'][0]
         q3_effort_worth_1 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['MPL_low'][1]
         q3_effort_worth_2 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['MPL_low'][1]
-        q2_effort_cost = session.config['effort_costs_points'][0] if C.Q2_EFFORT_RECEIVED == "high" else session.config['effort_costs_points'][1]
-        q3_effort_cost_1 = session.config['effort_costs_points'][0] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['effort_costs_points'][1]
-        q3_effort_cost_2 = session.config['effort_costs_points'][0] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['effort_costs_points'][1]
+        q2_effort_cost = session.config['effort_costs_points'][1] if C.Q2_EFFORT_RECEIVED == "high" else session.config['effort_costs_points'][0]
+        q3_effort_cost_1 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['effort_costs_points'][0]
+        q3_effort_cost_2 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['effort_costs_points'][0]
 
         if player.participant.currency_is_points:
             q1_employer_profit = session.config['employer_outside_option']

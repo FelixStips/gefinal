@@ -446,17 +446,19 @@
     </div>
     <br>
     <p>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this); ChangeHeaderBack();">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this);">Previous</button>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToComprehension(this)" style="float: right;">Next</button>
     </p>
 </div>
+
+
 
 <div class="tab" id="comprehension_q1" data-solved="0" style="display: none">
     <div class="card">
         <h5 class="card-header">Question 1</h5>
         <div class="card-body">
             <p>
-                Suppose an employer employed no worker and a worker accepted no job.
+                Suppose an employer employed no worker and a worker accepted no job. <br>
                 What profits would the worker and the employer make in this case?
             </p>
             <table>
@@ -472,12 +474,70 @@
                     </td>
                 </tr>
             </table>
+            <div style="margin-top: 20px;"></div>
+            <hr style="border-top: 1px solid #ccc;">
+            <button type="button" class="btn btn-outline-secondary" id="show-info-button1" onclick="showInformation()" style="display: none">Click for information on how profits are calculated</button>
+            <button type="button" class="btn btn-outline-secondary" id="hide-info-button1" onclick="hideInformation()" style="display: none">Click to hide information</button>
+            <div id="explainer-clicked1" style="display: none">
+                    <h5 class="underline">Worker profits</h5>
+                <ul class="list" style="margin-top: -10px;">
+                    <li> If a worker accepts no job offer, you earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b>.</li>
+                    <li> If a worker a job offer and chooses Low effort, profits equal the wage minus the low cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                    <li> If a worker a job offer and chooses High effort, profits equal the wage minus the high cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                </ul>
+                <div style="margin-top: 20px;"></div>
+                <h5 class="underline">Employer profits</h5>
+                 <p class="block-sentence">
+                    If an employers <b>does not employ any workers</b>, they earn <b>0 {{ currency_plural }}</b>.
+                    If they employ one or two workers, profits are the difference between the total revenue and the wages they pay:
+                </p>
+                <p style="margin-left: 50px;">
+                    <b>Profit = Total revenue - total wage payments</b>.
+                </p>
+                <p class="block-sentence">
+                    The total revenue depends on the number of workers they employ and the effort workers choose, according to the table below.
+                </p>
+                   <div style="max-width: 80%; margin: 0 auto; padding: 10px;">
+                      <table style="border-collapse: collapse; width: 100%;">
+                        <tr>
+                            <th style="border: 1px solid black;">Case</th>
+                            <th style="border: 1px solid black;">Revenue per worker</th>
+                            <th style="border: 1px solid black;">Total revenue</th>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers chose High effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }}</td>
+                            <td style="border: 1px solid black;">{{ total_gain_high_effort_2_workers }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses High effort.<br>The other worker chooses Low effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_mix_effort_2_workers }}</td>
+                            <td style="border: 1px solid black;">{{ total_gain_mix_effort_2_workers }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers chose Low effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_low_effort_2_workers }}</td>
+                            <td style="border: 1px solid black;">{{ total_gain_low_effort_2_workers }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses High effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
+                            <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Low effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_low_effort_1_worker }}</td>
+                            <td style="border: 1px solid black;">{{ gain_low_effort_1_worker }}</td>
+                        </tr>
+                    </table>
+                    </div>
+                <div style="margin-bottom: 10px;"></div>
+                <p>
+                    <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
+                </p>
+            </div>
         </div>
     </div>
-    <br>
-    <p>
-        <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
-    </p>
 </div>
 
 
@@ -506,12 +566,69 @@
                     </td>
                 </tr>
             </table>
+            <div style="margin-top: 20px;"></div>
+            <button type="button" class="btn btn-outline-secondary" id="show-info-button2" onclick="showInformation()" style="display: none">Click for information on how profits are calculated</button>
+            <button type="button" class="btn btn-outline-secondary" id="hide-info-button2" onclick="hideInformation()" style="display: none">Click to hide information</button>
+            <div id="explainer-clicked2" style="display: none">
+                    <h5 class="underline">Worker profits</h5>
+                <ul class="list" style="margin-top: -10px;">
+                    <li> If a worker accepts no job offer, you earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b>.</li>
+                    <li> If a worker a job offer and chooses Low effort, profits equal the wage minus the low cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                    <li> If a worker a job offer and chooses High effort, profits equal the wage minus the high cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                </ul>
+                <br>
+                <h5 class="underline">Employer profits</h5>
+                 <p class="block-sentence">
+                    If an employers <b>does not employ any workers</b>, they earn <b>0 {{ currency_plural }}</b>.
+                    If they employ one or two workers, profits are the difference between the total revenue and the wages they pay:
+                </p>
+                <p style="margin-left: 50px;">
+                    <b>Profit = Total revenue - total wage payments</b>.
+                </p>
+                <p class="block-sentence">
+                    The total revenue depends on the number of workers they employ and the effort workers choose, according to the table below.
+                </p>
+                   <div style="max-width: 80%; margin: 0 auto; padding: 10px;">
+                      <table style="border-collapse: collapse; width: 100%;">
+                        <tr>
+                            <th style="border: 1px solid black;">Case</th>
+                            <th style="border: 1px solid black;">Revenue per worker</th>
+                            <th style="border: 1px solid black;">Total revenue</th>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers chose High effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }}</td>
+                            <td style="border: 1px solid black;">{{ total_gain_high_effort_2_workers }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses High effort.<br>The other worker chooses Low effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_mix_effort_2_workers }}</td>
+                            <td style="border: 1px solid black;">{{ total_gain_mix_effort_2_workers }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers chose Low effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_low_effort_2_workers }}</td>
+                            <td style="border: 1px solid black;">{{ total_gain_low_effort_2_workers }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses High effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
+                            <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Low effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_low_effort_1_worker }}</td>
+                            <td style="border: 1px solid black;">{{ gain_low_effort_1_worker }}</td>
+                        </tr>
+                    </table>
+                    </div>
+                <div style="margin-bottom: 10px;"></div>
+                <p>
+                    <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
+                </p>
+            </div>
         </div>
     </div>
-    <br><br>
-    <p>
-        <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
-    </p>
 </div>
 
 
@@ -524,8 +641,8 @@
         <div class="card-body">
             <p>
                 Suppose an employer employed two workers.<br>
-                The first worker receives a wage of <b>{{ q3_wage_1 }}</b> and provides <b>{{ q3_effort_requested_1 }}</b> effort units.<br>
-                The second worker receives a wage of <b>{{ q3_wage_2 }}</b> and provides <b>{{ q3_effort_requested_2 }}</b> effort units.<br>
+                Worker 1 receives a wage of <b>{{ q3_wage_1 }}</b> and provides <b>{{ q3_effort_received_1 }}</b> effort.<br>
+                Worker 2 receives a wage of <b>{{ q3_wage_2 }}</b> and provides <b>{{ q3_effort_received_2 }}</b> effort.<br>
             </p>
              <p>
                 What profits would the employer and workers make in this case?
@@ -546,23 +663,75 @@
                     </td>
                 </tr>
             </table>
+            <div style="margin-top: 20px;"></div>
+            <button type="button" class="btn btn-outline-secondary" id="show-info-button3" onclick="showInformation()" style="display: none">Click for information on how profits are calculated</button>
+            <button type="button" class="btn btn-outline-secondary" id="hide-info-button3" onclick="hideInformation()" style="display: none">Click to hide information</button>
+            <div id="explainer-clicked3" style="display: none">
+                    <h5 class="underline">Worker profits</h5>
+                <ul class="list" style="margin-top: -10px;">
+                    <li> If a worker accepts no job offer, you earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b>.</li>
+                    <li> If a worker a job offer and chooses Low effort, profits equal the wage minus the low cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                    <li> If a worker a job offer and chooses High effort, profits equal the wage minus the high cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                </ul>
+                <br>
+                <h5 class="underline">Employer profits</h5>
+                 <p class="block-sentence">
+                    If an employers <b>does not employ any workers</b>, they earn <b>0 {{ currency_plural }}</b>.
+                    If they employ one or two workers, profits are the difference between the total revenue and the wages they pay:
+                </p>
+                <p style="margin-left: 50px;">
+                    <b>Profit = Total revenue - total wage payments</b>.
+                </p>
+                <p class="block-sentence">
+                    The total revenue depends on the number of workers they employ and the effort workers choose, according to the table below.
+                </p>
+                   <div style="max-width: 80%; margin: 0 auto; padding: 10px;">
+                      <table style="border-collapse: collapse; width: 100%;">
+                        <tr>
+                            <th style="border: 1px solid black;">Case</th>
+                            <th style="border: 1px solid black;">Revenue per worker</th>
+                            <th style="border: 1px solid black;">Total revenue</th>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers chose High effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }}</td>
+                            <td style="border: 1px solid black;">{{ total_gain_high_effort_2_workers }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses High effort.<br>The other worker chooses Low effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_mix_effort_2_workers }}</td>
+                            <td style="border: 1px solid black;">{{ total_gain_mix_effort_2_workers }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers chose Low effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_low_effort_2_workers }}</td>
+                            <td style="border: 1px solid black;">{{ total_gain_low_effort_2_workers }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses High effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
+                            <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Low effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_low_effort_1_worker }}</td>
+                            <td style="border: 1px solid black;">{{ gain_low_effort_1_worker }}</td>
+                        </tr>
+                    </table>
+                    </div>
+                <div style="margin-top: 10px;"></div>
+                <p>
+                    <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
+                </p>
+            </div>
         </div>
     </div>
-    <p>
-        <button type="button" class="btn btn-link" onclick="GoBackToInstructions()"> Go back to instructions </button>
-    </p>
 </div>
 
 
 <br><br>
 
-
-
-<br><br>
-
 <button class="otree-btn-next btn otree-next-button invisible" id="to_next_page"></button>
-
-
 
 {{ endblock }}
 
@@ -586,41 +755,60 @@
         nextTab.style.display = "block";
     }
 
-    function ChangeHeader() {
-        document.getElementById("header").innerHTML = "Quiz";
+    function showInformation() {
+        document.getElementById("explainer-clicked1").style.display = "block";
+        document.getElementById("show-info-button1").style.display = "none";
+        document.getElementById("hide-info-button1").style.display = "block";
     }
 
-    function ChangeHeaderBack() {
-        document.getElementById("header").innerHTML = "Instructions";
+    function hideInformation() {
+        document.getElementById("explainer-clicked1").style.display = "none";
+        document.getElementById("show-info-button1").style.display = "block";
+        document.getElementById("hide-info-button1").style.display = "none";
     }
 
     function GoBackToInstructions() {
+        console.log("Go back to instructions");
         document.getElementById("comprehension_q1").style.display = "none";
         document.getElementById("comprehension_q2").style.display = "none";
         document.getElementById("comprehension_q3").style.display = "none";
-        document.getElementById("header").innerHTML = "Instructions";
         document.getElementById("instructions_6").style.display = "block";
     }
 
     function MoveToComprehension() {
-        for (let i = 1; i <= 8; i++) {
-          document.getElementById("instructions_" + i).style.display = "none";
-        }
         document.getElementById("are_you_ready_q").style.display = "none";
+        for (var i = 1; i <= 7; i++) {
+          var instructionId = "instructions_" + i;
+          document.getElementById(instructionId).style.display = "none";
+        }
         let q1_solved = document.getElementById("comprehension_q1").getAttribute("data-solved");
         let q2_solved = document.getElementById("comprehension_q2").getAttribute("data-solved");
         let q3_solved = document.getElementById("comprehension_q3").getAttribute("data-solved");
         if (q1_solved === "0") {
             document.getElementById("comprehension_q1").style.display = "block";
+            document.getElementById("hide-info-button1").style.display = "none";
+            document.getElementById("show-info-button1").style.display = "block";
+            document.getElementById("explainer-clicked1").style.display = "none";
         } else if (q2_solved === "0") {
             console.log("showing q2")
             document.getElementById("comprehension_q2").style.display = "block";
+            document.getElementById("hide-info-button1").style.display = "none";
+            document.getElementById("show-info-button1").style.display = "none";
+            document.getElementById("explainer-clicked1").style.display = "none";
+            document.getElementById("hide-info-button2").style.display = "none";
+            document.getElementById("show-info-button2").style.display = "block";
+            document.getElementById("explainer-clicked2").style.display = "none";
         } else if (q3_solved === "0") {
             document.getElementById("comprehension_q3").style.display = "block";
+            document.getElementById("hide-info-button2").style.display = "none";
+            document.getElementById("show-info-button2").style.display = "none";
+            document.getElementById("explainer-clicked2").style.display = "none";
+            document.getElementById("hide-info-button3").style.display = "none";
+            document.getElementById("show-info-button3").style.display = "block";
+            document.getElementById("explainer-clicked3").style.display = "none";
         } else {
             document.getElementById("to_next_page").click();
         }
-        document.getElementById("header").innerHTML = "Quiz";
     }
 
     function liveRecv(data) {
@@ -704,14 +892,5 @@
 </script>
 
 
-<!-- MathJax -->
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script type="text/javascript" id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
-    window.MathJax = {
-      loader: {load: ['[tex]/cases']},
-      tex: {packages: {'[+]': ['cases']}}
-    };
-</script>
 
 {{ endblock }}
