@@ -36,9 +36,11 @@
     <h5 class="card-header">Overview</h5>
     <div class="card-body">
         <p>
-            The second part of the experiment is very similar to the first part. <br>
+            The second part of the experiment is very similar to the first part.
+        </p>
+        <p>
             There will be {{ num_rounds_left }} more rounds to play.
-            Each round will comprise a market and production stage like before.
+            Each round will comprise a market and production stage like before.<br>
         </p>
     </div>
 </div>
@@ -55,6 +57,8 @@
      <div class="card-body">
          <p>
             You have been moved to a different market.
+         </p>
+         <p>
             This market is different from the market you were in before.
             There are {{ num_employers }} employer(s) and {{ num_workers }} worker(s) in this market.<br>
          </p>
@@ -68,20 +72,42 @@
 
                 <!--  CASE 2: EMPLOYERS IN THE LARGE MARKET -->
                {% if is_employer == True %}
-                    <div class="card">
-                        <h5 class="card-header">Differences to Part 1</h5>
-                            <div class="card-body">
-                                <p>
-                                    The difference is that {{ shock_size }} worker(s) from another market have joined this market.
-                                    The new workers played in a low-income market before. This means that they provided similar effort levels for lower wages.
-                                    For example, the average in your market was X for an average effort of Y. For this wage,workers in the low-income market provided on average an effort of Z. <br>
-                                 </p>
-                                <p>
-                                    The number of employers is the same as in the first part of the experiment.
-                                    This means that there are {{ num_employers }} employer(s) and {{ num_workers }} worker(s) in this market.<br>
-                                </p>
-                            </div>
-                    </div>
+
+                    {% if income_diff == True %}
+                        <div class="card">
+                            <h5 class="card-header">Differences to Part 1</h5>
+                                <div class="card-body">
+                                    <p>
+                                        The difference is that {{ shock_size }} worker(s) from another market have joined this market.
+                                    </p>
+                                    <p>
+                                        The new workers played in a different market, where firms were less productive and thus paid lower wages.
+                                        For this reason, a high share of the workers provide high effort even at low wages.
+                                    </p>
+                                    <p>
+                                        The number of employers is the same as in the first part of the experiment.
+                                        This means that there are {{ num_employers }} employer(s) and {{ num_workers }} worker(s) in this market.<br>
+                                    </p>
+                                </div>
+                        </div>
+                    {% else %}
+                        <div class="card">
+                            <h5 class="card-header">Differences to Part 1</h5>
+                                <div class="card-body">
+                                    <p>
+                                        The difference is that {{ shock_size }} worker(s) from another market have joined this market.
+                                        The new workers played in a market, which was the same as your market.
+                                     </p>
+                                    <p>
+                                        The number of employers is the same as in the first part of the experiment.
+                                        This means that there are {{ num_employers }} employer(s) and {{ num_workers }} worker(s) in this market.<br>
+                                    </p>
+                                </div>
+                        </div>
+
+
+                    {% endif %}
+
                 <br><br>
 
 
@@ -92,6 +118,8 @@
                             <div class="card-body">
                                 <p>
                                     The difference is that {{ shock_size }} worker(s) from another market have joined this market.
+                                </p>
+                                <p>
                                     The number of employers is the same as in the first part of the experiment.
                                     This means that there are {{ num_employers }} employer(s) and {{ num_workers }} worker(s) in this market.<br>
                                 </p>
