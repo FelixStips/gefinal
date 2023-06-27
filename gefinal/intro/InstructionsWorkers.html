@@ -460,8 +460,8 @@
             </table>
             <div style="margin-top: 20px;"></div>
             <hr style="border-top: 1px solid #ccc;">
-            <button type="button" class="btn btn-outline-secondary" id="show-info-button1" onclick="showInformation()" style="display: none">Click for information on how profits are calculated</button>
-            <button type="button" class="btn btn-outline-secondary" id="hide-info-button1" onclick="hideInformation()" style="display: none">Click to hide information</button>
+            <button type="button" class="btn btn-outline-secondary" id="show-info-button1" onclick="showInformation(this.id)" style="display: none">Click for information on how profits are calculated</button>
+            <button type="button" class="btn btn-outline-secondary" id="hide-info-button1" onclick="hideInformation(this.id)" style="display: none">Click to hide information</button>
             <div id="explainer-clicked1" style="display: none">
                     <h5 class="underline">Worker profits</h5>
                 <ul class="list" style="margin-top: -10px;">
@@ -551,8 +551,9 @@
                 </tr>
             </table>
             <div style="margin-top: 20px;"></div>
-            <button type="button" class="btn btn-outline-secondary" id="show-info-button2" onclick="showInformation()" style="display: none">Click for information on how profits are calculated</button>
-            <button type="button" class="btn btn-outline-secondary" id="hide-info-button2" onclick="hideInformation()" style="display: none">Click to hide information</button>
+            <hr style="border-top: 1px solid #ccc;">
+            <button type="button" class="btn btn-outline-secondary" id="show-info-button2" onclick="showInformation(this.id)" style="display: none">Click for information on how profits are calculated</button>
+            <button type="button" class="btn btn-outline-secondary" id="hide-info-button2" onclick="hideInformation(this.id)" style="display: none">Click to hide information</button>
             <div id="explainer-clicked2" style="display: none">
                     <h5 class="underline">Worker profits</h5>
                 <ul class="list" style="margin-top: -10px;">
@@ -648,8 +649,9 @@
                 </tr>
             </table>
             <div style="margin-top: 20px;"></div>
-            <button type="button" class="btn btn-outline-secondary" id="show-info-button3" onclick="showInformation()" style="display: none">Click for information on how profits are calculated</button>
-            <button type="button" class="btn btn-outline-secondary" id="hide-info-button3" onclick="hideInformation()" style="display: none">Click to hide information</button>
+            <hr style="border-top: 1px solid #ccc;">
+            <button type="button" class="btn btn-outline-secondary" id="show-info-button3" onclick="showInformation(this.id)" style="display: none">Click for information on how profits are calculated</button>
+            <button type="button" class="btn btn-outline-secondary" id="hide-info-button3" onclick="hideInformation(this.id)" style="display: none">Click to hide information</button>
             <div id="explainer-clicked3" style="display: none">
                     <h5 class="underline">Worker profits</h5>
                 <ul class="list" style="margin-top: -10px;">
@@ -739,16 +741,20 @@
         nextTab.style.display = "block";
     }
 
-    function showInformation() {
-        document.getElementById("explainer-clicked1").style.display = "block";
-        document.getElementById("show-info-button1").style.display = "none";
-        document.getElementById("hide-info-button1").style.display = "block";
+    function showInformation(id) {
+        let buttonID = parseInt(id.slice(-1));
+        console.log(buttonID);
+        document.getElementById("explainer-clicked" + buttonID).style.display = "block";
+        document.getElementById("show-info-button" + buttonID).style.display = "none";
+        document.getElementById("hide-info-button" + buttonID).style.display = "block";
     }
 
-    function hideInformation() {
-        document.getElementById("explainer-clicked1").style.display = "none";
-        document.getElementById("show-info-button1").style.display = "block";
-        document.getElementById("hide-info-button1").style.display = "none";
+    function hideInformation(id) {
+        let buttonID = parseInt(id.slice(-1));
+        console.log(buttonID);
+        document.getElementById("explainer-clicked" + buttonID).style.display = "none";
+        document.getElementById("show-info-button" + buttonID).style.display = "block";
+        document.getElementById("hide-info-button" + buttonID).style.display = "none";
     }
 
     function GoBackToInstructions() {
@@ -802,11 +808,27 @@
                 document.getElementById("comprehension_q1").style.display = "none";
                 document.getElementById("comprehension_q2").style.display = "block";
                 document.getElementById("comprehension_q1").dataset.solved = "1";
+                document.getElementById("hide-info-button2").style.display = "block";
+                document.getElementById("show-info-button2").style.display = "none";
+                document.getElementById("explainer-clicked2").style.display = "none";
+                document.getElementById("comprehension_q2").style.display = "block";
+                document.getElementById("hide-info-button1").style.display = "none";
+                document.getElementById("show-info-button1").style.display = "none";
+                document.getElementById("explainer-clicked1").style.display = "none";
+                document.getElementById("hide-info-button2").style.display = "none";
+                document.getElementById("show-info-button2").style.display = "block";
+                document.getElementById("explainer-clicked2").style.display = "none";
             } else if (data.question === "q2") {
                 alert("Correct answer. Proceeding to next question.")
                 document.getElementById("comprehension_q2").style.display = "none";
                 document.getElementById("comprehension_q3").style.display = "block";
                 document.getElementById("comprehension_q2").dataset.solved = "1";
+                document.getElementById("hide-info-button2").style.display = "none";
+                document.getElementById("show-info-button2").style.display = "none";
+                document.getElementById("explainer-clicked2").style.display = "none";
+                document.getElementById("hide-info-button3").style.display = "none";
+                document.getElementById("show-info-button3").style.display = "block";
+                document.getElementById("explainer-clicked3").style.display = "none";
             } else if (data.question === "q3") {
                 alert("You have successfully completed the quiz. Proceeding to next page.")
                 document.getElementById("comprehension_q3").style.display = "none";
