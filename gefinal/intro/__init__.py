@@ -6,8 +6,6 @@ random.seed(10)
 doc = """
 TO-DO's:
     - Add setting of whether there is income difference --> is this needed? can set exchange rate to 1.
-    - Adjust quiz questions
-    - Improve employer table instructions
     - Add minimum payment
     - Improve design of payment screen
 TO-TEST:    

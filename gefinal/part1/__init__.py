@@ -420,28 +420,27 @@ class ResultsWaitPage(WaitPage):
                 p.worker_counter = 0
                 for o in offers:
                     if p.participant.playerID == o.employer_id and o.status == 'accepted':
+                        #print (o)
                         p.worker_counter += 1
                         p.total_effort_received += o.effort_given
-                        #p.total_wage_paid_points += o.wage_points                                                      # I was adding the wage twice, once before in the live_method
-                        #p.total_wage_paid_tokens += o.wage_tokens
                         if p.worker_counter == 1:
                             p.worker1_wage_points = o.wage_points
                             p.worker1_wage_tokens = o.wage_tokens
                             p.worker1_effort_given = o.effort_given
                             p.worker1_effort = o.effort
                             p.worker1_id = o.worker_id
-                            p.worker1_profit_points = p.worker1_wage_points - session.config['effort_costs_points'][p.worker1_effort]
-                            print('Worker 1 got wage', p.worker1_wage_points, 'points and provided', p.worker1_effort, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker1_effort], 'which gives profit of', p.worker1_profit_points)
-                            p.worker1_profit_tokens = p.worker1_wage_tokens - session.config['effort_costs_points'][p.worker1_effort] * session.config['exchange_rate']
+                            p.worker1_profit_points = p.worker1_wage_points - session.config['effort_costs_points'][p.worker1_effort_given]
+                            #print('Worker 1 got wage', p.worker1_wage_points, 'points and provided', p.worker1_effort_given, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker1_effort], 'which gives profit of', p.worker1_profit_points)
+                            p.worker1_profit_tokens = p.worker1_wage_tokens - session.config['effort_costs_points'][p.worker1_effort_given] * session.config['exchange_rate']
                         elif p.worker_counter == 2:
                             p.worker2_wage_points = o.wage_points
                             p.worker2_wage_tokens = o.wage_tokens
                             p.worker2_effort = o.effort
                             p.worker2_effort_given = o.effort_given
                             p.worker2_id = o.worker_id
-                            p.worker2_profit_points = p.worker2_wage_points - session.config['effort_costs_points'][p.worker2_effort]
-                            print('Worker 2 got wage', p.worker2_wage_points, 'points and provided', p.worker2_effort, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker2_effort], 'which gives profit of', p.worker2_profit_points)
-                            p.worker2_profit_tokens = p.worker2_wage_tokens - session.config['effort_costs_points'][p.worker2_effort] * session.config['exchange_rate']
+                            p.worker2_profit_points = p.worker2_wage_points - session.config['effort_costs_points'][p.worker2_effort_given]
+                            #print('Worker 2 got wage', p.worker2_wage_points, 'points and provided', p.worker2_effort_given, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker2_effort_given], 'which gives profit of', p.worker2_profit_points)
+                            p.worker2_profit_tokens = p.worker2_wage_tokens - session.config['effort_costs_points'][p.worker2_effort_given] * session.config['exchange_rate']
                     else:
                         pass
                 if p.num_workers_employed == 0:
@@ -517,6 +516,8 @@ class Results(Page):
     def vars_for_template(player: Player):
         group = player.group
         session = player.session
+        players = group.get_players()
+
 
         if player.participant.is_employer is False:
             others = player.get_others_in_group()
@@ -536,6 +537,13 @@ class Results(Page):
         effort_string = "high" if player.field_maybe_none('effort_choice') == 1 else ("low" if player.field_maybe_none('effort_choice') == 0 else "")
         round_number = player.participant.round_number
         rounds_left_part_1 = session.config['shock_after_rounds'] - round_number
+
+        for p in players:
+            if p.participant.is_employer is True:
+                print('Worker 1 effort requested:', worker1_effort)
+                print('Worker 1 effort given:', worker1_effort_given)
+                print('Worker 2 effort requested:', worker2_effort)
+                print('Worker 2 effort given:', worker2_effort_given)
 
         return dict(
             round_number=round_number,
