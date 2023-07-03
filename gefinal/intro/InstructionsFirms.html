@@ -72,7 +72,7 @@
                 All {{ currency_plural }} you earn will be converted to Pounds at the end of the experiment. The exchange rate will be
             </p>
              <p style="margin-left: 50px;">
-                    <b>1 {{ currency }} = {{ exchange_rate }} Pounds </b>.
+                    <b>1 {{ currency }} = {{ exchange_rate }} Pounds</b>.
              </p>
             <p class="block-sentence">
                 At the end of the experiment, you will receive the money you earned during the experiment in addition to your {{ participation_fee }}-Pound initial endowment.
@@ -132,7 +132,7 @@
             </p>
             <p class="block-sentence">
                 In the first part, you will interact in a group of {{ players_in_your_group }} randomly assigned participants.
-                Each group has {{ employers_in_your_group }} employers and {{ workers_in_your_group }} workers.
+                Each group has {{ employers_in_your_group }} employer(s) and {{ workers_in_your_group }} worker(s).
             </p>
             <p class="block-sentence">
                 All participants have received an identification number, which they will keep for the entire experiment.
@@ -181,7 +181,7 @@
             </p>
                 <ul class="list" style="margin-top: -10px">
                     <li>	The wage they will pay  </li>
-                    <li>	The effort they want the worker to choose </li>
+                    <li>	The effort they want the worker to provide </li>
                 </ul>
 
             <p class="block-sentence">
@@ -256,7 +256,6 @@
                     <img src="{% static 'instructions/employer_tokens_2.jpg' %}" alt="Employer 2 tokens" style="max-width: 80%;"/>
                 {% endif %}
             </div>
-            {% endif %}
             <p class="block-sentence">
                 Workers can accept an offer as long as it is "open".
                 You can have up two open job offers at a time.
@@ -269,16 +268,11 @@
                 If your offer is accepted, you will see a notification and the offer will appear in the "Accepted Offers" table.
                 See the figure below for an example of how the screen will look after a worker accepts your first job offer.
             </p>
-             {% if player.participant.currency_is_points == True %}
-                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                    <img src="{{ static 'employer_points_3.jpg' }}" alt="Employer 3 points"/>
-                </div>
-            {% else %}
-                <div style="display: flex; justify-content: center; padding-top: -15px; padding-bottom: 15px;">
-                    <img src="{{ static 'employer_tokens_3.jpg' }}" alt="Employer 3 tokens"/>
-                </div>
-            {% endif %}
-
+                {% if player.participant.currency_is_points == True %}
+                    <img src="{% static 'instructions/employer_points_3.jpg' %}" alt="Employer 2 points" style="max-width: 80%;"/>
+                {% else %}
+                    <img src="{% static 'instructions/employer_tokens_3.jpg' %}" alt="Employer 2 tokens" style="max-width: 80%;"/>
+                {% endif %}
             <p class="block-sentence">
                 The market phase <b>ends</b> when all workers have accepted an offer or when the time limit of {{ market_time }} seconds is reached.
                 The time left in the current round will be displayed in a yellow box at the top of the page.

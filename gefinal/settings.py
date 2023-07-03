@@ -20,7 +20,7 @@ SESSION_CONFIGS = [
                        'questionnaire',
                        'end'],
          num_demo_participants=9,
-         final=False,                                                              # Display instructions
+         final=True,                                                              # Display instructions
          market_timeout_seconds=180,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          showup_fee=5.0,                                                           # Participation show-up fee
@@ -75,7 +75,7 @@ SESSION_FIELDS = []
 LANGUAGE_CODE = 'en'
 
 # e.g. EUR, GBP, CNY, JPY
-REAL_WORLD_CURRENCY_CODE = 'Euro'
+REAL_WORLD_CURRENCY_CODE = 'Pounds'
 USE_POINTS = True
 
 ADMIN_USERNAME = 'admin'
