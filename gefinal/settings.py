@@ -25,7 +25,7 @@ SESSION_CONFIGS = [
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          showup_fee=5.0,                                                           # Participation show-up fee
          min_pay=11.0,                                                             # Minimum payment
-         payout_rate=0.1,                                                          # Payout rate: 1 point = X Euros
+         payout_rate=0.01,                                                          # Payout rate: 1 point = X Pounds
          exchange_rate=2,                                                          # Exchange rate: 1 point = X tokens
          employer_outside_option=0,                                                # Outside option for employers in points
          worker_outside_option=0,                                                  # Outside option for workers in points

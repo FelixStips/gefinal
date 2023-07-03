@@ -537,13 +537,12 @@ class Results(Page):
         effort_string = "high" if player.field_maybe_none('effort_choice') == 1 else ("low" if player.field_maybe_none('effort_choice') == 0 else "")
         round_number = player.participant.round_number
         rounds_left_part_1 = session.config['shock_after_rounds'] - round_number
-
-        for p in players:
-            if p.participant.is_employer is True:
-                print('Worker 1 effort requested:', worker1_effort)
-                print('Worker 1 effort given:', worker1_effort_given)
-                print('Worker 2 effort requested:', worker2_effort)
-                print('Worker 2 effort given:', worker2_effort_given)
+        average_wage_points = round(group.average_wage_points, 1) if group.average_wage_points is not None else None
+        average_wage_tokens = round(group.average_wage_tokens, 1) if group.average_wage_tokens is not None else None
+        average_profit_points = round(group.average_payoff_firms_points, 1) if group.average_payoff_firms_points is not None else None
+        average_profit_tokens = round(group.average_payoff_firms_tokens, 1) if group.average_payoff_firms_tokens is not None else None
+        average_income_points = round(group.average_payoff_workers_points, 1) if group.average_payoff_workers_points is not None else None
+        average_income_tokens = round(group.average_payoff_workers_tokens, 1) if group.average_payoff_workers_tokens is not None else None
 
         return dict(
             round_number=round_number,
@@ -564,12 +563,12 @@ class Results(Page):
             employer_payoff_tokens=player.field_maybe_none('employer_payoff_tokens'),
             total_payoff_points=sum(player.participant.vars['total_points']),
             total_payoff_tokens=sum(player.participant.vars['total_tokens']),
-            average_wage_points=group.field_maybe_none('average_wage_points'),
-            average_wage_tokens=group.field_maybe_none('average_wage_tokens'),
-            average_profit_points=group.average_payoff_firms_points,
-            average_profit_tokens=group.average_payoff_firms_tokens,
-            average_income_points=group.average_payoff_workers_points,
-            average_income_tokens=group.average_payoff_workers_tokens,
+            average_wage_points=average_wage_points,
+            average_wage_tokens=average_wage_tokens,
+            average_profit_points=average_profit_points,
+            average_profit_tokens=average_profit_tokens,
+            average_income_points=average_income_points,
+            average_income_tokens=average_income_tokens,
             average_effort=average_effort,
             num_unmatched_workers=group.field_maybe_none('num_unmatched_workers'),
             worker1_wage_points=player.field_maybe_none('worker1_wage_points'),
