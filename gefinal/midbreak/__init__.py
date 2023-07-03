@@ -39,7 +39,7 @@ class AnotherInstruction(Page):
     def vars_for_template(player: Player):
         session = player.session
         print(session.config['exchange_rate'])
-        income_diff = True if session.config['exchange_rate'] == 1 else False
+        income_diff = False if session.config['exchange_rate'] == 1 else True
 
         if player.participant.vars['large_market_1'] or player.participant.vars['move_to_market_1']:
             size_market = session.config['size_large_market'] + session.config['migration_small_shock_size']
