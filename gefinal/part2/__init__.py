@@ -431,18 +431,18 @@ class ResultsWaitPage(WaitPage):
                             p.worker1_effort_given = o.effort_given
                             p.worker1_effort = o.effort
                             p.worker1_id = o.worker_id
-                            p.worker1_profit_points = p.worker1_wage_points - session.config['effort_costs_points'][p.worker1_effort]
-                            print('Worker 1 got wage', p.worker1_wage_points, 'points and provided', p.worker1_effort, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker1_effort], 'which gives profit of', p.worker1_profit_points)
-                            p.worker1_profit_tokens = p.worker1_wage_tokens - session.config['effort_costs_points'][p.worker1_effort] * session.config['exchange_rate']
+                            p.worker1_profit_points = p.worker1_wage_points - session.config['effort_costs_points'][p.worker1_effort_given]
+                            print('Worker 1 got wage', p.worker1_wage_points, 'points and provided', p.worker1_effort_given, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker1_effort], 'which gives profit of', p.worker1_profit_points)
+                            p.worker1_profit_tokens = p.worker1_wage_tokens - session.config['effort_costs_points'][p.worker1_effort_given] * session.config['exchange_rate']
                         elif p.worker_counter == 2:
                             p.worker2_wage_points = o.wage_points
                             p.worker2_wage_tokens = o.wage_tokens
                             p.worker2_effort = o.effort
                             p.worker2_effort_given = o.effort_given
                             p.worker2_id = o.worker_id
-                            p.worker2_profit_points = p.worker2_wage_points - session.config['effort_costs_points'][p.worker2_effort]
-                            print('Worker 2 got wage', p.worker2_wage_points, 'points and provided', p.worker2_effort, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker2_effort], 'which gives profit of', p.worker2_profit_points)
-                            p.worker2_profit_tokens = p.worker2_wage_tokens - session.config['effort_costs_points'][p.worker2_effort] * session.config['exchange_rate']
+                            p.worker2_profit_points = p.worker2_wage_points - session.config['effort_costs_points'][p.worker2_effort_given]
+                            print('Worker 2 got wage', p.worker2_wage_points, 'points and provided', p.worker2_effort_given, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker2_effort], 'which gives profit of', p.worker2_profit_points)
+                            p.worker2_profit_tokens = p.worker2_wage_tokens - session.config['effort_costs_points'][p.worker2_effort_given] * session.config['exchange_rate']
                     else:
                         pass
                 if p.num_workers_employed == 0:
@@ -535,18 +535,12 @@ class Results(Page):
                 player.employer_payoff_tokens = None
 
         total_low_effort = player.num_workers_employed - player.total_effort_received if player.total_effort_received is not None else None
-        worker1_effort = "high" if player.field_maybe_none('worker1_effort') == 1 else (
-            "low" if player.field_maybe_none('worker1_effort') == 0 else "")
-        worker1_effort_given = "high" if player.field_maybe_none('worker1_effort_given') == 1 else (
-            "low" if player.field_maybe_none('worker1_effort_given') == 0 else "")
-        worker2_effort = "high" if player.field_maybe_none('worker2_effort') == 1 else (
-            "low" if player.field_maybe_none('worker2_effort') == 0 else "")
-        worker2_effort_given = "high" if player.field_maybe_none('worker2_effort_given') == 1 else (
-            "low" if player.field_maybe_none('worker2_effort_given') == 0 else "")
-        average_effort = int(group.field_maybe_none('average_effort') * 100) if group.field_maybe_none(
-            'average_effort') is not None else None
-        effort_string = "high" if player.field_maybe_none('effort_choice') == 1 else (
-            "low" if player.field_maybe_none('effort_choice') == 0 else "")
+        worker1_effort = "high" if player.field_maybe_none('worker1_effort') == 1 else ("low" if player.field_maybe_none('worker1_effort') == 0 else "")
+        worker1_effort_given = "high" if player.field_maybe_none('worker1_effort_given') == 1 else ("low" if player.field_maybe_none('worker1_effort_given') == 0 else "")
+        worker2_effort = "high" if player.field_maybe_none('worker2_effort') == 1 else ("low" if player.field_maybe_none('worker2_effort') == 0 else "")
+        worker2_effort_given = "high" if player.field_maybe_none('worker2_effort_given') == 1 else ("low" if player.field_maybe_none('worker2_effort_given') == 0 else "")
+        average_effort = int(group.field_maybe_none('average_effort') * 100) if group.field_maybe_none('average_effort') is not None else None
+        effort_string = "high" if player.field_maybe_none('effort_choice') == 1 else ("low" if player.field_maybe_none('effort_choice') == 0 else "")
         round_number = player.participant.round_number
         rounds_left_part_2 = session.config['total_rounds'] - round_number
 
