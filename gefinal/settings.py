@@ -14,7 +14,6 @@ SESSION_CONFIGS = [
          display_name="Main",
          app_sequence=['intro',
                        'part1',
-                       'quiz',
                        'midbreak',
                        'part2',
                        'questionnaire',
@@ -23,7 +22,7 @@ SESSION_CONFIGS = [
          final=False,                                                              # Display instructions
          market_timeout_seconds=180,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
-         showup_fee=5.0,                                                           # Participation show-up fee
+         showup_fee=8.0,                                                           # Participation show-up fee
          min_pay=11.0,                                                             # Minimum payment
          payout_rate=0.01,                                                          # Payout rate: 1 point = X Pounds
          exchange_rate=2,                                                          # Exchange rate: 1 point = X tokens
