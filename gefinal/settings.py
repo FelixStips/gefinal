@@ -6,6 +6,11 @@ ROOMS = [
         display_name='SSEL Lab B',
         participant_label_file='_rooms/SSEL_LabB.txt',
     ),
+    dict(
+        name='CeDEx',
+        display_name='CeDEx Lab',
+        participant_label_file='_rooms/CeDEx_Lab',
+    ),
 ]
 
 SESSION_CONFIGS = [
@@ -22,9 +27,8 @@ SESSION_CONFIGS = [
          final=False,                                                              # Display instructions
          market_timeout_seconds=180,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
-         showup_fee=8.0,                                                           # Participation show-up fee
-         min_pay=11.0,                                                             # Minimum payment
-         payout_rate=0.01,                                                          # Payout rate: 1 point = X Pounds
+         showup_fee=12.0,                                                          # Participation show-up fee
+         payout_rate=0.01,                                                         # Payout rate: 1 point = X Pounds
          exchange_rate=2,                                                          # Exchange rate: 1 point = X tokens
          employer_outside_option=0,                                                # Outside option for employers in points
          worker_outside_option=0,                                                  # Outside option for workers in points
@@ -66,7 +70,8 @@ PARTICIPANT_FIELDS = ['large_market',
                       'total_tokens',
                       'currency_is_points',
                       'round_for_points',
-                      'round_number',]
+                      'round_number',
+                      'date',]
 SESSION_FIELDS = []
 
 # ISO-639 code
