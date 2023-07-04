@@ -31,6 +31,7 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     playerID = models.IntegerField()
+    date = models.StringField()
 
 
 class QuizResponses(ExtraModel):
@@ -71,7 +72,7 @@ def creating_session(subsession: Subsession):
         participant_vars['total_tokens'] = []
         participant_vars['round_for_points'] = []
         participant_vars['round_number'] = 0
-        participant_vars['date'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        p.date = str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         if participant_vars['playerID'] <= size_large_market:
             participant_vars['large_market'] = True
             participant_vars['large_market_1'] = True
@@ -566,6 +567,7 @@ class WaitToStart(WaitPage):
     def is_displayed(player: Player):
         session = player.session
         return session.config['final']
+
 
 
 page_sequence = [Introduction,

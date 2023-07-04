@@ -64,7 +64,7 @@
         <h5 class="card-header">Payment</h5>
         <div class="card-body">
              <p class="block-sentence">
-                 At the beginning of the experiment, you will receive an  <b>initial endowment of {{ participation_fee }} Pound</b>.
+                 At the beginning of the experiment, you will receive an  <b>initial endowment of {{ participation_fee }} Pounds</b>.
                  During the experiment, you can earn more money by accumulating {{ currency_plural }}.
                  The amount earned will depend on your decisions and those of the other participants.
              </p>
@@ -161,7 +161,7 @@
                Effort is costly to workers, so they make profits only if their effort costs are lower than the wage they receive.
             </p>
             <p class="block-sentence">
-            On the other hand, your profits will depend on
+            On the other hand, your profits will depend on:
             </p>
             <ol class="list" style="margin-top: -10px">
                 <li> the number of workers you employ </li>
@@ -169,7 +169,7 @@
                 <li> the effort workers provide </li>
             </ol>
             <p class="block-sentence">
-                You make profits if the effort you receive is worth more than wage you pay.
+                You make profits if the effort you receive is worth more than the wage you pay.
             </p>
             <p>
                The first part lasts for {{ shock_after_rounds }} rounds. Each round has two phases:
@@ -233,7 +233,7 @@
                     <img src="{% static 'instructions/employer_tokens_1.jpg' %}" alt="Employer 1 tokens" style="max-width: 80%;"/>
                 {% endif %}
             </div>
-            <p class="block-sentence">
+            <p class="block-sentence" style="margin-top: 5px">
                 To <b>make a job offer</b>, use "Trading box" in the middle of the page.
                 You can send up to two job offers at the same time.
             </p>
@@ -246,8 +246,8 @@
                     <li>click on "Send Offer".</li>
                 </ol>
             <p class="block-sentence; padding-bottom: 5px;">
-                Once you <b>submit a job offer</b>, it will appear in the table "Open offers" at the bottom of the page. S
-                ee the figure below for an example of how the screen will look.
+                Once you <b>submit a job offer</b>, it will appear in the table "Open offers" at the bottom of the page.
+                See the figure below for an example of how the screen will look.
             </p>
             <div style="display: flex; justify-content: center;">
                 {% if player.participant.currency_is_points == True %}
@@ -256,7 +256,7 @@
                     <img src="{% static 'instructions/employer_tokens_2.jpg' %}" alt="Employer 2 tokens" style="max-width: 80%;"/>
                 {% endif %}
             </div>
-            <p class="block-sentence">
+            <p class="block-sentence" style="margin-top: 5px">
                 Workers can accept an offer as long as it is "open".
                 You can have up two open job offers at a time.
                 You can also submit no offer at all.
@@ -273,10 +273,10 @@
                 {% else %}
                     <img src="{% static 'instructions/employer_tokens_3.jpg' %}" alt="Employer 2 tokens" style="max-width: 80%;"/>
                 {% endif %}
-            <p class="block-sentence">
+            <p class="block-sentence" style="margin-top: 5px">
                 The market phase <b>ends</b> when all workers have accepted an offer or when the time limit of {{ market_time }} seconds is reached.
                 The time left in the current round will be displayed in a yellow box at the top of the page.
-                When the market phase is over, no offers cannot be submitted or accepted.
+                When the market phase is over, no offers can be submitted or accepted.
             </p>
         </div>
     </div>
@@ -304,12 +304,12 @@
                 At the top of the page, workers see the wage they accepted and the effort requested by the employer.
                 Below, they see the cost of each effort choice.
             </p>
-                <ul class="list" style="margin-top: -10px; margin-bottom: 20px">
+                <ul class="list" style="margin-top: -10px; margin-bottom: 15px">
                     <li> <b> The cost of Low effort is {{ low_effort_points_tokens }} {{ currency_plural }} </b></li>
                     <li> <b> The cost of High effort is {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
                 </ul>
             <br>
-            <div style="display: flex; justify-content: center; margin-bottom: 15px">
+            <div style="display: flex; justify-content: center; margin-bottom: 10px">
                 {% if player.participant.currency_is_points == True %}
                     <img src="{% static 'instructions/employer_points_3.jpg' %}" alt="Employer 3 points" style="max-width: 80%;"/>
                 {% else %}
@@ -414,7 +414,6 @@
         </ul>
         <p>
            Note you <b>make</b> a loss if the total wage payments are larger than the total revenue.
-            Losses will be paid from your initial endowment.
         </p>
     </div>
     <br>

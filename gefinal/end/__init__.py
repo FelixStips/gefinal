@@ -29,6 +29,7 @@ class Player(BasePlayer):
     total_points = models.FloatField()
     total_tokens = models.FloatField()
     total_euros = models.FloatField()
+    email = models.StringField(label="""Please enter your Pay e-mail so that we can transfer your payout""",)
 
 
 # PAGES
@@ -37,6 +38,9 @@ class WaitForOtherPlayers(WaitPage):
 
 
 class Results(Page):
+    form_model = 'player'
+    form_fields = ['email']
+
     @staticmethod
     def vars_for_template(player: Player):
         session = player.session
@@ -55,7 +59,7 @@ class Results(Page):
         session = player.session
         player.total_points = sum(filter(None, player.participant.vars['total_points']))
         player.total_tokens = sum(filter(None, player.participant.vars['total_tokens']))
-        player.total_euros = session.config['payout_rate'] * player.total_points + session.config['showup_fee'] if player.total_points > 0 else session.config['showup_fee']
+        player.total_euros = round(session.config['payout_rate'] * player.total_points + session.config['showup_fee'], 2) if player.total_points > 0 else round(session.config['showup_fee'], 2)
         player.large_market = player.participant.vars['large_market']
         player.small_market = player.participant.vars['small_market']
         player.is_employer = player.participant.vars['is_employer']

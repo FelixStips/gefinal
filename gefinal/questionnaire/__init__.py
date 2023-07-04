@@ -33,10 +33,10 @@ class Player(BasePlayer):
         choices=['Arts','Business','Economics','Finance','Law','Mathematics','Medicine','Psychology','Natural Sciences','Engineering','Not applicable','Other','Prefer not to say'])
     country_of_birth = models.StringField(
         label="What is your country of birth?",
-        choices=['Luxembourg','Belgium','France','Germany','Other European','Other non-European','Prefer not to say'])
+        choices=['United Kingdom','Other European','Other non-European','Prefer not to say'])
     country_of_residence = models.StringField(
         label="What is your country of residence?",
-        choices=['Luxembourg','Belgium','France','Germany','Other European','Other non-European','Prefer not to say'])
+        choices=['United Kingdom','Other European','Other non-European','Prefer not to say'])
     parents_education = models.StringField(
         label="What is the highest level of education one or both of your parents completed?",
         choices=['Less than high school', 'High school', 'Some college', 'Bachelor’s degree', 'Master’s degree', 'Doctorate', 'Other', 'Prefer not to say'])
@@ -76,7 +76,7 @@ class Player(BasePlayer):
     NR11 = models.IntegerField(
         label="""
                  <p style="margin-top:1cm;">
-                     Please consider what you would do in the following situation: 
+                     <b>Please consider what you would do in the following situation</b>: 
                      you and a stranger are involved in a car accident. You are not to blame for the accident, 
                      but the stranger claims that you ran a red light even though it was the stranger himself 
                      who ran the red light. Even though the stranger’s claim is false, the claim is believed 
@@ -92,7 +92,7 @@ class Player(BasePlayer):
     )
     NR1 = models.StringField(
         label="""<p style="margin-top:1cm;">
-                    How do you see yourself: Are you a person who is generally willing to punish unfair behavior even if this is costly? <br> 
+                    <b>How do you see yourself: Are you a person who is generally willing to punish unfair behavior even if this is costly?</b> <br> 
                     <i>Please use a scale from 0 to 10, where 0 means you are “not willing at all to incur costs to punish unfair behavior” 
                     and a 10 means you are “very willing to incur costs to punish unfair behavior”. You can also use the values in-between to
                     indicate where you fall on the scale.</i>
@@ -101,8 +101,8 @@ class Player(BasePlayer):
         choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     )
     PR1 = models.StringField(
-        label="""Are you a person who is generally willing to go out of their way to return a favor or a help even if it is costly, 
-                or are you not willing to do so? <br> <i>Please use a scale from 0 to 10, where 0 means you are “not willing at all to incur costs to punish unfair behavior” 
+        label="""<b>Are you a person who is generally willing to go out of their way to return a favor or a help even if it is costly, 
+                or are you not willing to do so?</b> <br><br> <i>Please use a scale from 0 to 10, where 0 means you are “not willing at all to incur costs to punish unfair behavior” 
                 and a 10 means you are “very willing to incur costs to punish unfair behavior”. You can also use the values in-between to
                 indicate where you fall on the scale.</i>""",
         widget=widgets.RadioSelectHorizontal,
