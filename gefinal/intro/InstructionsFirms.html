@@ -134,11 +134,6 @@
                 In the first part, you will interact in a group of {{ players_in_your_group }} randomly assigned participants.
                 Each group has {{ employers_in_your_group }} employer(s) and {{ workers_in_your_group }} worker(s).
             </p>
-            <p class="block-sentence">
-                All participants have received an identification number, which they will keep for the entire experiment.
-                Your ID number is {{ player.participant.playerID }}.
-                Please write the ID number on the paper in front of you.
-            </p>
         </div>
     </div>
     <br>
@@ -169,7 +164,7 @@
                 <li> the effort workers provide </li>
             </ol>
             <p class="block-sentence">
-                You make profits if the effort you receive is worth more than the wage you pay.
+                You make profits if the effort you receive is worth more than the wages you pay.
             </p>
             <p>
                The first part lasts for {{ shock_after_rounds }} rounds. Each round has two phases:
@@ -199,7 +194,7 @@
             </p>
             <p class="block-sentence">
                 Once all workers have chosen their effort, everyone's profits are calculated and the next round starts.
-                The sum of profits across all rounds will determine your earnings for the experiment.
+                The sum of your profits across all rounds will determine your earnings for the experiment.
             </p>
         </div>
     </div>
@@ -242,7 +237,7 @@
             </p>
                 <ol class="list" style="margin-top: -10px">
                     <li>choose a wage between 0 and 100 {{ currency_plural }}.</li>
-                    <li>indicate whether you want the worker to choose <b>"high"</b> or <b>"low"</b> effort.</li>
+                    <li>indicate whether you want the worker to provide <b>"high"</b> or <b>"low"</b> effort.</li>
                     <li>click on "Send Offer".</li>
                 </ol>
             <p class="block-sentence; padding-bottom: 5px;">
@@ -297,10 +292,10 @@
             <p class="block-sentence">
                 Following the market phase, all workers who have accepted a job offer enter the production phase.
                In this phase, workers choose their effort. <b>The effort requested by employers is not binding</b>.
-               Hence, you can choose <b>high</b> or <b>low</b> effort irrespective of the effort indicated in the job offer.
+               Hence, workers can choose <b>high</b> or <b>low</b> effort irrespective of the effort indicated in the job offer.
             </p>
             <p class="block-sentence">
-                The page workers see looks like the one shown below.
+                The page which workers see looks like the one shown below.
                 At the top of the page, workers see the wage they accepted and the effort requested by the employer.
                 Below, they see the cost of each effort choice.
             </p>
@@ -416,8 +411,8 @@
            Note you <b>make</b> a loss if the total wage payments are larger than the total revenue.
         </p>
     </div>
-    <br>
      </div>
+        <br>
   <p>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this); ChangeHeader();">Previous</button>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>

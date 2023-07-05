@@ -29,7 +29,7 @@ class Player(BasePlayer):
     total_points = models.FloatField()
     total_tokens = models.FloatField()
     total_euros = models.FloatField()
-    email = models.StringField(label="""Please enter your Pay e-mail so that we can transfer your payout""",)
+    email = models.StringField(label="""Please enter <b>your PayPal email address</b> below, so that we can transfer the money to your account.""",)
 
 
 # PAGES
@@ -66,6 +66,7 @@ class Results(Page):
         player.playerID = player.participant.vars['playerID']
         player.string_role = player.participant.vars['string_role']
 
+class End(Page):
+    pass
 
-
-page_sequence = [Results]
+page_sequence = [Results, End]

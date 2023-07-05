@@ -12,10 +12,10 @@
 
 
 <div class="card">
-        <h5 class="card-header">Final Results</h5>
-        <div class="card-body">
+    <h5 class="card-header">Final Results</h5>
+    <div class="card-body">
              <p class="block-sentence">
-                 The experiment is now complete. Your ID number is {{ player.participant.playerID }}.
+                 The experiment is now complete.
              </p>
             <p class="block-sentence">
                 {% if currency_is_points == True %}
@@ -26,13 +26,16 @@
                     Together with the show-up fee, your final payoff will be <b>{{ total_euros }}</b> Pounds. <br>
                 {% endif %}
             </p>
-            <p class="block-sentence">
-                Please remain at your desk until all participants have completed the experiment.
-            </p>
+
+
+            {{ formfields }}
+
         </div>
 </div>
 
-{{ formfields }}
+<br>
+
+{{ next_button }}
 
 {{ endblock }}
 
