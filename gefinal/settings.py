@@ -22,6 +22,7 @@ SESSION_CONFIGS = [
                        'midbreak',
                         'part2',
                        'questionnaire',
+                       'questionnaire2',
                        'end'],
          num_demo_participants=9,
          final=False,                                                               # Display instructions
