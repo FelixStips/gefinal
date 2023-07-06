@@ -22,9 +22,12 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     Q1 = models.StringField(
         label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
-              and the same 50 percent chance of receiving nothing, or the amount of 160£ as a sure payment?""",
-        choices=[[1, '50 percent chance of receiving 300£'],
-                 [0, '160£ as a sure payment']])
+              and the same 50 percent chance of receiving nothing, or the amount of 160£ as a sure payment?<br>""",
+        widget=widgets.RadioSelectHorizontal,
+        choices=[
+                    [True, '50 percent chance of receiving 300£'],
+                    [False, '160£ as a sure payment'],
+                ])
     Q2A = models.StringField(
         label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
               and the same 50 percent chance of receiving nothing, or the amount of 240£ as a sure payment?""",
@@ -184,16 +187,25 @@ class Q1(Page):
 class Q2A(Page):
     form_model = 'player'
     form_fields = ['Q2A']
+
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q1 == 1
+        print(player.field_maybe_none('Q1'))
+        if player.field_maybe_none('Q1') is True:
+            print('Show Q2A')
+            return True
+
 
 class Q2B(Page):
     form_model = 'player'
     form_fields = ['Q2B']
+
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q1 == 0
+        print(player.field_maybe_none('Q1'))
+        if player.field_maybe_none('Q1') is False:
+            print('Show Q2B')
+            return True
 
 
 class Q3AA(Page):
@@ -202,7 +214,7 @@ class Q3AA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q2A == 1
+        return player.field_maybe_none('Q2A') is False
 
 class Q3AB(Page):
     form_model = 'player'
@@ -210,14 +222,14 @@ class Q3AB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q2A == 0
+        return player.field_maybe_none('Q2A') == 0
 
 class Q3BA(Page):
     form_model = 'player'
     form_fields = ['Q3BA']
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q2B == 1
+        return player.field_maybe_none('Q2B') == 1
 
 class Q3BB(Page):
     form_model = 'player'
@@ -225,7 +237,7 @@ class Q3BB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q2B == 0
+        return player.field_maybe_none('Q2B') == 0
 
 class Q4AAA(Page):
     form_model = 'player'
@@ -233,7 +245,7 @@ class Q4AAA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q3AA == 1
+        return player.field_maybe_none('Q3AA') == 1
 
 class Q4AAB(Page):
     form_model = 'player'
@@ -241,7 +253,7 @@ class Q4AAB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q3AA == 0
+        return player.field_maybe_none('Q3AA') == 0
 
 class Q4ABA(Page):
     form_model = 'player'
@@ -249,7 +261,7 @@ class Q4ABA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q3AB== 1
+        return player.field_maybe_none('Q3AB')== 1
 
 class Q4ABB(Page):
     form_model = 'player'
@@ -257,7 +269,7 @@ class Q4ABB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q3AB == 0
+        return player.field_maybe_none('Q3AB') == 0
 
 class Q4BAA(Page):
     form_model = 'player'
@@ -265,7 +277,7 @@ class Q4BAA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q3BA == 1
+        return player.field_maybe_none('Q3BA') == 1
 
 class Q4BAB(Page):
     form_model = 'player'
@@ -273,7 +285,7 @@ class Q4BAB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q3BA == 0
+        return player.field_maybe_none('Q3BA') == 0
 
 
 class Q4BBA(Page):
@@ -282,7 +294,7 @@ class Q4BBA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q3BB == 1
+        return player.field_maybe_none('Q3BB') == 1
 
 
 class Q4BBB(Page):
@@ -291,7 +303,7 @@ class Q4BBB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q3BB == 0
+        return player.field_maybe_none('Q3BB') == 0
 
 
 class Q5AAAA(Page):
@@ -300,14 +312,14 @@ class Q5AAAA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4AAA == 1
+        return player.field_maybe_none('Q4AAA') == 1
 
 class Q5AAAB(Page):
     form_model = 'player'
     form_fields = ['Q5AAAB']
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4AAA == 0
+        return player.field_maybe_none('Q4AAA') == 0
 
 class Q5AABA(Page):
     form_model = 'player'
@@ -315,7 +327,7 @@ class Q5AABA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4AAB == 1
+        return player.field_maybe_none('Q4AAB') == 1
 
 
 class Q5AABB(Page):
@@ -323,7 +335,7 @@ class Q5AABB(Page):
     form_fields = ['Q5AABB']
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4AAB == 0
+        return player.field_maybe_none('Q4AAB') == 0
 
 
 
@@ -333,7 +345,7 @@ class Q5ABAA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4ABA == 1
+        return player.field_maybe_none('Q4ABA') == 1
 
 
 class Q5ABAB(Page):
@@ -342,7 +354,7 @@ class Q5ABAB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4ABA == 0
+        return player.field_maybe_none('Q4ABA') == 0
 
 
 class Q5ABBA(Page):
@@ -351,7 +363,7 @@ class Q5ABBA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4ABB == 1
+        return player.field_maybe_none('Q4ABB') == 1
 
 
 class Q5ABBB(Page):
@@ -360,7 +372,7 @@ class Q5ABBB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4ABB == 0
+        return player.field_maybe_none('Q4ABB') == 0
 
 
 class Q5BAAA(Page):
@@ -369,7 +381,7 @@ class Q5BAAA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4BAA == 1
+        return player.field_maybe_none('Q4BAA') == 1
 
 
 class Q5BAAB(Page):
@@ -378,7 +390,7 @@ class Q5BAAB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4BAA == 0
+        return player.field_maybe_none('Q4BAA') == 0
 
 class Q5BABA(Page):
     form_model = 'player'
@@ -386,7 +398,7 @@ class Q5BABA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4BAB == 1
+        return player.field_maybe_none('Q4BAB') == 1
 
 
 class Q5BABB(Page):
@@ -395,7 +407,7 @@ class Q5BABB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4BAB == 0
+        return player.field_maybe_none('Q4BAB') == 0
 
 
 class Q5BBAA(Page):
@@ -404,7 +416,7 @@ class Q5BBAA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4BAB == 0
+        return player.field_maybe_none('Q4BAB') == 0
 
 
 class Q5BBAB(Page):
@@ -413,7 +425,7 @@ class Q5BBAB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4BAB == 0
+        return player.field_maybe_none('Q4BAB') == 0
 
 
 class Q5BBBA(Page):
@@ -422,7 +434,7 @@ class Q5BBBA(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4BBB == 1
+        return player.field_maybe_none('Q4BBB') == 1
 
 
 class Q5BBBB(Page):
@@ -431,41 +443,10 @@ class Q5BBBB(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.Q4BBB == 0
+        return player.field_maybe_none('Q4BBB') == 0
 
 
 
 
 
-page_sequence = [Q1,
-                    Q2A,
-                    Q2B,
-                    Q3AA,
-                    Q3AB,
-                    Q3BA,
-                    Q3BB,
-                    Q4AAA,
-                    Q4AAB,
-                    Q4ABA,
-                    Q4ABB,
-                    Q4BAA,
-                    Q4BAB,
-                    Q4BBA,
-                    Q4BBB,
-                    Q5AAAA,
-                    Q5AAAB,
-                    Q5AABA,
-                    Q5AABB,
-                    Q5ABAA,
-                    Q5ABAB,
-                    Q5ABBA,
-                    Q5ABBB,
-                    Q5BAAA,
-                    Q5BAAB,
-                    Q5BABA,
-                    Q5BABB,
-                    Q5BBAA,
-                    Q5BBAB,
-                    Q5BBBA,
-                    Q5BBBB
-                    ]
+page_sequence = [Q1,Q2A,Q2B,Q3AA,Q3AB,Q3BA,Q3BB,Q4AAA,Q4AAB,Q4ABA,Q4ABB,Q4BAA,Q4BAB,Q4BBA,Q4BBB,Q5AAAA,Q5AAAB,Q5AABA,Q5AABB,Q5ABAA,Q5ABAB,Q5ABBA,Q5ABBB,Q5BAAA,Q5BAAB,Q5BABA,Q5BABB,Q5BBAA,Q5BBAB,Q5BBBA,Q5BBBB]
