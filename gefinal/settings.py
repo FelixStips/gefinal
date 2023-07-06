@@ -20,7 +20,7 @@ SESSION_CONFIGS = [
          app_sequence=['intro',
                        'part1',
                        'midbreak',
-                       'part2',
+                        'part2',
                        'questionnaire',
                        'end'],
          num_demo_participants=9,

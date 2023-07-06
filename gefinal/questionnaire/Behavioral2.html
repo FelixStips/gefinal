@@ -1,0 +1,30 @@
+{{ block title }}
+    Questionnaire
+{{ endblock }}
+{{ block content }}
+
+<style>
+         body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    color: #333;
+    padding: 20px;
+  }
+</style>
+
+  <p style="margin-bottom: 10px">
+    <i>How well do the following statements describe you as a person?
+        Please indicate your answer on a scale from 0 to 10.
+        A 0 means “does not describe me at all” and a 10 means “describes me perfectly”.
+        You can also use any numbers between 0 and 10 to indicate where you fall on the scale, like 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10.
+        </i>
+  </p>
+
+    {{ formfield 'AF31' }}
+    {{ formfield 'AF41' }}
+
+
+    <br>
+    {{ next_button }}
+
+{{ endblock }}
