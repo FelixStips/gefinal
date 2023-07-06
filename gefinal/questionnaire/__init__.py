@@ -110,6 +110,7 @@ class Behavioral3(Page):
 
 
 page_sequence = [SocioDemographic,
+                 CognitiveReflection,
                  Behavioral1,
                  Behavioral2,
                  Behavioral3]
