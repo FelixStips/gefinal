@@ -21,190 +21,190 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     Q1 = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 160£ as a sure payment?<br>""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[
                     [1, '50 percent chance of receiving 300£'],
                     [0, '160£ as a sure payment'],
                 ])
     Q2A = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 240£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '240£ as a sure payment']])
     Q2B = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 80£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '80£ as a sure payment']])
     Q3AA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 280£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '280£ as a sure payment']])
     Q3AB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                 and the same 50 percent chance of receiving nothing, or the amount of 200£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '200£ as a sure payment']])
     Q3BA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 120£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '120£ as a sure payment']])
     Q3BB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 40£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '40£ as a sure payment']])
     Q4AAA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 300£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '300£ as a sure payment']])
     Q4AAB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 260£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '260£ as a sure payment']])
     Q4ABA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 220£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '220£ as a sure payment']])
     Q4ABB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 180£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '180£ as a sure payment']])
     Q4BAA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 140£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '140£ as a sure payment']])
     Q4BAB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 100£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '100£ as a sure payment']])
     Q4BBA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 60£ as a sure payment?""",
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '60£ as a sure payment']])
     Q4BBB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 20£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '20£ as a sure payment']])
     Q5AAAA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 310£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '310£ as a sure payment']])
     Q5AAAB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 290£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '290£ as a sure payment']])
     Q5AABA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 270£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '270£ as a sure payment']])
     Q5AABB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 250£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '250£ as a sure payment']])
     Q5ABAA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 230£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '230£ as a sure payment']])
     Q5ABAB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 210£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '210£ as a sure payment']])
     Q5ABBA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 190£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '190£ as a sure payment']])
     Q5ABBB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 170£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '170£ as a sure payment']])
     Q5BAAA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 150£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '150£ as a sure payment']])
     Q5BAAB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 130£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '130£ as a sure payment']])
     Q5BABA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 110£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '110£ as a sure payment']])
     Q5BABB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 90£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '90£ as a sure payment']])
     Q5BBAA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 70£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '70£ as a sure payment']])
     Q5BBAB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 50£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '50£ as a sure payment']])
     Q5BBBA = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 30£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '30£ as a sure payment']])
     Q5BBBB = models.StringField(
-        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£,
+        label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
                  and the same 50 percent chance of receiving nothing, or the amount of 10£ as a sure payment?""",
-        widget=widgets.RadioSelectHorizontal,
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '10£ as a sure payment']])
 
