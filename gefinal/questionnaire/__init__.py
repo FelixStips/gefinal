@@ -53,7 +53,7 @@ class Player(BasePlayer):
         choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     )
     AF31 = models.StringField(
-        label=""" <b>1. When someone does me a favor I am willing to return it.</b>
+        label=""" <b>When someone does me a favor I am willing to return it.</b>
                     """,
         widget=widgets.RadioSelectHorizontal,
         choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -70,19 +70,19 @@ class Player(BasePlayer):
                  'The present worth 25£', 'The present worth 30£'],
     )
     AF41 = models.StringField(
-        label=""" <b>2. If I am treated very unjustly, I will take revenge at the first occasion, even if there is a cost to do so.</b>
+        label=""" <b>If I am treated very unjustly, I will take revenge at the first occasion, even if there is a cost to do so.</b>
                     """,
         widget=widgets.RadioSelectHorizontal,
         choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     )
     AF42 = models.StringField(
-        label=""" <b>1. How willing are you to punish someone who treats you unfairly, even if there may be costs for you?</b>""",
+        label=""" <b>How willing are you to punish someone who treats you unfairly, even if there may be costs for you?</b>""",
         widget=widgets.RadioSelectHorizontal,
         choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     )
 
     AF43 = models.StringField(
-        label=""" <b>2. How willing are you to punish someone who treats others unfairly, even if there may be costs for you?</b>""",
+        label=""" <b>How willing are you to punish someone who treats others unfairly, even if there may be costs for you?</b>""",
         widget=widgets.RadioSelectHorizontal,
         choices=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     )
