@@ -103,6 +103,7 @@ class Player(BasePlayer):
     Q4BBA = models.StringField(
         label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 60£ as a sure payment?""",
+        widget=widgets.RadioSelect,
         choices=[[1, '50 percent chance of receiving 300£'],
                  [0, '60£ as a sure payment']])
     Q4BBB = models.StringField(

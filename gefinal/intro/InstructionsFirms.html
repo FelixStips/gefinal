@@ -263,11 +263,13 @@
                 If your offer is accepted, you will see a notification and the offer will appear in the "Accepted Offers" table.
                 See the figure below for an example of how the screen will look after a worker accepts your first job offer.
             </p>
+            <div style="display: flex; justify-content: center;">
                 {% if player.participant.currency_is_points == True %}
-                    <img src="{% static 'instructions/employer_points_3.jpg' %}" alt="Employer 2 points" style="max-width: 80%;"/>
+                    <img src="{% static 'instructions/employer_points_3.jpg' %}" alt="Employer 3 points" style="max-width: 80%;"/>
                 {% else %}
-                    <img src="{% static 'instructions/employer_tokens_3.jpg' %}" alt="Employer 2 tokens" style="max-width: 80%;"/>
+                    <img src="{% static 'instructions/employer_tokens_3.jpg' %}" alt="Employer 3 tokens" style="max-width: 80%;"/>
                 {% endif %}
+            </div>
             <p class="block-sentence" style="margin-top: 5px">
                 The market phase <b>ends</b> when all workers have accepted an offer or when the time limit of {{ market_time }} seconds is reached.
                 The time left in the current round will be displayed in a yellow box at the top of the page.
@@ -737,6 +739,7 @@
         let previousTab = currentTab.previousElementSibling;
         currentTab.style.display = "none";
         previousTab.style.display = "block";
+        window.scrollTo(0, 0); // Scroll to the top of the page
     }
 
     function MoveToNext(btn) {
@@ -744,6 +747,7 @@
         let nextTab = currentTab.nextElementSibling;
         currentTab.style.display = "none";
         nextTab.style.display = "block";
+        window.scrollTo(0, 0); // Scroll to the top of the page
     }
 
     function showInformation(id) {
@@ -772,6 +776,7 @@
 
     function MoveToComprehension() {
         document.getElementById("are_you_ready_q").style.display = "none";
+        window.scrollTo(0, 0); // Scroll to the top of the page
         for (var i = 1; i <= 7; i++) {
           var instructionId = "instructions_" + i;
           document.getElementById(instructionId).style.display = "none";

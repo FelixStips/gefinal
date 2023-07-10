@@ -106,7 +106,7 @@ class Behavioral2(Page):
 
 class Behavioral3(Page):
     form_model = 'player'
-    form_fields = ['AF32', 'AF42', 'AF43']
+    form_fields = ['AF42', 'AF43']
 
 
 page_sequence = [SocioDemographic,

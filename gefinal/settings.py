@@ -21,9 +21,9 @@ SESSION_CONFIGS = [
                        'part1',
                        'midbreak',
                         'part2',
-                       'questionnaire',
+                        'questionnaire',
                         'questionnaire2',
-                       'end'],
+                        'end'],
          num_demo_participants=9,
          final=False,                                                               # Display instructions
          market_timeout_seconds=180,                                               # Duration of market stage in seconds
