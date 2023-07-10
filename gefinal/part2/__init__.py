@@ -209,10 +209,17 @@ class MarketPage(Page):
     @staticmethod
     def vars_for_template(player: Player):
         group = player.group
+        session = player.session
         players_in_group = group.players_in_group
         employers_in_group = group.employers_in_group
 
-        return dict(players_in_group=players_in_group,
+        if player.participant.vars['currency_is_points'] is True:
+            max_wage = session.config['max_wage']
+        else:
+            max_wage = session.config['max_wage'] * session.config['exchange_rate']
+
+        return dict(max_wage=max_wage,
+                    players_in_group=players_in_group,
                     employers_in_group=employers_in_group,
                     num_workers=players_in_group - employers_in_group,
                     round_number=player.round_number,
@@ -221,10 +228,17 @@ class MarketPage(Page):
 
     @staticmethod
     def js_vars(player: Player):
-        return dict(my_id=player.participant.vars['playerID'],
+        session = player.session
+        if player.participant.vars['currency_is_points'] is True:
+            max_wage = session.config['max_wage']
+        else:
+            max_wage = session.config['max_wage'] * session.config['exchange_rate']
+        return dict(max_wage=max_wage,
+                    my_id=player.participant.vars['playerID'],
                     is_employer=player.participant.vars['is_employer'],
                     string_role=player.participant.vars['string_role'],
                     currency_is_points=player.participant.vars['currency_is_points'])
+
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):

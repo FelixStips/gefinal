@@ -25,12 +25,13 @@ SESSION_CONFIGS = [
                         'questionnaire2',
                         'end'],
          num_demo_participants=9,
-         final=False,                                                               # Display instructions
+         final=False,                                                              # Display instructions
          market_timeout_seconds=180,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          showup_fee=12.0,                                                          # Participation show-up fee
          payout_rate=0.01,                                                         # Payout rate: 1 point = X Pounds
          exchange_rate=2,                                                          # Exchange rate: 1 point = X tokens
+         max_wage=100,                                                             # Maximum wage in points
          employer_outside_option=0,                                                # Outside option for employers in points
          worker_outside_option=0,                                                  # Outside option for workers in points
          MPL_high=[160, 140],                                                      # Revenue high effort for 1 or 2 workers

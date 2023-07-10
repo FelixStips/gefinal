@@ -161,6 +161,7 @@ class InstructionsWorkers(Page):
             q2_wage = C.Q2_WAGE
             q3_wage_1 = C.Q3_WAGE_1
             q3_wage_2 = C.Q3_WAGE_2
+            max_wage = session.config['max_wage']
         else:
             exchange_rate = session.config['payout_rate'] * (1/session.config['exchange_rate'])
             initial_points_tokens = session.config['showup_fee'] * (1/session.config['payout_rate']) * session.config['exchange_rate']
@@ -176,6 +177,7 @@ class InstructionsWorkers(Page):
             q2_wage = C.Q2_WAGE * session.config['exchange_rate']
             q3_wage_1 = C.Q3_WAGE_1 * session.config['exchange_rate']
             q3_wage_2 = C.Q3_WAGE_2 * session.config['exchange_rate']
+            max_wage = session.config['max_wage'] * session.config['exchange_rate']
 
         worker_example_profit_low_effort = worker_example_wage - low_effort_points_tokens
         worker_example_profit_high_effort = worker_example_wage - high_effort_points_tokens
@@ -198,6 +200,7 @@ class InstructionsWorkers(Page):
             print('error: no market type')
 
         return dict(
+            max_wage=max_wage,
             q2_effort_requested=C.Q2_EFFORT_REQUESTED,
             q2_effort_received=C.Q2_EFFORT_RECEIVED,
             q3_effort_received_1=C.Q3_EFFORT_RECEIVED_1,
@@ -260,6 +263,12 @@ class InstructionsWorkers(Page):
             q3_worker_profit_1 = q3_wage_1 - q3_effort_cost_1
             q3_worker_profit_2 = q3_wage_2 - q3_effort_cost_2
         else:
+            q2_effort_worth = q2_effort_worth * session.config['exchange_rate']
+            q3_effort_worth_1 = q3_effort_worth_1 * session.config['exchange_rate']
+            q3_effort_worth_2 = q3_effort_worth_2 * session.config['exchange_rate']
+            q2_effort_cost = q2_effort_cost * session.config['exchange_rate']
+            q3_effort_cost_1 = q3_effort_cost_1 * session.config['exchange_rate']
+            q3_effort_cost_2 = q3_effort_cost_2 * session.config['exchange_rate']
             q1_employer_profit = session.config['employer_outside_option']
             q1_worker_profit = session.config['worker_outside_option']
             q2_wage = C.Q2_WAGE * session.config['exchange_rate']
@@ -299,6 +308,7 @@ class InstructionsWorkers(Page):
                 print('Correct employer profit:', q2_employer_profit, 'Correct worker profit:', q2_worker_profit)
                 print('Received employer profit:', data['employer_profit'], 'Received worker profit:',
                       data['worker_profit'])
+                print('Effort worth:', q2_effort_worth, 'Effort cost:', q2_effort_cost, 'Wage:', q2_wage)
                 if int(data['employer_profit']) == q2_employer_profit and int(
                         data['worker_profit']) == q2_worker_profit:
                     print('correct!')
@@ -374,6 +384,7 @@ class InstructionsFirms(Page):
             q2_wage = C.Q2_WAGE
             q3_wage_1 = C.Q3_WAGE_1
             q3_wage_2 = C.Q3_WAGE_2
+            max_wage = session.config['max_wage']
         else:
             exchange_rate = session.config['payout_rate'] * (1/session.config['exchange_rate'])
             initial_points_tokens = session.config['showup_fee'] * (1/session.config['payout_rate']) * session.config['exchange_rate']
@@ -389,6 +400,7 @@ class InstructionsFirms(Page):
             q2_wage = C.Q2_WAGE * session.config['exchange_rate']
             q3_wage_1 = C.Q3_WAGE_1 * session.config['exchange_rate']
             q3_wage_2 = C.Q3_WAGE_2 * session.config['exchange_rate']
+            max_wage = session.config['max_wage'] * session.config['exchange_rate']
 
         worker_example_profit_low_effort = worker_example_wage - low_effort_points_tokens
         worker_example_profit_high_effort = worker_example_wage - high_effort_points_tokens
@@ -411,6 +423,7 @@ class InstructionsFirms(Page):
             print('error: no market type')
 
         return dict(
+            max_wage=max_wage,
             q2_effort_requested=C.Q2_EFFORT_REQUESTED,
             q2_effort_received=C.Q2_EFFORT_RECEIVED,
             q3_effort_received_1=C.Q3_EFFORT_RECEIVED_1,

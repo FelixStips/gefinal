@@ -225,7 +225,7 @@
                 They can submit up two open job offers at a time.
                 They can also submit no offer at all or cancel open offer.
                 The offers employers send will appear in the "<b>Open offers</b>" table in the left-bottom of the page.
-                An offer includes a wage between 0 and 100 {{ currency_plural }}, a desired effort level which is either "high" or "low", and a unique Job ID for each job.
+                An offer includes a wage between 0 and {{ max_wage }} {{ currency_plural }}, a desired effort level which is either "high" or "low", and a unique Job ID for each job.
             </p>
             <div style="display: flex; justify-content: center;">
                 {% if player.participant.currency_is_points == True %}
