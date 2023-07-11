@@ -244,14 +244,20 @@ class InstructionsWorkers(Page):
     def live_method(player: Player, data):
         session = player.session
 
-        q2_effort_worth = session.config['MPL_high'][0] if C.Q2_EFFORT_RECEIVED == "high" else session.config['MPL_low'][0]
-        q3_effort_worth_1 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['MPL_low'][1]
-        q3_effort_worth_2 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['MPL_low'][1]
-        q2_effort_cost = session.config['effort_costs_points'][1] if C.Q2_EFFORT_RECEIVED == "high" else session.config['effort_costs_points'][0]
-        q3_effort_cost_1 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['effort_costs_points'][0]
-        q3_effort_cost_2 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['effort_costs_points'][0]
+        q2_efort_worth = session.config['MPL_high'][0] if C.Q2_EFFORT_RECEIVED == "high" else session.config['MPL_low'][0]
+        q3_efort_worth_1 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['MPL_low'][1]
+        q3_efort_worth_2 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['MPL_low'][1]
+        q2_efort_cost = session.config['effort_costs_points'][1] if C.Q2_EFFORT_RECEIVED == "high" else session.config['effort_costs_points'][0]
+        q3_efort_cost_1 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['effort_costs_points'][0]
+        q3_efort_cost_2 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['effort_costs_points'][0]
 
         if player.participant.currency_is_points:
+            q2_effort_worth = q2_efort_worth
+            q3_effort_worth_1 = q3_efort_worth_1
+            q3_effort_worth_2 = q3_efort_worth_2
+            q2_effort_cost = q2_efort_cost
+            q3_effort_cost_1 = q3_efort_cost_1
+            q3_effort_cost_2 = q3_efort_cost_2
             q1_employer_profit = session.config['employer_outside_option']
             q1_worker_profit = session.config['worker_outside_option']
             q2_wage = C.Q2_WAGE
@@ -263,22 +269,22 @@ class InstructionsWorkers(Page):
             q3_worker_profit_1 = q3_wage_1 - q3_effort_cost_1
             q3_worker_profit_2 = q3_wage_2 - q3_effort_cost_2
         else:
-            q2_effort_worth = q2_effort_worth * session.config['exchange_rate']
-            q3_effort_worth_1 = q3_effort_worth_1 * session.config['exchange_rate']
-            q3_effort_worth_2 = q3_effort_worth_2 * session.config['exchange_rate']
-            q2_effort_cost = q2_effort_cost * session.config['exchange_rate']
-            q3_effort_cost_1 = q3_effort_cost_1 * session.config['exchange_rate']
-            q3_effort_cost_2 = q3_effort_cost_2 * session.config['exchange_rate']
+            q2_effort_worth = q2_efort_worth * session.config['exchange_rate']
+            q3_effort_worth_1 = q3_efort_worth_1 * session.config['exchange_rate']
+            q3_effort_worth_2 = q3_efort_worth_2 * session.config['exchange_rate']
+            q2_effort_cost = q2_efort_cost * session.config['exchange_rate']
+            q3_effort_cost_1 = q3_efort_cost_1 * session.config['exchange_rate']
+            q3_effort_cost_2 = q3_efort_cost_2 * session.config['exchange_rate']
             q1_employer_profit = session.config['employer_outside_option']
             q1_worker_profit = session.config['worker_outside_option']
             q2_wage = C.Q2_WAGE * session.config['exchange_rate']
-            q2_worker_profit = (q2_wage - q2_effort_cost) * session.config['exchange_rate']
-            q2_employer_profit = (q2_effort_worth - q2_wage) * session.config['exchange_rate']
+            q2_worker_profit = q2_wage - q2_effort_cost
+            q2_employer_profit = q2_effort_worth - q2_wage
             q3_wage_1 = C.Q3_WAGE_1 * session.config['exchange_rate']
             q3_wage_2 = C.Q3_WAGE_2 * session.config['exchange_rate']
-            q3_employer_profit = (q3_effort_worth_1 + q3_effort_worth_2 - q3_wage_1 - q3_wage_2) * session.config['exchange_rate']
-            q3_worker_profit_1 = (q3_wage_1 - q3_effort_cost_1) * session.config['exchange_rate']
-            q3_worker_profit_2 = (q3_wage_2 - q3_effort_cost_2) * session.config['exchange_rate']
+            q3_employer_profit = q3_effort_worth_1 + q3_effort_worth_2 - q3_wage_1 - q3_wage_2
+            q3_worker_profit_1 = q3_wage_1 - q3_effort_cost_1
+            q3_worker_profit_2 = q3_wage_2 - q3_effort_cost_2
 
         if data['information_type'] == 'submit_answer':
             my_id = player.id_in_group
@@ -309,6 +315,7 @@ class InstructionsWorkers(Page):
                 print('Received employer profit:', data['employer_profit'], 'Received worker profit:',
                       data['worker_profit'])
                 print('Effort worth:', q2_effort_worth, 'Effort cost:', q2_effort_cost, 'Wage:', q2_wage)
+
                 if int(data['employer_profit']) == q2_employer_profit and int(
                         data['worker_profit']) == q2_worker_profit:
                     print('correct!')
@@ -467,14 +474,26 @@ class InstructionsFirms(Page):
     def live_method(player: Player, data):
         session = player.session
 
-        q2_effort_worth = session.config['MPL_high'][0] if C.Q2_EFFORT_RECEIVED == "high" else session.config['MPL_low'][0]
-        q3_effort_worth_1 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['MPL_low'][1]
-        q3_effort_worth_2 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['MPL_low'][1]
-        q2_effort_cost = session.config['effort_costs_points'][1] if C.Q2_EFFORT_RECEIVED == "high" else session.config['effort_costs_points'][0]
-        q3_effort_cost_1 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['effort_costs_points'][0]
-        q3_effort_cost_2 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['effort_costs_points'][0]
+        q2_efort_worth = session.config['MPL_high'][0] if C.Q2_EFFORT_RECEIVED == "high" else session.config['MPL_low'][
+            0]
+        q3_efort_worth_1 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else \
+        session.config['MPL_low'][1]
+        q3_efort_worth_2 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else \
+        session.config['MPL_low'][1]
+        q2_efort_cost = session.config['effort_costs_points'][1] if C.Q2_EFFORT_RECEIVED == "high" else \
+        session.config['effort_costs_points'][0]
+        q3_efort_cost_1 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else \
+        session.config['effort_costs_points'][0]
+        q3_efort_cost_2 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else \
+        session.config['effort_costs_points'][0]
 
         if player.participant.currency_is_points:
+            q2_effort_worth = q2_efort_worth
+            q3_effort_worth_1 = q3_efort_worth_1
+            q3_effort_worth_2 = q3_efort_worth_2
+            q2_effort_cost = q2_efort_cost
+            q3_effort_cost_1 = q3_efort_cost_1
+            q3_effort_cost_2 = q3_efort_cost_2
             q1_employer_profit = session.config['employer_outside_option']
             q1_worker_profit = session.config['worker_outside_option']
             q2_wage = C.Q2_WAGE
@@ -486,16 +505,22 @@ class InstructionsFirms(Page):
             q3_worker_profit_1 = q3_wage_1 - q3_effort_cost_1
             q3_worker_profit_2 = q3_wage_2 - q3_effort_cost_2
         else:
+            q2_effort_worth = q2_efort_worth * session.config['exchange_rate']
+            q3_effort_worth_1 = q3_efort_worth_1 * session.config['exchange_rate']
+            q3_effort_worth_2 = q3_efort_worth_2 * session.config['exchange_rate']
+            q2_effort_cost = q2_efort_cost * session.config['exchange_rate']
+            q3_effort_cost_1 = q3_efort_cost_1 * session.config['exchange_rate']
+            q3_effort_cost_2 = q3_efort_cost_2 * session.config['exchange_rate']
             q1_employer_profit = session.config['employer_outside_option']
             q1_worker_profit = session.config['worker_outside_option']
             q2_wage = C.Q2_WAGE * session.config['exchange_rate']
-            q2_worker_profit = (q2_wage - q2_effort_cost) * session.config['exchange_rate']
-            q2_employer_profit = (q2_effort_worth - q2_wage) * session.config['exchange_rate']
+            q2_worker_profit = q2_wage - q2_effort_cost
+            q2_employer_profit = q2_effort_worth - q2_wage
             q3_wage_1 = C.Q3_WAGE_1 * session.config['exchange_rate']
             q3_wage_2 = C.Q3_WAGE_2 * session.config['exchange_rate']
-            q3_employer_profit = (q3_effort_worth_1 + q3_effort_worth_2 - q3_wage_1 - q3_wage_2) * session.config['exchange_rate']
-            q3_worker_profit_1 = (q3_wage_1 - q3_effort_cost_1) * session.config['exchange_rate']
-            q3_worker_profit_2 = (q3_wage_2 - q3_effort_cost_2) * session.config['exchange_rate']
+            q3_employer_profit = q3_effort_worth_1 + q3_effort_worth_2 - q3_wage_1 - q3_wage_2
+            q3_worker_profit_1 = q3_wage_1 - q3_effort_cost_1
+            q3_worker_profit_2 = q3_wage_2 - q3_effort_cost_2
 
         if data['information_type'] == 'submit_answer':
             my_id = player.id_in_group
