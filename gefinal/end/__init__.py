@@ -30,6 +30,7 @@ class Player(BasePlayer):
     total_tokens = models.FloatField()
     total_euros = models.FloatField()
     email = models.StringField(label="""Please enter <b>your PayPal email address</b> below, so that we can transfer the money to your account.""",)
+    feedback = models.StringField(label="""If you want to provide some feedback on the experiment, use the field below.""",)
 
 
 # PAGES
@@ -67,6 +68,8 @@ class Results(Page):
         player.string_role = player.participant.vars['string_role']
 
 class End(Page):
-    pass
+    form_model = 'player'
+    form_fields = ['feedback']
+
 
 page_sequence = [Results, End]
