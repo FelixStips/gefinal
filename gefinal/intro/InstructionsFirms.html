@@ -76,7 +76,7 @@
              </p>
             <p class="block-sentence">
                 At the end of the experiment, you will receive the money you earned during the experiment in addition to your {{ participation_fee }}-Pound initial endowment.
-                You will be paid in cash and in private.
+                You will be paid via PayPal.
             </p>
         </div>
     </div>
@@ -132,7 +132,7 @@
             </p>
             <p class="block-sentence">
                 In the first part, you will interact in a group of {{ players_in_your_group }} randomly assigned participants.
-                Each group has {{ employers_in_your_group }} employer(s) and {{ workers_in_your_group }} worker(s).
+                Each group has {{ employers_in_your_group }} employers and {{ workers_in_your_group }} workers.
             </p>
         </div>
     </div>
@@ -308,20 +308,20 @@
             <br>
             <div style="display: flex; justify-content: center; margin-bottom: 10px">
                 {% if player.participant.currency_is_points == True %}
-                    <img src="{% static 'instruction/employer_points_3.jpg' %}" alt="Employer 3 points" style="max-width: 80%;"/>
+                    <img src="{% static 'instruction/worker_points_3.jpg' %}" alt="Worker 3 points" style="max-width: 80%;"/>
+
                 {% else %}
-                    <img src="{% static 'instruction/employer_tokens_3.jpg' %}" alt="Employer 3 tokens" style="max-width: 80%;"/>
+                    <img src="{% static 'instruction/worker_tokens_3.jpg' %}" alt="Worker 3 tokens" style="max-width: 80%;"/>
                 {% endif %}
             </div>
-
             <h5 class="underline">How are the workers' profits calculated?</h5>
             <p class="block-sentence">
                 In each round, the workers' profits depend on whether they are employed, their wage, and their effort level.
             </p>
             <ul class="list" style="margin-top: -10px">
                 <li> If a worker does not accept a job offer, they earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b></li>
-                <li> If a worker accepts a job offer and chooses Low effort, their profits equal the wage they accepted minus the low cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b></li>
-                <li> If a worker accepts a job offer and chooses High effort, their profits equal the wage they accepted minus the high cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
+                <li> If a worker accepts a job offer and chooses Low effort, their profits equal the wage minus the low cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b></li>
+                <li> If a worker accepts a job offer and chooses High effort, their profits equal the wage minus the high cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
             </ul>
             <p class="block-sentence">
                 <u>Example</u>: if a workers receives a wage of {{ worker_example_wage }}  {{ currency_plural }} and chooses high effort, their profits in this round are {{ worker_example_wage }} –  {{ high_effort_points_tokens }} = {{ worker_example_profit_high_effort }} {{ currency_plural }}.
@@ -351,7 +351,7 @@
                Your profits in each round are determined by the wages you pay to your workers, the effort they choose, and the number of workers you employ.
            </p>
             <p class="block-sentence">
-                If you <b>do not employ any workers</b> in a round, you earn 0 points/tokens in that round.
+                If you <b>do not employ any workers</b> in a round, you earn 0 {{ currency_plural }} in that round.
             </p>
             <p class="block-sentence">
                 If you employ one or two workers, your profit is the difference between your total revenue and the wages you pay:
@@ -403,10 +403,10 @@
         </p>
         <ul>
             <li>
-                If both workers choose High effort, then your profits equal to 280 – 60 – 40 = 180 {{ currency_plural }}.
+                If both workers choose High effort, then your profits equal to {{ total_gain_high_effort_2_workers }} – 60 – 40 = {{ profit_employer_example_1 }} {{ currency_plural }}.
             </li>
             <li>
-                Alternatively, if one worker chooses High effort and the other Low effort, then your profits equal 154 – 60 – 40 = 54 {{ currency_plural }}.
+                Alternatively, if one worker chooses High effort and the other Low effort, then your profits equal {{ total_gain_mix_effort_2_workers }} – 60 – 40 = {{ profit_employer_example_2 }} {{ currency_plural }}.
             </li>
         </ul>
         <p>

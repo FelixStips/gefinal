@@ -185,6 +185,11 @@ class InstructionsWorkers(Page):
         total_gain_high_effort_2_workers = 2 * gain_high_effort_2_workers
         total_gain_mix_effort_2_workers = gain_low_effort_2_workers + gain_high_effort_2_workers
         gain_mix_effort_2_workers = int(total_gain_mix_effort_2_workers / 2) if total_gain_mix_effort_2_workers % 2 == 0 else total_gain_mix_effort_2_workers / 2
+        profit_employer_example_1 = total_gain_high_effort_2_workers - 60 - 40
+        profit_employer_example_2 = total_gain_mix_effort_2_workers - 60 - 40
+
+        print(total_gain_high_effort_2_workers)
+        print(total_gain_mix_effort_2_workers)
 
         if player.participant.large_market:
             players_in_your_group = session.config['size_large_market']
@@ -200,6 +205,8 @@ class InstructionsWorkers(Page):
             print('error: no market type')
 
         return dict(
+            profit_employer_example_1 = profit_employer_example_1,
+            profit_employer_example_2 = profit_employer_example_2,
             max_wage=max_wage,
             q2_effort_requested=C.Q2_EFFORT_REQUESTED,
             q2_effort_received=C.Q2_EFFORT_RECEIVED,
@@ -415,6 +422,8 @@ class InstructionsFirms(Page):
         total_gain_high_effort_2_workers = 2 * gain_high_effort_2_workers
         total_gain_mix_effort_2_workers = gain_low_effort_2_workers + gain_high_effort_2_workers
         gain_mix_effort_2_workers = int(total_gain_mix_effort_2_workers / 2) if total_gain_mix_effort_2_workers % 2 == 0 else total_gain_mix_effort_2_workers / 2
+        profit_employer_example_1 = total_gain_high_effort_2_workers - 60 - 40
+        profit_employer_example_2 = total_gain_mix_effort_2_workers - 60 - 40
 
         if player.participant.large_market:
             players_in_your_group = session.config['size_large_market']
@@ -430,6 +439,8 @@ class InstructionsFirms(Page):
             print('error: no market type')
 
         return dict(
+            profit_employer_example_1=profit_employer_example_1,
+            profit_employer_example_2=profit_employer_example_2,
             max_wage=max_wage,
             q2_effort_requested=C.Q2_EFFORT_REQUESTED,
             q2_effort_received=C.Q2_EFFORT_RECEIVED,
