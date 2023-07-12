@@ -72,4 +72,9 @@ class End(Page):
     form_fields = ['feedback']
 
 
-page_sequence = [Results, End]
+class Close(Page):
+    pass
+
+page_sequence = [Results,
+                 End,
+                 Close]
