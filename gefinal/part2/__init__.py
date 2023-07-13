@@ -468,18 +468,33 @@ class ResultsWaitPage(WaitPage):
                     p.participant.vars['round_for_points'].append(p.participant.vars['currency_is_points'])
                 elif p.num_workers_employed == 1:
                     if p.total_effort_received == 0:
-                        p.effort_worth = session.config['MPL_low'][0]
+                        if p.participant.vars['currency_is_points'] is True:
+                            p.effort_worth = session.config['MPL_low'][0]
+                        else:
+                            p.effort_worth = session.config['MPL_low'][0] * session.config['exchange_rate']
                     elif p.total_effort_received == 1:
-                        p.effort_worth = session.config['MPL_high'][0]
+                        if p.participant.vars['currency_is_points'] is True:
+                            p.effort_worth = session.config['MPL_high'][0]
+                        else:
+                            p.effort_worth = session.config['MPL_high'][0] * session.config['exchange_rate']
                     else:
                         print('error: effort_received not 0 or 1')
                 elif p.num_workers_employed == 2:
                     if p.total_effort_received == 0:                                                                    # if effort_received is 0, then the worker gave low effort
-                        p.effort_worth = 2 * session.config['MPL_low'][1]
+                        if p.participant.vars['currency_is_points'] is True:
+                            p.effort_worth = 2 * session.config['MPL_low'][1]
+                        else:
+                            p.effort_worth = 2 * session.config['MPL_low'][1] * session.config['exchange_rate']
                     elif p.total_effort_received == 1:                                                                  # if effort_received is 1, then one worker gave high effort
-                        p.effort_worth = session.config['MPL_high'][1] + session.config['MPL_low'][1]
+                        if p.participant.vars['currency_is_points'] is True:
+                            p.effort_worth = session.config['MPL_high'][1] + session.config['MPL_low'][1]
+                        else:
+                            p.effort_worth = (session.config['MPL_high'][1] + session.config['MPL_low'][1]) * session.config['exchange_rate']
                     elif p.total_effort_received == 2:                                                                  # if effort_received is 2, then both workers gave high effort
-                        p.effort_worth = 2 * session.config['MPL_high'][1]
+                        if p.participant.vars['currency_is_points'] is True:
+                            p.effort_worth = 2 * session.config['MPL_high'][1]
+                        else:
+                            p.effort_worth = 2 * session.config['MPL_high'][1] * session.config['exchange_rate']
                 else:
                     print('error: num_workers_employed not 0, 1 or 2')
 
