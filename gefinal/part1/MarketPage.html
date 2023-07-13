@@ -74,7 +74,7 @@
                 The average wage level is <b><span id="average_wage_tokens">0</span></b> tokens.
             {% endif %}
 
-            The share of offers requesting high effort is <b><span id="average_effort">0</span></b>%.
+            The share of offers requesting standard effort is <b><span id="average_effort">0</span></b>%.
         </p>
     </div>
 </div>
@@ -106,7 +106,7 @@
                         </div>
                         <select id="effort_input_1" class="form-select" aria-label="Default select example">
                           <option selected>Choose effort</option>
-                          <option value="1">high</option>
+                          <option value="1">standard</option>
                           <option value="0">low</option>
                         </select>
                     </div>
@@ -153,7 +153,7 @@
                             </div>
                             <select id="effort_input_2" class="form-select" aria-label="Default select example">
                               <option selected>Choose effort</option>
-                              <option value="1">high</option>
+                              <option value="1">standard</option>
                               <option value="0">low</option>
                             </select>
                         </div>
@@ -287,7 +287,7 @@
                 let {job_id, wage_points, wage_tokens, effort, status, employer_id, job_number} = offers[i];
                 let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens
                 if (effort === 1) {
-                    var effort_displayed = "high";
+                    var effort_displayed = "standard";
                 } else if (effort === 0) {
                     var effort_displayed = "low";
                 } else {
@@ -321,7 +321,7 @@
                     let {job_id, wage_points, wage_tokens, effort, job_number} = offers[i];
                     let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
                     if (effort === 1) {
-                        var effort_displayed = "high";
+                        var effort_displayed = "standard";
                     } else if (effort === 0) {
                         var effort_displayed = "low";
                     } else {
@@ -336,7 +336,7 @@
                     let {job_id, wage, wage_points, wage_tokens, effort, job_number} = offers[i];
                     let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
                       if (effort === 1) {
-                        var effort_displayed = "high";
+                        var effort_displayed = "standard";
                     } else if (effort === 0) {
                         var effort_displayed = "low";
                     } else {
@@ -358,7 +358,7 @@
                     let {job_id, wage_points, wage_tokens, effort} = offers[i];
                     let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
                       if (effort === 1) {
-                        var effort_displayed = "high";
+                        var effort_displayed = "standard";
                     } else if (effort === 0) {
                         var effort_displayed = "low";
                     } else {
@@ -377,8 +377,8 @@
             let {workers_left, open_offers, average_wage_tokens, average_wage_points, average_effort} = market_information;
             document.getElementById("workers_left").innerHTML = workers_left;
             document.getElementById("offers_left").innerHTML = open_offers;
-            let share_high = average_effort * 100;
-            document.getElementById("average_effort").innerHTML = share_high;
+            let share_standard = average_effort * 100;
+            document.getElementById("average_effort").innerHTML = share_standard.toFixed(0);
             if (document.getElementById("average_wage_tokens")) {
                 document.getElementById("average_wage_tokens").innerHTML = average_wage_tokens.toFixed(1);
             } else if (document.getElementById("average_wage_points")) {
@@ -471,12 +471,12 @@
             let accepted_wage = parseInt(document.getElementById(`open_col_wage_${accepted_job_id}`).innerHTML);
             let effort = document.getElementById(`open_col_effort_${accepted_job_id}`).innerHTML.trim();
             console.log(effort)
-            if (effort === "high") {
+            if (effort === "standard") {
                 var accepted_effort = 1;
             } else if (effort === "low") {
                 var accepted_effort = 0;
             } else {
-                console.log("error. effort neither high nor low")
+                console.log("error. effort neither standard nor low")
             }
             console.log(accepted_effort)
             let accepted_employer_id = parseInt(document.getElementById(`open_col_employer_id_${accepted_job_id}`).innerHTML);
@@ -524,7 +524,7 @@
             alert("Error: Please specify a wage between 0 and " +  max_wage + ".");
             return;
         } else if (effort_inputted < 0 || effort_inputted > 1) {
-            alert("Error: Please choose either high or low effort.");
+            alert("Error: Please choose either standard or low effort.");
             return;
         } else {
             let status = 'open';

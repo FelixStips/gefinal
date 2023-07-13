@@ -11,7 +11,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'part1'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 20
+    NUM_ROUNDS = 15
 
 
 class Subsession(BaseSubsession):
@@ -390,7 +390,7 @@ class WorkPage(Page):
     def vars_for_template(player: Player):
         session = player.session
         if player.field_maybe_none('effort_requested') == 1:
-            effort_requested = "high"
+            effort_requested = "standard"
         elif player.field_maybe_none('effort_requested') == 0:
             effort_requested = "low"
         else:
@@ -542,12 +542,12 @@ class Results(Page):
                 player.employer_payoff_tokens = None
 
         total_low_effort = player.num_workers_employed - player.total_effort_received if player.total_effort_received is not None else None
-        worker1_effort = "high" if player.field_maybe_none('worker1_effort') == 1 else ("low" if player.field_maybe_none('worker1_effort') == 0 else "")
-        worker1_effort_given = "high" if player.field_maybe_none('worker1_effort_given') == 1 else ("low" if player.field_maybe_none('worker1_effort_given') == 0 else "")
-        worker2_effort = "high" if player.field_maybe_none('worker2_effort') == 1 else ("low" if player.field_maybe_none('worker2_effort') == 0 else "")
-        worker2_effort_given = "high" if player.field_maybe_none('worker2_effort_given') == 1 else ("low" if player.field_maybe_none('worker2_effort_given') == 0 else "")
+        worker1_effort = "standard" if player.field_maybe_none('worker1_effort') == 1 else ("low" if player.field_maybe_none('worker1_effort') == 0 else "")
+        worker1_effort_given = "standard" if player.field_maybe_none('worker1_effort_given') == 1 else ("low" if player.field_maybe_none('worker1_effort_given') == 0 else "")
+        worker2_effort = "standard" if player.field_maybe_none('worker2_effort') == 1 else ("low" if player.field_maybe_none('worker2_effort') == 0 else "")
+        worker2_effort_given = "standard" if player.field_maybe_none('worker2_effort_given') == 1 else ("low" if player.field_maybe_none('worker2_effort_given') == 0 else "")
         average_effort = int(group.field_maybe_none('average_effort') * 100) if group.field_maybe_none('average_effort') is not None else None
-        effort_string = "high" if player.field_maybe_none('effort_choice') == 1 else ("low" if player.field_maybe_none('effort_choice') == 0 else "")
+        effort_string = "standard" if player.field_maybe_none('effort_choice') == 1 else ("low" if player.field_maybe_none('effort_choice') == 0 else "")
         round_number = player.participant.round_number
         rounds_left_part_1 = session.config['shock_after_rounds'] - round_number
         average_wage_points = round(group.average_wage_points, 1) if group.average_wage_points is not None else None

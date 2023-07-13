@@ -77,8 +77,8 @@
                     <b>1 {{ currency }} = {{ exchange_rate }} Pounds</b>.
              </p>
             <p class="block-sentence">
-                At the end of the experiment, you will receive the money you earned during the experiment in addition to your {{ participation_fee }}-Pound initial endowment.
-                You will be paid via PayPal.
+                At the end of the experiment, you will receive the money you earned during the experiment in addition to your initial endowment.
+                You will be paid via PayPal after the experiment is completed.
             </p>
         </div>
     </div>
@@ -222,7 +222,7 @@
                 They can submit up two open job offers at a time.
                 They can also submit no offer at all or cancel open offer.
                 The offers employers send will appear in the "<b>Open offers</b>" table in the left-bottom of the page.
-                An offer includes a wage between 0 and {{ max_wage }} {{ currency_plural }}, a desired effort level which is either "normal" or "low", and a unique Job ID for each job.
+                An offer includes a wage between 0 and {{ max_wage }} {{ currency_plural }}, a desired effort level which is either "standard" or "low", and a unique Job ID for each job.
             </p>
             <div style="display: flex; justify-content: center;">
                 {% if player.participant.currency_is_points == True %}
@@ -280,16 +280,16 @@
             <p class="block-sentence">
                 Following the market phase, all workers who have accepted a job offer enter the production phase.
                In this phase, workers choose their effort. <b>The effort requested by employers is not binding</b>.
-               Hence, you can choose <b>normal</b> or <b>low</b> effort irrespective of the effort indicated in the job offer.
+               Hence, you can choose <b>standard</b> or <b>low</b> effort irrespective of the effort indicated in the job offer.
             </p>
             <p class="block-sentence">
               The page you will see looks like the one shown above.
                 At the top of the page, you will see the wage you accepted and the effort requested by the employer.
                 Below, you see the cost of each effort choice.
             </p>
-                <ul class="list" style="margin-top: -10px; margin-bottom: 15px;">
+                <ul class="list" style="margin-top: -10px; margin-bottom: 10px;">
+                    <li> <b> The cost of Standard effort is {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
                     <li> <b> The cost of Low effort is {{ low_effort_points_tokens }} {{ currency_plural }} </b></li>
-                    <li> <b> The cost of Normal effort is {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
                 </ul>
             <div style="display: flex; justify-content: center; margin-bottom: 10px">
                 {% if player.participant.currency_is_points == True %}
@@ -307,10 +307,10 @@
             <ul class="list" style="margin-top: -10px;">
                 <li> If you do not accept any job offer, you earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b>.</li>
                 <li> If you accept a job offer and choose Low effort, your profits equal the wage minus the cost of low effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
-                <li> If you accept a job offer and choose Normal effort, your profits equal the wage minus the cost of normal effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                <li> If you accept a job offer and choose Standard effort, your profits equal the wage minus the cost of standard effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
             </ul>
             <p class="block-sentence">
-                <u>Example</u>: if you receive a wage of {{ worker_example_wage }}  {{ currency_plural }} and choose normal effort, your profits in this round are {{ worker_example_wage }} –  {{ high_effort_points_tokens }} = {{ worker_example_profit_high_effort }} {{ currency_plural }}.
+                <u>Example</u>: if you receive a wage of {{ worker_example_wage }}  {{ currency_plural }} and choose standard effort, your profits in this round are {{ worker_example_wage }} –  {{ high_effort_points_tokens }} = {{ worker_example_profit_high_effort }} {{ currency_plural }}.
                 If, instead, you choose Low effort, the profits are  {{ worker_example_wage }} – {{ low_effort_points_tokens }} = {{ worker_example_profit_low_effort }}  {{ currency_plural }}.
             </p>
             <p class="block-sentence">
@@ -342,8 +342,19 @@
             <p style="margin-left: 50px;">
                 <b>Profit = Total revenue - total wage payments</b>.
             </p>
+            <p class="block-sentence" style="margin-bottom: -1px">
+                The total revenue depends on the number of workers they employ and the effort the workers provide.
+            </p>
+                 <ul style="margin-top: -2px">
+                    <li> <b>If a worker provides standard effort the employers revenue will be considerably larger than if the worker provides low effort</b>.
+                         For example, the employer gets {{ gain_high_effort_1_worker }} {{ currency_plural }} revenue in case of standard effort and
+                         {{ gain_low_effort_1_worker }} {{ currency_plural }} in case of low effort.</li>
+                    <li> <b>If they employ two workers, each worker becomes somewhat less productive</b>. The total revenue of two workers may still be larger, but not twice as large.
+                         For example, an employer gets {{ gain_high_effort_2_workers }} {{ currency_plural }} for each worker providing standard effort and
+                        {{ gain_low_effort_2_workers }} {{ currency_plural }} for each worker providing low effort if they employ two workers.</li>
+                </ul>
             <p class="block-sentence">
-                The total revenue depends on the number of workers they employ and the effort workers choose, according to the table below.
+               The table below summarizes the total revenue in each case.
             </p>
            <div style="max-width: 80%; margin: 0 auto; padding: 10px;">
               <table style="border-collapse: collapse; width: 100%;">
@@ -352,19 +363,19 @@
                     <th style="border: 1px solid black;">Total revenue</th>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Normal effort.</td>
-                    <td style="border: 1px solid black;">{{ total_gain_high_effort_2_workers }}</td>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Standard effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }} + {{ gain_high_effort_2_workers }} = {{ total_gain_high_effort_2_workers }}</td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses Normal effort.<br>The other worker chooses Low effort.</td>
-                    <td style="border: 1px solid black;">{{ total_gain_mix_effort_2_workers }}</td>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses Standard effort.<br>The other worker chooses Low effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }} + {{ gain_low_effort_2_workers }} = {{ total_gain_mix_effort_2_workers }}</td>
                 </tr>
                 <tr>
                     <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Low effort.</td>
-                    <td style="border: 1px solid black;">{{ total_gain_low_effort_2_workers }}</td>
+                    <td style="border: 1px solid black;">{{ gain_low_effort_2_workers }} + {{ gain_low_effort_2_workers }} = {{ total_gain_low_effort_2_workers }}</td>
                 </tr>
                 <tr>
-                    <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Normal effort.</td>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Standard effort.</td>
                     <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
                 </tr>
                 <tr>
@@ -380,10 +391,10 @@
             </p>
             <ul>
                 <li>
-                    If both workers choose Normal effort, then their profits equal to {{ total_gain_high_effort_2_workers }} – 60 – 40 = 180 {{ currency_plural }}.
+                    If both workers choose Standard effort, then their profits equal to {{ total_gain_high_effort_2_workers }} – 60 – 40 = 180 {{ currency_plural }}.
                 </li>
                 <li>
-                    Alternatively, if one worker chooses Normal effort and the other Low effort, then the employers profits equal {{ total_gain_mix_effort_2_workers }} – 60 – 40 = 54 {{ currency_plural }}.
+                    Alternatively, if one worker chooses Standard effort and the other Low effort, then the employers profits equal {{ total_gain_mix_effort_2_workers }} – 60 – 40 = 54 {{ currency_plural }}.
                 </li>
             </ul>
             <p>
@@ -448,10 +459,11 @@
             <button type="button" class="btn btn-outline-secondary" id="hide-info-button1" onclick="hideInformation(this.id)" style="display: none">Click to hide information</button>
             <div id="explainer-clicked1" style="display: none">
                     <h5 class="underline">Worker profits</h5>
+                    Remember that worker profits are the wage minus the cost of effort:
                 <ul class="list" style="margin-top: -10px;">
-                    <li> If a worker accepts no job offer, you earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b>.</li>
-                    <li> If a worker a job offer and chooses Low effort, profits equal the wage minus the low cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
-                    <li> If a worker a job offer and chooses Normal effort, profits equal the wage minus the normal cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                    <li> If you accept no job, you earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b>.</li>
+                    <li> If you accept job and choose Low effort, profits equal the wage minus the low cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                    <li> If you accept job and choose Standard effort, profits equal the wage minus the standard cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
                 </ul>
                 <div style="margin-top: 20px;"></div>
                 <h5 class="underline">Employer profits</h5>
@@ -462,36 +474,47 @@
                 <p style="margin-left: 50px;">
                     <b>Profit = Total revenue - total wage payments</b>.
                 </p>
-                <p class="block-sentence">
-                    The total revenue depends on the number of workers they employ and the effort workers choose, according to the table below.
-                </p>
+                 <p class="block-sentence" style="margin-bottom: -1px">
+                The total revenue depends on the number of workers they employ and the effort the workers provide.
+            </p>
+                 <ul style="margin-top: -2px">
+                    <li> <b>If a worker provides standard effort the employers revenue will be considerably larger than if the worker provides low effort</b>.
+                         For example, the employer gets {{ gain_high_effort_1_worker }} {{ currency_plural }} revenue in case of standard effort and
+                         {{ gain_low_effort_1_worker }} {{ currency_plural }} in case of low effort.</li>
+                    <li> <b>If they employ two workers, each worker becomes somewhat less productive</b>. The total revenue of two workers may still be larger, but not twice as large.
+                         For example, an employer gets {{ gain_high_effort_2_workers }} {{ currency_plural }} for each worker providing standard effort and
+                        {{ gain_low_effort_2_workers }} {{ currency_plural }} for each worker providing low effort if they employ two workers.</li>
+                </ul>
+            <p class="block-sentence">
+               The table below summarizes the total revenue in each case.
+            </p>
                    <div style="max-width: 80%; margin: 0 auto; padding: 10px;">
                       <table style="border-collapse: collapse; width: 100%;">
-                        <tr>
-                            <th style="border: 1px solid black;">Case</th>
-                            <th style="border: 1px solid black;">Total revenue</th>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Normal effort.</td>
-                            <td style="border: 1px solid black;">{{ total_gain_high_effort_2_workers }}</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses Normal effort.<br>The other worker chooses Low effort.</td>
-                            <td style="border: 1px solid black;">{{ total_gain_mix_effort_2_workers }}</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Low effort.</td>
-                            <td style="border: 1px solid black;">{{ total_gain_low_effort_2_workers }}</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Normal effort.</td>
-                            <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Low effort.</td>
-                            <td style="border: 1px solid black;">{{ gain_low_effort_1_worker }}</td>
-                        </tr>
-                    </table>
+                            <tr>
+                                <th style="border: 1px solid black;">Case</th>
+                                <th style="border: 1px solid black;">Total revenue</th>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Standard effort.</td>
+                                <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }} + {{ gain_high_effort_2_workers }} = {{ total_gain_high_effort_2_workers }}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses Standard effort.<br>The other worker chooses Low effort.</td>
+                                <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }} + {{ gain_low_effort_2_workers }} = {{ total_gain_mix_effort_2_workers }}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Low effort.</td>
+                                <td style="border: 1px solid black;">{{ gain_low_effort_2_workers }} + {{ gain_low_effort_2_workers }} = {{ total_gain_low_effort_2_workers }}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Standard effort.</td>
+                                <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Low effort.</td>
+                                <td style="border: 1px solid black;">{{ gain_low_effort_1_worker }}</td>
+                            </tr>
+                        </table>
                     </div>
                 <div style="margin-bottom: 10px;"></div>
                 <p>
@@ -534,10 +557,11 @@
             <button type="button" class="btn btn-outline-secondary" id="hide-info-button2" onclick="hideInformation(this.id)" style="display: none">Click to hide information</button>
             <div id="explainer-clicked2" style="display: none">
                     <h5 class="underline">Worker profits</h5>
+                    Remember that worker profits are the wage minus the cost of effort:
                 <ul class="list" style="margin-top: -10px;">
                     <li> If a worker accepts no job offer, you earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b>.</li>
                     <li> If a worker a job offer and chooses Low effort, profits equal the wage minus the low cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
-                    <li> If a worker a job offer and chooses Normal effort, profits equal the wage minus the normal cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                    <li> If a worker a job offer and chooses Standard effort, profits equal the wage minus the standard cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
                 </ul>
                 <br>
                 <h5 class="underline">Employer profits</h5>
@@ -548,29 +572,40 @@
                 <p style="margin-left: 50px;">
                     <b>Profit = Total revenue - total wage payments</b>.
                 </p>
-                <p class="block-sentence">
-                    The total revenue depends on the number of workers they employ and the effort workers choose, according to the table below.
-                </p>
+                <p class="block-sentence" style="margin-bottom: -1px">
+                The total revenue depends on the number of workers they employ and the effort the workers provide.
+            </p>
+                 <ul style="margin-top: -2px">
+                    <li> <b>If a worker provides standard effort the employers revenue will be considerably larger than if the worker provides low effort</b>.
+                         For example, the employer gets {{ gain_high_effort_1_worker }} {{ currency_plural }} revenue in case of standard effort and
+                         {{ gain_low_effort_1_worker }} {{ currency_plural }} in case of low effort.</li>
+                    <li> <b>If they employ two workers, each worker becomes somewhat less productive</b>. The total revenue of two workers may still be larger, but not twice as large.
+                         For example, an employer gets {{ gain_high_effort_2_workers }} {{ currency_plural }} for each worker providing standard effort and
+                        {{ gain_low_effort_2_workers }} {{ currency_plural }} for each worker providing low effort if they employ two workers.</li>
+                </ul>
+            <p class="block-sentence">
+               The table below summarizes the total revenue in each case.
+            </p>
                    <div style="max-width: 80%; margin: 0 auto; padding: 10px;">
-                      <table style="border-collapse: collapse; width: 100%;">
+                              <table style="border-collapse: collapse; width: 100%;">
                         <tr>
                             <th style="border: 1px solid black;">Case</th>
                             <th style="border: 1px solid black;">Total revenue</th>
                         </tr>
                         <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Normal effort.</td>
-                            <td style="border: 1px solid black;">{{ total_gain_high_effort_2_workers }}</td>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Standard effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }} + {{ gain_high_effort_2_workers }} = {{ total_gain_high_effort_2_workers }}</td>
                         </tr>
                         <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses Normal effort.<br>The other worker chooses Low effort.</td>
-                            <td style="border: 1px solid black;">{{ total_gain_mix_effort_2_workers }}</td>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses Standard effort.<br>The other worker chooses Low effort.</td>
+                            <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }} + {{ gain_low_effort_2_workers }} = {{ total_gain_mix_effort_2_workers }}</td>
                         </tr>
                         <tr>
                             <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Low effort.</td>
-                            <td style="border: 1px solid black;">{{ total_gain_low_effort_2_workers }}</td>
+                            <td style="border: 1px solid black;">{{ gain_low_effort_2_workers }} + {{ gain_low_effort_2_workers }} = {{ total_gain_low_effort_2_workers }}</td>
                         </tr>
                         <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Normal effort.</td>
+                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Standard effort.</td>
                             <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
                         </tr>
                         <tr>
@@ -626,10 +661,11 @@
             <button type="button" class="btn btn-outline-secondary" id="hide-info-button3" onclick="hideInformation(this.id)" style="display: none">Click to hide information</button>
             <div id="explainer-clicked3" style="display: none">
                     <h5 class="underline">Worker profits</h5>
+                    Remember that worker profits are the wage minus the cost of effort:
                 <ul class="list" style="margin-top: -10px;">
                     <li> If a worker accepts no job offer, you earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b>.</li>
                     <li> If a worker a job offer and chooses Low effort, profits equal the wage minus the low cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
-                    <li> If a worker a job offer and chooses Normal effort, profits equal the wage minus the normal cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                    <li> If a worker a job offer and chooses Standard effort, profits equal the wage minus the standard cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
                 </ul>
                 <br>
                 <h5 class="underline">Employer profits</h5>
@@ -640,36 +676,47 @@
                 <p style="margin-left: 50px;">
                     <b>Profit = Total revenue - total wage payments</b>.
                 </p>
-                <p class="block-sentence">
-                    The total revenue depends on the number of workers they employ and the effort workers choose, according to the table below.
-                </p>
+                 <p class="block-sentence" style="margin-bottom: -1px">
+                The total revenue depends on the number of workers they employ and the effort the workers provide.
+            </p>
+                 <ul style="margin-top: -2px">
+                    <li> <b>If a worker provides standard effort the employers revenue will be considerably larger than if the worker provides low effort</b>.
+                         For example, the employer gets {{ gain_high_effort_1_worker }} {{ currency_plural }} revenue in case of standard effort and
+                         {{ gain_low_effort_1_worker }} {{ currency_plural }} in case of low effort.</li>
+                    <li> <b>If they employ two workers, each worker becomes somewhat less productive</b>. The total revenue of two workers may still be larger, but not twice as large.
+                         For example, an employer gets {{ gain_high_effort_2_workers }} {{ currency_plural }} for each worker providing standard effort and
+                        {{ gain_low_effort_2_workers }} {{ currency_plural }} for each worker providing low effort if they employ two workers.</li>
+                </ul>
+            <p class="block-sentence">
+               The table below summarizes the total revenue in each case.
+            </p>
                    <div style="max-width: 80%; margin: 0 auto; padding: 10px;">
                       <table style="border-collapse: collapse; width: 100%;">
-                        <tr>
-                            <th style="border: 1px solid black;">Case</th>
-                            <th style="border: 1px solid black;">Total revenue</th>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Normal effort.</td>
-                            <td style="border: 1px solid black;">{{ total_gain_high_effort_2_workers }}</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses Normal effort.<br>The other worker chooses Low effort.</td>
-                            <td style="border: 1px solid black;">{{ total_gain_mix_effort_2_workers }}</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Low effort.</td>
-                            <td style="border: 1px solid black;">{{ total_gain_low_effort_2_workers }}</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Normal effort.</td>
-                            <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
-                        </tr>
-                        <tr>
-                            <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Low effort.</td>
-                            <td style="border: 1px solid black;">{{ gain_low_effort_1_worker }}</td>
-                        </tr>
-                    </table>
+                <tr>
+                    <th style="border: 1px solid black;">Case</th>
+                    <th style="border: 1px solid black;">Total revenue</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Standard effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }} + {{ gain_high_effort_2_workers }} = {{ total_gain_high_effort_2_workers }}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses Standard effort.<br>The other worker chooses Low effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }} + {{ gain_low_effort_2_workers }} = {{ total_gain_mix_effort_2_workers }}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose Low effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_low_effort_2_workers }} + {{ gain_low_effort_2_workers }} = {{ total_gain_low_effort_2_workers }}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Standard effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses Low effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_low_effort_1_worker }}</td>
+                </tr>
+            </table>
                     </div>
                 <div style="margin-top: 10px;"></div>
                 <p>
