@@ -92,9 +92,9 @@ class SocioDemographic(Page):
     form_model = 'player'
     form_fields = ['age', 'gender', 'education', 'education_field', 'country_of_birth', 'country_of_residence']
 
-class CognitiveReflection(Page):
-    form_model = 'player'
-    form_fields = ['RA1', 'RA2', 'RA3']
+#class CognitiveReflection(Page):
+#    form_model = 'player'
+#    form_fields = ['RA1', 'RA2', 'RA3']
 
 class Behavioral1(Page):
     form_model = 'player'
@@ -110,7 +110,6 @@ class Behavioral3(Page):
 
 
 page_sequence = [SocioDemographic,
-                 CognitiveReflection,
                  Behavioral1,
                  Behavioral2,
                  Behavioral3]

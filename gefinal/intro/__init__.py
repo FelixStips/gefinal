@@ -13,12 +13,12 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
     Q2_WAGE = 70
-    Q2_EFFORT_REQUESTED = "high"
-    Q2_EFFORT_RECEIVED = "high"
+    Q2_EFFORT_REQUESTED = "standard"
+    Q2_EFFORT_RECEIVED = "standard"
     Q3_WAGE_1 = 30
     Q3_WAGE_2 = 50
     Q3_EFFORT_RECEIVED_1 = "low"
-    Q3_EFFORT_RECEIVED_2 = "high"
+    Q3_EFFORT_RECEIVED_2 = "standard"
 
 
 class Subsession(BaseSubsession):
@@ -188,9 +188,6 @@ class InstructionsWorkers(Page):
         profit_employer_example_1 = total_gain_high_effort_2_workers - 60 - 40
         profit_employer_example_2 = total_gain_mix_effort_2_workers - 60 - 40
 
-        print(total_gain_high_effort_2_workers)
-        print(total_gain_mix_effort_2_workers)
-
         if player.participant.large_market:
             players_in_your_group = session.config['size_large_market']
             employers_in_your_group = session.config['num_employers_large_market']
@@ -251,12 +248,12 @@ class InstructionsWorkers(Page):
     def live_method(player: Player, data):
         session = player.session
 
-        q2_efort_worth = session.config['MPL_high'][0] if C.Q2_EFFORT_RECEIVED == "high" else session.config['MPL_low'][0]
-        q3_efort_worth_1 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['MPL_low'][1]
-        q3_efort_worth_2 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['MPL_low'][1]
-        q2_efort_cost = session.config['effort_costs_points'][1] if C.Q2_EFFORT_RECEIVED == "high" else session.config['effort_costs_points'][0]
-        q3_efort_cost_1 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else session.config['effort_costs_points'][0]
-        q3_efort_cost_2 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else session.config['effort_costs_points'][0]
+        q2_efort_worth = session.config['MPL_high'][0] if C.Q2_EFFORT_RECEIVED == "standard" else session.config['MPL_low'][0]
+        q3_efort_worth_1 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_1 == "standard" else session.config['MPL_low'][1]
+        q3_efort_worth_2 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_2 == "standard" else session.config['MPL_low'][1]
+        q2_efort_cost = session.config['effort_costs_points'][1] if C.Q2_EFFORT_RECEIVED == "standard" else session.config['effort_costs_points'][0]
+        q3_efort_cost_1 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_1 == "standard" else session.config['effort_costs_points'][0]
+        q3_efort_cost_2 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_2 == "standard" else session.config['effort_costs_points'][0]
 
         if player.participant.currency_is_points:
             q2_effort_worth = q2_efort_worth
@@ -485,17 +482,17 @@ class InstructionsFirms(Page):
     def live_method(player: Player, data):
         session = player.session
 
-        q2_efort_worth = session.config['MPL_high'][0] if C.Q2_EFFORT_RECEIVED == "high" else session.config['MPL_low'][
+        q2_efort_worth = session.config['MPL_high'][0] if C.Q2_EFFORT_RECEIVED == "standard" else session.config['MPL_low'][
             0]
-        q3_efort_worth_1 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else \
+        q3_efort_worth_1 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_1 == "standard" else \
         session.config['MPL_low'][1]
-        q3_efort_worth_2 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else \
+        q3_efort_worth_2 = session.config['MPL_high'][1] if C.Q3_EFFORT_RECEIVED_2 == "standard" else \
         session.config['MPL_low'][1]
-        q2_efort_cost = session.config['effort_costs_points'][1] if C.Q2_EFFORT_RECEIVED == "high" else \
+        q2_efort_cost = session.config['effort_costs_points'][1] if C.Q2_EFFORT_RECEIVED == "standard" else \
         session.config['effort_costs_points'][0]
-        q3_efort_cost_1 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_1 == "high" else \
+        q3_efort_cost_1 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_1 == "standard" else \
         session.config['effort_costs_points'][0]
-        q3_efort_cost_2 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_2 == "high" else \
+        q3_efort_cost_2 = session.config['effort_costs_points'][1] if C.Q3_EFFORT_RECEIVED_2 == "standard" else \
         session.config['effort_costs_points'][0]
 
         if player.participant.currency_is_points:

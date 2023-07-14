@@ -24,11 +24,11 @@ SESSION_CONFIGS = [
                         'questionnaire',
                         'questionnaire2',
                         'end'],
-         num_demo_participants=9,
-         final=False,                                                              # Display instructions
+         num_demo_participants=36,
+         final=True,                                                              # Display instructions
          market_timeout_seconds=180,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
-         showup_fee=12.0,                                                          # Participation show-up fee
+         showup_fee=10.0,                                                          # Participation show-up fee
          payout_rate=0.01,                                                         # Payout rate: 1 point = X Pounds
          exchange_rate=2,                                                          # Exchange rate: 1 point = X tokens
          max_wage=100,                                                             # Maximum wage in points
@@ -37,14 +37,14 @@ SESSION_CONFIGS = [
          MPL_high=[160, 140],                                                      # Revenue high effort for 1 or 2 workers
          MPL_low=[32, 28],                                                         # Revenue low effort for 1 or 2 workers
          effort_costs_points=[10, 20],                                             # Effort costs for low and high effort, in points
-         total_rounds=2,                                                           # Total number of market rounds
-         shock_after_rounds=1,                                                     # Number of rounds before migration shock
-         size_large_market=3,                                                      # Number of players in each large market (note: large and small does not mean anything)
-         size_small_market=3,                                                      # Number of players in small market
-         num_employers_large_market=1,                                             # Number of employers in large market
-         num_employers_small_market=1,                                             # Number of employers in small market
+         total_rounds=20,                                                           # Total number of market rounds
+         shock_after_rounds=10,                                                     # Number of rounds before migration shock
+         size_large_market=12,                                                      # Number of players in each large market (note: large and small does not mean anything)
+         size_small_market=12,                                                      # Number of players in small market
+         num_employers_large_market=6,                                             # Number of employers in large market
+         num_employers_small_market=6,                                             # Number of employers in small market
          migration_small_shock_size=1,                                             # Number of migrants in small migration shock
-         migration_large_shock_size=1,                                             # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
+         migration_large_shock_size=5,                                             # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
          worker_example_wage=50,                                                   # Wage in the worker example in points
     )]
 

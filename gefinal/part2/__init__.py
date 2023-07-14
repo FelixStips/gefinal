@@ -537,6 +537,7 @@ class ResultsWaitPage(WaitPage):
 
 class Results(Page):
     form_model = 'player'
+    timeout_seconds = 60
 
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
