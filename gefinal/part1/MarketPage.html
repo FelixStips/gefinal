@@ -88,7 +88,8 @@
 <div class="card" id="trading_mask" style="display: none">
     <h5 class="card-header">Trading box</h5>
     <div class="card-body">
-        You can make up to two job offers at a time. Use the masks below to send offers.  <br><br>
+        You can make up to two job offers at a time. Use the masks below to send offers
+        <br><br>
     <div class="row">
         <div class="col">
             <div class="card" id="offer_mask_1" style="display: none">
@@ -133,6 +134,14 @@
                         The offer with ID <b><span id="employer_job_id_accepted_1"></span></b> was accepted.
                         You offered a wage <b><span id="employer_wage_accepted_1"></span></b>
                         for <b><span id="employer_effort_accepted_1"></span></b> desired effort.
+                    </p>
+                </div>
+            </div>
+            <div class="card" id="employer_done_1" style="display: none">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Wait</h6>
+                    <p class="card-text">
+                        You decided not to make any more offers this round.
                     </p>
                 </div>
             </div>
@@ -182,9 +191,21 @@
                 </p>
             </div>
         </div>
+        <div class="card" id="employer_done_2" style="display: none">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-muted">Wait</h6>
+                    <p class="card-text">
+                        You decided not to make any more offers this round.
+                    </p>
+                </div>
+            </div>
       </div>
     </div>
-    </div>
+        <div id="no_more_offers">
+        <br>
+        If you do not want to employ more workers this round, you can click <button type="button" class="btn btn-outline-secondary btn-sm mr-2" onclick="noMoreOffers(this.id)">here</button>
+         </div>
+     </div>
 </div>
 
 
@@ -390,7 +411,7 @@
 
 
         function renderPage(page_information) {
-            let {is_finished, wait, wait1, wait2, accepted1, accepted2, invalid} = page_information;
+            let {is_finished, wait, wait1, wait2, done1, done2, accepted1, accepted2, invalid} = page_information;
             if (is_finished) {
                 document.getElementById("to_next_page").click();
             } else {
@@ -403,28 +424,44 @@
                     if (wait1) {
                           document.getElementById("employer_wait_1").style.display = "block";
                           document.getElementById("offer_mask_1").style.display = "none";
-                          document.getElementById("employer_accepted_1").style.display = "none";
+                          document.getElementById("employer_accepted_1").style.display = "none"
+                            document.getElementById("employer_done_1").style.display = "none";
                         } else if (accepted1) {
-                          document.getElementById("employer_accepted_1").style.display = "block";
-                          document.getElementById("employer_wait_1").style.display = "none";
-                          document.getElementById("offer_mask_1").style.display = "none";
+                        document.getElementById("employer_accepted_1").style.display = "block";
+                        document.getElementById("employer_wait_1").style.display = "none";
+                        document.getElementById("offer_mask_1").style.display = "none";
+                        document.getElementById("employer_done_1").style.display = "none";
+                        } else if (done1) {
+                            document.getElementById("employer_wait_1").style.display = "none";
+                            document.getElementById("offer_mask_1").style.display = "none";
+                            document.getElementById("employer_accepted_1").style.display = "none";
+                            document.getElementById("employer_done_1").style.display = "block";
                         } else {
                           document.getElementById("offer_mask_1").style.display = "block";
                           document.getElementById("employer_wait_1").style.display = "none";
-                          document.getElementById("employer_accepted_1").style.display = "none";
+                          document.getElementById("employer_accepted_1").style.display = "none"
+                            document.getElementById("employer_done_1").style.display = "none";
                     }
                     if (wait2) {
                         document.getElementById("employer_wait_2").style.display = "block";
                         document.getElementById("offer_mask_2").style.display = "none";
-                        document.getElementById("employer_accepted_2").style.display = "none";
+                        document.getElementById("employer_accepted_2").style.display = "none"
+                        document.getElementById("employer_done_2").style.display = "none";
                         } else if (accepted2) {
                         document.getElementById("employer_accepted_2").style.display = "block";
                         document.getElementById("employer_wait_2").style.display = "none";
-                        document.getElementById("offer_mask_2").style.display = "none";
-                        } else {
+                        document.getElementById("offer_mask_2").style.display = "none"
+                        document.getElementById("employer_done_2").style.display = "none";
+                        } else if (done2) {
+                            document.getElementById("employer_wait_2").style.display = "none";
+                            document.getElementById("offer_mask_2").style.display = "none";
+                            document.getElementById("employer_accepted_2").style.display = "none";
+                            document.getElementById("employer_done_2").style.display = "block";
+                        } else  {
                         document.getElementById("offer_mask_2").style.display = "block";
                         document.getElementById("employer_wait_2").style.display = "none";
                         document.getElementById("employer_accepted_2").style.display = "none";
+                        document.getElementById("employer_done_2").style.display = "none";
                     }
                 } else {
                     document.getElementById("trading_mask").style.display = "none";
@@ -500,6 +537,18 @@
         } finally {
             document.getElementById("input_job_id_accept").value = "";
         }
+    }
+
+    function noMoreOffers() {
+        let job1_open = (document.getElementById('employer_accepted_1').style.display === "block") ? 0 : 1;
+        let job2_open = (document.getElementById('employer_accepted_2').style.display === "block") ? 0 : 1;
+        let jobs_open = job1_open + job2_open
+        console.log(jobs_open)
+        liveSend({
+            "information_type": "done",
+            "employer_id": js_vars.my_id,
+            "jobs_open" : jobs_open,
+        })
     }
 
     function isNumeric(input) {

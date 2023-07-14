@@ -251,6 +251,19 @@ class MarketPage(Page):
         session = player.session
         player.invalid = False
         print('Received', data)
+        if data['information_type'] == 'done':
+            group.num_unmatched_jobs -= data['jobs_open']
+
+            player.done = True
+            player.invalid = False
+            player.timestamp_done = int(time.time())
+
+            if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
+                group.is_finished = True
+                group.end_timestamp = int(time.time())
+
+
+
         if data['information_type'] == 'offer':
             group.job_offer_counter += 1
             group.num_job_offers += 1
