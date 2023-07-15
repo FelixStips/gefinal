@@ -80,6 +80,8 @@ class Player(BasePlayer):
     worker2_effort = models.IntegerField()
     worker1_effort_given = models.IntegerField()
     worker2_effort_given = models.IntegerField()
+    done = models.IntegerField(initial=0)
+    timestamp_done = models.FloatField()
 
 
 
@@ -252,7 +254,22 @@ class MarketPage(Page):
         session = player.session
         player.invalid = False
         print('Received', data)
-        if data['information_type'] == 'offer':
+        if data['information_type'] == 'done':
+            group.num_unmatched_jobs -= data['jobs_open']
+            player.done = data['jobs_open']
+            player.invalid = False
+            player.timestamp_done = int(time.time()) - group.start_timestamp
+            print('Number of unmatched jobs:', group.num_unmatched_jobs)
+            if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
+                group.is_finished = True
+            else:
+                offers = Offer.filter(group=group)
+                for o in offers:
+                    if o.status == 'open' and o.employer_id == player.participant.playerID:
+                        o.status = 'cancelled'
+                        o.show = False
+                        o.timestamp_cancelled = int(time.time()) - group.start_timestamp
+        elif data['information_type'] == 'offer':
             group.job_offer_counter += 1
             group.num_job_offers += 1
             if data['currency_is_points'] is True:
@@ -361,6 +378,7 @@ class MarketPage(Page):
         data_to_return = {
             p.id_in_group: dict(
                 page_information=dict(is_finished=group.is_finished,
+                                      done=p.done,
                                       wait=p.wait,
                                       wait1=p.wait1,
                                       wait2=p.wait2,

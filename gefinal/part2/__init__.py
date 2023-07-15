@@ -77,7 +77,10 @@ class Player(BasePlayer):
     worker2_effort = models.IntegerField()
     worker1_effort_given = models.IntegerField()
     worker2_effort_given = models.IntegerField()
-
+    done = models.IntegerField(initial=0)
+    timestamp_done = models.FloatField()
+    done = models.IntegerField(initial=0)
+    timestamp_done = models.FloatField()
 
 
 
@@ -194,6 +197,7 @@ class Countdown(Page):
         return session.config['countdown_seconds']
 
 
+
 class MarketPage(Page):
     timer_text = 'The market phase will end in:'
 
@@ -208,8 +212,8 @@ class MarketPage(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
-        group = player.group
         session = player.session
+        group = player.group
         players_in_group = group.players_in_group
         employers_in_group = group.employers_in_group
 
@@ -239,7 +243,6 @@ class MarketPage(Page):
                     string_role=player.participant.vars['string_role'],
                     currency_is_points=player.participant.vars['currency_is_points'])
 
-
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         if timeout_happened:
@@ -253,18 +256,20 @@ class MarketPage(Page):
         print('Received', data)
         if data['information_type'] == 'done':
             group.num_unmatched_jobs -= data['jobs_open']
-
-            player.done = True
+            player.done = data['jobs_open']
             player.invalid = False
-            player.timestamp_done = int(time.time())
-
+            player.timestamp_done = int(time.time()) - group.start_timestamp
+            print('Number of unmatched jobs:', group.num_unmatched_jobs)
             if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
                 group.is_finished = True
-                group.end_timestamp = int(time.time())
-
-
-
-        if data['information_type'] == 'offer':
+            else:
+                offers = Offer.filter(group=group)
+                for o in offers:
+                    if o.status == 'open' and o.employer_id == player.participant.playerID:
+                        o.status = 'cancelled'
+                        o.show = False
+                        o.timestamp_cancelled = int(time.time()) - group.start_timestamp
+        elif data['information_type'] == 'offer':
             group.job_offer_counter += 1
             group.num_job_offers += 1
             if data['currency_is_points'] is True:
@@ -365,17 +370,15 @@ class MarketPage(Page):
 
         market_information = dict(workers_left=group.num_unmatched_workers,
                                   open_offers=sum(i['status'] == 'open' for i in offers_list),
-                                  average_wage_tokens=sum(i['wage_tokens'] for i in offers_list) / len(
-                                      offers_list) if len(offers_list) > 0 else 0,
-                                  average_wage_points=sum(i['wage_points'] for i in offers_list) / len(
-                                      offers_list) if len(offers_list) > 0 else 0,
-                                  average_effort=sum(i['effort'] for i in offers_list) / len(offers_list) if len(
-                                      offers_list) > 0 else 0,
+                                  average_wage_tokens=sum(i['wage_tokens'] for i in offers_list) / len(offers_list) if len(offers_list) > 0 else 0,
+                                  average_wage_points=sum(i['wage_points'] for i in offers_list) / len(offers_list) if len(offers_list) > 0 else 0,
+                                  average_effort=sum(i['effort'] for i in offers_list) / len(offers_list) if len(offers_list) > 0 else 0,
                                   )
 
         data_to_return = {
             p.id_in_group: dict(
                 page_information=dict(is_finished=group.is_finished,
+                                      done=p.done,
                                       wait=p.wait,
                                       wait1=p.wait1,
                                       wait2=p.wait2,
