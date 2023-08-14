@@ -49,7 +49,7 @@
 
 <div class="card">
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Info Box</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Info box</h6>
         <p>
             This is round number <b><span id="round_number">{{ round_number }}</span></b>.
             Your group includes <b><span id="employers_total">{{ employers_in_group }}</span> </b> employer(s)
@@ -86,9 +86,10 @@
 
 
 <div class="card" id="trading_mask" style="display: none">
-    <h5 class="card-header">Trading mask</h5>
+    <h5 class="card-header">Trading box</h5>
     <div class="card-body">
-        You can make up to two job offers at a time. Use the masks below to send offers.  <br><br>
+        You can make up to two job offers at a time. Use the masks below to send offers
+        <br><br>
     <div class="row">
         <div class="col">
             <div class="card" id="offer_mask_1" style="display: none">
@@ -120,7 +121,7 @@
                         You offered a wage of <b><span id="employer_wage_offered_1"></span></b>
                         for <b><span id="employer_effort_offered_1"></span></b> desired effort.
                         The job ID is <b><span id="employer_job_id_offered_1"></span></b>.
-                        To cancel the offer, click the button below.
+                        To cancel the offer, click below.
                     </p>
                     <button type="button" class="btn btn-secondary" id="cancel_offer_1" onclick="cancelOffer(this.id)"> Cancel Offer
                     </button>
@@ -133,15 +134,6 @@
                         The offer with ID <b><span id="employer_job_id_accepted_1"></span></b> was accepted.
                         You offered a wage <b><span id="employer_wage_accepted_1"></span></b>
                         for <b><span id="employer_effort_accepted_1"></span></b> desired effort.
-                    </p>
-                </div>
-            </div>
-                <div class="card" id="employer_done_1" style="display: none">
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Wait</h6>
-                    <p class="card-text">
-                        You indicated that you do not want to send any more offers this round.
-                        Please wait until the other employers and workers are done.
                     </p>
                 </div>
             </div>
@@ -176,7 +168,7 @@
                     You offered a wage of <b><span id="employer_wage_offered_2"></span></b>
                     for <b><span id="employer_effort_offered_2"></span></b> desired effort.
                     The job ID is <b><span id="employer_job_id_offered_2"></span></b>.
-                    To cancel the offer, click the button below.
+                    To cancel the offer, click below.
                 </p>
                     <button type="button" class="btn btn-secondary" id="cancel_offer_2" onclick="cancelOffer(this.id)"> Cancel Offer</button>
             </div>
@@ -191,21 +183,21 @@
                 </p>
             </div>
         </div>
-              <div class="card" id="employer_done_2" style="display: none">
-                <div class="card-body">
-                    <h6 class="card-subtitle mb-2 text-muted">Wait</h6>
-                    <p class="card-text">
-                        You indicated that you do not want to send any more offers this round.
-                        Please wait until the other employers and workers are done.
-                    </p>
-                </div>
-            </div>
       </div>
     </div>
-        <div id="no_more_offers">
         <br>
+    <div id="no_more_offers" style="display: none">
         If you do not want to employ more workers this round, you can click <button type="button" class="btn btn-outline-secondary btn-sm mr-2" onclick="noMoreOffers(this.id)">here</button>
-         </div>
+    </div>
+    <div class="card" id="employer_done" style="display: none">
+        <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">Wait</h6>
+            <p class="card-text">
+               You indicated that you do not want to send any more offers this round.
+               Please wait until the other players are done.
+             </p>
+        </div>
+     </div>
     </div>
 </div>
 
@@ -424,46 +416,39 @@
                     document.getElementById("worker_wait").style.display = "none";
                     document.getElementById("accept_mask").style.display = "none";
                     if (done==2) {
-                        console.log("done==2");
                         document.getElementById("employer_wait_1").style.display = "none";
-                        document.getElementById("offer_mask_1").style.display = "none";
-                        document.getElementById("employer_accepted_1").style.display = "none"
-                        document.getElementById("employer_done_1").style.display = "block";
                         document.getElementById("employer_wait_2").style.display = "none";
-                        document.getElementById("offer_mask_2").style.display = "none";
+                        document.getElementById("employer_accepted_1").style.display = "none"
                         document.getElementById("employer_accepted_2").style.display = "none"
-                        document.getElementById("employer_done_2").style.display = "block";
+                        document.getElementById("offer_mask_1").style.display = "none";
+                        document.getElementById("offer_mask_2").style.display = "none";
                         document.getElementById('no_more_offers').style.display = "none";
-                    } else if (done==1) {
-                        console.log("done==1");
-                        if (wait1) {
-                            document.getElementById("employer_wait_1").style.display = "block";
+                        document.getElementById("employer_done").style.display = "block";
+                    } else if (done==1) {                                                                               // One job was accepted, reduce cases because wait1 and accepted2 are the same
+                        if (wait1 || accepted2) {
+                            document.getElementById("employer_wait_1").style.display = "none";
+                            document.getElementById("employer_wait_2").style.display = "none";
                             document.getElementById("offer_mask_1").style.display = "none";
+                            document.getElementById("offer_mask_2").style.display = "none";
                             document.getElementById("employer_accepted_1").style.display = "none"
-                            document.getElementById("employer_done_2").style.display = "block";
+                            document.getElementById("employer_accepted_2").style.display = "block"
+                            document.getElementById("employer_done").style.display = "block";
                             document.getElementById('no_more_offers').style.display = "none";
-                        } else if (accepted1) {
-                            document.getElementById("employer_wait_1").style.display = "block";
+                        } else if (accepted1 || wait2) {
+                            document.getElementById("employer_wait_1").style.display = "none";
+                            document.getElementById("employer_wait_2").style.display = "none";
                             document.getElementById("offer_mask_1").style.display = "none";
+                            document.getElementById("offer_mask_2").style.display = "none";
                             document.getElementById("employer_accepted_1").style.display = "block"
-                            document.getElementById("employer_done_2").style.display = "block";
-                            document.getElementById('no_more_offers').style.display = "none";
-                        } else if (wait2) {
-                            document.getElementById("employer_wait_2").style.display = "block";
-                            document.getElementById("offer_mask_2").style.display = "none";
                             document.getElementById("employer_accepted_2").style.display = "none"
-                            document.getElementById("employer_done_1").style.display = "block";
-                            document.getElementById('no_more_offers').style.display = "none";
-                        } else if (accepted2) {
-                            document.getElementById("employer_wait_2").style.display = "block";
-                            document.getElementById("offer_mask_2").style.display = "none";
-                            document.getElementById("employer_accepted_2").style.display = "none"
-                            document.getElementById("employer_done_1").style.display = "block";
+                            document.getElementById("employer_done").style.display = "block";
                             document.getElementById('no_more_offers').style.display = "none";
                         } else {
                             console.log(error)
                         }
                     } else if (done==0) {
+                        document.getElementById("employer_done").style.display = "none";
+                        document.getElementById('no_more_offers').style.display = "block";
                         if (wait1) {
                             document.getElementById("employer_wait_1").style.display = "block";
                             document.getElementById("offer_mask_1").style.display = "none";
@@ -569,6 +554,18 @@
         }
     }
 
+    function noMoreOffers() {
+        let job1_open = (document.getElementById('employer_accepted_1').style.display === "block") ? 0 : 1;
+        let job2_open = (document.getElementById('employer_accepted_2').style.display === "block") ? 0 : 1;
+        let jobs_open = job1_open + job2_open
+        console.log(jobs_open)
+        liveSend({
+            "information_type": "done",
+            "employer_id": js_vars.my_id,
+            "jobs_open" : jobs_open,
+        })
+    }
+
     function isNumeric(input) {
         const regex = /^[0-9]+$/;
         return regex.test(input);
@@ -588,7 +585,7 @@
             alert("Error: Please enter a number in both fields before sending offer.");
             return;
         } else if (wage_inputted < 0 || wage_inputted > max_wage) {
-            alert("Error: Please specify a wage between 0 and " + max_wage + ".");
+            alert("Error: Please specify a wage between 0 and " +  max_wage + ".");
             return;
         } else if (effort_inputted < 0 || effort_inputted > 1) {
             alert("Error: Please choose either standard or low effort.");

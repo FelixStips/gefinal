@@ -1,6 +1,4 @@
-{% block title %}
-Results
-{% endblock %}
+
 
 {% block content %}
 
@@ -74,6 +72,19 @@ Results
     margin-bottom: 0;
   }
 
+
+   .btn-joint {
+        background-color: transparent;
+        border: 2px solid #555;
+        border-radius: 50%;
+        padding: 10px 20px;
+        margin: 0 5px;
+        color: #555;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+
 </style>
 
 <br>
@@ -84,9 +95,8 @@ Results
         <h6 class="card-subtitle mb-2 text-muted">Contract extension</h6>
           You can make a private offer to the worker(s) you hired this round. <br>
 
-          // yes or no button for offer
-          <button type="button" class="btn btn-primary">Yes</button>
-          <button type="button" class="btn btn-primary">No</button>
+        <button type="button" class="btn btn-joint">Yes</button>
+        <button type="button" class="btn btn-joint">No</button>
     </div>
 </div>
 

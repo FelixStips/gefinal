@@ -259,7 +259,6 @@ class MarketPage(Page):
             player.done = data['jobs_open']
             player.invalid = False
             player.timestamp_done = int(time.time()) - group.start_timestamp
-            print('Number of unmatched jobs:', group.num_unmatched_jobs)
             if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
                 group.is_finished = True
             else:
@@ -555,11 +554,6 @@ class Results(Page):
     timeout_seconds = 60
 
     @staticmethod
-    def app_after_this_page(player, upcoming_apps):
-        if player.round_number >= player.session.config['shock_after_rounds']:
-            return "midbreak"
-
-    @staticmethod
     def vars_for_template(player: Player):
         group = player.group
         session = player.session
@@ -641,6 +635,23 @@ class Reemploy(Page):
     def is_displayed(player: Player):
         return player.participant.is_employer
 
+    @staticmethod
+    def app_after_this_page(player, upcoming_apps):
+        if player.round_number >= player.session.config['shock_after_rounds']:
+            return "midbreak"
+
+class Part1Done(WaitPage):
+    body_text = "You finished part 1. Please wait for the other players in your group."
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.participant.is_employer is False and player.round_number >= player.session.config['shock_after_rounds']
+
+    @staticmethod
+    def app_after_this_page(player, upcoming_apps):
+        if player.round_number >= player.session.config['shock_after_rounds']:
+            return "midbreak"
+
 
 page_sequence = [WaitToStart,
                  Countdown,
@@ -648,7 +659,8 @@ page_sequence = [WaitToStart,
                  WorkPage,
                  ResultsWaitPage,
                  Results,
-                 Reemploy,]
+                 Reemploy,
+                 Part1Done,]
 
 
 def custom_export(players):
