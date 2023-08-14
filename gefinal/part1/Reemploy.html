@@ -1,0 +1,108 @@
+{% block title %}
+Results
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+    .otree-timer {
+    display: none;
+}
+  body {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 0px;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  table {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  th,
+  td {
+    padding: 6px;
+    text-align: left;
+    border: 1px solid #ddd;
+    background-color: #fff;
+  }
+
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+     color: #555;
+    font-size: 16px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+
+  .card {
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+  }
+
+  .card-subtitle {
+    font-size: 16px;
+     color: #555;
+      font-weight: bold;
+  }
+
+  .card-body {
+    margin-top: 2px;
+  }
+
+  .card-body p {
+    margin-bottom: 0;
+  }
+
+</style>
+
+<br>
+
+
+<div class="card" id="ask_for_renewal" style="display: block">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Contract extension</h6>
+          You can make a private offer to the worker(s) you hired this round. <br>
+
+          // yes or no button for offer
+          <button type="button" class="btn btn-primary">Yes</button>
+          <button type="button" class="btn btn-primary">No</button>
+    </div>
+</div>
+
+<div class="card" id="offer_renewals" style="display: none">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Contract extension</h6>
+
+    </div>
+</div>
+
+<br>
+
+{{ next_button }}
+
+
+{{ endblock }}
+
+
+

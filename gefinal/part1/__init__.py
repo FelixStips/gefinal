@@ -634,13 +634,22 @@ class Results(Page):
         )
 
 
+class Reemploy(Page):
+    form_model = 'player'
+    form_fields = ['prolongue_1', 'prolongue_2', 'wage_1', 'wage_2', 'effort_1', 'effort_2']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.participant.is_employer
+
 
 page_sequence = [WaitToStart,
                  Countdown,
                  MarketPage,
                  WorkPage,
                  ResultsWaitPage,
-                 Results]
+                 Results,
+                 Reemploy,]
 
 
 def custom_export(players):
