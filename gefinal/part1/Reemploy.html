@@ -1,5 +1,6 @@
 
 
+
 {% block content %}
 
 <style>
@@ -84,35 +85,106 @@
         cursor: pointer;
     }
 
+   .worker-section {
+    margin-bottom: 20px; /* Adjust the value as needed */
+    padding: 10px;
+    border: 1px solid #ccc; /* Add a border for visual separation */
+    border-radius: 5px;
+}
 
 </style>
 
-<br>
 
-
-<div class="card" id="ask_for_renewal" style="display: block">
+<div class="container mt-4">
+  <div class="card" style="border-radius: 10px; border: none; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
     <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Contract extension</h6>
-          You can make a private offer to the worker(s) you hired this round. <br>
+      <h5 class="card-title">Private Offers</h5>
+        <p class="mb-4">You can submit a private offer to each player you employed this round.<br>
+           Click "next" once you are done sending offers.</p>
 
-        <button type="button" class="btn btn-joint">Yes</button>
-        <button type="button" class="btn btn-joint">No</button>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="card" style="border-radius: 10px; border: none; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+            <div class="card-header bg-secondary text-white" style="border-radius: 10px 10px 0 0;">
+              Offer 1
+            </div>
+            <div class="card-body">
+              <p class="mb-4">You paid the worker a wage of XXX. <br>
+                  The worker provided YYY effort.</p>
+                  <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" id="wage-addon1">Wage</span>
+                        </div>
+                        <input id="wage_input_1" class="form-control" placeholder="0 - {{ max_wage }}" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text" id="effort-addon1">Effort</span>
+                            </div>
+                            <select id="effort_input_1" class="form-select" aria-label="Default select example">
+                              <option selected>Choose effort</option>
+                              <option value="1">standard</option>
+                              <option value="0">low</option>
+                            </select>
+                    </div>
+                <button type="button" class="btn btn-secondary" id="send_offer_1" onclick="sendOffer(this.id)"> Send Offer</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="card" style="border-radius: 10px; border: none; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+            <div class="card-header bg-secondary text-white" style="border-radius: 10px 10px 0 0;">
+              Offer 2
+            </div>
+            <div class="card-body">
+              <p class="mb-4">You paid the worker a wage of XXX. <br>
+                  The worker provided YYY effort.</p>
+                  <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text" id="wage-addon2">Wage</span>
+                        </div>
+                        <input id="wage_input_2" class="form-control" placeholder="0 - {{ max_wage }}" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                            <span class="input-group-text" id="effort-addon2">Effort</span>
+                            </div>
+                            <select id="effort_input_2" class="form-select" aria-label="Default select example">
+                              <option selected>Choose effort</option>
+                              <option value="1">standard</option>
+                              <option value="0">low</option>
+                            </select>
+                    </div>
+                <button type="button" class="btn btn-secondary" id="send_offer_2" onclick="sendOffer(this.id)"> Send Offer</button>
+                </div>
+            </div>
+        </div>
+      </div>
     </div>
+
+  </div>
 </div>
 
-<div class="card" id="offer_renewals" style="display: none">
-    <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">Contract extension</h6>
-
-    </div>
-</div>
 
 <br>
 
 {{ next_button }}
 
 
+
+
+
+<script>
+    function noReemploy() {
+        document.getElementById("ask_for_renewal").style.display = "none";
+        document.getElementById("to_next_page").click();
+    }
+
+    function Reemploy() {
+        document.getElementById("ask_for_renewal").style.display = "none";
+        document.getElementById("which_renewal").style.display = "block";
+    }
+
+</script>
+
 {{ endblock }}
-
-
-

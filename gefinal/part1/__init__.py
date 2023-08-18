@@ -82,6 +82,7 @@ class Player(BasePlayer):
     worker2_effort_given = models.IntegerField()
     done = models.IntegerField(initial=0)
     timestamp_done = models.FloatField()
+    reemploy = models.IntegerField(initial=0)
 
 
 
@@ -181,6 +182,36 @@ def to_dict(offer: Offer):
 
 
 # PAGES
+class CheckReemploy(Page):
+    form_model = 'player'
+    form_fields = ['reemploy']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.participant.is_employer
+
+
+class Reemploy(Page):
+    form_model = 'player'
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.participant.is_employer and player.reemploy==1:
+            return True
+
+    def vars_for_template(player: Player):
+        session = player.session
+        if player.participant.vars['currency_is_points'] is True:
+            max_wage = session.config['max_wage']
+        else:
+            max_wage = session.config['max_wage'] * session.config['exchange_rate']
+
+        return dict(
+            max_wage=max_wage,
+        )
+
+
+
 class WaitToStart(WaitPage):
     #group_by_arrival_time = True
     body_text = "Waiting for other players in your group to arrive."
@@ -554,6 +585,14 @@ class Results(Page):
     timeout_seconds = 60
 
     @staticmethod
+    def app_after_this_page(player, upcoming_apps):
+        session = player.session
+        rounds_part_2 = session.config['total_rounds'] - session.config['shock_after_rounds']
+        if player.round_number >= rounds_part_2:
+            return "questionnaire"
+
+
+    @staticmethod
     def vars_for_template(player: Player):
         group = player.group
         session = player.session
@@ -628,39 +667,14 @@ class Results(Page):
         )
 
 
-class Reemploy(Page):
-    form_model = 'player'
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.participant.is_employer
-
-    @staticmethod
-    def app_after_this_page(player, upcoming_apps):
-        if player.round_number >= player.session.config['shock_after_rounds']:
-            return "midbreak"
-
-class Part1Done(WaitPage):
-    body_text = "You finished part 1. Please wait for the other players in your group."
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.participant.is_employer is False and player.round_number >= player.session.config['shock_after_rounds']
-
-    @staticmethod
-    def app_after_this_page(player, upcoming_apps):
-        if player.round_number >= player.session.config['shock_after_rounds']:
-            return "midbreak"
-
-
-page_sequence = [WaitToStart,
+page_sequence = [CheckReemploy,
+                 Reemploy,
+                 WaitToStart,
                  Countdown,
                  MarketPage,
                  WorkPage,
                  ResultsWaitPage,
-                 Results,
-                 Reemploy,
-                 Part1Done,]
+                 Results,]
 
 
 def custom_export(players):
