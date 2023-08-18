@@ -188,7 +188,8 @@ class CheckReemploy(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.participant.is_employer
+        if player.participant.is_employer and player.round_number>1:
+            return True
 
 
 class Reemploy(Page):
@@ -586,10 +587,8 @@ class Results(Page):
 
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
-        session = player.session
-        rounds_part_2 = session.config['total_rounds'] - session.config['shock_after_rounds']
-        if player.round_number >= rounds_part_2:
-            return "questionnaire"
+        if player.round_number >= player.session.config['shock_after_rounds']:
+            return "midbreak"
 
 
     @staticmethod
