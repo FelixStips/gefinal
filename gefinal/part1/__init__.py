@@ -286,6 +286,9 @@ class MarketPage(Page):
         session = player.session
         player.invalid = False
         print('Received', data)
+        if data['information_type'] == 'accept_private':
+            print('Accept private')
+
         if data['information_type'] == 'done':
             group.num_unmatched_jobs -= data['jobs_open']
             player.done = data['jobs_open']

@@ -210,7 +210,7 @@
                           <p class="mb-4">Your employer from last round wants to hire you again. <br>
                               They offer a wage of XXX and expect effort of YYY. Do you want to accept this offer?</p>
 
-                          <button class="btn btn-secondary" style="border: none;">Accept Private Offer</button>
+                          <button class="btn btn-secondary" style="border: none;" onclick="acceptPrivateOffer()">Accept Private Offer</button>
 
                         </div>
                     </div>
@@ -300,12 +300,17 @@
 
         function liveRecv(data) {
             // destructuring assignment
-            let {page_information, market_information, offers} = data;
+            let {page_information, market_information, offers, private} = data;
             renderPage(page_information);
             updateInfobox(market_information);
             updateOffersTable(offers);
             updateEmployerCards(offers);
             updateWorkerWaitCard(offers);
+            updatePrivateOffer(private);
+        }
+
+        function updatePrivateOffer() {
+            console.log("Update the private offer")
         }
 
         function updateOffersTable(offers) {
@@ -533,6 +538,17 @@
             "job_number": job_offer_number,
         })
     }
+
+    function acceptPrivateOffer() {
+        let accepted_wage = parseInt(document.getElementById("private_wage_accept").value);
+        let accepted_effort = parseInt(document.getElementById("private_effort_accept").value);
+    }
+    liveSend({
+        "information_type": "accept_private",
+        "worker_id": js_vars.my_id,
+        "wage": acccepted_wage,
+        "effort": accepted_effort,
+    })
 
     function acceptOffer() {
         let accepted_job_id = parseInt(document.getElementById("input_job_id_accept").value);
