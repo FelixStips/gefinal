@@ -72,6 +72,17 @@ def creating_session(subsession: Subsession):
         participant_vars['total_tokens'] = []
         participant_vars['round_for_points'] = []
         participant_vars['round_number'] = 0
+        participant_vars['num_workers'] = []
+        participant_vars['worker1_wage_points'] = []
+        participant_vars['worker1_wage_tokens'] = []
+        participant_vars['worker1_effort_given'] = []
+        participant_vars['worker1_effort'] = []
+        participant_vars['worker1_id'] = []
+        participant_vars['worker2_wage_points'] = []
+        participant_vars['worker2_wage_tokens'] = []
+        participant_vars['worker2_effort_given'] = []
+        participant_vars['worker2_effort'] = []
+        participant_vars['worker2_id'] = []
         p.date = str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         if participant_vars['playerID'] <= size_large_market:
             participant_vars['large_market'] = True

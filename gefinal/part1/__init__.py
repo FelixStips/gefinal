@@ -1,7 +1,7 @@
 from otree.api import *
 import time
+import datetime
 import math
-
 
 doc = """
 Your app description
@@ -40,31 +40,31 @@ class Group(BaseGroup):
     average_payoff_workers_tokens = models.FloatField()
 
 
-
 class Player(BasePlayer):
-    num_workers_employed = models.IntegerField(initial=0, min=0, max=2)                                                 # Counter for number of workers the firm employed
-    total_wage_paid_tokens = models.FloatField(initial=0)                                                               # Total wage paid by the firm (in tokens)
-    total_wage_paid_points = models.FloatField(initial=0)                                                               # Total wage paid by the firm (in points)
-    total_effort_received = models.IntegerField(initial=0)                                                              # Total effort received by the firm
-    effort_worth = models.IntegerField(initial=0)                                                                       # Effort worth of the firm
-    payoff_points = models.FloatField(initial=0)                                                                        # Payoff of the firm (in points)
-    payoff_tokens = models.FloatField(initial=0)                                                                        # Payoff of the firm (in tokens)
-    is_employed = models.BooleanField(initial=False)                                                                    # Boolean for whether the worker is employed
-    wage_received_tokens = models.FloatField(min=0)                                                                     # Wage the worker received by the firm (in tokens)
-    wage_received_points = models.FloatField(min=0)                                                                     # Wage the worker received by the firm (in points)
-    effort_requested = models.IntegerField(min=0, max=1)                                                                # Effort level the firm requested from the worker
-    effort_choice = models.IntegerField(min=0, max=1)                                                                   # Effort choice of the worker
-    effort_cost_points = models.FloatField()                                                                            # Effort cost equivalent to the effort level in points
-    effort_cost_tokens = models.FloatField()                                                                            # Effort cost equivalent to the effort level in tokens
-    matched_with_id = models.IntegerField()                                                                             # ID of the firm the worker is matched with
-    employer_payoff_points = models.FloatField()                                                                        # Payoff of the employer (in points)
-    employer_payoff_tokens = models.FloatField()                                                                        # Payoff of the employer (in tokens)
-    wait = models.BooleanField(initial=False)                                                                           # Show wait page if true (workers)+
-    wait1 = models.BooleanField(initial=False)                                                                          # Show wait page if true (employers)
-    wait2 = models.BooleanField(initial=False)                                                                          # Show wait page if true (employers)
-    accepted1 = models.BooleanField(initial=False)                                                                      # Show job acceptance page if true (workers)
-    accepted2 = models.BooleanField(initial=False)                                                                      # Show job acceptance page if true (workers)
-    invalid = models.BooleanField(initial=False)                                                                        # Show job acceptance was invalid alert if true
+    num_workers_employed = models.IntegerField(initial=0, min=0,
+                                               max=2)  # Counter for number of workers the firm employed
+    total_wage_paid_tokens = models.FloatField(initial=0)  # Total wage paid by the firm (in tokens)
+    total_wage_paid_points = models.FloatField(initial=0)  # Total wage paid by the firm (in points)
+    total_effort_received = models.IntegerField(initial=0)  # Total effort received by the firm
+    effort_worth = models.IntegerField(initial=0)  # Effort worth of the firm
+    payoff_points = models.FloatField(initial=0)  # Payoff of the firm (in points)
+    payoff_tokens = models.FloatField(initial=0)  # Payoff of the firm (in tokens)
+    is_employed = models.BooleanField(initial=False)  # Boolean for whether the worker is employed
+    wage_received_tokens = models.FloatField(min=0)  # Wage the worker received by the firm (in tokens)
+    wage_received_points = models.FloatField(min=0)  # Wage the worker received by the firm (in points)
+    effort_requested = models.IntegerField(min=0, max=1)  # Effort level the firm requested from the worker
+    effort_choice = models.IntegerField(min=0, max=1)  # Effort choice of the worker
+    effort_cost_points = models.FloatField()  # Effort cost equivalent to the effort level in points
+    effort_cost_tokens = models.FloatField()  # Effort cost equivalent to the effort level in tokens
+    matched_with_id = models.IntegerField()  # ID of the firm the worker is matched with
+    employer_payoff_points = models.FloatField()  # Payoff of the employer (in points)
+    employer_payoff_tokens = models.FloatField()  # Payoff of the employer (in tokens)
+    wait = models.BooleanField(initial=False)  # Show wait page if true (workers)+
+    wait1 = models.BooleanField(initial=False)  # Show wait page if true (employers)
+    wait2 = models.BooleanField(initial=False)  # Show wait page if true (employers)
+    accepted1 = models.BooleanField(initial=False)  # Show job acceptance page if true (workers)
+    accepted2 = models.BooleanField(initial=False)  # Show job acceptance page if true (workers)
+    invalid = models.BooleanField(initial=False)  # Show job acceptance was invalid alert if true
     worker_counter = models.IntegerField()
     worker1_id = models.IntegerField()
     worker2_id = models.IntegerField()
@@ -81,8 +81,8 @@ class Player(BasePlayer):
     worker1_effort_given = models.IntegerField()
     worker2_effort_given = models.IntegerField()
     done = models.IntegerField(initial=0)
-    timestamp_done = models.FloatField()
     reemploy = models.IntegerField(initial=0)
+    show_private = models.BooleanField(initial=False)
 
 
 
@@ -91,19 +91,19 @@ class Offer(ExtraModel):
     marketID = models.IntegerField()
     round_number = models.IntegerField()
     job_id = models.IntegerField()
+    job_number = models.IntegerField()
+    timestamp_created = models.LongStringField()
+    timestamp_accepted = models.LongStringField()
+    timestamp_cancelled = models.LongStringField()
+    status = models.StringField()
+    show = models.BooleanField()
+    private = models.BooleanField()
     employer_id = models.IntegerField()
     worker_id = models.IntegerField()
     wage_points = models.FloatField()
     wage_tokens = models.FloatField()
     effort = models.IntegerField()
     effort_given = models.IntegerField()
-    job_number = models.IntegerField()
-    status = models.StringField()
-    show = models.BooleanField()
-    timestamp_created = models.FloatField()
-    timestamp_accepted = models.FloatField()
-    timestamp_cancelled = models.FloatField()
-
 
 
 # FUNCTIONS
@@ -113,9 +113,14 @@ def creating_session(subsession: Subsession):
         players_in_all_groups.extend(group.get_players())
 
     # group matrix numbers are based on player.id_in_subsession
-    players_in_large_market_1 = [p.id_in_subsession for p in players_in_all_groups if p.participant.vars['large_market_1'] is True or p.participant.vars['large_market_1'] is None]
-    players_in_large_market_2 = [p.id_in_subsession for p in players_in_all_groups if p.participant.vars['large_market_2'] is True or p.participant.vars['large_market_2'] is None]
-    players_in_small_market = [p.id_in_subsession for p in players_in_all_groups if p.participant.vars['large_market'] is False]
+    players_in_large_market_1 = [p.id_in_subsession for p in players_in_all_groups if
+                                 p.participant.vars['large_market_1'] is True or p.participant.vars[
+                                     'large_market_1'] is None]
+    players_in_large_market_2 = [p.id_in_subsession for p in players_in_all_groups if
+                                 p.participant.vars['large_market_2'] is True or p.participant.vars[
+                                     'large_market_2'] is None]
+    players_in_small_market = [p.id_in_subsession for p in players_in_all_groups if
+                               p.participant.vars['large_market'] is False]
 
     matrix = []
     if players_in_large_market_1 is not []:
@@ -159,7 +164,6 @@ def creating_session(subsession: Subsession):
             group.num_unmatched_jobs = session.config['num_employers_small_market'] * 2
 
 
-
 def to_dict(offer: Offer):
     return dict(
         group_id=offer.group_id,
@@ -168,6 +172,7 @@ def to_dict(offer: Offer):
         job_id=offer.job_id,
         employer_id=offer.employer_id,
         worker_id=offer.worker_id,
+        private=offer.private,
         wage_points=offer.wage_points,
         wage_tokens=offer.wage_tokens,
         effort=offer.effort,
@@ -181,6 +186,7 @@ def to_dict(offer: Offer):
     )
 
 
+
 # PAGES
 class CheckReemploy(Page):
     form_model = 'player'
@@ -188,38 +194,136 @@ class CheckReemploy(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.participant.is_employer and player.round_number>1:
-            return True
+        if player.participant.is_employer and player.round_number > 1:
+            num_workers = player.participant.vars['num_workers'][player.round_number - 2]
+            if num_workers > 0:
+                return True
 
 
 class Reemploy(Page):
+    timeout_seconds = 120
     form_model = 'player'
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.participant.is_employer and player.reemploy==1:
+        if player.participant.is_employer and player.reemploy == 1:
             return True
 
-    def vars_for_template(player: Player):
+
+    @staticmethod
+    def js_vars(player: Player):
         session = player.session
-        if player.participant.vars['currency_is_points'] is True:
+        if player.participant.currency_is_points:
             max_wage = session.config['max_wage']
         else:
             max_wage = session.config['max_wage'] * session.config['exchange_rate']
 
-        return dict(
-            max_wage=max_wage,
+        return dict (
+            my_id = player.participant.vars['playerID'],
+            worker_id_1 = player.participant.vars['worker1_id'][player.round_number - 2],
+            worker_id_2 = player.participant.vars['worker2_id'][player.round_number - 2],
+            currency_is_points = player.participant.vars['currency_is_points'],
+            max_wage = max_wage,
         )
 
+    @staticmethod
+    def vars_for_template(player: Player):
+        session = player.session
+
+        num_workers = player.participant.vars['num_workers'][player.round_number - 2]
+        if num_workers == 1:
+            effort_given_1 = player.participant.vars['worker1_effort_given'][player.round_number - 2]
+            effort_given_1_string = session.config['effort_names'][effort_given_1]
+            effort_given_2 = 999
+            effort_given_2_string = ''
+            if player.participant.currency_is_points:
+                max_wage = session.config['max_wage']
+                wage_1 = player.participant.vars['worker1_wage_points'][player.round_number - 2]
+                wage_2 = 999
+            else:
+                max_wage = session.config['max_wage'] * session.config['exchange_rate']
+                wage_1 = player.participant.vars['worker1_wage_tokens'][player.round_number - 2]
+                wage_2 = 999
+        if num_workers == 2:
+            effort_given_1 = player.participant.vars['worker1_effort_given'][player.round_number - 2]
+            effort_given_1_string = session.config['effort_names'][effort_given_1]
+            effort_given_2 = player.participant.vars['worker2_effort_given'][player.round_number - 2]
+            effort_given_2_string = session.config['effort_names'][effort_given_2]
+            if player.participant.currency_is_points:
+                max_wage = session.config['max_wage']
+                wage_1 = player.participant.vars['worker1_wage_points'][player.round_number - 2]
+                wage_2 = player.participant.vars['worker2_wage_points'][player.round_number - 2]
+            else:
+                max_wage = session.config['max_wage'] * session.config['exchange_rate']
+                wage_1 = player.participant.vars['worker1_wage_tokens'][player.round_number - 2]
+                wage_2 = player.participant.vars['worker2_wage_tokens'][player.round_number - 2]
+
+        return dict(
+            max_wage=int(max_wage),
+            wage_1=int(wage_1),
+            wage_2=int(wage_2),
+            effort_given_1_string=effort_given_1_string,
+            effort_given_2_string=effort_given_2_string,
+            num_workers=num_workers,
+        )
+
+    @staticmethod
+    def live_method(player: Player, data):
+        session = player.session
+        group = player.group
+        #print(data)
+        i = 1
+        if data['information_type'] == 'private_offer':
+            if data['currency_is_points'] is True:
+                wage_points = data['wage']
+                wage_tokens = session.config['exchange_rate'] * wage_points
+            else:
+                wage_tokens = data['wage']
+                wage_points = wage_tokens / session.config['exchange_rate']
+            current_datetime = datetime.datetime.now()
+            Offer.create(
+                group=group,
+                marketID=group.marketID,
+                round_number=player.round_number,
+                private=True,
+                employer_id=data['employer_id'],
+                worker_id=data['worker_id'],
+                wage_points=wage_points,
+                wage_tokens=wage_tokens,
+                effort=data['effort'],
+                status='open',
+                show=True,
+                effort_given=None,
+                job_id=int(str(group.marketID) + str(player.round_number) + str(i) + str(0)),
+                job_number=data['job_number'],
+                timestamp_created=current_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+            )
+        string_effort = session.config['effort_names'][data['effort']]
+        players = group.get_players()
+        i += 1
+
+        for p in players:
+            if p.participant.playerID == data['employer_id']:
+                id = p.id_in_group
+
+        return {id:
+            {'information_type': 'received',
+            'wage_points': wage_points,
+            'wage_tokens': wage_tokens,
+            'effort': data['effort'],
+            'string_effort': string_effort,
+            'job_number': data['job_number']}
+        }
 
 
 class WaitToStart(WaitPage):
-    #group_by_arrival_time = True
+    # group_by_arrival_time = True
     body_text = "Waiting for other players in your group to arrive."
 
     @staticmethod
     def after_all_players_arrive(group: Group):
         group.start_timestamp = int(time.time())
+
 
 class Countdown(Page):
     timer_text = 'The next market phase will start in:'
@@ -285,33 +389,50 @@ class MarketPage(Page):
         group = player.group
         session = player.session
         player.invalid = False
-        print('Received', data)
-        if data['information_type'] == 'accept_private':
-            print('Accept private')
+        player.show_private = False
+        current_datetime = datetime.datetime.now()
 
         if data['information_type'] == 'done':
-            group.num_unmatched_jobs -= data['jobs_open']
+            """
+            'Done' means the employer does not want to send more offers.
+             - We need to cancel all his open offers and change his trading scheme to wait mode.
+             - If all employers are done we finish the round.
+            """
+
+            # Update offers
+            offers = Offer.filter(group=group)
+            for o in offers:
+                if o.status == 'open' and o.employer_id == player.participant.playerID:
+                    o.status = 'cancelled'
+                    o.show = False
+                    o.timestamp_cancelled = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+
+            # Update player
             player.done = data['jobs_open']
             player.invalid = False
-            player.timestamp_done = int(time.time()) - group.start_timestamp
+
+            # Update group
+            group.num_unmatched_jobs -= data['jobs_open']
             if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
                 group.is_finished = True
-            else:
-                offers = Offer.filter(group=group)
-                for o in offers:
-                    if o.status == 'open' and o.employer_id == player.participant.playerID:
-                        o.status = 'cancelled'
-                        o.show = False
-                        o.timestamp_cancelled = int(time.time()) - group.start_timestamp
+
         elif data['information_type'] == 'offer':
-            group.job_offer_counter += 1
-            group.num_job_offers += 1
+            """ 
+            'Offer' means that the employer sent a public offer (private have been done already). We need to
+             - Create a new offer in the database
+             - Change the employer's trading scheme
+             - Update group information
+             """
+
+            # Prepare information
             if data['currency_is_points'] is True:
                 wage_points = data['wage']
                 wage_tokens = session.config['exchange_rate'] * wage_points
             else:
                 wage_tokens = data['wage']
                 wage_points = wage_tokens / session.config['exchange_rate']
+
+            # Create a new offer: Public offers have 3 digit ID!
             Offer.create(
                 group=group,
                 marketID=group.marketID,
@@ -319,6 +440,7 @@ class MarketPage(Page):
                 job_id=int(str(group.marketID) + str(player.round_number) + str(group.job_offer_counter)),
                 employer_id=player.participant.playerID,
                 worker_id=None,
+                private=False,
                 wage_points=wage_points,
                 wage_tokens=wage_tokens,
                 effort=data['effort'],
@@ -326,11 +448,10 @@ class MarketPage(Page):
                 status='open',
                 show=True,
                 job_number=data["job_number"],
-                timestamp_created=int(time.time()) - group.start_timestamp,
-                timestamp_accepted=None,
-                timestamp_cancelled=None,
+                timestamp_created=current_datetime.strftime("%Y-%m-%d %H:%M:%S"),
             )
 
+            # Update player information
             for p in group.get_players():
                 if p.participant.playerID == data['employer_id']:
                     if data["job_number"] == 1:
@@ -339,53 +460,91 @@ class MarketPage(Page):
                     elif data["job_number"] == 2:
                         p.wait2 = True
                         p.accepted2 = False
+
+            # Update group information
+            group.job_offer_counter += 1
+            group.num_job_offers += 1
+
         elif data['information_type'] == 'accept':
+            """
+            'Accept' means that a worker accepted an offer. This can be a private or public offer! We need to:
+            - Update the offer
+            - Update worker and employer views
+            - Copy information to worker and employer
+            - Update group information
+            """
+
+            # Prepare information
+            if data['currency_is_points'] is True:
+                wage_points = data['wage']
+                wage_tokens = session.config['exchange_rate'] * wage_points
+            else:
+                wage_tokens = data['wage']
+                wage_points = wage_tokens / session.config['exchange_rate']
+
+            # Update the offer
             current_offer = Offer.filter(group=group, job_id=data['job_id'])
             if current_offer[0].status == 'open':
-                group.num_job_offers -= 1
-                group.num_unmatched_workers -= 1
-                group.num_unmatched_jobs -= 1
-                if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
-                    group.is_finished = True
-                for o in current_offer:
-                    o.status = 'accepted'
-                    o.show = True
-                    o.worker_id = player.participant.playerID
-                    o.timestamp_accepted = int(time.time()) - group.start_timestamp
-                for p in group.get_players():
-                    if data['currency_is_points'] is True:
-                        wage_points = data['wage']
-                        wage_tokens = session.config['exchange_rate'] * wage_points
-                    else:
-                        wage_tokens = data['wage']
-                        wage_points = wage_tokens / session.config['exchange_rate']
-                    if p.participant.playerID == data['employer_id']:
-                        p.num_workers_employed += 1
-                        p.total_wage_paid_tokens += wage_tokens
-                        p.total_wage_paid_points += wage_points
+                current_offer[0].wage_points = wage_points if current_offer[0].wage_points is None else current_offer[0].wage_points
+                current_offer[0].wage_tokens = wage_tokens if current_offer[0].wage_tokens is None else current_offer[0].wage_tokens
+                current_offer[0].status = 'accepted'
+                current_offer[0].show = True
+                current_offer[0].worker_id = player.participant.playerID
+                current_offer[0].timestamp_accepted = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+            else:
+                print('offer already accepted or cancelled')
+                player.invalid = True
+
+            # Update players (this depends on whether the offer is private or not)
+            for p in group.get_players():
+                if p.participant.playerID == data['employer_id']:
+                    p.num_workers_employed += 1
+                    p.total_wage_paid_tokens += wage_tokens
+                    p.total_wage_paid_points += wage_points
+                    p.matched_with_id = data['worker_id']
+                    if data['private'] is False:
                         if data["job_number"] == 1:
                             p.wait1 = False
                             p.accepted1 = True
                         elif data["job_number"] == 2:
                             p.wait2 = False
                             p.accepted2 = True
-                    if p.participant.playerID == data['worker_id']:
+                        else:
+                            print('job number not 1 or 2')
+                    else:
+                        if p.wait2 is False and p.accepted2 is False:
+                            p.accepted2 = True
+
+                elif p.participant.playerID == data['worker_id']:
                         p.is_employed = True
                         p.wait = True
                         p.wage_received_points = wage_points
                         p.wage_received_tokens = wage_tokens
                         p.effort_requested = data['effort']
                         p.matched_with_id = data['employer_id']
-            else:
-                print('offer already accepted or cancelled')
-                player.invalid = True
-        elif data['information_type'] == 'cancel':
+
+            # Update the group
             group.num_job_offers -= 1
+            group.num_unmatched_workers -= 1
+            group.num_unmatched_jobs -= 1
+            if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
+                group.is_finished = True
+
+        elif data['information_type'] == 'cancel':
+            """
+            'Cancel' means that the employer cancelled an offer. We need to:
+            - Update the offer
+            - Update employer view
+            """
+
+            # Update the offer
             current_offer = Offer.filter(group=group, job_id=data['job_id'])
             for o in current_offer:
                 o.status = 'cancelled'
                 o.show = False
-                o.timestamp_cancelled = int(time.time()) - group.start_timestamp
+                o.timestamp_cancelled = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+
+            # Update employer view
             for p in group.get_players():
                 if p.participant.playerID == data['employer_id']:
                     if data["job_number"] == 1:
@@ -394,19 +553,55 @@ class MarketPage(Page):
                     elif data["job_number"] == 2:
                         p.wait2 = False
                         p.accepted2 = False
+
+            # Update group information
+            group.num_job_offers -= 1
+
         elif data['information_type'] == 'load':
             pass
         else:
             print('unknown message type: ', data['information_type'])
 
-        offers_to_show = sorted(Offer.filter(group=group, show=True), key=lambda o: o.job_id, reverse=True)
-        offers_list = [to_dict(o) for o in offers_to_show]
+        """
+        Now we need to prepare the information to send back to the server. We need to:
+         - Make sure offers from employers with two accepted offers are not shown
+         - Make sure private offers are only shown to the worker they are intended for
+         - Copy list of private and public offers
+         - Calculate market information
+        """
+
+        # Check whether employer has two accepted offers and remove other offers
+        for p in group.get_players():
+            if p.participant.is_employer is True and p.num_workers_employed == 2:
+                for o in Offer.filter(group=group, employer_id=p.participant.playerID):
+                    if o.status == 'open':
+                        o.status = 'cancelled'
+                        o.show = False
+                    else:
+                        pass
+
+        # Whether to show the private offer
+        for p in group.get_players():
+            for o in Offer.filter(group=group, private=True):
+                if o.status == 'open' and o.worker_id == p.participant.playerID:
+                    p.show_private = True
+                elif o.status == 'cancelled' and o.worker_id == p.participant.playerID:
+                    p.show_private = False
+
+        public_offers_to_show = sorted(Offer.filter(group=group, show=True, private=False), key=lambda o: o.job_id, reverse=True)
+        offers_list = [to_dict(o) for o in public_offers_to_show]
+
+        private_offers_to_show = sorted(Offer.filter(group=group, show=True, private=True), key=lambda o: o.job_id, reverse=True)
+        private_offers_list = [to_dict(o) for o in private_offers_to_show]
 
         market_information = dict(workers_left=group.num_unmatched_workers,
                                   open_offers=sum(i['status'] == 'open' for i in offers_list),
-                                  average_wage_tokens=sum(i['wage_tokens'] for i in offers_list) / len(offers_list) if len(offers_list) > 0 else 0,
-                                  average_wage_points=sum(i['wage_points'] for i in offers_list) / len(offers_list) if len(offers_list) > 0 else 0,
-                                  average_effort=sum(i['effort'] for i in offers_list) / len(offers_list) if len(offers_list) > 0 else 0,
+                                  average_wage_tokens=sum(i['wage_tokens'] for i in offers_list) / len(
+                                      offers_list) if len(offers_list) > 0 else 0,
+                                  average_wage_points=sum(i['wage_points'] for i in offers_list) / len(
+                                      offers_list) if len(offers_list) > 0 else 0,
+                                  average_effort=sum(i['effort'] for i in offers_list) / len(offers_list) if len(
+                                      offers_list) > 0 else 0,
                                   )
 
         data_to_return = {
@@ -419,9 +614,11 @@ class MarketPage(Page):
                                       accepted1=p.accepted1,
                                       accepted2=p.accepted2,
                                       invalid=p.invalid,
+                                      show_private=p.show_private,
                                       ),
                 market_information=market_information,
                 offers=offers_list,
+                private=private_offers_list,
             )
             for p in group.get_players()
         }
@@ -429,6 +626,7 @@ class MarketPage(Page):
         player.invalid = False
 
         return data_to_return
+
 
 class WorkPage(Page):
     form_model = 'player'
@@ -461,51 +659,73 @@ class WorkPage(Page):
         )
 
 
-
 class ResultsWaitPage(WaitPage):
     body_text = "Waiting for workers to finish the effort stage."
 
     @staticmethod
     def after_all_players_arrive(group: Group):
         players = group.get_players()
+
         offers = Offer.filter(group=group)
+        accepted_offers = Offer.filter(group=group, status='accepted')
 
-        group.average_wage_points = sum([p.wage_received_points for p in players if p.is_employed]) / sum([p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
-        group.average_wage_tokens = sum([p.wage_received_tokens for p in players if p.is_employed]) / sum([p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
-        group.average_effort = sum([p.effort_choice for p in players if p.is_employed]) / sum([p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
-
-        for p in players:                                                                                               # first update the offers
+        for p in players:  # first update the offers
             session = p.session
+            for o in accepted_offers:
+                if p.participant.playerID == o.worker_id:
+                    o.effort_given = p.effort_choice
             for o in offers:
                 if p.participant.playerID == o.worker_id and o.status == 'accepted':
                     o.effort_given = p.effort_choice
-        for p in players:                                                                                               # then update the players
+
+        group.average_wage_points = sum([p.wage_received_points for p in players if p.is_employed]) / sum(
+            [p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
+        group.average_wage_tokens = sum([p.wage_received_tokens for p in players if p.is_employed]) / sum(
+            [p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
+        group.average_effort = sum([p.effort_choice for p in players if p.is_employed]) / sum(
+            [p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
+
+        for p in players:  # then update the players
             p.participant.vars['round_number'] = p.participant.vars['round_number'] + 1
             if p.participant.is_employer is True:
                 p.worker_counter = 0
                 for o in offers:
                     if p.participant.playerID == o.employer_id and o.status == 'accepted':
-                        #print (o)
+                        # print (o)
                         p.worker_counter += 1
                         p.total_effort_received += o.effort_given
                         if p.worker_counter == 1:
+                            p.participant.vars['worker1_wage_points'].append(o.wage_points)
+                            p.participant.vars['worker1_wage_tokens'].append(o.wage_tokens)
+                            p.participant.vars['worker1_effort_given'].append(o.effort_given)
+                            p.participant.vars['worker1_effort'].append(o.effort)
+                            p.participant.vars['worker1_id'].append(o.worker_id)
                             p.worker1_wage_points = o.wage_points
                             p.worker1_wage_tokens = o.wage_tokens
                             p.worker1_effort_given = o.effort_given
                             p.worker1_effort = o.effort
                             p.worker1_id = o.worker_id
-                            p.worker1_profit_points = p.worker1_wage_points - session.config['effort_costs_points'][p.worker1_effort_given]
-                            #print('Worker 1 got wage', p.worker1_wage_points, 'points and provided', p.worker1_effort_given, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker1_effort], 'which gives profit of', p.worker1_profit_points)
-                            p.worker1_profit_tokens = p.worker1_wage_tokens - session.config['effort_costs_points'][p.worker1_effort_given] * session.config['exchange_rate']
+                            p.worker1_profit_points = p.worker1_wage_points - session.config['effort_costs_points'][
+                                p.worker1_effort_given]
+                            # print('Worker 1 got wage', p.worker1_wage_points, 'points and provided', p.worker1_effort_given, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker1_effort], 'which gives profit of', p.worker1_profit_points)
+                            p.worker1_profit_tokens = p.worker1_wage_tokens - session.config['effort_costs_points'][
+                                p.worker1_effort_given] * session.config['exchange_rate']
                         elif p.worker_counter == 2:
+                            p.participant.vars['worker2_wage_points'].append(o.wage_points)
+                            p.participant.vars['worker2_wage_tokens'].append(o.wage_tokens)
+                            p.participant.vars['worker2_effort_given'].append(o.effort_given)
+                            p.participant.vars['worker2_effort'].append(o.effort)
+                            p.participant.vars['worker2_id'].append(o.worker_id)
                             p.worker2_wage_points = o.wage_points
                             p.worker2_wage_tokens = o.wage_tokens
                             p.worker2_effort = o.effort
                             p.worker2_effort_given = o.effort_given
                             p.worker2_id = o.worker_id
-                            p.worker2_profit_points = p.worker2_wage_points - session.config['effort_costs_points'][p.worker2_effort_given]
-                            #print('Worker 2 got wage', p.worker2_wage_points, 'points and provided', p.worker2_effort_given, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker2_effort_given], 'which gives profit of', p.worker2_profit_points)
-                            p.worker2_profit_tokens = p.worker2_wage_tokens - session.config['effort_costs_points'][p.worker2_effort_given] * session.config['exchange_rate']
+                            p.worker2_profit_points = p.worker2_wage_points - session.config['effort_costs_points'][
+                                p.worker2_effort_given]
+                            # print('Worker 2 got wage', p.worker2_wage_points, 'points and provided', p.worker2_effort_given, 'effort, for a cost of',  session.config['effort_costs_points'][p.worker2_effort_given], 'which gives profit of', p.worker2_profit_points)
+                            p.worker2_profit_tokens = p.worker2_wage_tokens - session.config['effort_costs_points'][
+                                p.worker2_effort_given] * session.config['exchange_rate']
                     else:
                         pass
                 if p.num_workers_employed == 0:
@@ -515,7 +735,24 @@ class ResultsWaitPage(WaitPage):
                     p.participant.vars['total_points'].append(p.payoff_points)
                     p.participant.vars['total_tokens'].append(p.payoff_tokens)
                     p.participant.vars['round_for_points'].append(p.participant.vars['currency_is_points'])
+                    p.participant.vars['worker1_wage_points'].append('NA')
+                    p.participant.vars['worker1_wage_tokens'].append('NA')
+                    p.participant.vars['worker1_effort_given'].append('NA')
+                    p.participant.vars['worker1_effort'].append('NA')
+                    p.participant.vars['worker1_id'].append('NA')
+                    p.participant.vars['worker2_wage_points'].append('NA')
+                    p.participant.vars['worker2_wage_tokens'].append('NA')
+                    p.participant.vars['worker2_effort_given'].append('NA')
+                    p.participant.vars['worker2_effort'].append('NA')
+                    p.participant.vars['worker2_id'].append('NA')
+                    p.participant.vars['num_workers'].append(0)
                 elif p.num_workers_employed == 1:
+                    p.participant.vars['num_workers'].append(1)
+                    p.participant.vars['worker2_wage_points'].append('NA')
+                    p.participant.vars['worker2_wage_tokens'].append('NA')
+                    p.participant.vars['worker2_effort_given'].append('NA')
+                    p.participant.vars['worker2_effort'].append('NA')
+                    p.participant.vars['worker2_id'].append('NA')
                     if p.total_effort_received == 0:
                         if p.participant.vars['currency_is_points'] is True:
                             p.effort_worth = session.config['MPL_low'][0]
@@ -529,17 +766,19 @@ class ResultsWaitPage(WaitPage):
                     else:
                         print('error: effort_received not 0 or 1')
                 elif p.num_workers_employed == 2:
-                    if p.total_effort_received == 0:                                                                    # if effort_received is 0, then the worker gave low effort
+                    p.participant.vars['num_workers'].append(2)
+                    if p.total_effort_received == 0:  # if effort_received is 0, then the worker gave low effort
                         if p.participant.vars['currency_is_points'] is True:
                             p.effort_worth = 2 * session.config['MPL_low'][1]
                         else:
                             p.effort_worth = 2 * session.config['MPL_low'][1] * session.config['exchange_rate']
-                    elif p.total_effort_received == 1:                                                                  # if effort_received is 1, then one worker gave high effort
+                    elif p.total_effort_received == 1:  # if effort_received is 1, then one worker gave high effort
                         if p.participant.vars['currency_is_points'] is True:
                             p.effort_worth = session.config['MPL_high'][1] + session.config['MPL_low'][1]
                         else:
-                            p.effort_worth = (session.config['MPL_high'][1] + session.config['MPL_low'][1]) * session.config['exchange_rate']
-                    elif p.total_effort_received == 2:                                                                  # if effort_received is 2, then both workers gave high effort
+                            p.effort_worth = (session.config['MPL_high'][1] + session.config['MPL_low'][1]) * \
+                                             session.config['exchange_rate']
+                    elif p.total_effort_received == 2:  # if effort_received is 2, then both workers gave high effort
                         if p.participant.vars['currency_is_points'] is True:
                             p.effort_worth = 2 * session.config['MPL_high'][1]
                         else:
@@ -562,7 +801,8 @@ class ResultsWaitPage(WaitPage):
             else:
                 if p.is_employed:
                     p.effort_cost_points = session.config['effort_costs_points'][p.effort_choice]
-                    p.effort_cost_tokens = session.config['effort_costs_points'][p.effort_choice] * session.config['exchange_rate']
+                    p.effort_cost_tokens = session.config['effort_costs_points'][p.effort_choice] * session.config[
+                        'exchange_rate']
                     p.payoff_tokens = p.wage_received_tokens - p.effort_cost_tokens
                     p.payoff_points = p.wage_received_points - p.effort_cost_points
                     p.participant.vars['total_points'].append(p.payoff_points)
@@ -575,13 +815,27 @@ class ResultsWaitPage(WaitPage):
                     p.participant.vars['total_tokens'].append(p.payoff_tokens)
                     p.participant.vars['round_for_points'].append(p.participant.vars['currency_is_points'])
         for p in players:
-            print('Player', p.participant.playerID, 'has had point payoffs of', p.participant.vars['total_points'][p.round_number-1], 'and token payoffs of', p.participant.vars['total_tokens'][p.round_number-1], 'and played for points:', p.participant.vars['round_for_points'][p.round_number-1])
+            print('Player', p.participant.playerID, 'has had point payoffs of',
+                  p.participant.vars['total_points'][p.round_number - 1], 'and token payoffs of',
+                  p.participant.vars['total_tokens'][p.round_number - 1], 'and played for points:',
+                  p.participant.vars['round_for_points'][p.round_number - 1])
 
-        group.average_payoff_firms_points = sum([p.payoff_points for p in players if p.participant.is_employer is True]) / sum([p.participant.is_employer is True for p in players]) if sum([p.participant.is_employer is True for p in players]) > 0 else 0
-        group.average_payoff_firms_tokens = sum([p.payoff_tokens for p in players if p.participant.is_employer is True]) / sum([p.participant.is_employer is True for p in players]) if sum([p.participant.is_employer is True for p in players]) > 0 else 0
-        group.average_payoff_workers_points = sum([p.payoff_points for p in players if p.participant.is_employer is False]) / sum([p.participant.is_employer is False for p in players]) if sum([p.participant.is_employer is False for p in players]) > 0 else 0
-        group.average_payoff_workers_tokens = sum([p.payoff_tokens for p in players if p.participant.is_employer is False]) / sum([p.participant.is_employer is False for p in players]) if sum([p.participant.is_employer is False for p in players]) > 0 else 0
-
+        group.average_payoff_firms_points = sum(
+            [p.payoff_points for p in players if p.participant.is_employer is True]) / sum(
+            [p.participant.is_employer is True for p in players]) if sum(
+            [p.participant.is_employer is True for p in players]) > 0 else 0
+        group.average_payoff_firms_tokens = sum(
+            [p.payoff_tokens for p in players if p.participant.is_employer is True]) / sum(
+            [p.participant.is_employer is True for p in players]) if sum(
+            [p.participant.is_employer is True for p in players]) > 0 else 0
+        group.average_payoff_workers_points = sum(
+            [p.payoff_points for p in players if p.participant.is_employer is False]) / sum(
+            [p.participant.is_employer is False for p in players]) if sum(
+            [p.participant.is_employer is False for p in players]) > 0 else 0
+        group.average_payoff_workers_tokens = sum(
+            [p.payoff_tokens for p in players if p.participant.is_employer is False]) / sum(
+            [p.participant.is_employer is False for p in players]) if sum(
+            [p.participant.is_employer is False for p in players]) > 0 else 0
 
 
 class Results(Page):
@@ -593,7 +847,6 @@ class Results(Page):
         if player.round_number >= player.session.config['shock_after_rounds']:
             return "midbreak"
 
-
     @staticmethod
     def vars_for_template(player: Player):
         group = player.group
@@ -603,27 +856,41 @@ class Results(Page):
         if player.participant.is_employer is False:
             others = player.get_others_in_group()
             try:
-                player.employer_payoff_points = [p.payoff_points for p in others if p.participant.playerID == player.field_maybe_none('matched_with_id')][0]
-                player.employer_payoff_tokens = [p.payoff_tokens for p in others if p.participant.playerID == player.field_maybe_none('matched_with_id')][0]
+                player.employer_payoff_points = [p.payoff_points for p in others if
+                                                 p.participant.playerID == player.field_maybe_none('matched_with_id')][
+                    0]
+                player.employer_payoff_tokens = [p.payoff_tokens for p in others if
+                                                 p.participant.playerID == player.field_maybe_none('matched_with_id')][
+                    0]
             except (KeyError, IndexError) as e:
                 player.employer_payoff_points = None
                 player.employer_payoff_tokens = None
 
         total_low_effort = player.num_workers_employed - player.total_effort_received if player.total_effort_received is not None else None
-        worker1_effort = "standard" if player.field_maybe_none('worker1_effort') == 1 else ("low" if player.field_maybe_none('worker1_effort') == 0 else "")
-        worker1_effort_given = "standard" if player.field_maybe_none('worker1_effort_given') == 1 else ("low" if player.field_maybe_none('worker1_effort_given') == 0 else "")
-        worker2_effort = "standard" if player.field_maybe_none('worker2_effort') == 1 else ("low" if player.field_maybe_none('worker2_effort') == 0 else "")
-        worker2_effort_given = "standard" if player.field_maybe_none('worker2_effort_given') == 1 else ("low" if player.field_maybe_none('worker2_effort_given') == 0 else "")
-        average_effort = int(group.field_maybe_none('average_effort') * 100) if group.field_maybe_none('average_effort') is not None else None
-        effort_string = "standard" if player.field_maybe_none('effort_choice') == 1 else ("low" if player.field_maybe_none('effort_choice') == 0 else "")
+        worker1_effort = "standard" if player.field_maybe_none('worker1_effort') == 1 else (
+            "low" if player.field_maybe_none('worker1_effort') == 0 else "")
+        worker1_effort_given = "standard" if player.field_maybe_none('worker1_effort_given') == 1 else (
+            "low" if player.field_maybe_none('worker1_effort_given') == 0 else "")
+        worker2_effort = "standard" if player.field_maybe_none('worker2_effort') == 1 else (
+            "low" if player.field_maybe_none('worker2_effort') == 0 else "")
+        worker2_effort_given = "standard" if player.field_maybe_none('worker2_effort_given') == 1 else (
+            "low" if player.field_maybe_none('worker2_effort_given') == 0 else "")
+        average_effort = int(group.field_maybe_none('average_effort') * 100) if group.field_maybe_none(
+            'average_effort') is not None else None
+        effort_string = "standard" if player.field_maybe_none('effort_choice') == 1 else (
+            "low" if player.field_maybe_none('effort_choice') == 0 else "")
         round_number = player.participant.round_number
         rounds_left_part_1 = session.config['shock_after_rounds'] - round_number
         average_wage_points = round(group.average_wage_points, 1) if group.average_wage_points is not None else None
         average_wage_tokens = round(group.average_wage_tokens, 1) if group.average_wage_tokens is not None else None
-        average_profit_points = round(group.average_payoff_firms_points, 1) if group.average_payoff_firms_points is not None else None
-        average_profit_tokens = round(group.average_payoff_firms_tokens, 1) if group.average_payoff_firms_tokens is not None else None
-        average_income_points = round(group.average_payoff_workers_points, 1) if group.average_payoff_workers_points is not None else None
-        average_income_tokens = round(group.average_payoff_workers_tokens, 1) if group.average_payoff_workers_tokens is not None else None
+        average_profit_points = round(group.average_payoff_firms_points,
+                                      1) if group.average_payoff_firms_points is not None else None
+        average_profit_tokens = round(group.average_payoff_firms_tokens,
+                                      1) if group.average_payoff_firms_tokens is not None else None
+        average_income_points = round(group.average_payoff_workers_points,
+                                      1) if group.average_payoff_workers_points is not None else None
+        average_income_tokens = round(group.average_payoff_workers_tokens,
+                                      1) if group.average_payoff_workers_tokens is not None else None
 
         return dict(
             round_number=round_number,
@@ -676,17 +943,19 @@ page_sequence = [CheckReemploy,
                  MarketPage,
                  WorkPage,
                  ResultsWaitPage,
-                 Results,]
+                 Results, ]
 
 
 def custom_export(players):
     # top row
-    yield ['session_code', 'group.id_in_subsession', 'round', 'job_id', 'employer_id', 'worker_id', 'wage_points', 'wage_tokens',
-           'effort', 'effort_given', 'status', 'timestamp_created', 'timestamp_accepted', 'timestamp_cancelled']
+    yield ['session_code', 'group.id_in_subsession', 'round', 'job_id', 'employer_id', 'worker_id', 'private',
+           'wage_points', 'wage_tokens', 'effort', 'effort_given', 'status', 'timestamp_created', 'timestamp_accepted',
+           'timestamp_cancelled']
 
     # data rows
     offers = Offer.filter()
     for offer in offers:
-        yield [offer.group.session.code, offer.group.id_in_subsession, offer.round_number, offer.job_id, offer.employer_id, offer.worker_id, offer.wage_points,
-               offer.wage_tokens, offer.effort, offer.effort_given, offer.status, offer.timestamp_created, offer.timestamp_accepted, offer.timestamp_cancelled]
-
+        yield [offer.group.session.code, offer.group.id_in_subsession, offer.round_number, offer.job_id,
+               offer.employer_id, offer.worker_id, offer.private, offer.wage_points, offer.wage_tokens,
+               offer.effort, offer.effort_given, offer.status, offer.timestamp_created, offer.timestamp_accepted,
+               offer.timestamp_cancelled]

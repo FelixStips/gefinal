@@ -203,19 +203,6 @@
 
 
 
-        <div class="card" id="private_offer" style="display: none">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">Private Offer</h6>
-                       <div class="card-body">
-                          <p class="mb-4">Your employer from last round wants to hire you again. <br>
-                              They offer a wage of XXX and expect effort of YYY. Do you want to accept this offer?</p>
-
-                          <button class="btn btn-secondary" style="border: none;" onclick="acceptPrivateOffer()">Accept Private Offer</button>
-
-                        </div>
-                    </div>
-                </div>
-
             <br>
 
         <div class="card" id="accept_mask" style="display: none">
@@ -291,7 +278,26 @@
         </div>
 </div>
 
+<br>
 
+        <div class="card" id="private_offer" style="display: none">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">You have a private Offer</h6>
+                       <div class="card-body">
+                          <p class="mb-4">Your employer from last round wants to hire you again.
+                              They offer a wage of <b><span id="wage_private"></span></b>
+                              and expect  <b><span id="effort_private_string"></span></b> effort. <br>
+                              Do you want to accept this offer?</b>
+                          </p>
+                          <button type="button" class="btn btn-secondary" style="border: none;" onclick="acceptPrivateOffer()">Accept private offer</button>
+                           <div id="more_infos" style="display: none">
+                               <span id="private_job_id" style="display: none"></span>
+                               <span id="private_employer_id" style="display: none"></span>
+                               <span id="private_wage" style="display: none"></span>
+                           </div>
+                       </div>
+                    </div>
+                </div>
 
 
 
@@ -309,9 +315,7 @@
             updatePrivateOffer(private);
         }
 
-        function updatePrivateOffer() {
-            console.log("Update the private offer")
-        }
+
 
         function updateOffersTable(offers) {
             let open_offers_body = document.getElementById("open_offers_body");
@@ -347,6 +351,69 @@
                                                 </tr>`;
                 }
             }
+        }
+
+
+
+         function updatePrivateOffer(private) {
+            if (!private || private.length === 0) {
+                // If private is empty or not provided, do nothing
+                return;
+            }
+
+            for (let i = 0; i < private.length; i++) {
+                if (private[i].status === "open" && private[i].worker_id == js_vars.my_id) {
+                    console.log(private[i]);
+                    let {job_id, wage_points, wage_tokens, effort, employer_id} = private[i];
+                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                    if (effort === 1) {
+                        var effort_displayed = "standard";
+                    } else if (effort === 0) {
+                        var effort_displayed = "low";
+                    } else {
+                        var effort_displayed = "";
+                        console.log("effort_displayed is wrong");
+                    }
+                    document.getElementById('wage_private').innerHTML = wage_displayed;
+                    document.getElementById('effort_private_string').innerHTML = effort_displayed;
+                    document.getElementById('private_job_id').innerHTML = job_id;
+                    document.getElementById('private_employer_id').innerHTML = employer_id;
+                } else if (private[i].status === "accepted" && private[i].worker_id == js_vars.my_id) {
+                    // Put the same as the normal acceptance
+                    let {job_id, wage_points, wage_tokens, effort} = private[i];
+                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                      if (effort === 1) {
+                        var effort_displayed = "standard";
+                    } else if (effort === 0) {
+                        var effort_displayed = "low";
+                    } else {
+                        var effort_displayed = "";
+                        console.log("effort_displayed is wrong");
+                    }
+                    document.getElementById("worker_wage_accepted").innerHTML = wage_displayed;
+                    document.getElementById("worker_effort_accepted").innerHTML = effort_displayed;
+                    document.getElementById("worker_job_id_accepted").innerHTML = job_id;
+                }
+            }
+        }
+
+        function acceptPrivateOffer() {
+            let accepted_wage = parseInt(document.getElementById('wage_private').innerHTML);
+            let effort = document.getElementById('effort_private_string').innerHTML.trim();
+            let accepted_effort = 1 ? effort === "standard" : 0;
+            let currency_is_points = js_vars.currency_is_points;
+            let job_id = parseInt(document.getElementById('private_job_id').innerHTML);
+            let employer_id = parseInt(document.getElementById('private_employer_id').innerHTML);
+            liveSend({
+                "information_type": "accept",
+                "private": true,
+                "job_id": job_id,
+                "employer_id": employer_id,
+                "worker_id": js_vars.my_id,
+                "wage": accepted_wage,
+                "effort": accepted_effort,
+                "currency_is_points": currency_is_points,
+            })
         }
 
 
@@ -388,7 +455,6 @@
 
         function updateWorkerWaitCard(offers) {
             for (let i = 0; i < offers.length; i++) {
-                console.log(offers[i]);
                 if (offers[i].status === "accepted" && offers[i].worker_id == js_vars.my_id) {
                     let {job_id, wage_points, wage_tokens, effort} = offers[i];
                     let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
@@ -408,7 +474,6 @@
         }
 
         function updateInfobox(market_information) {
-            console.log(market_information);
             let {workers_left, open_offers, average_wage_tokens, average_wage_points, average_effort} = market_information;
             document.getElementById("workers_left").innerHTML = workers_left;
             document.getElementById("offers_left").innerHTML = open_offers;
@@ -425,13 +490,17 @@
 
 
         function renderPage(page_information) {
-            let {is_finished, done, wait, wait1, wait2, accepted1, accepted2, invalid} = page_information;
-            console.log('done ' + done);
+            let {is_finished, done, wait, wait1, wait2, accepted1, accepted2, invalid, show_private} = page_information;
             if (is_finished) {
                 document.getElementById("to_next_page").click();
             } else {
                 document.getElementById("accepted_offers_table").style.display = "block";
                 document.getElementById("open_offers_table").style.display = "block";
+                if (show_private) {
+                    document.getElementById("private_offer").style.display = "block";
+                } else {
+                    document.getElementById("private_offer").style.display = "none";
+                }
                 if (js_vars.is_employer==true) {
                     document.getElementById("trading_mask").style.display = "block";
                     document.getElementById("worker_wait").style.display = "none";
@@ -507,7 +576,6 @@
                     document.getElementById("employer_accepted_2").style.display = "none";
                     document.getElementById("offer_mask_1").style.display = "none";
                     document.getElementById("offer_mask_2").style.display = "none";
-                    document.getElementById("private_offer").style.display = "block";
                     if (wait) {
                         document.getElementById("accept_mask").style.display = "none";
                         document.getElementById("worker_wait").style.display = "block";
@@ -539,23 +607,11 @@
         })
     }
 
-    function acceptPrivateOffer() {
-        let accepted_wage = parseInt(document.getElementById("private_wage_accept").value);
-        let accepted_effort = parseInt(document.getElementById("private_effort_accept").value);
-    }
-    liveSend({
-        "information_type": "accept_private",
-        "worker_id": js_vars.my_id,
-        "wage": acccepted_wage,
-        "effort": accepted_effort,
-    })
-
     function acceptOffer() {
         let accepted_job_id = parseInt(document.getElementById("input_job_id_accept").value);
         try {
             let accepted_wage = parseInt(document.getElementById(`open_col_wage_${accepted_job_id}`).innerHTML);
             let effort = document.getElementById(`open_col_effort_${accepted_job_id}`).innerHTML.trim();
-            console.log(effort)
             if (effort === "standard") {
                 var accepted_effort = 1;
             } else if (effort === "low") {
@@ -563,13 +619,13 @@
             } else {
                 console.log("error. effort neither standard nor low")
             }
-            console.log(accepted_effort)
             let accepted_employer_id = parseInt(document.getElementById(`open_col_employer_id_${accepted_job_id}`).innerHTML);
             let accepted_job_number = parseInt(document.getElementById(`open_col_job_number_${accepted_job_id}`).innerHTML);
             let worker_id = js_vars.my_id;
             let currency_is_points = js_vars.currency_is_points;
             liveSend({
                 "information_type": "accept",
+                "private": false,
                 "employer_id": accepted_employer_id,
                 "wage": accepted_wage,
                 "effort": accepted_effort,
@@ -591,7 +647,6 @@
         let job1_open = (document.getElementById('employer_accepted_1').style.display === "block") ? 0 : 1;
         let job2_open = (document.getElementById('employer_accepted_2').style.display === "block") ? 0 : 1;
         let jobs_open = job1_open + job2_open
-        console.log(jobs_open)
         liveSend({
             "information_type": "done",
             "employer_id": js_vars.my_id,

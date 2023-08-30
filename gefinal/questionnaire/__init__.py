@@ -20,6 +20,7 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+    playerID = models.IntegerField()
     age = models.StringField(
         label="What is your age?")
     gender = models.StringField(label="What is your gender?", choices=['Female', 'Male', 'Other', 'Prefer not to say'])
@@ -107,6 +108,12 @@ class Behavioral2(Page):
 class Behavioral3(Page):
     form_model = 'player'
     form_fields = ['AF42', 'AF43']
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        session = player.session
+        player.playerID = player.participant.vars['playerID']
+
 
 
 page_sequence = [SocioDemographic,

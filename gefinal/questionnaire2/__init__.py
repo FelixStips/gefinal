@@ -20,6 +20,7 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+    playerID = models.IntegerField()
     Q1 = models.StringField(
         label="""What would you prefer: a draw with a 50 percent chance of receiving amount 300£
               and the same 50 percent chance of receiving nothing, or the amount of 160£ as a sure payment?<br>""",
@@ -213,6 +214,11 @@ class Player(BasePlayer):
 class Q1(Page):
     form_model = 'player'
     form_fields = ['Q1']
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        session = player.session
+        player.playerID = player.participant.vars['playerID']
 
 class Q2A(Page):
     form_model = 'player'
