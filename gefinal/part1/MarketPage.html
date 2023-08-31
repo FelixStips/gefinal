@@ -47,7 +47,7 @@
 
 </style>
 
-<div class="card">
+<div class="card"  id="info_box" style="display: block">
     <div class="card-body">
         <h6 class="card-subtitle mb-2 text-muted">Info box</h6>
         <p>
@@ -66,15 +66,15 @@
         </p>
         <p>
             There are currently <b><span id="workers_left">{{ num_workers }}</span> </b> unmatched worker(s)
-            and <b><span id="offers_left">0</span> </b> open offer(s) in the market. <br>
+            and <b><span id="offers_left">0</span> </b> public offer(s) in the market. <br>
 
             {% if player.participant.currency_is_points == True %}
-                The average wage level is <b><span id="average_wage_points">0</span></b> points.
+                The average wage level of public offers is <b><span id="average_wage_points">0</span></b> points.
             {% else %}
-                The average wage level is <b><span id="average_wage_tokens">0</span></b> tokens.
+                The average wage level of public offer is <b><span id="average_wage_tokens">0</span></b> tokens.
             {% endif %}
 
-            The share of offers requesting standard effort is <b><span id="average_effort">0</span></b>%.
+            The share of public offers requesting {{ name_high_effort }} effort is <b><span id="average_effort">0</span></b>%.
         </p>
     </div>
 </div>
@@ -107,8 +107,8 @@
                         </div>
                         <select id="effort_input_1" class="form-select" aria-label="Default select example">
                           <option selected>Choose effort</option>
-                          <option value="1">standard</option>
-                          <option value="0">low</option>
+                          <option value="1">{{ name_high_effort }}</option>
+                          <option value="0">{{ name_low_effort }}</option>
                         </select>
                     </div>
                 <button type="button" class="btn btn-secondary" id="send_offer_1" onclick="sendOffer(this.id)"> Send Offer</button>
@@ -154,8 +154,8 @@
                             </div>
                             <select id="effort_input_2" class="form-select" aria-label="Default select example">
                               <option selected>Choose effort</option>
-                              <option value="1">standard</option>
-                              <option value="0">low</option>
+                              <option value="1">{{ name_high_effort }}</option>
+                              <option value="0">{{ name_low_effort }}</option>
                             </select>
                         </div>
                 <button type="button" class="btn btn-secondary" id="send_offer_2" onclick="sendOffer(this.id)"> Send Offer</button>
@@ -170,7 +170,7 @@
                     The job ID is <b><span id="employer_job_id_offered_2"></span></b>.
                     To cancel the offer, click below.
                 </p>
-                    <button type="button" class="btn btn-secondary" id="cancel_offer_2" onclick="cancelOffer(this.id)"> Cancel Offer</button>
+                <button type="button" class="btn btn-secondary" id="cancel_offer_2" onclick="cancelOffer(this.id)"> Cancel Offer</button>
             </div>
         </div>
         <div class="card" id="employer_accepted_2" style="display: none">
@@ -195,6 +195,14 @@
             <p class="card-text">
                You indicated that you do not want to send any more offers this round.
                Please wait until the other players are done.
+             </p>
+        </div>
+     </div>
+     <div class="card" id="employer_max_workers" style="display: none">
+        <div class="card-body">
+            <h6 class="card-subtitle mb-2 text-muted">Wait</h6>
+            <p class="card-text">
+               You employed two workers this round. Please wait until the other players are done.
              </p>
         </div>
      </div>
@@ -237,7 +245,7 @@
 
 <br>
 
-<div class="card">
+<div class="card" id="offers_table">
         <div class="card-body">
             <div class="row">
                 <div class="table-responsive col-lg-6" id="open_offers_table">
@@ -280,24 +288,66 @@
 
 <br>
 
-        <div class="card" id="private_offer" style="display: none">
-                    <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">You have a private Offer</h6>
-                       <div class="card-body">
-                          <p class="mb-4">Your employer from last round wants to hire you again.
-                              They offer a wage of <b><span id="wage_private"></span></b>
-                              and expect  <b><span id="effort_private_string"></span></b> effort. <br>
-                              Do you want to accept this offer?</b>
-                          </p>
-                          <button type="button" class="btn btn-secondary" style="border: none;" onclick="acceptPrivateOffer()">Accept private offer</button>
-                           <div id="more_infos" style="display: none">
-                               <span id="private_job_id" style="display: none"></span>
-                               <span id="private_employer_id" style="display: none"></span>
-                               <span id="private_wage" style="display: none"></span>
-                           </div>
-                       </div>
-                    </div>
-                </div>
+<div class="card" id="private_offer" style="display: none">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Your employer from the last round sends a private Offer</h6>
+        <div class="card-body" style="display: flex; align-items: center;">
+            <p class="mb-4" style="flex: 1;">
+                A wage of <b><span id="wage_private"></span></b> for <b><span id="effort_private_string"></span></b> effort.
+                <br>
+                Do you want to accept this offer?
+                <button type="button" class="btn btn-secondary" style="border: none; margin-left: 10px;" onclick="acceptPrivateOffer()">Accept private offer</button>
+            </p>
+            <div id="more_infos" style="display: none">
+                <span id="private_job_id" style="display: none"></span>
+                <span id="private_employer_id" style="display: none"></span>
+                <span id="private_wage" style="display: none"></span>
+                <span id="private_job_number" style="display: none"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card" id="employer_private_offers" style="display: none">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Your private offers</h6>
+        <div class="row mb-2">
+            <div class="col">
+                <p class="card-text" id="employer_wait_3" style="display: none">
+                    Your second private offer was a wage of <b><span id="wage_wage_offered_3"></span></b>
+                    for <b><span id="employer_effort_offered_3"></span></b> desired effort. <br>
+                    The worker has not yet accepted the offer.
+                    <span id="employer_job_id_offered_3" style="display: none"></span>
+                </p>
+                <p class="card-text" id="employer_accepted_3" style="display: none">
+                    Your second private offer was accepted! <br>
+                    You offered a wage of <b><span id="employer_wage_accepted_3"></span></b>
+                    for <b><span id="employer_effort_accepted_3"></span></b> desired effort.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+               <p class="card-text" id="employer_wait_4" style="display: none">
+                    Your second private offer was a wage of <b><span id="wage_wage_offered_4"></span></b>
+                    for <b><span id="employer_effort_offered_4"></span></b> desired effort. <br>
+                    The worker has not yet accepted the offer.
+                    <span id="employer_job_id_offered_4" style="display: none"></span>
+                </p>
+                <p class="card-text" id="employer_accepted_4" style="display: none">
+                    Your second private offer was accepted! <br>
+                    You offered a wage of <b><span id="employer_wage_accepted_4"></span></b>
+                    for <b><span id="employer_effort_accepted_4"></span></b> desired effort.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
 
 
 
@@ -306,170 +356,26 @@
 
         function liveRecv(data) {
             // destructuring assignment
-            let {page_information, market_information, offers, private} = data;
+            let {page_information, worker_information, employer_information, market_information, offers} = data;
             renderPage(page_information);
             updateInfobox(market_information);
-            updateOffersTable(offers);
-            updateEmployerCards(offers);
-            updateWorkerWaitCard(offers);
-            updatePrivateOffer(private);
+            updateTable(offers);
+            updateWorkerPage(worker_information);
+            updateWorkerOffers(offers);
+            updateEmployerPage(employer_information);
+            updateEmployerOffers(offers);
         }
 
 
+        function renderPage(page_information) {
+            let {is_finished} = page_information;
 
-        function updateOffersTable(offers) {
-            let open_offers_body = document.getElementById("open_offers_body");
-            let accepted_offers_body = document.getElementById("accepted_offers_body");
-            open_offers_body.innerHTML = "";
-            accepted_offers_body.innerHTML = "";
-            for (let i = 0; i < offers.length; i++) {
-                let {job_id, wage_points, wage_tokens, effort, status, employer_id, job_number} = offers[i];
-                let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens
-                if (effort === 1) {
-                    var effort_displayed = "standard";
-                } else if (effort === 0) {
-                    var effort_displayed = "low";
-                } else {
-                    var effort_displayed = "";
-                    console.log("effort_displayed is wrong");
-                }
-                if (status === "open") {
-                    open_offers_body.innerHTML += `<tr id="open_row_${job_id}">
-                                                    <td id="open_col_job_id_${job_id}"> ${job_id} </td>
-                                                    <td id="open_col_wage_${job_id}"> ${wage_displayed} </td>
-                                                    <td id="open_col_effort_${job_id}"> ${effort_displayed} </td>
-                                                    <td id="open_col_status_${job_id}" style="color: #008000;"> ${status} </td>
-                                                    <td id="open_col_employer_id_${job_id}" style="display: none"> ${employer_id} </td>
-                                                    <td id="open_col_job_number_${job_id}" style="display: none"> ${job_number} </td>
-                                                </tr>`;
-                } else if (status === "accepted") {
-                    accepted_offers_body.innerHTML += `<tr id="accepted_row_${job_id}">
-                                                    <td id="accepted_col_job_id_${job_id}"> ${job_id} </td>
-                                                    <td id="accepted_col_wage_${job_id}"> ${wage_displayed} </td>
-                                                    <td id="accepted_col_effort_${job_id}"> ${effort_displayed} </td>
-                                                    <td id="accepted_col_status_${job_id}" style="color: #0000CD;"> ${status} </td>
-                                                </tr>`;
-                }
-            }
-        }
-
-
-
-         function updatePrivateOffer(private) {
-            if (!private || private.length === 0) {
-                // If private is empty or not provided, do nothing
-                return;
-            }
-
-            for (let i = 0; i < private.length; i++) {
-                if (private[i].status === "open" && private[i].worker_id == js_vars.my_id) {
-                    console.log(private[i]);
-                    let {job_id, wage_points, wage_tokens, effort, employer_id} = private[i];
-                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
-                    if (effort === 1) {
-                        var effort_displayed = "standard";
-                    } else if (effort === 0) {
-                        var effort_displayed = "low";
-                    } else {
-                        var effort_displayed = "";
-                        console.log("effort_displayed is wrong");
-                    }
-                    document.getElementById('wage_private').innerHTML = wage_displayed;
-                    document.getElementById('effort_private_string').innerHTML = effort_displayed;
-                    document.getElementById('private_job_id').innerHTML = job_id;
-                    document.getElementById('private_employer_id').innerHTML = employer_id;
-                } else if (private[i].status === "accepted" && private[i].worker_id == js_vars.my_id) {
-                    // Put the same as the normal acceptance
-                    let {job_id, wage_points, wage_tokens, effort} = private[i];
-                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
-                      if (effort === 1) {
-                        var effort_displayed = "standard";
-                    } else if (effort === 0) {
-                        var effort_displayed = "low";
-                    } else {
-                        var effort_displayed = "";
-                        console.log("effort_displayed is wrong");
-                    }
-                    document.getElementById("worker_wage_accepted").innerHTML = wage_displayed;
-                    document.getElementById("worker_effort_accepted").innerHTML = effort_displayed;
-                    document.getElementById("worker_job_id_accepted").innerHTML = job_id;
-                }
-            }
-        }
-
-        function acceptPrivateOffer() {
-            let accepted_wage = parseInt(document.getElementById('wage_private').innerHTML);
-            let effort = document.getElementById('effort_private_string').innerHTML.trim();
-            let accepted_effort = 1 ? effort === "standard" : 0;
-            let currency_is_points = js_vars.currency_is_points;
-            let job_id = parseInt(document.getElementById('private_job_id').innerHTML);
-            let employer_id = parseInt(document.getElementById('private_employer_id').innerHTML);
-            liveSend({
-                "information_type": "accept",
-                "private": true,
-                "job_id": job_id,
-                "employer_id": employer_id,
-                "worker_id": js_vars.my_id,
-                "wage": accepted_wage,
-                "effort": accepted_effort,
-                "currency_is_points": currency_is_points,
-            })
-        }
-
-
-        function updateEmployerCards(offers) {
-            for (let i = 0; i < offers.length; i++) {
-                if (offers[i].status === "open" && offers[i].employer_id == js_vars.my_id) {
-                    let {job_id, wage_points, wage_tokens, effort, job_number} = offers[i];
-                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
-                    if (effort === 1) {
-                        var effort_displayed = "standard";
-                    } else if (effort === 0) {
-                        var effort_displayed = "low";
-                    } else {
-                        var effort_displayed = "";
-                        console.log("effort_displayed is wrong");
-                    }
-                    document.getElementById(`employer_wage_offered_${job_number}`).innerHTML = wage_displayed;
-                    document.getElementById(`employer_effort_offered_${job_number}`).innerHTML = effort_displayed;
-                    document.getElementById(`employer_job_id_offered_${job_number}`).innerHTML = job_id;
-                }
-                if (offers[i].status === "accepted" && offers[i].employer_id == js_vars.my_id) {
-                    let {job_id, wage, wage_points, wage_tokens, effort, job_number} = offers[i];
-                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
-                      if (effort === 1) {
-                        var effort_displayed = "standard";
-                    } else if (effort === 0) {
-                        var effort_displayed = "low";
-                    } else {
-                        var effort_displayed = "";
-                        console.log("effort_displayed is wrong");
-                    }
-                    document.getElementById(`employer_wage_accepted_${job_number}`).innerHTML = wage_displayed;
-                    document.getElementById(`employer_effort_accepted_${job_number}`).innerHTML = effort_displayed;
-                    document.getElementById(`employer_job_id_accepted_${job_number}`).innerHTML = job_id;
-                }
-            }
-        }
-
-
-        function updateWorkerWaitCard(offers) {
-            for (let i = 0; i < offers.length; i++) {
-                if (offers[i].status === "accepted" && offers[i].worker_id == js_vars.my_id) {
-                    let {job_id, wage_points, wage_tokens, effort} = offers[i];
-                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
-                      if (effort === 1) {
-                        var effort_displayed = "standard";
-                    } else if (effort === 0) {
-                        var effort_displayed = "low";
-                    } else {
-                        var effort_displayed = "";
-                        console.log("effort_displayed is wrong");
-                    }
-                    document.getElementById("worker_wage_accepted").innerHTML = wage_displayed;
-                    document.getElementById("worker_effort_accepted").innerHTML = effort_displayed;
-                    document.getElementById("worker_job_id_accepted").innerHTML = job_id;
-                }
+            // Submit page if done
+            if (is_finished) {
+                document.getElementById("to_next_page").click();
+            } else {
+                document.getElementById('info_box').style.display = 'block';
+                document.getElementById('offers_table').style.display = 'block';
             }
         }
 
@@ -488,137 +394,237 @@
             }
         }
 
+        function updateTable(offers) {
+            let open_offers_body = document.getElementById("open_offers_body");
+            let accepted_offers_body = document.getElementById("accepted_offers_body");
 
-        function renderPage(page_information) {
-            let {is_finished, done, wait, wait1, wait2, accepted1, accepted2, invalid, show_private} = page_information;
-            if (is_finished) {
-                document.getElementById("to_next_page").click();
-            } else {
-                document.getElementById("accepted_offers_table").style.display = "block";
-                document.getElementById("open_offers_table").style.display = "block";
-                if (show_private) {
+            // Clear table
+            open_offers_body.innerHTML = "";
+            accepted_offers_body.innerHTML = "";
+
+            // Loop over public offers
+            var publicOffers = offers.filter(offer => offer.private === false);
+            for (let i = 0; i < publicOffers.length; i++) {
+                // Retrieve information
+                let {job_id, wage_points, wage_tokens, effort, status, employer_id, job_number} = offers[i];
+                let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                if (effort === 1) {
+                    var effort_displayed = js_vars.name_high_effort;
+                } else if (effort === 0) {
+                    var effort_displayed = js_vars.name_low_effort;
+                } else {
+                    var effort_displayed = "";
+                    console.log("effort_displayed is wrong");
+                }
+
+                // Update open offers table
+                if (status === "open") {
+                    open_offers_body.innerHTML += `<tr id="open_row_${job_id}">
+                                                        <td id="open_col_job_id_${job_id}"> ${job_id} </td>
+                                                        <td id="open_col_wage_${job_id}"> ${wage_displayed} </td>
+                                                        <td id="open_col_effort_${job_id}"> ${effort_displayed} </td>
+                                                        <td id="open_col_status_${job_id}" style="color: #008000;"> ${status} </td>
+                                                        <td id="open_col_employer_id_${job_id}" style="display: none"> ${employer_id} </td>
+                                                        <td id="open_col_job_number_${job_id}" style="display: none"> ${job_number} </td>
+                                                    </tr>`;
+                // Updated accepted offers table
+                } else if (status === "accepted") {
+                    accepted_offers_body.innerHTML += `<tr id="accepted_row_${job_id}">
+                                                        <td id="accepted_col_job_id_${job_id}"> ${job_id} </td>
+                                                        <td id="accepted_col_wage_${job_id}"> ${wage_displayed} </td>
+                                                        <td id="accepted_col_effort_${job_id}"> ${effort_displayed} </td>
+                                                        <td id="accepted_col_status_${job_id}" style="color: #0000CD;"> ${status} </td>
+                                                    </tr>`;
+                }
+            }
+        }
+
+
+        function updateWorkerPage(worker_information) {
+            let {wait, invalid, show_private} = worker_information;
+            if (js_vars.is_employer==false) {
+                document.getElementById("trading_mask").style.display = "none";                                         // Hide trading mask
+                if (wait) {                                                                                             // Unless wait is true, show accept mask
+                    document.getElementById("worker_wait").style.display = "block";
+                    document.getElementById("accept_mask").style.display = "none";
+                } else {
+                    document.getElementById("worker_wait").style.display = "none";
+                    document.getElementById("accept_mask").style.display = "block";
+                }
+                if (show_private) {                                                                                     // Show private offers if show_private is true
                     document.getElementById("private_offer").style.display = "block";
                 } else {
                     document.getElementById("private_offer").style.display = "none";
                 }
-                if (js_vars.is_employer==true) {
-                    document.getElementById("trading_mask").style.display = "block";
-                    document.getElementById("worker_wait").style.display = "none";
-                    document.getElementById("accept_mask").style.display = "none";
-                    if (done==2) {
-                        document.getElementById("employer_wait_1").style.display = "none";
-                        document.getElementById("employer_wait_2").style.display = "none";
-                        document.getElementById("employer_accepted_1").style.display = "none"
-                        document.getElementById("employer_accepted_2").style.display = "none"
-                        document.getElementById("offer_mask_1").style.display = "none";
-                        document.getElementById("offer_mask_2").style.display = "none";
-                        document.getElementById('no_more_offers').style.display = "none";
-                        document.getElementById("employer_done").style.display = "block";
-                    } else if (done==1) {                                                                               // One job was accepted, reduce cases because wait1 and accepted2 are the same
-                        if (wait1 || accepted2) {
-                            document.getElementById("employer_wait_1").style.display = "none";
-                            document.getElementById("employer_wait_2").style.display = "none";
-                            document.getElementById("offer_mask_1").style.display = "none";
-                            document.getElementById("offer_mask_2").style.display = "none";
-                            document.getElementById("employer_accepted_1").style.display = "none"
-                            document.getElementById("employer_accepted_2").style.display = "block"
-                            document.getElementById("employer_done").style.display = "block";
-                            document.getElementById('no_more_offers').style.display = "none";
-                        } else if (accepted1 || wait2) {
-                            document.getElementById("employer_wait_1").style.display = "none";
-                            document.getElementById("employer_wait_2").style.display = "none";
-                            document.getElementById("offer_mask_1").style.display = "none";
-                            document.getElementById("offer_mask_2").style.display = "none";
-                            document.getElementById("employer_accepted_1").style.display = "block"
-                            document.getElementById("employer_accepted_2").style.display = "none"
-                            document.getElementById("employer_done").style.display = "block";
-                            document.getElementById('no_more_offers').style.display = "none";
-                        } else {
-                            console.log(error)
-                        }
-                    } else if (done==0) {
-                        document.getElementById("employer_done").style.display = "none";
-                        document.getElementById('no_more_offers').style.display = "block";
-                        if (wait1) {
-                            document.getElementById("employer_wait_1").style.display = "block";
-                            document.getElementById("offer_mask_1").style.display = "none";
-                            document.getElementById("employer_accepted_1").style.display = "none"
-                        } else if (accepted1) {
-                            document.getElementById("employer_accepted_1").style.display = "block";
-                            document.getElementById("employer_wait_1").style.display = "none";
-                            document.getElementById("offer_mask_1").style.display = "none";
-                        } else {
-                            document.getElementById("offer_mask_1").style.display = "block";
-                            document.getElementById("employer_wait_1").style.display = "none";
-                            document.getElementById("employer_accepted_1").style.display = "none"
-                        }
-                        if (wait2) {
-                            document.getElementById("employer_wait_2").style.display = "block";
-                            document.getElementById("offer_mask_2").style.display = "none";
-                            document.getElementById("employer_accepted_2").style.display = "none"
-                        } else if (accepted2) {
-                            document.getElementById("employer_accepted_2").style.display = "block";
-                            document.getElementById("employer_wait_2").style.display = "none";
-                            document.getElementById("offer_mask_2").style.display = "none"
-                        } else {
-                            document.getElementById("offer_mask_2").style.display = "block";
-                            document.getElementById("employer_wait_2").style.display = "none";
-                            document.getElementById("employer_accepted_2").style.display = "none";
-                        }
+                if (invalid) {                                                                                          // If invalid is true, show alert
+                    alert("The job id you have entered is not valid!");
+                }
+            }
+        }
+
+        function updateWorkerOffers(offers) {
+            for (let i = 0; i < offers.length; i++) {
+                if (offers[i].status === "accepted" && offers[i].worker_id == js_vars.my_id) {
+                    let {job_id, wage_points, wage_tokens, effort} = offers[i];
+                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                    if (effort === 1) {
+                        var effort_displayed = js_vars.name_high_effort;
+                    } else if (effort === 0) {
+                        var effort_displayed = js_vars.name_low_effort;
                     } else {
-                        console.log('Error, done is:' + done)
+                        var effort_displayed = "";
+                        console.log("effort_displayed is wrong");
                     }
+                    document.getElementById("worker_wage_accepted").innerHTML = wage_displayed;
+                    document.getElementById("worker_effort_accepted").innerHTML = effort_displayed;
+                    document.getElementById("worker_job_id_accepted").innerHTML = job_id;
+                }
+            }
+        }
+
+        function updateEmployerPage(employer_information) {
+            let {done, num_workers_employed, offer1, offer2, offer3, offer4} = employer_information;
+            if (js_vars.is_employer==true) {
+                // Update overall page view
+                document.getElementById("trading_mask").style.display = "block";
+                document.getElementById("worker_wait").style.display = "none";
+                document.getElementById("private_offer").style.display = "none";
+                document.getElementById("accept_mask").style.display = "none";
+
+                // Is the employer done?
+                if (done) {
+                    document.getElementById("employer_done").style.display = "block";
+                    document.getElementById("no_more_offers").style.display = "none";
+                    document.getElementById("employer_max_workers").style.display = "none";
+                } else if (num_workers_employed===2) {
+                    document.getElementById("employer_max_workers").style.display = "block";
+                    document.getElementById("employer_done").style.display = "none";
+                    document.getElementById("no_more_offers").style.display = "none";
                 } else {
-                    document.getElementById("trading_mask").style.display = "none";
-                    document.getElementById("employer_wait_1").style.display = "none";
-                    document.getElementById("employer_wait_2").style.display = "none";
-                    document.getElementById("employer_accepted_1").style.display = "none";
-                    document.getElementById("employer_accepted_2").style.display = "none";
-                    document.getElementById("offer_mask_1").style.display = "none";
-                    document.getElementById("offer_mask_2").style.display = "none";
-                    if (wait) {
-                        document.getElementById("accept_mask").style.display = "none";
-                        document.getElementById("worker_wait").style.display = "block";
-                    } else if (invalid) {
-                        alert("The job id you have entered is not valid!");
-                        document.getElementById("accept_mask").style.display = "block";
-                        document.getElementById("worker_wait").style.display = "none";
-                    } else {
-                        document.getElementById("accept_mask").style.display = "block";
-                        document.getElementById("worker_wait").style.display = "none";
+                    document.getElementById("employer_max_workers").style.display = "none";
+                    document.getElementById("employer_done").style.display = "none";
+                    document.getElementById("no_more_offers").style.display = "block";
+                }
+
+                // Update public offer mask
+                const public_offers_status = [offer1, offer2];
+                for (let i = 0; i < public_offers_status.length; i++) {
+                    let offer_status = public_offers_status[i];
+                    let counter = i + 1;
+                    if (offer_status === "empty" || offer_status === "cancelled")  {
+                        // Empty or cancelled: show the offer mask if employer is not done or has not reached the limit of 2 workers
+                        document.getElementById(`employer_wait_${counter}`).style.display = "none";
+                        document.getElementById(`employer_accepted_${counter}`).style.display = "none";
+                        if (num_workers_employed===2 || done==true) {
+                            document.getElementById(`offer_mask_${counter}`).style.display = "none";
+                        } else {
+                            document.getElementById(`offer_mask_${counter}`).style.display = "block";
+                        }
+                    } else if (offer_status === "open") {
+                        document.getElementById(`offer_mask_${counter}`).style.display = "none";
+                        document.getElementById(`employer_wait_${counter}`).style.display = "block";
+                        document.getElementById(`employer_accepted_${counter}`).style.display = "none";
+                    } else if (offer_status === "accepted") {
+                        document.getElementById(`offer_mask_${counter}`).style.display = "none";
+                        document.getElementById(`employer_wait_${counter}`).style.display = "none";
+                        document.getElementById(`employer_accepted_${counter}`).style.display = "block";
+                    }
+                }
+
+                // Update private offer mask
+                const private_offers_status = [offer3, offer4];
+                for (let i = 0; i < private_offers_status.length; i++) {
+                    let offer_status = private_offers_status[i];
+                    let counter = i + 3;
+                    if (offer_status === "empty" || offer_status === "cancelled")  {
+                        document.getElementById(`employer_wait_${counter}`).style.display = "none";
+                        document.getElementById(`employer_accepted_${counter}`).style.display = "none";
+                    } else if (offer_status === "open") {
+                        document.getElementById(`employer_wait_${counter}`).style.display = "block";
+                        document.getElementById(`employer_accepted_${counter}`).style.display = "none";
+                    } else if (offer_status === "accepted") {
+                        document.getElementById(`employer_wait_${counter}`).style.display = "none";
+                        document.getElementById(`employer_accepted_${counter}`).style.display = "block";
                     }
                 }
             }
         }
 
-    function cancelOffer(offer_cancelled) {
-        let job_offer_number = parseInt(offer_cancelled.slice(-1));
-        let cancel_job_id = parseInt(document.getElementById(`employer_job_id_offered_${job_offer_number}`).innerHTML);
-        let cancel_wage = parseInt(document.getElementById(`employer_wage_offered_${job_offer_number}`).innerHTML);
-        let cancel_effort = parseInt(document.getElementById(`employer_effort_offered_${job_offer_number}`).innerHTML);
-        let cancel_employer_id = js_vars.my_id;
-        liveSend({
-            "information_type": "cancel",
-            "employer_id": cancel_employer_id,
-            "job_id": cancel_job_id,
-            "wage": cancel_wage,
-            "effort": cancel_effort,
-            "job_number": job_offer_number,
-        })
+
+        function updateEmployerOffers(offers) {
+            for (let i = 0; i < offers.length; i++) {
+                let {job_id, wage_points, wage_tokens, effort, job_number} = offers[i];
+                let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                    if (effort === 1) {
+                        var effort_displayed = js_vars.name_high_effort;
+                    } else if (effort === 0) {
+                        var effort_displayed = js_vars.name_low_effort;
+                    } else {
+                        var effort_displayed = "";
+                        console.log("effort_displayed is wrong");
+                    }
+                if (offers[i].status === "open" && offers[i].employer_id == js_vars.my_id) {
+                    document.getElementById(`employer_wage_offered_${job_number}`).innerHTML = wage_displayed;
+                    document.getElementById(`employer_effort_offered_${job_number}`).innerHTML = effort_displayed;
+                    document.getElementById(`employer_job_id_offered_${job_number}`).innerHTML = job_id;
+                }
+                if (offers[i].status === "accepted" && offers[i].employer_id == js_vars.my_id) {
+                    document.getElementById(`employer_wage_accepted_${job_number}`).innerHTML = wage_displayed;
+                    document.getElementById(`employer_effort_accepted_${job_number}`).innerHTML = effort_displayed;
+                    document.getElementById(`employer_job_id_accepted_${job_number}`).innerHTML = job_id;
+                }
+            }
+        }
+
+
+
+    function sendOffer(offer_sent) {
+         let job_offer_number = parseInt(offer_sent.slice(-1));
+          let effort_input_element = document.getElementById(`effort_input_${job_offer_number}`);
+          let wage_input_element = document.getElementById(`wage_input_${job_offer_number}`);
+          if (!isNumeric(effort_input_element.value) || !isNumeric(wage_input_element.value)) {
+            alert("Error: Please choose a wage and an effort level before sending the offer.");
+            return;
+          }
+        let effort_inputted = parseInt(effort_input_element.value);
+        let wage_inputted = parseInt(wage_input_element.value);
+        let max_wage = js_vars.max_wage;
+        var name_low_effort = js_vars.name_low_effort;
+        var name_high_effort = js_vars.name_high_effort;
+        if (isNaN(wage_inputted) || isNaN(effort_inputted)) {
+            alert("Error: Please enter a number in both fields before sending offer.");
+            return;
+        } else if (wage_inputted < 0 || wage_inputted > max_wage) {
+            alert("Error: Please specify a wage between 0 and " +  max_wage + ".");
+            return;
+        } else if (effort_inputted < 0 || effort_inputted > 1) {
+            alert(`Error: Please choose either ${name_high_effort} or ${name_low_effort} effort.`);
+            return;
+        } else {
+            let status = 'open';
+            let my_id = js_vars.my_id;
+            let currency_is_points = js_vars.currency_is_points;
+            liveSend({
+                "information_type": "offer",
+                "employer_id": my_id,
+                "wage": wage_inputted,
+                "effort": effort_inputted,
+                "status": status,
+                "job_number": job_offer_number,
+                "currency_is_points": currency_is_points,
+            });
+        }
+        document.getElementById(`effort_input_${job_offer_number}`).value = "";
+        document.getElementById(`wage_input_${job_offer_number}`).value = "";
     }
+
 
     function acceptOffer() {
         let accepted_job_id = parseInt(document.getElementById("input_job_id_accept").value);
         try {
             let accepted_wage = parseInt(document.getElementById(`open_col_wage_${accepted_job_id}`).innerHTML);
             let effort = document.getElementById(`open_col_effort_${accepted_job_id}`).innerHTML.trim();
-            if (effort === "standard") {
-                var accepted_effort = 1;
-            } else if (effort === "low") {
-                var accepted_effort = 0;
-            } else {
-                console.log("error. effort neither standard nor low")
-            }
+            let accepted_effort = 1 ? effort === js_vars.name_high_effort : 0;
             let accepted_employer_id = parseInt(document.getElementById(`open_col_employer_id_${accepted_job_id}`).innerHTML);
             let accepted_job_number = parseInt(document.getElementById(`open_col_job_number_${accepted_job_id}`).innerHTML);
             let worker_id = js_vars.my_id;
@@ -643,6 +649,42 @@
         }
     }
 
+
+        function acceptPrivateOffer() {
+            let accepted_wage = parseInt(document.getElementById('wage_private').innerHTML);
+            let effort = document.getElementById('effort_private_string').innerHTML.trim();
+            let accepted_effort = 1 ? effort === js_vars.name_high_effort : 0;
+            let currency_is_points = js_vars.currency_is_points;
+            let job_id = parseInt(document.getElementById('private_job_id').innerHTML);
+            let employer_id = parseInt(document.getElementById('private_employer_id').innerHTML);
+            liveSend({
+                "information_type": "accept",
+                "private": true,
+                "job_id": job_id,
+                "employer_id": employer_id,
+                "worker_id": js_vars.my_id,
+                "wage": accepted_wage,
+                "effort": accepted_effort,
+                "currency_is_points": currency_is_points,
+            })
+        }
+
+
+
+    function cancelOffer(offer_cancelled) {
+        let job_offer_number = parseInt(offer_cancelled.slice(-1));
+        let cancel_job_id = parseInt(document.getElementById(`employer_job_id_offered_${job_offer_number}`).innerHTML);
+        let cancel_employer_id = js_vars.my_id;
+        liveSend({
+            "information_type": "cancel",
+            "employer_id": cancel_employer_id,
+            "job_id": cancel_job_id,
+            "job_number": job_offer_number,
+        })
+    }
+
+
+
     function noMoreOffers() {
         let job1_open = (document.getElementById('employer_accepted_1').style.display === "block") ? 0 : 1;
         let job2_open = (document.getElementById('employer_accepted_2').style.display === "block") ? 0 : 1;
@@ -654,47 +696,8 @@
         })
     }
 
-    function isNumeric(input) {
-        const regex = /^[0-9]+$/;
-        return regex.test(input);
-    }
-    function sendOffer(offer_sent) {
-         let job_offer_number = parseInt(offer_sent.slice(-1));
-          let effort_input_element = document.getElementById(`effort_input_${job_offer_number}`);
-          let wage_input_element = document.getElementById(`wage_input_${job_offer_number}`);
-          if (!isNumeric(effort_input_element.value) || !isNumeric(wage_input_element.value)) {
-            alert("Error: Please choose a wage and an effort level before sending the offer.");
-            return;
-          }
-        let effort_inputted = parseInt(effort_input_element.value);
-        let wage_inputted = parseInt(wage_input_element.value);
-        let max_wage = js_vars.max_wage;
-        if (isNaN(wage_inputted) || isNaN(effort_inputted)) {
-            alert("Error: Please enter a number in both fields before sending offer.");
-            return;
-        } else if (wage_inputted < 0 || wage_inputted > max_wage) {
-            alert("Error: Please specify a wage between 0 and " +  max_wage + ".");
-            return;
-        } else if (effort_inputted < 0 || effort_inputted > 1) {
-            alert("Error: Please choose either standard or low effort.");
-            return;
-        } else {
-            let status = 'open';
-            let my_id = js_vars.my_id;
-            let currency_is_points = js_vars.currency_is_points;
-            liveSend({
-                "information_type": "offer",
-                "employer_id": my_id,
-                "wage": wage_inputted,
-                "effort": effort_inputted,
-                "status": status,
-                "job_number": job_offer_number,
-                "currency_is_points": currency_is_points,
-            });
-        }
-        document.getElementById(`effort_input_${job_offer_number}`).value = "";
-        document.getElementById(`wage_input_${job_offer_number}`).value = "";
-    }
+
+
 
     window.onload = function() {
         liveSend ({
@@ -702,6 +705,11 @@
             "sender": js_vars.my_id
         });
     };
+
+    function isNumeric(input) {
+        const regex = /^[0-9]+$/;
+        return regex.test(input);
+    }
 
 
 

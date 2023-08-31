@@ -108,29 +108,29 @@
                 <div class="card-header bg-secondary text-white" style="border-radius: 10px 10px 0 0;">
                   Private offer 1
                 </div>
-                <div class="card-body" id="private_offer_1" style="display: block">
+                <div class="card-body" id="offer_3" style="display: block">
                   <p class="mb-4">You paid this worker a wage of {{ wage_1 }}.<br>
                       The worker provided {{ effort_given_1_string }} effort.</p>
                       <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                            <span class="input-group-text" id="wage-addon1">Wage</span>
+                            <span class="input-group-text" id="wage-addon3">Wage</span>
                             </div>
-                            <input id="wage_input_1" class="form-control" placeholder="0 - {{ max_wage }}" aria-describedby="basic-addon1">
+                            <input id="wage_input_3" class="form-control" placeholder="0 - {{ max_wage }}" aria-describedby="basic-addon1">
                         </div>
                         <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                <span class="input-group-text" id="effort-addon1">Effort</span>
+                                <span class="input-group-text" id="effort-addon3">Effort</span>
                                 </div>
-                                <select id="effort_input_1" class="form-select" aria-label="Default select example">
+                                <select id="effort_input_3" class="form-select" aria-label="Default select example">
                                   <option selected>Choose effort</option>
-                                  <option value="1">standard</option>
-                                  <option value="0">low</option>
+                                  <option value="1">{{ name_high_effort }}</option>
+                                  <option value="0">{{ name_low_effort }}</option>
                                 </select>
                         </div>
-                    <button type="button" class="btn btn-secondary" id="send_offer_1" onclick="sendOffer(this.id)"> Send Offer</button>
+                    <button type="button" class="btn btn-secondary" id="send_offer_3" onclick="sendOffer(this.id)"> Send Offer</button>
                 </div>
-                  <div class="card-body" id="private_offer_1_accepted" style="display: none">
-                        <p class="mb-4">You offered a wage of <span id="wage_1"></span> for <span id="effort_1"></span> effort.</p>
+                  <div class="card-body" id="offer_3_accepted" style="display: none">
+                        <p class="mb-4">You offered a wage of <span id="wage_3"></span> for <span id="effort_3"></span> effort.</p>
                     </div>
               </div>
             </div>
@@ -142,29 +142,29 @@
                     <div class="card-header bg-secondary text-white" style="border-radius: 10px 10px 0 0;">
                       Private offer 2
                     </div>
-                    <div class="card-body" id="private_offer_2" style="display: block">
+                    <div class="card-body" id="offer_4" style="display: block">
                         <p class="mb-4">You paid this worker a wage of {{ wage_2 }}.<br>
                         The worker provided {{ effort_given_2_string }} effort.</p>
                           <div class="input-group mb-3">
                                 <div class="input-group-prepend">
-                                <span class="input-group-text" id="wage-addon2">Wage</span>
+                                <span class="input-group-text" id="wage-addon4">Wage</span>
                                 </div>
-                                <input id="wage_input_2" class="form-control" placeholder="0 - {{ max_wage }}" aria-describedby="basic-addon1">
+                                <input id="wage_input_4" class="form-control" placeholder="0 - {{ max_wage }}" aria-describedby="basic-addon1">
                             </div>
                             <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                    <span class="input-group-text" id="effort-addon2">Effort</span>
+                                    <span class="input-group-text" id="effort-addon4">Effort</span>
                                     </div>
-                                    <select id="effort_input_2" class="form-select" aria-label="Default select example">
+                                    <select id="effort_input_4" class="form-select" aria-label="Default select example">
                                       <option selected>Choose effort</option>
-                                      <option value="1">standard</option>
-                                      <option value="0">low</option>
+                                      <option value="1">{{ name_high_effort }}</option>
+                                        <option value="0">{{ name_low_effort }}</option>
                                     </select>
                             </div>
-                        <button type="button" class="btn btn-secondary" id="send_offer_2" onclick="sendOffer(this.id)"> Send Offer</button>
+                        <button type="button" class="btn btn-secondary" id="send_offer_4" onclick="sendOffer(this.id)"> Send Offer</button>
                     </div>
-                    <div class="card-body" id="private_offer_2_accepted" style="display: none">
-                        <p class="mb-4">You offered a wage of <span id="wage_2"></span> for <span id="effort_2"></span> effort.</p>
+                    <div class="card-body" id="offer_4_accepted" style="display: none">
+                        <p class="mb-4">You offered a wage of <span id="wage_4"></span> for <span id="effort_4"></span> effort.</p>
                     </div>
                     {{ endif }}
                 </div>
@@ -198,30 +198,31 @@
 
     function liveRecv(data) {
         if (data['information_type'] == 'received') {
+            // Note: I am using 3 & 4 here to align with the market phase when private offers will have job number 3 & 4.
             var wage_points = data['wage_points'];
             var wage_tokens = data['wage_tokens'];
-            if (data['job_number']==1) {
-                document.getElementById("private_offer_1").style.display = "none";
-                document.getElementById("private_offer_1_accepted").style.display = "block";
-                var effort_1 = document.getElementById("effort_1");
-                var wage_1 = document.getElementById("wage_1");
+            if (data['job_number']==3) {
+                document.getElementById("offer_3").style.display = "none";
+                document.getElementById("offer_4_accepted").style.display = "block";
+                var effort_3 = document.getElementById("effort_3");
+                var wage_3 = document.getElementById("wage_3");
                 let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens
-                wage_1.textContent = wage_displayed
-                effort_1.textContent = data['string_effort'];
-            } else if (data['job_number']==2) {
-                document.getElementById("private_offer_2").style.display = "none";
-                document.getElementById("private_offer_2_accepted").style.display = "block";
-                var effort_2 = document.getElementById("effort_2");
-                var wage_2 = document.getElementById("wage_2");
+                wage_3.textContent = wage_displayed
+                effort_3.textContent = data['string_effort'];
+            } else if (data['job_number']==4) {
+                document.getElementById("offer_4").style.display = "none";
+                document.getElementById("offer_4_accepted").style.display = "block";
+                var effort_4 = document.getElementById("effort_4");
+                var wage_4 = document.getElementById("wage_4");
                 let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
-                wage_2.textContent = wage_displayed;
-                effort_2.textContent = data['string_effort'];
+                wage_4.textContent = wage_displayed;
+                effort_4.textContent = data['string_effort'];
             } else {
-                console.log("Error: job number not 1 or 2");
+                console.log("Error: job number not 3 or 4");
             }
         }
-        var privateOffer1 = document.getElementById("private_offer_1");
-        var privateOffer2 = document.getElementById("private_offer_2");
+        var privateOffer1 = document.getElementById("offer_3");
+        var privateOffer2 = document.getElementById("offer_4");
 
         if ((!privateOffer1 || privateOffer1.style.display === "none") && (!privateOffer2 || privateOffer2.style.display === "none")) {
             document.getElementById("next").click();
@@ -240,6 +241,8 @@ function sendOffer(offer_sent) {
         let effort_inputted = parseInt(effort_input_element.value);
         let wage_inputted = parseInt(wage_input_element.value);
         let max_wage = js_vars.max_wage;
+        var name_low_effort = js_vars.name_low_effort;
+        var name_high_effort = js_vars.name_high_effort;
         console.log(max_wage)
         if (isNaN(wage_inputted) || isNaN(effort_inputted)) {
             alert("Error: Please enter a number in both fields before sending offer.");
@@ -248,15 +251,17 @@ function sendOffer(offer_sent) {
             alert("Error: Please specify a wage between 0 and " +  max_wage + ".");
             return;
         } else if (effort_inputted < 0 || effort_inputted > 1) {
-            alert("Error: Please choose either standard or low effort.");
+            alert(`Error: Please choose either ${name_high_effort} or ${name_low_effort} effort.`);
             return;
         } else {
             let my_id = js_vars.my_id;
             let currency_is_points = js_vars.currency_is_points;
-            if (job_offer_number== 1) {
+            if (job_offer_number === 3) {
                 var worker_id = js_vars.worker_id_1;
-            } else {
+            } else if (job_offer_number== 4){
                 var worker_id = js_vars.worker_id_2;
+            } else {
+                console.log("Error: job number not 3 or 4")
             }
             liveSend({
                 "information_type": "private_offer",
