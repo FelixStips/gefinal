@@ -1,3 +1,3 @@
 # gefinal
 
-Read me. Done.
+Work in progress, not recommended to use.
