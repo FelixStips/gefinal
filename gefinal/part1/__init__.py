@@ -415,7 +415,7 @@ class MarketPage(Page):
              - If all employers are done we finish the round.
             """
 
-            # Update offers
+            # Update offers -> Note that here we don't need to loop over players since signal came from employer
             offers = Offer.filter(group=group)
             for o in offers:
                 if (o.status == 'open' or o.status == None) and o.employer_id == player.participant.playerID:
@@ -424,12 +424,13 @@ class MarketPage(Page):
                     o.timestamp_cancelled = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
             # Update player info
-            if player.participant.playerID == data['employer_id']:
-                player.done = True
-                player.offer1 = 'cancelled' if player.offer1 != 'accepted' else player.offer1
-                player.offer2 = 'cancelled' if player.offer2 != 'accepted' else player.offer2
-                player.offer3 = 'cancelled' if player.offer3 != 'accepted' else player.offer3
-                player.offer4 = 'cancelled' if player.offer4 != 'accepted' else player.offer4
+            for p in group.get_players():
+                if p.participant.playerID == data['employer_id']:
+                    p.done = True
+                    p.offer1 = 'cancelled' if p.offer1 != 'accepted' else p.offer1
+                    p.offer2 = 'cancelled' if p.offer2 != 'accepted' else p.offer2
+                    p.offer3 = 'cancelled' if p.offer3 != 'accepted' else p.offer3
+                    p.offer4 = 'cancelled' if p.offer4 != 'accepted' else p.offer4
 
             # Update group
             group.num_unmatched_jobs -= data['jobs_open']
@@ -472,7 +473,7 @@ class MarketPage(Page):
                 timestamp_created=current_datetime.strftime("%Y-%m-%d %H:%M:%S"),
             )
 
-            # Update player information
+            # Update player information (even here I don't need the loop, even the if I wouldn't need in theory..)
             if player.participant.playerID == data['employer_id']:
                 player.offer1 = 'open' if data['job_number'] == 1 and player.offer1 != 'accepted' else player.offer1
                 player.offer2 = 'open' if data['job_number'] == 2 and player.offer2 != 'accepted' else player.offer2
@@ -513,24 +514,25 @@ class MarketPage(Page):
                 print('offer already accepted or cancelled')
                 player.invalid = True
 
-            # Update players (this depends on whether the offer is private or not)
-            if player.participant.playerID == data['employer_id']:
-                player.num_workers_employed += 1
-                player.total_wage_paid_tokens += wage_tokens
-                player.total_wage_paid_points += wage_points
-                player.matched_with_id = data['worker_id']
-                player.offer1 = 'accepted' if data['job_number'] == 1 else player.offer1
-                player.offer2 = 'accepted' if data['job_number'] == 2 else player.offer2
-                player.offer3 = 'accepted' if data['job_number'] == 3 else player.offer3
-                player.offer4 = 'accepted' if data['job_number'] == 4 else player.offer4
-            if player.participant.playerID == data['worker_id']:
-                player.is_employed = True
-                player.wait = True
-                player.show_private = False
-                player.wage_received_points = wage_points
-                player.wage_received_tokens = wage_tokens
-                player.effort_requested = data['effort']
-                player.matched_with_id = data['employer_id']
+            # Update players (this depends on whether the offer is private or not). Here I need the loop!
+            for p in group.get_players():
+                if p.participant.playerID == data['employer_id']:
+                    p.num_workers_employed += 1
+                    p.total_wage_paid_tokens += wage_tokens
+                    p.total_wage_paid_points += wage_points
+                    p.matched_with_id = data['worker_id']
+                    p.offer1 = 'accepted' if data['job_number'] == 1 else p.offer1
+                    p.offer2 = 'accepted' if data['job_number'] == 2 else p.offer2
+                    p.offer3 = 'accepted' if data['job_number'] == 3 else p.offer3
+                    p.offer4 = 'accepted' if data['job_number'] == 4 else p.offer4
+                elif p.participant.playerID == data['worker_id']:
+                    p.is_employed = True
+                    p.wait = True
+                    p.show_private = False
+                    p.wage_received_points = wage_points
+                    p.wage_received_tokens = wage_tokens
+                    p.effort_requested = data['effort']
+                    p.matched_with_id = data['employer_id']
 
             # Update the group
             group.num_job_offers -= 1
@@ -538,6 +540,7 @@ class MarketPage(Page):
             group.num_unmatched_jobs -= 1
             if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
                 group.is_finished = True
+
 
         elif data['information_type'] == 'cancel':
             """

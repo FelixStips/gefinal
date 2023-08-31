@@ -485,14 +485,12 @@
         function updateEmployerPage(employer_information) {
             let {done, num_workers_employed, offer1, offer2, offer3, offer4} = employer_information;
             if (js_vars.is_employer==true) {
+
                 // Update overall page view
                 document.getElementById("trading_mask").style.display = "block";
                 document.getElementById("worker_wait").style.display = "none";
                 document.getElementById("private_offer").style.display = "none";
                 document.getElementById("accept_mask").style.display = "none";
-
-                console.log('Player id', js_vars.my_id)
-                console.log("Done", done)
 
                 // Is the employer done?
                 if (done) {
@@ -508,6 +506,7 @@
                     document.getElementById("employer_done").style.display = "none";
                     document.getElementById("no_more_offers").style.display = "block";
                 }
+
 
                 // Update public offer mask
                 const public_offers_status = [offer1, offer2];
@@ -689,6 +688,9 @@
 
 
     function noMoreOffers() {
+        //console.log(document.getElementById('employer_accepted_1').style.display);
+        //console.log(document.getElementById('employer_accepted_2').style.display);
+
         let job1_open = (document.getElementById('employer_accepted_1').style.display === "block") ? 0 : 1;
         let job2_open = (document.getElementById('employer_accepted_2').style.display === "block") ? 0 : 1;
         let jobs_open = job1_open + job2_open
