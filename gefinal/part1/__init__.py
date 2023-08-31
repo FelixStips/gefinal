@@ -433,6 +433,7 @@ class MarketPage(Page):
 
             # Update group
             group.num_unmatched_jobs -= data['jobs_open']
+            print('Unmatched jobs: ', group.num_unmatched_jobs)
             if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
                 group.is_finished = True
 
@@ -582,8 +583,6 @@ class MarketPage(Page):
                     if o.status == 'open':
                         o.status = 'cancelled'
                         o.show = False
-                    else:
-                        pass
 
         # Whether to show the private offer
         for p in group.get_players():
@@ -611,26 +610,23 @@ class MarketPage(Page):
                                       public_offers_list) > 0 else 0,
                                   )
 
+
         # Prepare information for page display
         page_information = dict(is_finished=group.is_finished,)
-
-        worker_information = dict(wait=player.wait,
-                                  invalid=player.invalid,
-                                  show_private=player.show_private,)
-
-        employer_information = dict(done=player.done,
-                                    num_workers_employed=player.num_workers_employed,
-                                    offer1=player.offer1,
-                                    offer2=player.offer2,
-                                    offer3=player.offer3,
-                                    offer4=player.offer4,)
 
         # Return data
         data_to_return = {
             p.id_in_group: dict(
                 page_information=page_information,
-                worker_information=worker_information,
-                employer_information=employer_information,
+                worker_information=dict(wait=p.wait,
+                                        invalid=p.invalid,
+                                        show_private=p.show_private, ),
+                employer_information=dict(done=p.done,
+                                        num_workers_employed=p.num_workers_employed,
+                                        offer1=p.offer1,
+                                        offer2=p.offer2,
+                                        offer3=p.offer3,
+                                        offer4=p.offer4,),
                 market_information=market_information,
                 offers=offers_list,
             )
