@@ -4,7 +4,7 @@
     <div class="card-body">
       <h5 class="card-title">Private Offers</h5>
         <p class="mb-4">You can submit a private offer to each player you employed this round.<br>
-         Click "next" once you are done sending offers. If you do not want to send any private offers, click "next" now.
+         Click "next" when you are done sending offers. If you don't want to send private offers, click "next" now.
         </p>
           <div class="row">
             <div class="col-md-6 mb-4">
@@ -13,8 +13,8 @@
                   Private offer 1
                 </div>
                 <div class="card-body" id="offer_3" style="display: block">
-                  <p class="mb-4">You paid this worker a wage of {{ wage_1 }}.<br>
-                      The worker provided {{ effort_given_1_string }} effort.</p>
+                  <p class="mb-4">You paid this worker a wage of <b>{{ wage_1 }}</b>.<br>
+                      The worker provided <b>{{ effort_given_1_string }}</b> effort.</p>
                       <div class="input-group mb-3">
                             <div class="input-group-prepend">
                             <span class="input-group-text" id="wage-addon3">Wage</span>
@@ -34,7 +34,7 @@
                     <button type="button" class="btn btn-secondary" id="send_offer_3" onclick="sendPrivateOffer(this.id)"> Send Offer</button>
                 </div>
                   <div class="card-body" id="offer_3_accepted" style="display: none">
-                        <p class="mb-4">You offered a wage of <span id="wage_3"></span> for <span id="effort_3"></span> effort.</p>
+                        <p class="mb-4">You offered a wage of <b><span id="wage_3"></span></b> for <b><span id="effort_3"></span></b> effort.</p>
                     </div>
               </div>
             </div>
@@ -47,8 +47,8 @@
                       Private offer 2
                     </div>
                     <div class="card-body" id="offer_4" style="display: block">
-                        <p class="mb-4">You paid this worker a wage of {{ wage_2 }}.<br>
-                        The worker provided {{ effort_given_2_string }} effort.</p>
+                        <p class="mb-4">You paid this worker a wage of <b>{{ wage_2 }}</b>.<br>
+                        The worker provided  <b>{{ effort_given_2_string }}</b> effort.</p>
                           <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                 <span class="input-group-text" id="wage-addon4">Wage</span>
@@ -68,7 +68,7 @@
                         <button type="button" class="btn btn-secondary" id="send_offer_4" onclick="sendPrivateOffer(this.id)"> Send Offer</button>
                     </div>
                     <div class="card-body" id="offer_4_accepted" style="display: none">
-                        <p class="mb-4">You offered a wage of <span id="wage_4"></span> for <span id="effort_4"></span> effort.</p>
+                        <p class="mb-4">You offered a wage of <b><span id="wage_4"></span></b> for <b><span id="effort_4"></span></b> effort.</p>
                     </div>
                     {{ endif }}
                 </div>

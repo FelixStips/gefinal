@@ -1,13 +1,14 @@
 
         function updateEmployerPage(employer_information) {
             let {done, num_workers_employed, offer1, offer2, offer3, offer4} = employer_information;
+            console.log(employer_information)
             if (js_vars.is_employer==true) {
-
                 // Update overall page view
                 document.getElementById("trading_mask").style.display = "block";
                 document.getElementById("worker_wait").style.display = "none";
                 document.getElementById("private_offer").style.display = "none";
                 document.getElementById("accept_mask").style.display = "none";
+                document.getElementById("employer_private_offers").style.display = "none";
 
                 // Is the employer done?
                 if (done) {
@@ -23,7 +24,6 @@
                     document.getElementById("employer_done").style.display = "none";
                     document.getElementById("no_more_offers").style.display = "block";
                 }
-
 
                 // Update public offer mask
                 const public_offers_status = [offer1, offer2];
@@ -54,14 +54,16 @@
                 const private_offers_status = [offer3, offer4];
                 for (let i = 0; i < private_offers_status.length; i++) {
                     let offer_status = private_offers_status[i];
-                    let counter = i + 3;
+                    var counter = i + 3;
                     if (offer_status === "empty" || offer_status === "cancelled")  {
                         document.getElementById(`employer_wait_${counter}`).style.display = "none";
                         document.getElementById(`employer_accepted_${counter}`).style.display = "none";
                     } else if (offer_status === "open") {
+                        document.getElementById('employer_private_offers').style.display = "block";
                         document.getElementById(`employer_wait_${counter}`).style.display = "block";
                         document.getElementById(`employer_accepted_${counter}`).style.display = "none";
                     } else if (offer_status === "accepted") {
+                        document.getElementById('employer_private_offers').style.display = "block";
                         document.getElementById(`employer_wait_${counter}`).style.display = "none";
                         document.getElementById(`employer_accepted_${counter}`).style.display = "block";
                     }

@@ -12,7 +12,7 @@
             var publicOffers = offers.filter(offer => offer.private === false);
             for (let i = 0; i < publicOffers.length; i++) {
                 // Retrieve information
-                let {job_id, wage_points, wage_tokens, effort, status, employer_id, job_number} = offers[i];
+                let {job_id, wage_points, wage_tokens, effort, status, employer_id, job_number} = publicOffers[i];
                 let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
                 if (effort === 1) {
                     var effort_displayed = js_vars.name_high_effort;

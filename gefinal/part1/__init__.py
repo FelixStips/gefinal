@@ -26,6 +26,7 @@ class Group(BaseGroup):
     is_finished = models.BooleanField(initial=False)
     num_job_offers = models.IntegerField(initial=0)
     job_offer_counter = models.IntegerField(initial=0)
+    prvt_job_offer_counter = models.IntegerField(initial=0)
     players_in_group = models.IntegerField()
     employers_in_group = models.IntegerField()
     num_unmatched_workers = models.IntegerField()
@@ -276,8 +277,6 @@ class Reemploy(Page):
     def live_method(player: Player, data):
         session = player.session
         group = player.group
-        print(data)
-        i = 1
         if data['information_type'] == 'private_offer':
             if data['currency_is_points'] is True:
                 wage_points = data['wage']
@@ -299,13 +298,13 @@ class Reemploy(Page):
                 status='open',
                 show=True,
                 effort_given=None,
-                job_id=int(str(group.marketID) + str(player.round_number) + str(i) + str(0)),
+                job_id=int(str(group.marketID) + str(player.round_number) + str(group.prvt_job_offer_counter) + str(0)),
                 job_number=data['job_number'],
                 timestamp_created=current_datetime.strftime("%Y-%m-%d %H:%M:%S"),
             )
         string_effort = session.config['effort_names'][data['effort']]
         players = group.get_players()
-        i += 1
+        group.prvt_job_offer_counter += 1
 
         for p in players:
             if p.participant.playerID == data['employer_id']:
@@ -564,6 +563,8 @@ class MarketPage(Page):
 
         elif data['information_type'] == 'load':
             pass
+
+
         else:
             print('unknown message type: ', data['information_type'])
 
@@ -586,19 +587,28 @@ class MarketPage(Page):
         # Whether to show the private offer
         for p in group.get_players():
             for o in Offer.filter(group=group, private=True):
-                if o.status == 'open' and o.worker_id == p.participant.playerID:
-                    p.show_private = True
-                elif o.status == 'cancelled' and o.worker_id == p.participant.playerID:
-                    p.show_private = False
-
+                if o.worker_id == p.participant.playerID:
+                    p.show_private = True if o.status == 'open' else False
+                if o.employer_id == p.participant.playerID:
+                    if o.job_number == 3:
+                        p.offer3 = 'open'
+                    elif o.job_number == 4:
+                        p.offer4 = 'open'
+                    else:
+                        print('Wrong job number')
 
         # Prepare offers list
         offers_to_show = sorted(Offer.filter(group=group, show=True), key=lambda o: o.job_id, reverse=True)
         offers_list = [to_dict(o) for o in offers_to_show]
 
+        print('offers_list: ', offers_list)
+
         # Calculate market information
         public_offers = sorted(Offer.filter(group=group, show=True, private=False), key=lambda o: o.job_id, reverse=True)
         public_offers_list = [to_dict(o) for o in public_offers]
+
+        print('public_offers_list: ', public_offers_list)
+
         market_information = dict(workers_left=group.num_unmatched_workers,
                                   open_offers=sum(i['status'] == 'open' for i in public_offers_list),
                                   average_wage_tokens=sum(i['wage_tokens'] for i in public_offers_list) / len(

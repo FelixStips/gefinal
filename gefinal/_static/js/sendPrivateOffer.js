@@ -11,7 +11,6 @@ function sendPrivateOffer(offer_sent) {
         let max_wage = js_vars.max_wage;
         var name_low_effort = js_vars.name_low_effort;
         var name_high_effort = js_vars.name_high_effort;
-        console.log(max_wage)
         if (isNaN(wage_inputted) || isNaN(effort_inputted)) {
             alert("Error: Please enter a number in both fields before sending offer.");
             return;
