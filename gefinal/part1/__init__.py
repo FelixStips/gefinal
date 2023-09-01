@@ -30,7 +30,7 @@ class Group(BaseGroup):
     employers_in_group = models.IntegerField()
     num_unmatched_workers = models.IntegerField()
     num_unmatched_jobs = models.IntegerField()
-    start_timestamp = models.FloatField()
+    start_timestamp = models.StringField()
     average_wage_points = models.FloatField()
     average_wage_tokens = models.FloatField()
     average_effort = models.FloatField()
@@ -276,7 +276,7 @@ class Reemploy(Page):
     def live_method(player: Player, data):
         session = player.session
         group = player.group
-        #print(data)
+        print(data)
         i = 1
         if data['information_type'] == 'private_offer':
             if data['currency_is_points'] is True:
@@ -325,10 +325,6 @@ class WaitToStart(WaitPage):
     # group_by_arrival_time = True
     body_text = "Waiting for other players in your group to arrive."
 
-    @staticmethod
-    def after_all_players_arrive(group: Group):
-        group.start_timestamp = int(time.time())
-
 
 class Countdown(Page):
     timer_text = 'The next market phase will start in:'
@@ -349,7 +345,8 @@ class MarketPage(Page):
 
     @staticmethod
     def after_all_players_arrive(group: Group):
-        group.start_timestamp = int(time.time())
+        current_datetime = datetime.datetime.now()
+        group.start_timestamp = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -883,19 +880,22 @@ class Results(Page):
                 player.employer_payoff_points = None
                 player.employer_payoff_tokens = None
 
+        name_high_effort = session.config['effort_names'][1]
+        name_low_effort = session.config['effort_names'][0]
+
         total_low_effort = player.num_workers_employed - player.total_effort_received if player.total_effort_received is not None else None
-        worker1_effort = "standard" if player.field_maybe_none('worker1_effort') == 1 else (
-            "low" if player.field_maybe_none('worker1_effort') == 0 else "")
-        worker1_effort_given = "standard" if player.field_maybe_none('worker1_effort_given') == 1 else (
-            "low" if player.field_maybe_none('worker1_effort_given') == 0 else "")
-        worker2_effort = "standard" if player.field_maybe_none('worker2_effort') == 1 else (
-            "low" if player.field_maybe_none('worker2_effort') == 0 else "")
-        worker2_effort_given = "standard" if player.field_maybe_none('worker2_effort_given') == 1 else (
-            "low" if player.field_maybe_none('worker2_effort_given') == 0 else "")
+        worker1_effort = name_high_effort if player.field_maybe_none('worker1_effort') == 1 else (
+            name_low_effort if player.field_maybe_none('worker1_effort') == 0 else "")
+        worker1_effort_given = name_high_effort if player.field_maybe_none('worker1_effort_given') == 1 else (
+            name_low_effort if player.field_maybe_none('worker1_effort_given') == 0 else "")
+        worker2_effort = name_high_effort if player.field_maybe_none('worker2_effort') == 1 else (
+            name_low_effort if player.field_maybe_none('worker2_effort') == 0 else "")
+        worker2_effort_given = name_high_effort if player.field_maybe_none('worker2_effort_given') == 1 else (
+            name_low_effort if player.field_maybe_none('worker2_effort_given') == 0 else "")
         average_effort = int(group.field_maybe_none('average_effort') * 100) if group.field_maybe_none(
             'average_effort') is not None else None
-        effort_string = "standard" if player.field_maybe_none('effort_choice') == 1 else (
-            "low" if player.field_maybe_none('effort_choice') == 0 else "")
+        effort_string = name_high_effort if player.field_maybe_none('effort_choice') == 1 else (
+            name_low_effort if player.field_maybe_none('effort_choice') == 0 else "")
         round_number = player.participant.round_number
         rounds_left_part_1 = session.config['shock_after_rounds'] - round_number
         average_wage_points = round(group.average_wage_points, 1) if group.average_wage_points is not None else None
@@ -910,6 +910,8 @@ class Results(Page):
                                       1) if group.average_payoff_workers_tokens is not None else None
 
         return dict(
+            name_low_effort=name_low_effort,
+            name_high_effort=name_high_effort,
             round_number=round_number,
             rounds_left=rounds_left_part_1,
             is_employer=player.participant.is_employer,
@@ -963,16 +965,20 @@ page_sequence = [CheckReemploy,
                  Results, ]
 
 
+
+
 def custom_export(players):
     # top row
-    yield ['session_code', 'group.id_in_subsession', 'round', 'job_id', 'employer_id', 'worker_id', 'private',
+    yield ['session_code', 'group.id_in_subsession', 'marketID', 'round', 'job_id', 'employer_id', 'worker_id', 'private',
            'wage_points', 'wage_tokens', 'effort', 'effort_given', 'status', 'timestamp_created', 'timestamp_accepted',
            'timestamp_cancelled']
 
     # data rows
     offers = Offer.filter()
     for offer in offers:
-        yield [offer.group.session.code, offer.group.id_in_subsession, offer.round_number, offer.job_id,
+        yield [offer.group.session.code, offer.group.id_in_subsession, offer.marketID, offer.round_number, offer.job_id,
                offer.employer_id, offer.worker_id, offer.private, offer.wage_points, offer.wage_tokens,
                offer.effort, offer.effort_given, offer.status, offer.timestamp_created, offer.timestamp_accepted,
                offer.timestamp_cancelled]
+
+# NOTE: I DO NOT EXPORT SHOW OR JOB NUMBER, DON'T NEED IT

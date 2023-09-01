@@ -31,13 +31,14 @@
 <script>
     // RECEIVE DATA
     function liveRecv(data) {
+        console.log("Received data: ", data);
         if (data['information_type'] == 'received') {
             // Note: I am using 3 & 4 here to align with the market phase when private offers will have job number 3 & 4.
             var wage_points = data['wage_points'];
             var wage_tokens = data['wage_tokens'];
             if (data['job_number']==3) {
                 document.getElementById("offer_3").style.display = "none";
-                document.getElementById("offer_4_accepted").style.display = "block";
+                document.getElementById("offer_3_accepted").style.display = "block";
                 var effort_3 = document.getElementById("effort_3");
                 var wage_3 = document.getElementById("wage_3");
                 let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens
