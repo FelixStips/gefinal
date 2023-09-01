@@ -1,0 +1,46 @@
+<div class="container">
+  <table>
+    <tr>
+      <th colspan="2" style="padding-left: 20px;">Group Results</th>
+    </tr>
+    <tr>
+      <td style="padding-left: 25px;">Unemployed workers</td>
+      <td>{{ num_unmatched_workers }}</td>
+    </tr>
+    <tr>
+      <td style="padding-left: 25px;">Average wage</td>
+      <td>
+        {% if player.participant.currency_is_points == True %}
+            {{ average_wage_points }}
+        {% else %}
+            {{ average_wage_tokens }}
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td style="padding-left: 25px;">Share of workers providing standard effort</td>
+      <td>{{ average_effort }}%</td>
+    </tr>
+    <tr>
+      <td style="padding-left: 25px;">Average firm profit</td>
+      <td>
+        {% if player.participant.currency_is_points == True %}
+            {{ average_profit_points }}
+        {% else %}
+            {{ average_profit_tokens }}
+        {% endif %}
+      </td>
+    </tr>
+    <tr>
+      <td style="padding-left: 25px;">Average worker profit</td>
+      <td>
+        {% if player.participant.currency_is_points == True %}
+            {{ average_income_points }}
+        {% else %}
+            {{ average_income_tokens }}
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+
+<br>

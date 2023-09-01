@@ -1,0 +1,148 @@
+<div class="card">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Your Results</h6>
+
+
+    {% if player.participant.currency_is_points == True %}
+        {% if is_employer == True %}
+            {% if num_workers == 0 %}
+            <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
+                You did not employ any workers this round. You made a profit of <b>{{ player.payoff_points }}</b> points this round.
+            </p>
+
+            {% elif num_workers == 1 %}
+            <p style="margin-bottom:0.3cm; margin-top:0.3cm">
+                You made a profit of <b>{{ player.payoff_points }}</b> points in this round.
+            </p>
+            <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
+                You concluded <b>{{ num_workers }}</b> work contract:
+                <ul style="margin-top: -2px;">
+                    <li>
+                        You paid a wage of <b>{{ worker1_wage_points }}</b> points and expected {{ worker1_effort }} effort.
+                        The worker provided <b>{{ worker1_effort_given }}</b> effort.
+                    </li>
+                </ul>
+            </p>
+            <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
+                    The worker who accepted contract 1. made a profit of <b>{{ worker1_payoff_points }}</b> points this round.<br>
+            </p>
+
+            {% else %}
+             <p style="margin-bottom:0.3cm; margin-top:0.3cm">
+                You made a profit of <b>{{ player.payoff_points }}</b> points in this round.
+            </p>
+            <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
+                You concluded <b>{{ num_workers }}</b> work contracts:
+                <ul style="margin-top: -2px;">
+                    <li>
+                        You paid a wage of <b>{{ worker1_wage_points }}</b> points and expected {{ worker1_effort }} effort.
+                        The worker chose <b>{{ worker1_effort_given }}</b> effort.
+                    </li>
+                    <li>
+                        You paid a wage of <b>{{ worker2_wage_points }}</b> points and expected {{ worker2_effort }} effort.
+                        The worker chose <b>{{ worker2_effort_given }}</b> effort.
+                    </li>
+                </ul>
+           </p>
+
+
+        <p style="margin-bottom:0cm; margin-top:0.2cm">
+                The worker from contract 1 made a profit of <b>{{ worker1_payoff_points }}</b>  points. <br>
+                The worker from contract 2 made a profit of <b>{{ worker2_payoff_points }}</b>  points.
+            </p>
+
+
+            {% endif %}
+        {% else %}
+            {% if is_employed == True %}
+            <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
+                You were employed this round:
+                <ul style="margin-top: -5px;">
+                    <li>
+                        You received a wage of <b>{{ wage_received_points }}</b> points and provided <b>{{ effort_choice }}</b> effort.
+                    </li>
+                    <li>
+                        You made a profit of <b>{{ player.payoff_points }}</b> points this round.
+                    </li>
+                    <li>
+                        Your employer made a profit of <b>{{ employer_payoff_points }}</b> points this round.
+                    </li>
+                </ul>
+             </p>
+            {% else %}
+            <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
+                You were not employed this round. You made a profit of <b>{{ player.payoff_points }}</b> points this round.
+            </p>
+            {% endif %}
+        {% endif %}
+
+    {% else %}
+        {% if is_employer == True %}
+            {% if num_workers == 0 %}
+            <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
+                You did not employ any workers this round. You made a profit of <b>{{ player.payoff_tokens }}</b> tokens this round.
+            </p>
+
+            {% elif num_workers == 1 %}
+            <p style="margin-bottom:0.3cm; margin-top:0.3cm">
+                You made a profit of <b>{{ player.payoff_tokens }}</b> tokens in this round.
+            </p>
+            <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
+                You concluded <b>{{ num_workers }}</b> work contract:
+                <ul style="margin-top: -2px;">
+                    <li>
+                        You paid a wage of <b>{{ worker1_wage_tokens }}</b> tokens and expected {{ worker1_effort }} effort.
+                        The worker provided <b>{{ worker1_effort_given }}</b> effort.
+                    </li>
+                </ul>
+            </p>
+            <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
+                    The worker who accepted contract 1) made a profit of <b>{{ worker1_payoff_tokens }}</b> tokens this round.<br>
+                </p>
+            {% else %}
+            <p style="margin-bottom:0.3cm; margin-top:0.3cm">
+                You made a profit of <b>{{ player.payoff_tokens }}</b> tokens in this round.
+            </p>
+                You concluded <b>{{ num_workers }}</b> work contracts:
+                <ul style="margin-top: -2px;">
+                   <li>
+                       You paid a wage of <b>{{ worker1_wage_tokens }}</b> tokens and expected {{ worker1_effort }} effort.
+                       The worker provided <b>{{ worker1_effort_given }}</b> effort.
+                   </li>
+                   <li>
+                       You paid a wage of <b>{{ worker2_wage_tokens }}</b> tokens and expected {{ worker2_effort }} effort.
+                       The worker provided <b>{{ worker2_effort_given }}</b> effort.
+                    </ul>
+                </p>
+                 <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
+                    The worker who accepted contract 1 made a profit of <b>{{ worker1_payoff_tokens }}</b> tokens this round.<br>
+                    The worker who accepted contract 2 made a profit of <b>{{ worker2_payoff_tokens }}</b> tokens this round.<br>
+                </p>
+            {% endif %}
+        {% else %}
+            {% if is_employed == True %}
+            <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
+                You were employed this round:
+                <ul style="margin-top: -5px;">
+                    <li>
+                        You received a wage of <b>{{ wage_received_tokens }}</b> tokens and provided <b>{{ effort_choice }}</b> effort.
+                    </li>
+                    <li>
+                        You made a profit of <b>{{ player.payoff_tokens }}</b> tokens this round.
+                    </li>
+                    <li>
+                        Your employer made a profit of <b>{{ employer_payoff_tokens }}</b> tokens this round.
+                    </li>
+                </ul>
+             </p>
+            {% else %}
+            <p style="margin-bottom:0.2cm; margin-top: 0.3cm">
+                You were not employed this round. You made a profit of <b>{{ player.payoff_tokens }}</b> tokens this round.
+            </p>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+        </div>
+    </div>
+
+    <br>

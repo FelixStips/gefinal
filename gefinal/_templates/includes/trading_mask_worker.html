@@ -1,0 +1,30 @@
+
+        <div class="card" id="accept_mask" style="display: none">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2 text-muted">Accept an offer</h6>
+                <table>
+                    <tr>
+                        <td>
+                            <input id="input_job_id_accept" class="form-control" placeholder="Enter Job ID">
+                        </td>
+                        <td></td>
+                        <td>
+                            <button type="button" class="btn btn-secondary" id="accept_offer" onclick="acceptOffer()"> Accept
+                                Offer
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="card" id="worker_wait" style="display: none">
+            <h5 class="card-header">You accepted the following offer </h5>
+            <div class="card-body">
+                <p class="card-text">
+                  A wage of <b><span id="worker_wage_accepted"></span> </b>
+                    for <b><span id="worker_effort_accepted"></span></b> desired effort.
+                    The job ID is <b><span id="worker_job_id_accepted"></span></b>.
+                Please wait until the round ends.
+            </div>
+        </div>
+<br>

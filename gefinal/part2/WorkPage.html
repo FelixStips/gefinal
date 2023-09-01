@@ -1,99 +1,35 @@
 
 {% block content %}
 
-<style>
-         body {
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
-    color: #333;
-    padding: 20px;
-  }
+<!-- ---------------------------------------------------------------------------------------------------- -->
+<!--                                            STYLES                                                    -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
 
-    caption {
-        caption-side: top;
-        font-weight: 100;
-        font-size: 20px;
-    }
-    p + ul {
-        margin-top: -10px;
-    }
-
-</style>
+{% block styles %}
+    {% include '_templates/styles/work_page.html' %}
+{% endblock %}
 
 
-{% if player.participant.currency_is_points == True %}
-    <div class="card" id="work_info_box_points">
-        <h5 class="card-header">Work Page</h5>
-        <div class="card-body">
-            <p class="card-text">
-                You will receive a wage of <b>{% wage_received_points %}</b> points.
-                For this wage, the employer expects you to provide <b>{% effort_requested %}</b> effort.<br><br>
+<!-- ---------------------------------------------------------------------------------------------------- -->
+<!--                                            PAGE VIEW                                                 -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
 
-                The level of effort remains your choice, however.<br>
+<!-- INFO BOX EFFORT CHOICE -->
+{% include '_templates/includes/effort_choice_info.html' %}
 
-                If you provide <b>standard</b> effort, you will incur a cost of <b>{{ effort_cost_points_1 }}</b> points.<br>
-                If you provide <b>low</b> effort, you will incur a cost of <b>{{ effort_cost_points_0 }}</b> points.<br><br>
-
-                Bear in mind that:
-                <ul>
-                    <li> your payoff at the end of each period is equal to your wage minus the cost of your chosen effort level</li>
-                    <li> the effort level you choose will impact your employer's revenues.</li>
-                </ul>
-
-            </p>
-       </div>
-    </div><br>
-
-{% else %}
-   <div class="card" id="work_info_box_tokens">
-        <h5 class="card-header">Work Page</h5>
-        <div class="card-body">
-            <p class="card-text">
-                You will receive a wage of <b>{% wage_received_tokens %}</b> tokens.
-                For this wage, the employer expects you to provide <b>{% effort_requested %}</b> effort.<br><br>
-
-                The level of effort remains your choice, however.<br>
-
-                If you provide <b>standard</b> effort, you will incur a cost of <b>{{ effort_cost_tokens_1 }}</b> tokens.<br>
-                If you provide <b>low</b> effort, you will incur a cost of <b>{{ effort_cost_tokens_0 }}</b> tokens.<br><br>
-
-                Bear in mind that:
-                <ul>
-                    <li> your payoff at the end of each period is equal to your wage minus the cost of your chosen effort level</li>
-                    <li> the effort level you choose will impact your employer's revenues.</li>
-                </ul>
-
-            </p>
-       </div>
-    </div><br>
-
-{% endif %}
-
-<input type="hidden" name="effort_choice" id="effort_choice">
-{{ formfield_errors 'effort_choice' }}
-
-
-<p style="margin-bottom:0.3cm;">What effort level do you choose?</p>
-
-<div class="d-grid gap-2">
-    <button type="button" id="high_effort" onclick="submitEffort(this)" class="btn btn-secondary" value="1">Standard effort</button>
-    <button type="button" id="low_effort" onclick="submitEffort(this)" class="btn btn-secondary" value="0">Low effort</button>
-</div>
-
+<!-- EFFORT CHOICE MASK -->
+{% include '_templates/includes/effort_choice_mask.html' %}
 
 <br> <br> <br>
-
-
-
 {{ next_button }}
 
 
+<!-- ---------------------------------------------------------------------------------------------------- -->
+<!--                                            FUNCTIONS                                                 -->
+<!-- ---------------------------------------------------------------------------------------------------- -->
 
-<script>
-   function submitEffort(objButton) {
-        document.getElementById("effort_choice").value = objButton.value;
-    }
-</script>
+<!-- LOAD CUSTOM FUNCTIONS -->
+<script src="{% static "js/submitEffort.js" %}"></script>
 
 
 {% endblock %}

@@ -1,0 +1,18 @@
+
+<div class="card" id="private_offer" style="display: none">
+    <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">Your employer from the last round sends a private Offer</h6>
+        <div class="card-body" style="display: flex; align-items: center;">
+            <p class="mb-4" style="flex: 1;">
+                A wage of <b><span id="wage_private"></span></b> for <b><span id="effort_private_string"></span></b> effort. Do you want to accept this offer?
+                <button type="button" class="btn btn-secondary" style="border: none; margin-left: 10px;" onclick="acceptPrivateOffer()">Accept private offer</button>
+            </p>
+            <div id="more_infos" style="display: none">
+                <span id="private_job_id" style="display: none"></span>
+                <span id="private_employer_id" style="display: none"></span>
+                <span id="private_wage" style="display: none"></span>
+                <span id="private_job_number" style="display: none"></span>
+            </div>
+        </div>
+    </div>
+</div>

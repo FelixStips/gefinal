@@ -1,0 +1,50 @@
+
+
+
+{% if player.participant.currency_is_points == True %}
+    <div class="card" id="work_info_box_points">
+        <h5 class="card-header">Work Page</h5>
+        <div class="card-body">
+            <p class="card-text">
+                You will receive a wage of <b>{% wage_received_points %}</b> points.
+                For this wage, the employer expects you to provide <b>{% effort_requested %}</b> effort.<br><br>
+
+                The level of effort remains your choice, however.<br>
+
+                If you provide <b>{{ name_high_effort }}</b> effort, you will incur a cost of <b>{{ effort_cost_points_1 }}</b> points.<br>
+                If you provide <b>{{ name_low_effort }}</b> effort, you will incur a cost of <b>{{ effort_cost_points_0 }}</b> points.<br><br>
+
+                Bear in mind that:
+                <ul>
+                    <li> your payoff at the end of each period is equal to your wage minus the cost of your chosen effort level</li>
+                    <li> the effort level you choose will impact your employer's revenues.</li>
+                </ul>
+
+            </p>
+       </div>
+    </div><br>
+
+{% else %}
+   <div class="card" id="work_info_box_tokens">
+        <h5 class="card-header">Work Page</h5>
+        <div class="card-body">
+            <p class="card-text">
+                You will receive a wage of <b>{% wage_received_tokens %}</b> tokens.
+                For this wage, the employer expects you to provide <b>{% effort_requested %}</b> effort.<br><br>
+
+                The level of effort remains your choice, however.<br>
+
+                If you provide <b>{{ name_high_effort }}</b> effort, you will incur a cost of <b>{{ effort_cost_tokens_1 }}</b> tokens.<br>
+                If you provide <b>{{ name_low_effort }}</b>> effort, you will incur a cost of <b>{{ effort_cost_tokens_0 }}</b> tokens.<br><br>
+
+                Bear in mind that:
+                <ul>
+                    <li> your payoff at the end of each period is equal to your wage minus the cost of your chosen effort level</li>
+                    <li> the effort level you choose will impact your employer's revenues.</li>
+                </ul>
+
+            </p>
+       </div>
+    </div><br>
+
+{% endif %}

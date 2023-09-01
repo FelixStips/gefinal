@@ -1,0 +1,9 @@
+<input type="hidden" name="effort_choice" id="effort_choice">
+{{ formfield_errors 'effort_choice' }}
+
+<p style="margin-bottom:0.3cm;">What effort level do you choose?</p>
+
+<div class="d-grid gap-2">
+    <button type="button" id="high_effort" onclick="submitEffort(this)" class="btn btn-secondary" value="1">{{ name_high_effort }} effort</button>
+    <button type="button" id="low_effort" onclick="submitEffort(this)" class="btn btn-secondary" value="0">{{ name_low_effort }} effort</button>
+</div>

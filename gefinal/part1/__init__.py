@@ -488,7 +488,7 @@ class MarketPage(Page):
             """
             'Accept' means that a worker accepted an offer. This can be a private or public offer! We need to:
             - Update the offer
-            - Update worker and employer views
+            - Update worker and employer includes
             - Copy information to worker and employer
             - Update group information
             """
@@ -652,8 +652,8 @@ class WorkPage(Page):
     @staticmethod
     def vars_for_template(player: Player):
         session = player.session
-        name_high_effort = session.config['effort_costs_points'][1]
-        name_low_effort = session.config['effort_costs_points'][0]
+        name_high_effort = session.config['effort_names'][1]
+        name_low_effort = session.config['effort_names'][0]
         if player.field_maybe_none('effort_requested') == 1:
             effort_requested = name_high_effort
         elif player.field_maybe_none('effort_requested') == 0:
