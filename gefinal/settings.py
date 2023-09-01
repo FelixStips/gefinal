@@ -24,7 +24,7 @@ SESSION_CONFIGS = [
                         'questionnaire',
                         'questionnaire2',
                         'end'],
-         num_demo_participants=11,
+         num_demo_participants=15,
          final=False,                                                              # Display instructions
          market_timeout_seconds=150,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
@@ -40,7 +40,7 @@ SESSION_CONFIGS = [
          effort_costs_points=[10, 20],                                             # Effort costs for low and high effort, in points
          total_rounds=3,                                                           # Total number of market rounds
          shock_after_rounds=2,                                                     # Number of rounds before migration shock
-         size_large_market=4,                                                      # Number of players in each large market (note: large and small does not mean anything)
+         size_large_market=6,                                                      # Number of players in each large market (note: large and small does not mean anything)
          size_small_market=3,                                                      # Number of players in small market
          num_employers_large_market=2,                                             # Number of employers in large market
          num_employers_small_market=1,                                             # Number of employers in small market
