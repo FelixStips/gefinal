@@ -15,5 +15,12 @@
                     document.getElementById("worker_effort_accepted").innerHTML = effort_displayed;
                     document.getElementById("worker_job_id_accepted").innerHTML = job_id;
                 }
+                if (offers[i].status === "open" && offers[i].private === true && offers[i].worker_id == js_vars.my_id) {
+                    document.getElementById("wage_private").innerHTML = wage_displayed;
+                    document.getElementById("effort_private").innerHTML = effort_displayed;
+                    document.getElementById("job_id_private").innerHTML = offers[i].job_id;
+                    document.getElementById("employer_id_private").innerHTML = offers[i].employer_id;
+                    document.getElementById("job_number_private").style.display = offers[i].job_number;
+                }
             }
         }

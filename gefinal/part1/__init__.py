@@ -320,7 +320,6 @@ class Reemploy(Page):
             'job_number': data['job_number']}
         }
 
-
 class WaitToStart(WaitPage):
     # group_by_arrival_time = True
     body_text = "Waiting for other players in your group to arrive."

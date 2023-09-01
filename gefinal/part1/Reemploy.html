@@ -17,7 +17,7 @@
 <!-- REEMPLOY MASK -->
 {% include '_templates/includes/reemploy_mask.html' %}
 
-{{ next_button }}
+<button class="btn btn-primary" id="to_next_page">Next</button>
 
 <!-- ---------------------------------------------------------------------------------------------------- -->
 <!--                                            FUNCTIONS                                                 -->
@@ -60,7 +60,7 @@
         var privateOffer2 = document.getElementById("offer_4");
 
         if ((!privateOffer1 || privateOffer1.style.display === "none") && (!privateOffer2 || privateOffer2.style.display === "none")) {
-            document.getElementById("next").click();
+            document.getElementById("to_next_page").click();
         }
     }
 </script>
