@@ -1,36 +1,30 @@
 
-{% block content %}
 
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            STYLES                                                    -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+
 
 {% block styles %}
     {% include '_templates/styles/work_page.html' %}
 {% endblock %}
 
 
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            PAGE VIEW                                                 -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
+{% block content %}
+    <!-- INFO BOX EFFORT CHOICE -->
+    {% include '_templates/includes/effort_choice_info.html' %}
 
-<!-- INFO BOX EFFORT CHOICE -->
-{% include '_templates/includes/effort_choice_info.html' %}
+    <!-- EFFORT CHOICE MASK -->
+    {% include '_templates/includes/effort_choice_mask.html' %}
 
-<!-- EFFORT CHOICE MASK -->
-{% include '_templates/includes/effort_choice_mask.html' %}
-
-<!-- NEXT BUTTON -->
-<br><br>
-{{ next_button }}
-
-
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            FUNCTIONS                                                 -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
-
-<!-- LOAD CUSTOM FUNCTIONS -->
-<script src="{% static 'javascript/submitEffort.js' %}"></script>
-
-
+    <!-- NEXT BUTTON -->
+    <br><br>
+    {{ next_button }}
 {% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'javascript/submitEffort.js' %}"></script>
+{% endblock %}
+
+
+

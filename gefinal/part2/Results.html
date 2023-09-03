@@ -1,41 +1,26 @@
+
+{% extends "global/Page.html" %}
+{% load otree static %}
+
 {% block title %}
 Results
 {% endblock %}
-
-{% block content %}
-
-
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            STYLES                                                    -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
 
 {% block styles %}
     {% include '_templates/styles/reemploy_page.html' %}
 {% endblock %}
 
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            PAGE VIEW                                                 -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
+{% block content %}
+    <!-- GROUP RESULTS -->
+    {% include '_templates/includes/results_group.html' %}
 
+    <!-- PLAYERS RESULTS -->
+    {% include '_templates/includes/results_player.html' %}
 
-<!-- GROUP RESULTS -->
-{% include '_templates/includes/results_group.html' %}
+    <!-- SUMMARY -->
+    {% include '_templates/includes/results_summary.html' %}
 
-<!-- PLAYERS RESULTS -->
-{% include '_templates/includes/results_player.html' %}
-
-<!-- SUMMARY -->
-{% include '_templates/includes/results_summary.html' %}
-
-{{ next_button }}
-
-
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            FUNCTIONS                                                 -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
-
-
+    {{ next_button }}
 {{ endblock }}
-
 
 

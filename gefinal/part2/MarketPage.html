@@ -1,82 +1,73 @@
 
-{% block content %}
-
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            STYLES                                                    -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
+{% extends "global/Page.html" %}
+{% load otree static %}
 
 {% block styles %}
     {% include '_templates/styles/market_page.html' %}
 {% endblock %}
 
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            PAGE VIEW                                                 -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
+
+{% block content %}
+    <!-- INFORMATION BOX AT THE TOP OF PAGE -->
+    {% include '_templates/includes/information_box.html' %}
+
+    <!-- EMPLOYER TRADING MASK -->
+    {% include '_templates/includes/trading_mask_employer.html' %}
+
+    <!-- WORKER TRADING MASK -->
+    {% include '_templates/includes/trading_mask_worker.html' %}
+
+    <!-- PUBLIC OFFERS TABLE -->
+    {% include '_templates/includes/public_offers_table.html' %}
+
+    <!-- PRIVATE OFFERS WORKERS -->
+    {% include '_templates/includes/private_offers_worker.html' %}
+
+    <!-- PRIVATE OFFERS EMPLOYER -->
+    {% include '_templates/includes/private_offers_employer.html' %}
+
+    <!-- NEXT BUTTON -->
+    {% include '_templates/includes/next_button_hidden.html' %}
+
+{% endblock %}
 
 
-<!-- INFORMATION BOX AT THE TOP OF PAGE -->
-{% include '_templates/includes/information_box.html' %}
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'javascript/acceptOffer.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/acceptPrivateOffer.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/cancelOffer.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/isNumeric.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/updateWorkerOffers.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/noMoreOffers.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/renderPage.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/sendOffer.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/updateEmployerOffers.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/updateEmployerPage.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/updateInfobox.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/updateTable.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/updateWorkerOffers.js' %}"></script>
+    <script type="text/javascript" src="{% static 'javascript/updateWorkerPage.js' %}"></script>
 
-<!-- EMPLOYER TRADING MASK -->
-{% include '_templates/includes/trading_mask_employer.html' %}
+    <script>
+        // CALL LIVESEND ON PAGE LOAD
+        window.onload = function() {
+            liveSend ({
+                    "information_type": "load",
+                    "sender": js_vars.my_id
+                });
+            };
 
-<!-- WORKER TRADING MASK -->
-{% include '_templates/includes/trading_mask_worker.html' %}
-
-<!-- PUBLIC OFFERS TABLE -->
-{% include '_templates/includes/public_offers_table.html' %}
-
-<!-- PRIVATE OFFERS WORKERS -->
-{% include '_templates/includes/private_offers_worker.html' %}
-
-<!-- PRIVATE OFFERS EMPLOYER -->
-{% include '_templates/includes/private_offers_employer.html' %}
-
-<!-- NEXT BUTTON -->
-{% include '_templates/includes/next_button_hidden.html' %}
-
-
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            FUNCTIONS                                                 -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
-
-<!-- LOAD CUSTOM JAVA SCRIPTS -->
-<script src="{% static 'javascript/acceptOffer.js' %}"> </script>
-<script src="{% static 'javascript/acceptPrivateOffer.js' %}"></script>
-<script src="{% static 'javascript/cancelOffer.js' %}"></script>
-<script src="{% static 'javascript/isNumeric.js' %}"></script>
-<script src="{% static 'javascript/updateWorkerOffers.js' %}"></script>
-<script src="{% static 'javascript/noMoreOffers.js' %}"></script>
-<script src="{% static 'javascript/renderPage.js' %}"></script>
-<script src="{% static 'javascript/sendOffer.js' %}"></script>
-<script src="{% static 'javascript/updateEmployerOffers.js' %}"></script>
-<script src="{% static 'javascript/updateEmployerPage.js' %}"></script>
-<script src="{% static 'javascript/updateInfobox.js' %}"></script>
-<script src="{% static 'javascript/updateTable.js' %}"></script>
-<script src="{% static 'javascript/updateWorkerOffers.js' %}"></script>
-<script src="{% static 'javascript/updateWorkerPage.js' %}"></script>
-
-<script>
-    <!-- CALL LIVESEND ON PAGE LOAD -->
-    window.onload = function() {
-        liveSend ({
-                "information_type": "load",
-                "sender": js_vars.my_id
-            });
-        };
-
-    <!-- RECEIVE DATA AND EXECUTE FUNCTIONS -->
-    function liveRecv(data) {
-                // destructuring assignment
-                let {page_information, worker_information, employer_information, market_information, offers} = data;
-                renderPage(page_information);
-                updateInfobox(market_information);
-                updateTable(offers);
-                updateWorkerPage(worker_information);
-                updateWorkerOffers(offers);
-                updateEmployerPage(employer_information);
-                updateEmployerOffers(offers);
-            }
-</script>
-
+        // RECEIVE DATA AND EXECUTE FUNCTIONS
+        function liveRecv(data) {
+                    // destructuring assignment
+                    let {page_information, worker_information, employer_information, market_information, offers} = data;
+                    renderPage(page_information);
+                    updateInfobox(market_information);
+                    updateTable(offers);
+                    updateWorkerPage(worker_information);
+                    updateWorkerOffers(offers);
+                    updateEmployerPage(employer_information);
+                    updateEmployerOffers(offers);
+                }
+    </script>
 {% endblock %}

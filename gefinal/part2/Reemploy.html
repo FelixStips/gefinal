@@ -1,68 +1,60 @@
 
-{% block content %}
-
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            STYLES                                                    -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
+{% extends "global/Page.html" %}
+{% load otree static %}
 
 {% block styles %}
     {% include '_templates/styles/reemploy_page.html' %}
 {% endblock %}
 
+{% block content %}
+    <!-- REEMPLOY MASK -->
+    {% include '_templates/includes/reemploy_mask.html' %}
 
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            PAGE VIEW                                                 -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
-
-<!-- REEMPLOY MASK -->
-{% include '_templates/includes/reemploy_mask.html' %}
-
-<button class="btn btn-primary" id="to_next_page">Next</button>
+    <button class="btn btn-primary" id="to_next_page">Next</button>
+{{ endblock }}
 
 
-<!-- ---------------------------------------------------------------------------------------------------- -->
-<!--                                            FUNCTIONS                                                 -->
-<!-- ---------------------------------------------------------------------------------------------------- -->
+{% block scripts %}
+    <!-- LOAD CUSTOM FUNCTIONS -->
+    <script src="{% static 'javascript/isNumeric.js' %}"></script>
+    <script src="{% static 'javascript/sendPrivateOffer.js' %}"></script>
 
-<!-- LOAD CUSTOM FUNCTIONS -->
-<script src="{% static 'javascript/isNumeric.js' %}"></script>
-<script src="{% static 'javascript/sendPrivateOffer.js' %}"></script>
+    <script>
+        // RECEIVE DATA
+        function liveRecv(data) {
+            console.log("Received data: ", data);
+            if (data['information_type'] == 'received') {
+                // Note: I am using 3 & 4 here to align with the market phase when private offers will have job number 3 & 4.
+                var wage_points = data['wage_points'];
+                var wage_tokens = data['wage_tokens'];
+                if (data['job_number']==3) {
+                    document.getElementById("offer_3").style.display = "none";
+                    document.getElementById("offer_3_accepted").style.display = "block";
+                    var effort_3 = document.getElementById("effort_3");
+                    var wage_3 = document.getElementById("wage_3");
+                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens
+                    wage_3.textContent = wage_displayed
+                    effort_3.textContent = data['string_effort'];
+                } else if (data['job_number']==4) {
+                    document.getElementById("offer_4").style.display = "none";
+                    document.getElementById("offer_4_accepted").style.display = "block";
+                    var effort_4 = document.getElementById("effort_4");
+                    var wage_4 = document.getElementById("wage_4");
+                    let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
+                    wage_4.textContent = wage_displayed;
+                    effort_4.textContent = data['string_effort'];
+                } else {
+                    console.log("Error: job number not 3 or 4");
+                }
+            }
+            var privateOffer1 = document.getElementById("offer_3");
+            var privateOffer2 = document.getElementById("offer_4");
 
-
-<script>
-    // RECEIVE DATA
-    function liveRecv(data) {
-        if (data['information_type'] == 'received') {
-            // Note: I am using 3 & 4 here to align with the market phase when private offers will have job number 3 & 4.
-            var wage_points = data['wage_points'];
-            var wage_tokens = data['wage_tokens'];
-            if (data['job_number']==3) {
-                document.getElementById("offer_3").style.display = "none";
-                document.getElementById("offer_3_accepted").style.display = "block";
-                var effort_3 = document.getElementById("effort_3");
-                var wage_3 = document.getElementById("wage_3");
-                let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens
-                wage_3.textContent = wage_displayed
-                effort_3.textContent = data['string_effort'];
-            } else if (data['job_number']==4) {
-                document.getElementById("offer_4").style.display = "none";
-                document.getElementById("offer_4_accepted").style.display = "block";
-                var effort_4 = document.getElementById("effort_4");
-                var wage_4 = document.getElementById("wage_4");
-                let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
-                wage_4.textContent = wage_displayed;
-                effort_4.textContent = data['string_effort'];
-            } else {
-                console.log("Error: job number not 3 or 4");
+            if ((!privateOffer1 || privateOffer1.style.display === "none") && (!privateOffer2 || privateOffer2.style.display === "none")) {
+                document.getElementById("to_next_page").click();
             }
         }
-        var privateOffer1 = document.getElementById("offer_3");
-        var privateOffer2 = document.getElementById("offer_4");
+    </script>
+{% endblock %}
 
-        if ((!privateOffer1 || privateOffer1.style.display === "none") && (!privateOffer2 || privateOffer2.style.display === "none")) {
-            document.getElementById("to_next_page").click();
-        }
-    }
-</script>
 
-{{ endblock }}
