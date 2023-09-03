@@ -10,7 +10,9 @@
 
             // Loop over public offers
             var publicOffers = offers.filter(offer => offer.private === false);
+            console.log(publicOffers)
             for (let i = 0; i < publicOffers.length; i++) {
+                console.log(publicOffers[i])
                 // Retrieve information
                 let {job_id, wage_points, wage_tokens, effort, status, employer_id, job_number} = publicOffers[i];
                 let wage_displayed = js_vars.currency_is_points ? wage_points : wage_tokens;
