@@ -25,7 +25,7 @@ SESSION_CONFIGS = [
                         'questionnaire2',
                         'end'],
          num_demo_participants=11,
-         final=False,                                                              # Display instructions
+         final=True,                                                              # Display instructions
          market_timeout_seconds=150,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          showup_fee=12.0,                                                          # Participation show-up fee
