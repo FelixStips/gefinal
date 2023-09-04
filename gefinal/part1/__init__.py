@@ -591,9 +591,9 @@ class MarketPage(Page):
                     p.show_private = True if o.status == 'open' else False
                 if o.employer_id == p.participant.playerID:
                     if o.job_number == 3:
-                        p.offer3 = 'open'
+                        p.offer3 = o.status
                     elif o.job_number == 4:
-                        p.offer4 = 'open'
+                        p.offer4 = o.status
                     else:
                         print('Wrong job number')
 
@@ -606,8 +606,6 @@ class MarketPage(Page):
         # Calculate market information
         public_offers = sorted(Offer.filter(group=group, show=True, private=False), key=lambda o: o.job_id, reverse=True)
         public_offers_list = [to_dict(o) for o in public_offers]
-
-        print('public_offers_list: ', public_offers_list)
 
         market_information = dict(workers_left=group.num_unmatched_workers,
                                   open_offers=sum(i['status'] == 'open' for i in public_offers_list),
