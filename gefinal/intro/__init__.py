@@ -393,6 +393,9 @@ class InstructionsFirms(Page):
     def vars_for_template(player: Player):
         session = player.session
 
+        name_low_effort = session.config['effort_names'][0]
+        name_high_effort = session.config['effort_names'][1]
+
         currency_plural = "points" if player.participant.currency_is_points else "tokens"
         currency = "point" if player.participant.currency_is_points else "token"
 
@@ -452,6 +455,8 @@ class InstructionsFirms(Page):
             print('error: no market type')
 
         return dict(
+            name_low_effort=name_low_effort,
+            name_high_effort=name_high_effort,
             profit_employer_example_1=profit_employer_example_1,
             profit_employer_example_2=profit_employer_example_2,
             max_wage=max_wage,
