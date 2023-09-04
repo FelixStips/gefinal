@@ -1,7 +1,6 @@
 
         function updateEmployerPage(employer_information) {
             let {done, num_workers_employed, offer1, offer2, offer3, offer4} = employer_information;
-            console.log(employer_information)
             if (js_vars.is_employer==true) {
                 // Update overall page view
                 document.getElementById("trading_mask").style.display = "block";

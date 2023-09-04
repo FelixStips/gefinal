@@ -261,8 +261,11 @@ class Reemploy(Page):
 
         name_low_effort = session.config['effort_names'][0]
         name_high_effort = session.config['effort_names'][1]
+        currency_plural = "points" if player.participant.currency_is_points else "tokens"
+
 
         return dict(
+            currency_plural=currency_plural,
             max_wage=int(max_wage),
             wage_1=int(wage_1),
             wage_2=int(wage_2),

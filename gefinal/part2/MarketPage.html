@@ -5,6 +5,30 @@
     {% include '_templates/styles/market_page.html' %}
 {% endblock %}
 
+{% block content %}
+    <!-- INFORMATION BOX AT THE TOP OF PAGE -->
+    {% include '_templates/includes/information_box.html' %}
+
+    <!-- PRIVATE OFFERS WORKERS -->
+    {% include '_templates/includes/private_offers_worker.html' %}
+
+    <!-- PRIVATE OFFERS EMPLOYER -->
+    {% include '_templates/includes/private_offers_employer.html' %}
+
+    <!-- EMPLOYER TRADING MASK -->
+    {% include '_templates/includes/trading_mask_employer.html' %}
+
+    <!-- WORKER TRADING MASK -->
+    {% include '_templates/includes/trading_mask_worker.html' %}
+
+    <!-- PUBLIC OFFERS TABLE -->
+    {% include '_templates/includes/public_offers_table.html' %}
+
+    <!-- NEXT BUTTON -->
+    {% include '_templates/includes/next_button_hidden.html' %}
+
+{% endblock %}
+
 {% block scripts %}
     <script src="{% static 'javascript/acceptOffer.js' %}"></script>
     <script src="{% static 'javascript/acceptPrivateOffer.js' %}"></script>
@@ -44,30 +68,4 @@
                 }
     </script>
 {% endblock %}
-
-
-{% block content %}
-    <!-- INFORMATION BOX AT THE TOP OF PAGE -->
-    {% include '_templates/includes/information_box.html' %}
-
-    <!-- EMPLOYER TRADING MASK -->
-    {% include '_templates/includes/trading_mask_employer.html' %}
-
-    <!-- WORKER TRADING MASK -->
-    {% include '_templates/includes/trading_mask_worker.html' %}
-
-    <!-- PUBLIC OFFERS TABLE -->
-    {% include '_templates/includes/public_offers_table.html' %}
-
-    <!-- PRIVATE OFFERS WORKERS -->
-    {% include '_templates/includes/private_offers_worker.html' %}
-
-    <!-- PRIVATE OFFERS EMPLOYER -->
-    {% include '_templates/includes/private_offers_employer.html' %}
-
-    <!-- NEXT BUTTON -->
-    {% include '_templates/includes/next_button_hidden.html' %}
-
-{% endblock %}
-
 

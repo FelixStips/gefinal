@@ -1,7 +1,7 @@
         function acceptPrivateOffer() {
             let accepted_wage = parseInt(document.getElementById('wage_private').innerHTML);
             let effort = document.getElementById('effort_private').innerHTML.trim();
-            let accepted_effort = 1 ? effort === js_vars.name_high_effort : 0;
+            let accepted_effort = effort === js_vars.name_high_effort ? 1 : 0;
             let currency_is_points = js_vars.currency_is_points;
             let job_id = parseInt(document.getElementById('job_id_private').innerHTML);
             let employer_id = parseInt(document.getElementById('employer_id_private').innerHTML);

@@ -3,7 +3,8 @@
         try {
             let accepted_wage = parseInt(document.getElementById(`open_col_wage_${accepted_job_id}`).innerHTML);
             let effort = document.getElementById(`open_col_effort_${accepted_job_id}`).innerHTML.trim();
-            let accepted_effort = 1 ? effort === js_vars.name_high_effort : 0;
+            let accepted_effort = effort === js_vars.name_high_effort ? 1 : 0;
+            console.log('accepted effort', accepted_effort);
             let accepted_employer_id = parseInt(document.getElementById(`open_col_employer_id_${accepted_job_id}`).innerHTML);
             let accepted_job_number = parseInt(document.getElementById(`open_col_job_number_${accepted_job_id}`).innerHTML);
             let worker_id = js_vars.my_id;
@@ -17,7 +18,6 @@
                 "job_number": accepted_job_number,
                 "job_id": accepted_job_id,
                 "worker_id": worker_id,
-                "employer_id": accepted_employer_id,
                 "currency_is_points": currency_is_points,
             })
         } catch {
