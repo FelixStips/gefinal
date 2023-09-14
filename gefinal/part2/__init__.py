@@ -333,7 +333,6 @@ class Countdown(Page):
         session = player.session
         return session.config['countdown_seconds']
 
-
 class MarketPage(Page):
     timer_text = 'The market phase will end in:'
 
@@ -399,10 +398,8 @@ class MarketPage(Page):
         group = player.group
         session = player.session
         player.invalid = False
-        player.show_private = False
         current_datetime = datetime.datetime.now()
 
-        print(data)
 
         if data['information_type'] == 'done':
             """
@@ -500,10 +497,8 @@ class MarketPage(Page):
             # Update the offer
             current_offer = Offer.filter(group=group, job_id=data['job_id'])
             if current_offer[0].status == 'open':
-                current_offer[0].wage_points = wage_points if current_offer[0].wage_points is None else current_offer[
-                    0].wage_points
-                current_offer[0].wage_tokens = wage_tokens if current_offer[0].wage_tokens is None else current_offer[
-                    0].wage_tokens
+                current_offer[0].wage_points = wage_points if current_offer[0].wage_points is None else current_offer[0].wage_points
+                current_offer[0].wage_tokens = wage_tokens if current_offer[0].wage_tokens is None else current_offer[0].wage_tokens
                 current_offer[0].status = 'accepted'
                 current_offer[0].show = True
                 current_offer[0].worker_id = player.participant.playerID
@@ -556,14 +551,10 @@ class MarketPage(Page):
 
             # Update player information
             if player.participant.playerID == data['employer_id']:
-                player.offer1 = 'cancelled' if data[
-                                                   'job_number'] == 1 and player.offer1 != 'accepted' else player.offer1
-                player.offer2 = 'cancelled' if data[
-                                                   'job_number'] == 2 and player.offer2 != 'accepted' else player.offer2
-                player.offer3 = 'cancelled' if data[
-                                                   'job_number'] == 3 and player.offer3 != 'accepted' else player.offer3
-                player.offer4 = 'cancelled' if data[
-                                                   'job_number'] == 4 and player.offer4 != 'accepted' else player.offer4
+                player.offer1 = 'cancelled' if data['job_number'] == 1 and player.offer1 != 'accepted' else player.offer1
+                player.offer2 = 'cancelled' if data['job_number'] == 2 and player.offer2 != 'accepted' else player.offer2
+                player.offer3 = 'cancelled' if data['job_number'] == 3 and player.offer3 != 'accepted' else player.offer3
+                player.offer4 = 'cancelled' if data['job_number'] == 4 and player.offer4 != 'accepted' else player.offer4
 
             # Update group information
             group.num_job_offers -= 1
@@ -595,7 +586,7 @@ class MarketPage(Page):
         for p in group.get_players():
             for o in Offer.filter(group=group, private=True):
                 if o.worker_id == p.participant.playerID:
-                    p.show_private = True if o.status == 'open' else False
+                    p.show_private = True if (o.status == 'open' and p.is_employed is False) else False
                 if o.employer_id == p.participant.playerID:
                     if o.job_number == 3:
                         p.offer3 = o.status
@@ -611,8 +602,7 @@ class MarketPage(Page):
         print('offers_list: ', offers_list)
 
         # Calculate market information
-        public_offers = sorted(Offer.filter(group=group, show=True, private=False), key=lambda o: o.job_id,
-                               reverse=True)
+        public_offers = sorted(Offer.filter(group=group, show=True, private=False), key=lambda o: o.job_id, reverse=True)
         public_offers_list = [to_dict(o) for o in public_offers]
 
         market_information = dict(workers_left=group.num_unmatched_workers,
@@ -621,13 +611,13 @@ class MarketPage(Page):
                                       public_offers_list) if len(public_offers_list) > 0 else 0,
                                   average_wage_points=sum(i['wage_points'] for i in public_offers_list) / len(
                                       public_offers_list) if len(public_offers_list) > 0 else 0,
-                                  average_effort=sum(i['effort'] for i in public_offers_list) / len(
-                                      public_offers_list) if len(
+                                  average_effort=sum(i['effort'] for i in public_offers_list) / len(public_offers_list) if len(
                                       public_offers_list) > 0 else 0,
                                   )
 
+
         # Prepare information for page display
-        page_information = dict(is_finished=group.is_finished, )
+        page_information = dict(is_finished=group.is_finished,)
 
         # Return data
         data_to_return = {
@@ -637,11 +627,11 @@ class MarketPage(Page):
                                         invalid=p.invalid,
                                         show_private=p.show_private, ),
                 employer_information=dict(done=p.done,
-                                          num_workers_employed=p.num_workers_employed,
-                                          offer1=p.offer1,
-                                          offer2=p.offer2,
-                                          offer3=p.offer3,
-                                          offer4=p.offer4, ),
+                                        num_workers_employed=p.num_workers_employed,
+                                        offer1=p.offer1,
+                                        offer2=p.offer2,
+                                        offer3=p.offer3,
+                                        offer4=p.offer4,),
                 market_information=market_information,
                 offers=offers_list,
             )

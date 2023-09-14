@@ -401,10 +401,8 @@ class MarketPage(Page):
         group = player.group
         session = player.session
         player.invalid = False
-        player.show_private = False
         current_datetime = datetime.datetime.now()
 
-        print(data)
 
         if data['information_type'] == 'done':
             """
@@ -591,7 +589,7 @@ class MarketPage(Page):
         for p in group.get_players():
             for o in Offer.filter(group=group, private=True):
                 if o.worker_id == p.participant.playerID:
-                    p.show_private = True if o.status == 'open' else False
+                    p.show_private = True if (o.status == 'open' and p.is_employed is False) else False
                 if o.employer_id == p.participant.playerID:
                     if o.job_number == 3:
                         p.offer3 = o.status
