@@ -286,14 +286,9 @@
                In this phase, workers choose their effort. <b>The effort requested by employers is not binding</b>.
                Hence, you can choose <b>{{ name_high_effort }}</b> or <b>{{ name_low_effort }}</b> effort irrespective of the effort indicated in the job offer.
             </p>
-            <p class="block-sentence">
-              The page you will see looks like the one shown above.
-                At the top of the page, you will see the wage you accepted and the effort requested by the employer.
-                Below, you see the cost of each effort choice.
-            </p>
                 <ul class="list" style="margin-top: -10px; margin-bottom: 10px;">
-                    <li> <b> The cost of {{ name_high_effort }} effort is {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
-                    <li> <b> The cost of {{ name_low_effort }} effort is {{ low_effort_points_tokens }} {{ currency_plural }} </b></li>
+                    <li> The <b>cost of {{ name_high_effort }} effort is {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
+                    <li> The <b>cost of {{ name_low_effort }} effort is {{ low_effort_points_tokens }} {{ currency_plural }} </b></li>
                 </ul>
             <div style="display: flex; justify-content: center; margin-bottom: 10px">
                 {% if player.participant.currency_is_points == True %}
@@ -303,6 +298,11 @@
                     <img src="{% static 'instruction/worker_tokens_3.jpg' %}" alt="Worker 3 tokens" style="max-width: 80%;"/>
                 {% endif %}
             </div>
+            <p class="block-sentence">
+              The page you will see looks like the one shown above.
+                At the top of the page, you will see the wage you accepted and the effort requested by the employer.
+                Below, you see the cost of each effort choice.
+            </p>
         </div>
     </div>
     <br>
@@ -321,9 +321,7 @@
                <b>Your employer can send you a private re-employment offer</b> in the following round. Only you can see and accept this offer.
                 The offer will appear at the top of the market page, as shown below. To accept the offer, click on "Accept private offer".
             </p>
-            <p class="block-sentence">
-                The offer can only be seen by you. As such, private offers <b>allow you to establish a longer-term relationship with your employer</b>.
-            </p>
+
             <div style="display: flex; justify-content: center; margin-bottom: 10px">
                 {% if player.participant.currency_is_points == True %}
                     <img src="{% static 'instruction/worker_points_4.jpg' %}" alt="Worker 4 points" style="max-width: 80%;"/>
@@ -334,6 +332,9 @@
             </div>
             <p class="block-sentence">
                 Private offers work just as public offers. You can accept at most one offer per round.
+            </p>
+            <p class="block-sentence">
+               Private offers can only be seen by you. As such, they <b>allow you to establish a longer-term relationship with your employer</b>.
             </p>
         </div>
     </div>
