@@ -185,12 +185,12 @@
                 Each employer can employ at most two workers.</b>
                 Unaccepted offers are deleted at the end of the market phase.
             </p>
+
             <p class="block-sentence">
-                2. After the market phase, workers who accepted a job offer enter the <b>production phase</b>.
-                In this phase, workers decide their effort.
-                <b>Workers are not forced to provide the effort desired by the employer.
-                They are free to choose any effort.</b>
+                You can also send a private <b>re-employment offer to each worker you employed in the previous round</b>.
+                Only the worker to whom the offer is directed can accept a private offer.
             </p>
+
             <p class="block-sentence">
                 Once all workers have chosen their effort, everyone's profits are calculated and the next round starts.
                 The sum of your profits across all rounds will determine your earnings for the experiment.
@@ -267,7 +267,11 @@
                 {% endif %}
             </div>
             <p class="block-sentence" style="margin-top: 5px">
-                The market phase <b>ends</b> when all workers have accepted an offer or when the time limit of {{ market_time }} seconds is reached.
+                If you do not want to send any more offers in this round, you can click the "done" button in the bottom of the Trading Box.
+            </p>
+            <p class="block-sentence" style="margin-top: 5px">
+                The market phase <b>ends</b> when all workers have accepted an offer, all employers have either filled their jobs or clicked the "done" button,
+                , or else when the time limit of {{ market_time }} seconds is reached.
                 The time left in the current round will be displayed in a yellow box at the top of the page.
                 When the market phase is over, no offers can be submitted or accepted.
             </p>
@@ -309,6 +313,56 @@
                     <img src="{% static 'instruction/worker_tokens_3.jpg' %}" alt="Worker 3 tokens" style="max-width: 80%;"/>
                 {% endif %}
             </div>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+<div class="tab" id="instructions_7" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Private Re-Employment Offers</h5>
+        <div class="card-body">
+            <p class="block-sentence">
+               Before the next market phase, you can send <b>private offers to workers you employed in the previous round</b>.
+                Before each round, you will be asked whether you want to send private offers.
+                If you click yes, you will see the screen below.
+                To submit a private offer, you choose a wage and desired effort level and click on "Send Offer".
+                Click "next" once you are done sending offers.
+            </p>
+            <p class="block-sentence">
+                The offer can only be seen by the worker you've sent it to.
+                The worker will know that the offer is coming from their previous employer.
+                As such, private offers <b>allow you to establish a longer-term relationship with workers</b>.
+            </p>
+            <div style="display: flex; justify-content: center; margin-bottom: 10px">
+                {% if player.participant.currency_is_points == True %}
+                    <img src="{% static 'instruction/employer_points_4.jpg' %}" alt="Employer 4 points" style="max-width: 80%;"/>
+
+                {% else %}
+                    <img src="{% static 'instruction/employer_tokens_4.jpg' %}" alt="Employer 4 tokens" style="max-width: 80%;"/>
+                {% endif %}
+            </div>
+            <p class="block-sentence">
+                Private re-employment offers work just as public offers: You need to specify a wage and an effort, and then click on "Send Offer".
+                You can employ at most two workers during each round; this includes both private and public jobs.
+                Note that private re-employment offers cannot be cancelled during the round.
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+
+<div class="tab" id="instructions_8" style="display: none">
+    <div class="card">
             <h5 class="underline">How are the workers' profits calculated?</h5>
             <p class="block-sentence">
                 In each round, the workers' profits depend on whether they are employed, their wage, and their effort level.
@@ -338,7 +392,7 @@
 
 
 
-<div class="tab" id="instructions_7" style="display: none">
+<div class="tab" id="instructions_9" style="display: none">
     <div class="card">
         <h5 class="card-header">How are your profits calculated?</h5>
         <div class="card-body">
@@ -779,7 +833,7 @@
         document.getElementById("comprehension_q1").style.display = "none";
         document.getElementById("comprehension_q2").style.display = "none";
         document.getElementById("comprehension_q3").style.display = "none";
-        document.getElementById("instructions_6").style.display = "block";
+        document.getElementById("instructions_8").style.display = "block";
     }
 
     function MoveToComprehension() {
