@@ -274,6 +274,7 @@ class Reemploy(Page):
             num_workers=num_workers,
             name_low_effort=name_low_effort,
             name_high_effort=name_high_effort,
+            playerID=player.participant.vars['playerID'],
         )
 
     @staticmethod
@@ -905,7 +906,8 @@ class Results(Page):
         effort_string = name_high_effort if player.field_maybe_none('effort_choice') == 1 else (
             name_low_effort if player.field_maybe_none('effort_choice') == 0 else "")
         round_number = player.participant.round_number
-        rounds_left_part_1 = session.config['shock_after_rounds'] - round_number
+        rounds_left = session.config['shock_after_rounds'] - round_number
+        part = 2 if round_number > session.config['shock_after_rounds'] else 1
         average_wage_points = round(group.average_wage_points, 1) if group.average_wage_points is not None else None
         average_wage_tokens = round(group.average_wage_tokens, 1) if group.average_wage_tokens is not None else None
         average_profit_points = round(group.average_payoff_firms_points,
@@ -921,7 +923,8 @@ class Results(Page):
             name_low_effort=name_low_effort,
             name_high_effort=name_high_effort,
             round_number=round_number,
-            rounds_left=rounds_left_part_1,
+            rounds_left=rounds_left,
+            part=part,
             is_employer=player.participant.is_employer,
             is_employed=player.is_employed,
             num_workers=player.num_workers_employed,

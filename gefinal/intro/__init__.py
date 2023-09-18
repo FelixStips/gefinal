@@ -56,6 +56,9 @@ def creating_session(subsession: Subsession):
     migration_small_shock_size = session.config['migration_small_shock_size']
     migration_large_shock_size = session.config['migration_large_shock_size']
 
+    print('temp_id_list: ', temp_id_list)
+    print('players: ', players)
+
     for p in players:
         participant_vars = p.participant.vars
         participant_vars['playerID'] = temp_id_list[(p.id_in_group - 1)]
@@ -118,7 +121,7 @@ def creating_session(subsession: Subsession):
                     participant_vars['move_to_market_2'] = True
         #print(participant_vars['currency_is_points'])
 
-    """ Proportions seem right at least...
+    """
     size_large_1 = [p.participant.vars['large_market_1'] for p in players].count(True)
     size_large_2 = [p.participant.vars['large_market_2'] for p in players].count(True)
     size_small = [p.participant.vars['small_market'] for p in players].count(True)
@@ -129,8 +132,6 @@ def creating_session(subsession: Subsession):
     print('Large market 2 will have', size_large_2, 'players and will receive', move_to_2, 'migrants')
     print('Small market will have', size_small, 'players')
     """
-
-
 
 
 # PAGES
