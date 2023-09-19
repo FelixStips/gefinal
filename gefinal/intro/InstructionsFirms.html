@@ -332,16 +332,12 @@
         <h5 class="card-header">Private Re-Employment Offers</h5>
         <div class="card-body">
             <p class="block-sentence">
-               Before the next market phase, you can send <b>private offers to workers you employed in the previous round</b>.
-                Before each round, you will be asked whether you want to send private offers.
-                If you click yes, you will see the screen below.
-                To submit a private offer, you choose a wage and desired effort level and click on "Send Offer".
-                Click "next" once you are done sending offers.
+                You can send a <b>private offer to each worker you employed in the previous round</b>.
+                Before the next round starts, you can decide whether and what private offers to submit.
             </p>
             <p class="block-sentence">
-                The offer can only be seen by the worker you've sent it to.
-                The worker will know that the offer is coming from their previous employer.
-                As such, private offers <b>allow you to establish a longer-term relationship with workers</b>.
+                Private offers work just as public offers: You need to specify a wage and an effort, and then click on "Send Offer".
+                Click "next" once you are done sending private offers. Note that you cannot cancel the offer later on.
             </p>
             <div style="display: flex; justify-content: center; margin-bottom: 10px">
                 {% if player.participant.currency_is_points == True %}
@@ -352,9 +348,8 @@
                 {% endif %}
             </div>
             <p class="block-sentence">
-                Private re-employment offers work just as public offers: You need to specify a wage and an effort, and then click on "Send Offer".
-                You can employ at most two workers during each round; this includes both private and public jobs.
-                Note that private re-employment offers cannot be cancelled during the round.
+                A private offer can only be seen by the worker you've sent it to.
+                As such, <b>private offers allow you to establish a longer-term relationship</b> with workers.
             </p>
         </div>
     </div>

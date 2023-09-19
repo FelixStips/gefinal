@@ -318,10 +318,12 @@
         <h5 class="card-header">Private Re-Employment Offers</h5>
         <div class="card-body">
             <p class="block-sentence">
-               <b>Your employer can send you a private re-employment offer</b> in the following round. Only you can see and accept this offer.
-                The offer will appear at the top of the market page, as shown below. To accept the offer, click on "Accept private offer".
+               Your employer can also send a <b>private re-employment offer</b> in the following round. Only you can see and accept this offer.
+                The offer will appear at the top of the market page. To accept the offer, click on "Accept private offer".
             </p>
-
+            <p class="block-sentence">
+               The offer can only be seen by you. As such, private offers <b>allow you to establish a longer-term relationship</b> with your employer.
+            </p>
             <div style="display: flex; justify-content: center; margin-bottom: 10px">
                 {% if player.participant.currency_is_points == True %}
                     <img src="{% static 'instruction/worker_points_4.jpg' %}" alt="Worker 4 points" style="max-width: 80%;"/>
@@ -332,9 +334,6 @@
             </div>
             <p class="block-sentence">
                 Private offers work just as public offers. You can accept at most one offer per round.
-            </p>
-            <p class="block-sentence">
-               Private offers can only be seen by you. As such, they <b>allow you to establish a longer-term relationship with your employer</b>.
             </p>
         </div>
     </div>
