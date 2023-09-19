@@ -139,8 +139,6 @@ class Introduction(Page):
         return session.config['final']
 
 
-
-
 class InstructionsWorkers(Page):
     @staticmethod
     def is_displayed(player: Player):
@@ -213,16 +211,21 @@ class InstructionsWorkers(Page):
         else:
             print('error: no market type')
 
+        q2_effort_requested = name_high_effort
+        q2_effort_received = name_high_effort
+        q3_effort_received_1 = name_low_effort
+        q3_effort_received_2 = name_high_effort
+
         return dict(
             name_low_effort = name_low_effort,
             name_high_effort = name_high_effort,
             profit_employer_example_1 = profit_employer_example_1,
             profit_employer_example_2 = profit_employer_example_2,
             max_wage=max_wage,
-            q2_effort_requested=C.Q2_EFFORT_REQUESTED,
-            q2_effort_received=C.Q2_EFFORT_RECEIVED,
-            q3_effort_received_1=C.Q3_EFFORT_RECEIVED_1,
-            q3_effort_received_2=C.Q3_EFFORT_RECEIVED_2,
+            q2_effort_requested=q2_effort_requested,
+            q2_effort_received=q2_effort_received,
+            q3_effort_received_1=q3_effort_received_1,
+            q3_effort_received_2=q3_effort_received_2,
             q2_wage=q2_wage,
             q3_wage_1=q3_wage_1,
             q3_wage_2=q3_wage_2,
@@ -452,16 +455,22 @@ class InstructionsFirms(Page):
         else:
             print('error: no market type')
 
+        q2_effort_requested = name_high_effort
+        q2_effort_received = name_high_effort
+        q3_effort_received_1 = name_low_effort
+        q3_effort_received_2 = name_high_effort
+
+
         return dict(
             name_low_effort=name_low_effort,
             name_high_effort=name_high_effort,
             profit_employer_example_1=profit_employer_example_1,
             profit_employer_example_2=profit_employer_example_2,
             max_wage=max_wage,
-            q2_effort_requested=C.Q2_EFFORT_REQUESTED,
-            q2_effort_received=C.Q2_EFFORT_RECEIVED,
-            q3_effort_received_1=C.Q3_EFFORT_RECEIVED_1,
-            q3_effort_received_2=C.Q3_EFFORT_RECEIVED_2,
+            q2_effort_requested=q2_effort_requested,
+            q2_effort_received=q2_effort_received,
+            q3_effort_received_1=q3_effort_received_1,
+            q3_effort_received_2=q3_effort_received_2,
             q2_wage=q2_wage,
             q3_wage_1=q3_wage_1,
             q3_wage_2=q3_wage_2,
