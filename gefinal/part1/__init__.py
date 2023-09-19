@@ -131,7 +131,6 @@ def creating_session(subsession: Subsession):
     if players_in_small_market is not []:
         matrix.append(players_in_small_market)
 
-    #print(matrix)
     subsession.set_group_matrix(matrix)
     print(subsession.get_group_matrix())
 
@@ -330,10 +329,9 @@ class Reemploy(Page):
         }
 
 class WaitToStart(WaitPage):
-    # wait_for_all_groups = True
+    wait_for_all_groups = True
     # group_by_arrival_time = True
     body_text = "Waiting for other players in your group to arrive."
-
 
 
 class Countdown(Page):
@@ -357,9 +355,6 @@ class MarketPage(Page):
     def after_all_players_arrive(group: Group):
         current_datetime = datetime.datetime.now()
         group.start_timestamp = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-        #players = group.get_players()
-
-        print('all players arrived')
 
 
     @staticmethod

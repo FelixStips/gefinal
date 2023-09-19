@@ -599,7 +599,6 @@ class MarketPage(Page):
         offers_to_show = sorted(Offer.filter(group=group, show=True), key=lambda o: o.job_id, reverse=True)
         offers_list = [to_dict(o) for o in offers_to_show]
 
-        print('offers_list: ', offers_list)
 
         # Calculate market information
         public_offers = sorted(Offer.filter(group=group, show=True, private=False), key=lambda o: o.job_id, reverse=True)
