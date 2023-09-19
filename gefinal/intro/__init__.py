@@ -56,9 +56,6 @@ def creating_session(subsession: Subsession):
     migration_small_shock_size = session.config['migration_small_shock_size']
     migration_large_shock_size = session.config['migration_large_shock_size']
 
-    print('temp_id_list: ', temp_id_list)
-    print('players: ', players)
-
     for p in players:
         participant_vars = p.participant.vars
         participant_vars['playerID'] = temp_id_list[(p.id_in_group - 1)]
@@ -119,7 +116,7 @@ def creating_session(subsession: Subsession):
                 elif participant_vars['playerID'] <= (num_employers_small_market + size_large_market + size_large_market + migration_small_shock_size + migration_large_shock_size):
                     participant_vars['migrant'] = True
                     participant_vars['move_to_market_2'] = True
-        #print(participant_vars['currency_is_points'])
+        #print('Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is', participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'], 'small market is', participant_vars['small_market'], 'move to market 1 is', participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
 
     """
     size_large_1 = [p.participant.vars['large_market_1'] for p in players].count(True)

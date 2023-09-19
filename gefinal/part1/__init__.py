@@ -131,8 +131,9 @@ def creating_session(subsession: Subsession):
     if players_in_small_market is not []:
         matrix.append(players_in_small_market)
 
-    print(matrix)
+    #print(matrix)
     subsession.set_group_matrix(matrix)
+    print(subsession.get_group_matrix())
 
     session = subsession.session
     for group in subsession.get_groups():
@@ -163,6 +164,11 @@ def creating_session(subsession: Subsession):
             group.employers_in_group = session.config['num_employers_small_market']
             group.num_unmatched_workers = group.players_in_group - session.config['num_employers_small_market']
             group.num_unmatched_jobs = session.config['num_employers_small_market'] * 2
+
+    players = subsession.get_players()
+    for p in players:
+        participant_vars = p.participant.vars
+        print('Participant', p.participant.id_in_session, 'Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is', participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'], 'small market is', participant_vars['small_market'], 'move to market 1 is', participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
 
 
 def to_dict(offer: Offer):
@@ -324,8 +330,10 @@ class Reemploy(Page):
         }
 
 class WaitToStart(WaitPage):
+    # wait_for_all_groups = True
     # group_by_arrival_time = True
     body_text = "Waiting for other players in your group to arrive."
+
 
 
 class Countdown(Page):
@@ -349,6 +357,10 @@ class MarketPage(Page):
     def after_all_players_arrive(group: Group):
         current_datetime = datetime.datetime.now()
         group.start_timestamp = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        #players = group.get_players()
+
+        print('all players arrived')
+
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -431,7 +443,6 @@ class MarketPage(Page):
 
             # Update group
             group.num_unmatched_jobs -= data['jobs_open']
-            print('Unmatched jobs: ', group.num_unmatched_jobs)
             if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
                 group.is_finished = True
 
@@ -602,8 +613,6 @@ class MarketPage(Page):
         # Prepare offers list
         offers_to_show = sorted(Offer.filter(group=group, show=True), key=lambda o: o.job_id, reverse=True)
         offers_list = [to_dict(o) for o in offers_to_show]
-
-        print('offers_list: ', offers_list)
 
         # Calculate market information
         public_offers = sorted(Offer.filter(group=group, show=True, private=False), key=lambda o: o.job_id, reverse=True)
