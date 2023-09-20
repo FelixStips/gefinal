@@ -132,7 +132,7 @@ def creating_session(subsession: Subsession):
         matrix.append(players_in_small_market)
 
     subsession.set_group_matrix(matrix)
-    print(subsession.get_group_matrix())
+    #print(subsession.get_group_matrix())
 
     session = subsession.session
     for group in subsession.get_groups():
@@ -164,10 +164,10 @@ def creating_session(subsession: Subsession):
             group.num_unmatched_workers = group.players_in_group - session.config['num_employers_small_market']
             group.num_unmatched_jobs = session.config['num_employers_small_market'] * 2
 
-    players = subsession.get_players()
-    for p in players:
-        participant_vars = p.participant.vars
-        print('Participant', p.participant.id_in_session, 'Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is', participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'], 'small market is', participant_vars['small_market'], 'move to market 1 is', participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
+    #players = subsession.get_players()
+    #for p in players:
+        #participant_vars = p.participant.vars
+        #print('Participant', p.participant.id_in_session, 'Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is', participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'], 'small market is', participant_vars['small_market'], 'move to market 1 is', participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
 
 
 def to_dict(offer: Offer):

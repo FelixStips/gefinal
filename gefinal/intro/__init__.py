@@ -198,6 +198,11 @@ class InstructionsWorkers(Page):
         profit_employer_example_1 = total_gain_high_effort_2_workers - 60 - 40
         profit_employer_example_2 = total_gain_mix_effort_2_workers - 60 - 40
 
+        print('currency', currency)
+        print('gain_high_effort_2_workers', gain_high_effort_2_workers)
+        print('total_gain_high_effort_2_workers', total_gain_high_effort_2_workers)
+        print('profit_employer_example_1', profit_employer_example_1)
+
         if player.participant.large_market:
             players_in_your_group = session.config['size_large_market']
             employers_in_your_group = session.config['num_employers_large_market']
