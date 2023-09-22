@@ -321,11 +321,8 @@ class Reemploy(Page):
 
 
 class WaitToStart(WaitPage):
+    template_name = '_templates/includes/My_WaitPage.html'
     body_text = "Waiting for other players in your group to arrive."
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.round_number > 1
 
 
 class Countdown(Page):
