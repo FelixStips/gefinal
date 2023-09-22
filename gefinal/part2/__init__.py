@@ -679,6 +679,7 @@ class WorkPage(Page):
 
 
 class ResultsWaitPage(WaitPage):
+    template_name = '_templates/includes/My_WaitPage.html'
     body_text = "Waiting for workers to finish the effort stage."
 
     @staticmethod
