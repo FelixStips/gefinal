@@ -356,8 +356,8 @@
             </p>
             <ul class="list" style="margin-top: -10px;">
                 <li> If you do not accept any job offer, you earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b>.</li>
-                <li> If you accept a job offer and choose {{ name_low_effort }} effort, your profits equal the wage minus the cost of {{ name_low_effort }} effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
-                <li> If you accept a job offer and choose {{ name_high_effort }} effort, your profits equal the wage minus the cost of {{ name_high_effort }} effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                <li> If you accept a job offer and choose {{ name_low_effort }} effort, your profits equal wage minus cost of {{ name_low_effort }} effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
+                <li> If you accept a job offer and choose {{ name_high_effort }} effort, your profits equal wage minus the cost of {{ name_high_effort }} effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b>.</li>
             </ul>
             <p class="block-sentence">
                 <u>Example</u>: if you receive a wage of {{ worker_example_wage }}  {{ currency_plural }} and choose {{ name_high_effort }} effort, your profits in this round are {{ worker_example_wage }} –  {{ high_effort_points_tokens }} = {{ worker_example_profit_high_effort }} {{ currency_plural }}.
@@ -581,7 +581,7 @@
         <h5 class="card-header">Question 2</h5>
         <div class="card-body">
             <p>
-                Suppose an employer employed a worker for a wage of <b>{{ q2_wage }}</b> and requested <b>{{ q2_effort_requested }}</b> effort.
+                Suppose an employer employed a worker for a wage of <b>{{ q2_wage }}</b> and requested <b>{{ q2_effort_requested }}</b> effort. <br>
                 The worker decided to provide <b>{{ q2_effort_received }}</b> effort.
             </p>
             <p>

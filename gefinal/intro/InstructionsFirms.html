@@ -371,8 +371,8 @@
             </p>
             <ul class="list" style="margin-top: -10px">
                 <li> If a worker does not accept a job, they earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b></li>
-                <li> If a worker accepts a job and chooses {{ name_low_effort }} effort, profits are the wage minus the {{ name_low_effort }} cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b></li>
-                <li> If a worker accepts a job and chooses {{ name_high_effort }} effort, profits are the wage minus the {{ name_high_effort }} cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
+                <li> If a worker accepts a job and chooses {{ name_low_effort }} effort, profits are wage minus {{ name_low_effort }} cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b></li>
+                <li> If a worker accepts a job and chooses {{ name_high_effort }} effort, profits are wage minus {{ name_high_effort }} cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
             </ul>
             <p class="block-sentence">
                 <u>Example</u>: if a workers receives a wage of {{ worker_example_wage }}  {{ currency_plural }} and chooses {{ name_high_effort }} effort, their profits in this round are {{ worker_example_wage }} –  {{ high_effort_points_tokens }} = {{ worker_example_profit_high_effort }} {{ currency_plural }}.
@@ -599,7 +599,7 @@
         <h5 class="card-header">Question 2</h5>
         <div class="card-body">
             <p>
-                Suppose an employer employed a worker for a wage of <b>{{ q2_wage }}</b> and requested <b>{{ q2_effort_requested }}</b> effort.
+                Suppose an employer employed a worker for a wage of <b>{{ q2_wage }}</b> and requested <b>{{ q2_effort_requested }}</b> effort. <br>
                 The worker decided to provide <b>{{ q2_effort_received }}</b> effort.
             </p>
             <p>

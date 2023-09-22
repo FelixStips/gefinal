@@ -116,7 +116,7 @@ def creating_session(subsession: Subsession):
                 elif participant_vars['playerID'] <= (num_employers_small_market + size_large_market + size_large_market + migration_small_shock_size + migration_large_shock_size):
                     participant_vars['migrant'] = True
                     participant_vars['move_to_market_2'] = True
-        #print('Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is', participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'], 'small market is', participant_vars['small_market'], 'move to market 1 is', participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
+        print('Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is', participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'], 'small market is', participant_vars['small_market'], 'move to market 1 is', participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
 
     """
     size_large_1 = [p.participant.vars['large_market_1'] for p in players].count(True)
@@ -197,11 +197,6 @@ class InstructionsWorkers(Page):
         gain_mix_effort_2_workers = int(total_gain_mix_effort_2_workers / 2) if total_gain_mix_effort_2_workers % 2 == 0 else total_gain_mix_effort_2_workers / 2
         profit_employer_example_1 = total_gain_high_effort_2_workers - 60 - 40
         profit_employer_example_2 = total_gain_mix_effort_2_workers - 60 - 40
-
-        print('currency', currency)
-        print('gain_high_effort_2_workers', gain_high_effort_2_workers)
-        print('total_gain_high_effort_2_workers', total_gain_high_effort_2_workers)
-        print('profit_employer_example_1', profit_employer_example_1)
 
         if player.participant.large_market:
             players_in_your_group = session.config['size_large_market']
@@ -640,6 +635,7 @@ class InstructionsFirms(Page):
 
 
 class WaitToStart(WaitPage):
+    wait_for_all_groups = True
     body_text = "Waiting for other participants to finish the quiz."
 
     @staticmethod

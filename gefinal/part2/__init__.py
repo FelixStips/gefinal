@@ -321,8 +321,11 @@ class Reemploy(Page):
 
 
 class WaitToStart(WaitPage):
-    #group_by_arrival_time = True
     body_text = "Waiting for other players in your group to arrive."
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number > 1
 
 
 class Countdown(Page):
