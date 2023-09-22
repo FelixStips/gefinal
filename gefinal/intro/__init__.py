@@ -636,7 +636,7 @@ class InstructionsFirms(Page):
 
 class WaitToStart(WaitPage):
     wait_for_all_groups = True
-    body_text = "Waiting for other participants to finish the quiz."
+    template_name = 'intro/My_WaitPage.html'
 
     @staticmethod
     def is_displayed(player: Player):

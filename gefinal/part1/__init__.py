@@ -329,8 +329,7 @@ class Reemploy(Page):
         }
 
 class WaitToStart(WaitPage):
-    body_text = "Waiting for other players in your group to arrive."
-
+    template_name = 'part1/My_WaitPage.html'
 
 class Countdown(Page):
     timer_text = 'The next market phase will start in:'
