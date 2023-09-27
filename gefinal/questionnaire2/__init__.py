@@ -229,7 +229,6 @@ class Q2A(Page):
         return player.field_maybe_none('Q1') == '1'
 
 
-
 class Q2B(Page):
     form_model = 'player'
     form_fields = ['Q2B']

@@ -17,13 +17,8 @@ SESSION_CONFIGS = [
     dict(
          name='Main',
          display_name="Main",
-         app_sequence=['intro',
-                       'part1',
-                       'midbreak',
-                        'part2',
-                        'questionnaire',
-                        'questionnaire2',
-                        'end'],
+         app_sequence=['intro',],
+         use_browser_bots=True,
          num_demo_participants=6,
          final=True,                                                               # Display instructions
          market_timeout_seconds=150,                                               # Duration of market stage in seconds

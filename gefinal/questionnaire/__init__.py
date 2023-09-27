@@ -91,7 +91,7 @@ class Player(BasePlayer):
     # PAGES
 class SocioDemographic(Page):
     form_model = 'player'
-    form_fields = ['age', 'gender', 'education', 'education_field', 'country_of_birth', 'country_of_residence']
+    form_fields = ['age', 'gender', 'education', 'education_field', 'country_of_birth']
 
 #class CognitiveReflection(Page):
 #    form_model = 'player'
