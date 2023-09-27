@@ -17,7 +17,13 @@ SESSION_CONFIGS = [
     dict(
          name='Main',
          display_name="Main",
-         app_sequence=['intro',],
+         app_sequence=['intro',
+                       'part1',
+                       'midbreak',
+                       'part2',
+                       'questionnaire',
+                       'questionnaire2',
+                       'end'],
          use_browser_bots=True,
          num_demo_participants=6,
          final=True,                                                               # Display instructions
