@@ -4,7 +4,6 @@ from otree.api import Bot
 
 class PlayerBot(Bot):
     def play_round(self):
-        yield Countdown
+        yield Submission(Countdown, check_html=False)
         yield MarketPage
-        yield WorkPage
         yield Results
