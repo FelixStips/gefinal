@@ -24,7 +24,7 @@ SESSION_CONFIGS = [
                        'questionnaire',
                        'questionnaire2',
                        'end'],
-         use_browser_bots=True,
+         use_browser_bots=False,
          num_demo_participants=6,
          final=True,                                                               # Display instructions
          market_timeout_seconds=150,                                               # Duration of market stage in seconds
