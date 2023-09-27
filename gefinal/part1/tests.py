@@ -4,6 +4,8 @@ from otree.api import Bot
 
 class PlayerBot(Bot):
     def play_round(self):
-        yield Submission(Countdown, check_html=False)
-        yield MarketPage
-        yield Results
+        session = self.player.session
+        if self.player.round_number <= session.config['shock_after_rounds']:
+            yield Submission(Countdown, check_html=False)
+            yield MarketPage
+            yield Results
