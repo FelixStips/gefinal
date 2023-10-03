@@ -560,14 +560,12 @@ class InstructionsFirms(Page):
 
         if data['information_type'] == 'submit_answer':
             my_id = player.id_in_group
-            print('Received', data)
             if data['question'] == 'q1':
                 print('Correct employer profit:', q1_employer_profit, 'Correct worker profit:', q1_worker_profit)
                 print('Received employer profit:', data['employer_profit'], 'Received worker profit:',
                       data['worker_profit'])
                 if int(data['employer_profit']) == q1_employer_profit and int(
                         data['worker_profit']) == q1_worker_profit:
-                    print('correct!')
                     QuizResponses.create(
                         playerID=player.participant.playerID,
                         question=data['question'],
@@ -588,7 +586,6 @@ class InstructionsFirms(Page):
                       data['worker_profit'])
                 if int(data['employer_profit']) == q2_employer_profit and int(
                         data['worker_profit']) == q2_worker_profit:
-                    print('correct!')
                     QuizResponses.create(
                         playerID=player.participant.playerID,
                         question=data['question'],
@@ -596,7 +593,6 @@ class InstructionsFirms(Page):
                     )
                     return {my_id: dict(correct=True, question=data['question'])}
                 else:
-                    print('False')
                     QuizResponses.create(
                         playerID=player.participant.playerID,
                         question=data['question'],
