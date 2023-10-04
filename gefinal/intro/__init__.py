@@ -152,15 +152,46 @@ class quiz1(Page):
 
         name_low_effort = session.config['effort_names'][0]
         name_high_effort = session.config['effort_names'][1]
-
         currency_plural = "points" if player.participant.currency_is_points else "tokens"
         currency = "point" if player.participant.currency_is_points else "token"
+        outside_option_workers_points_tokens = session.config['worker_outside_option']
+        outside_option_employers_points_tokens = session.config['employer_outside_option']
+        low_effort_points_tokens = session.config['effort_costs_points'][0]
+        high_effort_points_tokens = session.config['effort_costs_points'][1]
+        gain_high_effort_1_worker = session.config['MPL_high'][0]
+        gain_low_effort_1_worker = session.config['MPL_low'][0]
+        gain_high_effort_2_workers = session.config['MPL_high'][1]
+        gain_low_effort_2_workers = session.config['MPL_low'][1]
+
+        if player.participant.currency_is_points is False:
+            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config['exchange_rate']
+            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config['exchange_rate']
+            low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
+            high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
+            gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
+            gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
+            gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
+
+        total_gain_high_effort_2_workers = gain_high_effort_2_workers + gain_high_effort_2_workers
+        total_gain_mix_effort_2_workers = gain_high_effort_2_workers + gain_low_effort_2_workers
+        total_gain_low_effort_2_workers = gain_low_effort_2_workers + gain_low_effort_2_workers
 
         return dict(
             name_low_effort = name_low_effort,
             name_high_effort = name_high_effort,
             currency_plural = currency_plural,
             currency = currency,
+            outside_option_workers_points_tokens=outside_option_workers_points_tokens,
+            low_effort_points_tokens=low_effort_points_tokens,
+            high_effort_points_tokens=high_effort_points_tokens,
+            outside_option_employers_points_tokens=outside_option_employers_points_tokens,
+            gain_high_effort_1_worker=gain_high_effort_1_worker,
+            gain_low_effort_1_worker=gain_low_effort_1_worker,
+            gain_high_effort_2_workers=gain_high_effort_2_workers,
+            gain_low_effort_2_workers=gain_low_effort_2_workers,
+            total_gain_high_effort_2_workers=total_gain_high_effort_2_workers,
+            total_gain_mix_effort_2_workers=total_gain_mix_effort_2_workers,
+            total_gain_low_effort_2_workers=total_gain_low_effort_2_workers,
         )
 
     @staticmethod
@@ -187,15 +218,53 @@ class quiz2(Page):
     def vars_for_template(player: Player):
         session = player.session
 
-        if player.participant.currency_is_points:
-            q2_wage = C.Q2_WAGE
-        else:
-            q2_wage = C.Q2_WAGE * session.config['exchange_rate']
-
         q2_effort_requested = session.config['effort_names'][C.Q2_EFFORT_REQUESTED]
         q2_effort_received = session.config['effort_names'][C.Q2_EFFORT_RECEIVED]
+        name_low_effort = session.config['effort_names'][0]
+        name_high_effort = session.config['effort_names'][1]
+        currency_plural = "points" if player.participant.currency_is_points else "tokens"
+        currency = "point" if player.participant.currency_is_points else "token"
+
+        outside_option_workers_points_tokens = session.config['worker_outside_option']
+        outside_option_employers_points_tokens = session.config['employer_outside_option']
+        low_effort_points_tokens = session.config['effort_costs_points'][0]
+        high_effort_points_tokens = session.config['effort_costs_points'][1]
+        gain_high_effort_1_worker = session.config['MPL_high'][0]
+        gain_low_effort_1_worker = session.config['MPL_low'][0]
+        gain_high_effort_2_workers = session.config['MPL_high'][1]
+        gain_low_effort_2_workers = session.config['MPL_low'][1]
+        q2_wage = C.Q2_WAGE * session.config['exchange_rate']
+
+        if player.participant.currency_is_points is False:
+            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config['exchange_rate']
+            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config['exchange_rate']
+            low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
+            high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
+            gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
+            gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
+            gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
+            q2_wage = q2_wage * session.config['exchange_rate']
+
+        total_gain_high_effort_2_workers = gain_high_effort_2_workers + gain_high_effort_2_workers
+        total_gain_mix_effort_2_workers = gain_high_effort_2_workers + gain_low_effort_2_workers
+        total_gain_low_effort_2_workers = gain_low_effort_2_workers + gain_low_effort_2_workers
 
         return dict(
+            name_low_effort=name_low_effort,
+            name_high_effort=name_high_effort,
+            currency_plural=currency_plural,
+            currency=currency,
+            outside_option_workers_points_tokens=outside_option_workers_points_tokens,
+            low_effort_points_tokens=low_effort_points_tokens,
+            high_effort_points_tokens=high_effort_points_tokens,
+            outside_option_employers_points_tokens=outside_option_employers_points_tokens,
+            gain_high_effort_1_worker=gain_high_effort_1_worker,
+            gain_low_effort_1_worker=gain_low_effort_1_worker,
+            gain_high_effort_2_workers=gain_high_effort_2_workers,
+            gain_low_effort_2_workers=gain_low_effort_2_workers,
+            total_gain_high_effort_2_workers=total_gain_high_effort_2_workers,
+            total_gain_mix_effort_2_workers=total_gain_mix_effort_2_workers,
+            total_gain_low_effort_2_workers=total_gain_low_effort_2_workers,
             q2_effort_received = q2_effort_received,
             q2_effort_requested = q2_effort_requested,
             q2_wage = q2_wage,
@@ -242,12 +311,50 @@ class quiz3(Page):
         q3_effort_received_1 = session.config['effort_names'][C.Q3_EFFORT_RECEIVED_1]
         q3_effort_received_2 = session.config['effort_names'][C.Q3_EFFORT_RECEIVED_2]
 
+        name_low_effort = session.config['effort_names'][0]
+        name_high_effort = session.config['effort_names'][1]
+        currency_plural = "points" if player.participant.currency_is_points else "tokens"
+        currency = "point" if player.participant.currency_is_points else "token"
+        outside_option_workers_points_tokens = session.config['worker_outside_option']
+        outside_option_employers_points_tokens = session.config['employer_outside_option']
+        low_effort_points_tokens = session.config['effort_costs_points'][0]
+        high_effort_points_tokens = session.config['effort_costs_points'][1]
+        gain_high_effort_1_worker = session.config['MPL_high'][0]
+        gain_low_effort_1_worker = session.config['MPL_low'][0]
+        gain_high_effort_2_workers = session.config['MPL_high'][1]
+        gain_low_effort_2_workers = session.config['MPL_low'][1]
+
         if player.participant.currency_is_points is False:
+            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config['exchange_rate']
+            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config['exchange_rate']
+            low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
+            high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
+            gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
+            gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
+            gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
             q3_wage_1 = q3_wage_1 * session.config['exchange_rate']
             q3_wage_2 = q3_wage_2 * session.config['exchange_rate']
 
+        total_gain_high_effort_2_workers = gain_high_effort_2_workers + gain_high_effort_2_workers
+        total_gain_mix_effort_2_workers = gain_high_effort_2_workers + gain_low_effort_2_workers
+        total_gain_low_effort_2_workers = gain_low_effort_2_workers + gain_low_effort_2_workers
 
         return dict(
+            name_low_effort=name_low_effort,
+            name_high_effort=name_high_effort,
+            currency_plural=currency_plural,
+            currency=currency,
+            outside_option_workers_points_tokens=outside_option_workers_points_tokens,
+            low_effort_points_tokens=low_effort_points_tokens,
+            high_effort_points_tokens=high_effort_points_tokens,
+            outside_option_employers_points_tokens=outside_option_employers_points_tokens,
+            gain_high_effort_1_worker=gain_high_effort_1_worker,
+            gain_low_effort_1_worker=gain_low_effort_1_worker,
+            gain_high_effort_2_workers=gain_high_effort_2_workers,
+            gain_low_effort_2_workers=gain_low_effort_2_workers,
+            total_gain_high_effort_2_workers=total_gain_high_effort_2_workers,
+            total_gain_mix_effort_2_workers=total_gain_mix_effort_2_workers,
+            total_gain_low_effort_2_workers=total_gain_low_effort_2_workers,
             q3_wage_1 = q3_wage_1,
             q3_wage_2 = q3_wage_2,
             q3_effort_received_1 = q3_effort_received_1,
@@ -307,11 +414,3 @@ page_sequence = [Introduction,
                  quiz2,
                  quiz3,
                  WaitToStart]
-def custom_export(player):
-    # top row
-    yield ['playerID', 'question', 'correct']
-
-    # data rows
-    quiz_responses = QuizResponses.filter()
-    for response in quiz_responses:
-        yield [response.playerID, response.question, response.correct]
