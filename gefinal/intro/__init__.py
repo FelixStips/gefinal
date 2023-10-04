@@ -233,7 +233,7 @@ class quiz2(Page):
         gain_low_effort_1_worker = session.config['MPL_low'][0]
         gain_high_effort_2_workers = session.config['MPL_high'][1]
         gain_low_effort_2_workers = session.config['MPL_low'][1]
-        q2_wage = C.Q2_WAGE * session.config['exchange_rate']
+        q2_wage = C.Q2_WAGE
 
         if player.participant.currency_is_points is False:
             outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config['exchange_rate']

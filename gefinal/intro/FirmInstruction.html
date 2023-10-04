@@ -1,10 +1,519 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+{{ block content }}
+
+<style>
+    .underline {
+        text-decoration: underline;
+        margin-top: 20px;
+    }
+    .tab {
+        margin-top: 0.5cm;
+        margin-inside: 1cm;
+    }
+    body {
+        background-color: #f8f9fa;
+        font-family: Arial, sans-serif;
+        color: #333;
+        padding: 10px;
+    }
+    p {
+        margin-bottom: 15px;
+        margin-top: 5px;
+    }
+    .list {
+        margin-top: 0;
+        margin-bottom: 0;
+        padding-left: 30px;
+    }
+    .block-sentence {
+        display: block;
+        text-align: justify;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+        background-color: #ffffff;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    .container {
+        margin: 0 auto;
+        padding: 10px;
+    }
+</style>
+
+<div class="tab" id="instructions_1" style="display: block">
+    <div class="card">
+        <h5 class="card-header">Payment</h5>
+        <div class="card-body">
+             <p class="block-sentence">
+                 At the beginning of the experiment, you will receive an  <b>initial endowment of {{ participation_fee }} Pounds</b>.
+                 During the experiment, you can earn more money by accumulating {{ currency_plural }}.
+             </p>
+            <p class="block-sentence">
+                All {{ currency_plural }} you earn will be converted to Pounds at the end of the experiment. The exchange rate will be
+            </p>
+             <p style="margin-left: 50px;">
+                    <b>1 {{ currency }} = {{ exchange_rate }} Pounds</b>.
+             </p>
+            <p class="block-sentence">
+                The amount earned will depend on your decisions and those of the other participants.
+                You will be paid via PayPal after the experiment is completed.
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+
+
+<div class="tab" id="instructions_2" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Instructions - Part 1</h5>
+        <div class="card-body">
+            <p class="block-sentence">
+                This set of instructions describes the first part of the experiment.
+                After you finish the first part, there will be another set of instructions for the second part.
+                The second part is very similar to the first part.
+            </p>
+            <p class="block-sentence">
+                Please read the following instructions carefully.
+                After the instructions, you will be asked a <b>set of questions to ensure you understand</b> the instructions.
+                The experiment will begin after every participant has answered all questions.
+            </p>
+            <p class="block-sentence">
+                If you have any <b>questions, please raise your hand</b>.
+                We will answer your questions at your cubicle.
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+
+<div class="tab" id="instructions_3" style="display: none">
+    <div class="card">
+        <h5 class="card-header">General Information</h5>
+        <div class="card-body">
+          <p class="block-sentence">
+              The experiment is divided into {{ total_rounds }} rounds, {{ shock_after_rounds }} rounds in the first part and {{ rounds_part_two }} rounds in the second part.
+            </p>
+            <p class="block-sentence">
+                You have been randomly assigned to one of two roles: either an employer or a worker.
+            </p>
+            <p style="margin-left: 50px;">
+                    <b>You will take the role of {{ player.participant.string_role }}</b>.
+                    You will keep this role for the entire course of the experiment.
+            </p>
+            <p class="block-sentence">
+                In the first part, you will interact in a group of {{ players_in_your_group }} randomly assigned participants.
+                Each group has {{ employers_in_your_group }} employers and {{ workers_in_your_group }} workers.
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+
+
+<div class="tab" id="instructions_4" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Short Overview of the Experimental Procedures</h5>
+        <div class="card-body">
+           <p class="block-sentence">
+               In each round, employers choose to employ zero, one, or two workers.
+               To employ a worker, an employer needs to pay a wage. In return, employed workers provide effort.
+               Workers choose how much effort to provide after they accept a job offer.
+               Effort is costly to workers, so they make profits only if their effort costs are lower than the wage they receive.
+            </p>
+            <p class="block-sentence">
+            On the other hand, your profits will depend on:
+            </p>
+            <ol class="list" style="margin-top: -10px">
+                <li> the number of workers you employ </li>
+                <li> the wages you pay </li>
+                <li> the effort workers provide </li>
+            </ol>
+            <p class="block-sentence">
+                You make profits if the effort you receive is worth more than the wages you pay.
+            </p>
+            <p>
+               The first part lasts for {{ shock_after_rounds }} rounds. Each round has two phases:
+            </p>
+            <p class="block-sentence">
+                1. First, a <b>market phase</b> lasting for {{ market_time }} seconds.
+                During this phase, employers can submit job offers, which workers can accept.
+                When submitting a job offer, an employer specifies two things
+            </p>
+                <ul class="list" style="margin-top: -10px">
+                    <li>	The wage they will pay  </li>
+                    <li>	The effort they want the worker to provide </li>
+                </ul>
+
+            <p class="block-sentence">
+           Once employers submit offers, workers get to see them and decide which to accept.
+                The first worker to accept an offer will get it.
+                <b>Each worker can accept at most one job offer in each round.
+                Each employer can employ at most two workers.</b>
+                Unaccepted offers are deleted at the end of the market phase.
+            </p>
+
+            <p class="block-sentence">
+                You can also send a private <b>re-employment offer to each worker you employed in the previous round</b>.
+                Only the worker to whom the offer is directed can accept a private offer.
+            </p>
+            <p class="block-sentence">
+                2. After the market phase, workers who accepted a job offer enter the <b>production phase</b>.
+                In this phase, workers decide their effort.
+                <b>Workers are not forced to provide the effort desired by the employer.
+                They are free to choose any effort.</b>
+            </p>
+            <p class="block-sentence">
+                Once all workers have chosen their effort, everyone's profits are calculated and the next round starts.
+                The sum of your profits across all rounds will determine your earnings for the experiment.
+            </p>
+        </div>
+    </div>
+    <br>
+  <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+
+
+<div class="tab" id="instructions_5" style="display: none">
+    <div class="card">
+        <h5 class="card-header">The Market Phase in Detail</h5>
+        <div class="card-body">
+           <p class="block-sentence">
+            Each round begins with a <b>market phase</b>.
+           </p>
+            <p class="block-sentence">
+                The figure below shows a preview of the market phase screen.
+                The white box below the timer gives <b>information</b> about the state of the market.
+            </p>
+            <div style="display: flex; justify-content: center;">
+                {% if player.participant.currency_is_points == True %}
+                    <img src="{% static 'instruction/employer_points_1.jpg' %}" alt="Employer 1 points" style="max-width: 80%;"/>
+                {% else %}
+                    <img src="{% static 'instruction/employer_tokens_1.jpg' %}" alt="Employer 1 tokens" style="max-width: 80%;"/>
+                {% endif %}
+            </div>
+            <p class="block-sentence" style="margin-top: 5px">
+                To <b>make a job offer</b>, use "Trading box" in the middle of the page.
+                You can send up to two job offers at the same time.
+            </p>
+            <p class="block-sentence">
+            To send a job offer, you must:
+            </p>
+                <ol class="list" style="margin-top: -10px">
+                    <li>choose a wage between 0 and {{ max_wage }} {{ currency_plural }}.</li>
+                    <li>indicate whether you want the worker to provide <b>"{{ name_high_effort }}"</b> or <b>"{{ name_low_effort }}"</b> effort.</li>
+                    <li>click on "Send Offer".</li>
+                </ol>
+            <p class="block-sentence; padding-bottom: 5px;">
+                Once you <b>submit a job offer</b>, it will appear in the table "Open offers" at the bottom of the page.
+                See the figure below for an example of how the screen will look.
+            </p>
+            <div style="display: flex; justify-content: center;">
+                {% if player.participant.currency_is_points == True %}
+                    <img src="{% static 'instruction/employer_points_2.jpg' %}" alt="Employer 2 points" style="max-width: 80%;"/>
+                {% else %}
+                    <img src="{% static 'instruction/employer_tokens_2.jpg' %}" alt="Employer 2 tokens" style="max-width: 80%;"/>
+                {% endif %}
+            </div>
+            <p class="block-sentence" style="margin-top: 5px">
+                Workers can accept an offer as long as it is "open".
+                You can have up to two open job offers at a time.
+                You can also submit no offer at all.
+                To withdraw or change a job offer, click on "Cancel Offer".
+            </p>
+            <p class="block-sentence">
+                Open offers from all employers are visible to everyone in the "Open Offers" table.
+                <b>Workers can accept at most one offer during each round</b>, and each job offer can only be accepted by one worker.
+                If your offer is accepted, you will see a notification and the offer will appear in the "Accepted Offers" table.
+                See the figure below for an example of how the screen will look after a worker accepts your first job offer.
+            </p>
+            <div style="display: flex; justify-content: center;">
+                {% if player.participant.currency_is_points == True %}
+                    <img src="{% static 'instruction/employer_points_3.jpg' %}" alt="Employer 3 points" style="max-width: 80%;"/>
+                {% else %}
+                    <img src="{% static 'instruction/employer_tokens_3.jpg' %}" alt="Employer 3 tokens" style="max-width: 80%;"/>
+                {% endif %}
+            </div>
+            <p class="block-sentence" style="margin-top: 5px">
+                If you do not want to send any more offers in this round, you can click the "done" button in the bottom of the Trading Box.
+            </p>
+            <p class="block-sentence" style="margin-top: 5px">
+                The market phase <b>ends</b> when all workers have accepted an offer, all employers have either filled their jobs or clicked the "done" button,
+                 or else when the time limit of {{ market_time }} seconds is reached.
+                The time left in the current round will be displayed in a yellow box at the top of the page.
+                When the market phase is over, no offers can be submitted or accepted.
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+
+
+
+<div class="tab" id="instructions_6" style="display: none">
+    <div class="card">
+        <h5 class="card-header">The Production Phase in Detail</h5>
+        <div class="card-body">
+            <p class="block-sentence">
+                Following the market phase, all workers who have accepted a job offer enter the production phase.
+               In this phase, workers choose their effort. <b>The effort requested by employers is not binding</b>.
+               Hence, workers can choose <b>{{ name_high_effort }}</b> or <b>{{ name_low_effort }}</b> effort irrespective of the effort indicated in the job offer.
+            </p>
+
+            <div style="display: flex; justify-content: center; margin-bottom: 10px">
+                {% if player.participant.currency_is_points == True %}
+                    <img src="{% static 'instruction/worker_points_3.jpg' %}" alt="Worker 3 points" style="max-width: 80%;"/>
+
+                {% else %}
+                    <img src="{% static 'instruction/worker_tokens_3.jpg' %}" alt="Worker 3 tokens" style="max-width: 80%;"/>
+                {% endif %}
+            </div>
+            <p class="block-sentence">
+                The page which workers see looks like the one shown above.
+                At the top of the page, workers see the wage they accepted and the effort requested by the employer.
+                Below, they see the cost of each effort choice.
+            </p>
+            <ul class="list" style="margin-top: -10px; margin-bottom: 10px">
+                <li> <b>The cost of {{ name_high_effort }} effort is {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
+                <li> <b>The cost of {{ name_low_effort }} effort is {{ low_effort_points_tokens }} {{ currency_plural }} </b></li>
+            </ul>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+<div class="tab" id="instructions_7" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Private Re-Employment Offers</h5>
+        <div class="card-body">
+            <p class="block-sentence">
+                You can send a <b>private offer to each worker you employed in the previous round</b>.
+                Before the next round starts, you can decide whether and what private offers to submit.
+            </p>
+            <p class="block-sentence">
+                Private offers work just as public offers: You need to specify a wage and an effort, and then click on "Send Offer".
+                Click "next" once you are done sending private offers. Note that you cannot cancel the offer later on.
+            </p>
+            <div style="display: flex; justify-content: center; margin-bottom: 10px">
+                {% if player.participant.currency_is_points == True %}
+                    <img src="{% static 'instruction/employer_points_4.jpg' %}" alt="Employer 4 points" style="max-width: 80%;"/>
+
+                {% else %}
+                    <img src="{% static 'instruction/employer_tokens_4.jpg' %}" alt="Employer 4 tokens" style="max-width: 80%;"/>
+                {% endif %}
+            </div>
+            <p class="block-sentence">
+                A private offer can only be seen by the worker you've sent it to.
+                As such, private offers allow you to <b>establish a longer-term relationship</b> with workers.
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+
+<div class="tab" id="instructions_8" style="display: none">
+    <div class="card">
+        <h5 class="card-header">How are the workers' profits calculated?</h5>
+        <div class="card-body">
+            <p class="block-sentence">
+                In each round, the workers' profits depend on whether they are employed, their wage, and their effort level.
+            </p>
+            <ul class="list" style="margin-top: -10px">
+                <li> If a worker does not accept a job, they earn <b> {{ outside_option_workers_points_tokens }} {{ currency_plural }} </b></li>
+                <li> If a worker accepts a job and chooses {{ name_low_effort }} effort, profits are wage minus {{ name_low_effort }} cost of effort: <b> wage – {{ low_effort_points_tokens }} {{ currency_plural }}  </b></li>
+                <li> If a worker accepts a job and chooses {{ name_high_effort }} effort, profits are wage minus {{ name_high_effort }} cost of effort: <b> wage – {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
+            </ul>
+            <p class="block-sentence">
+                <u>Example</u>: if a workers receives a wage of {{ worker_example_wage }}  {{ currency_plural }} and chooses {{ name_high_effort }} effort, their profits in this round are {{ worker_example_wage }} –  {{ high_effort_points_tokens }} = {{ worker_example_profit_high_effort }} {{ currency_plural }}.
+                If, instead, the worker chooses {{ name_low_effort }} effort, the profits are {{ worker_example_wage }} – {{ low_effort_points_tokens }} = {{ worker_example_profit_low_effort }} {{ currency_plural }}.
+            </p>
+           <p class="block-sentence">
+               As you can see, a worker's profits are larger the higher their wage.
+                Their profit is also higher if they choose {{ name_low_effort }} effort.
+                Note that a worker can make a loss if the effort costs are higher than their wage.
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+
+
+<div class="tab" id="instructions_9" style="display: none">
+    <div class="card">
+        <h5 class="card-header">How are your profits calculated?</h5>
+        <div class="card-body">
+           <p class="block-sentence">
+               Your profits in each round are determined by the wages you pay to your workers, the effort they choose, and the number of workers you employ.
+           </p>
+            <p class="block-sentence">
+                If you <b>do not employ any workers</b> in a round, you earn 0 {{ currency_plural }} in that round.
+            </p>
+            <p class="block-sentence">
+                If you employ one or two workers, your profit is the difference between your total revenue and the wages you pay:
+            </p>
+            <p style="margin-left: 50px;">
+                <b>Profit = Total revenue - total wage payments</b>.
+            </p>
+             <p class="block-sentence" style="margin-bottom: -1px">
+                The total revenue depends on the number of workers you employ and the effort the workers provide.
+             </p>
+                <ul style="margin-top: -2px">
+                    <li> <b>If a worker provides {{ name_high_effort }} effort your revenue will be considerably larger than if they provide {{ name_low_effort }} effort</b>.
+                         For example, you get {{ gain_high_effort_1_worker }} {{ currency_plural }} revenue in case of {{ name_high_effort }} effort and
+                         {{ gain_low_effort_1_worker }} {{ currency_plural }} in case of {{ name_low_effort }} effort.</li>
+                    <li> <b>If you employ two workers, each worker becomes somewhat less productive</b>. The total revenue of two workers may still be larger, but not twice as large.
+                         For example, you get {{ gain_high_effort_2_workers }} {{ currency_plural }} for each worker providing {{ name_high_effort }} effort and
+                        {{ gain_low_effort_2_workers }} {{ currency_plural }} for each worker providing {{ name_low_effort }} effort if you employ two workers.</li>
+                </ul>
+            <p class="block-sentence">
+               The table below summarizes the total revenue in each case.
+            </p>
+            <div style="max-width: 80%; margin: 0 auto; padding: 10px;">
+             <table style="border-collapse: collapse; width: 100%;">
+                <tr>
+                    <th style="border: 1px solid black;">Case</th>
+                    <th style="border: 1px solid black;">Total revenue</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses {{ name_high_effort }} effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_high_effort_1_worker }}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ one worker.<br>The worker chooses {{ name_low_effort }} effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_low_effort_1_worker }}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose {{ name_high_effort }} effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }} + {{ gain_high_effort_2_workers }} = {{ total_gain_high_effort_2_workers }}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>One worker chooses {{ name_high_effort }} effort.<br>The other worker chooses {{ name_low_effort }} effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_high_effort_2_workers }} + {{ gain_low_effort_2_workers }} = {{ total_gain_mix_effort_2_workers }}</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid black; word-break: break-word;">Employ two workers.<br>Both workers choose {{ name_low_effort }} effort.</td>
+                    <td style="border: 1px solid black;">{{ gain_low_effort_2_workers }} + {{ gain_low_effort_2_workers }} = {{ total_gain_low_effort_2_workers }}</td>
+                </tr>
+            </table>
+            </div>
+            <br>
+        <p>
+            <u>Example</u>: Suppose you employ two workers.
+            You pay one worker a wage of 60 {{ currency_plural }} and the other worker a wage of 40 {{ currency_plural }}.
+        </p>
+        <ul>
+            <li>
+                If both workers choose {{ name_high_effort }} effort, then your profits equal to {{ total_gain_high_effort_2_workers }} – 60 – 40 = {{ profit_employer_example_1 }} {{ currency_plural }}.
+            </li>
+            <li>
+                Alternatively, if one worker chooses {{ name_high_effort }} effort and the other {{ name_low_effort }} effort, then your profits equal {{ total_gain_mix_effort_2_workers }} – 60 – 40 = {{ profit_employer_example_2 }} {{ currency_plural }}.
+            </li>
+        </ul>
+        <p>
+           Note you <b>make a loss</b> if the total wage payments are larger than total revenue.
+        </p>
+    </div>
+     </div>
+        <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this); ChangeHeader();">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
+    </p>
+</div>
+
+<div class="tab" id="are_you_ready_q" style="display: none">
+    <div class="card">
+        <h5 class="card-header">Are you ready?</h5>
+        <div class="card-body">
+            <p class="block-sentence">
+               The experiment will not start until all participants are familiar with the instructions.
+                To ensure this is the case, we ask you to <b>answer three questions</b> on the following pages.
+            </p>
+            <p class="block-sentence">
+                Click on the next button below when you are ready to answer these questions.
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this);">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="clickNext()" style="float: right;">Start Quiz</button>
+    </p>
+</div>
+
+
+
+<br>
+
+<button class="otree-btn-next btn otree-next-button invisible" id="to_next_page"></button>
+
+{{ endblock }}
+
+
+{{ block scripts }}
+
+
+
+    <script src="{% static 'javascript/MoveToPrevious.js' %}"></script>
+    <script src="{% static 'javascript/MoveToNext.js' %}"></script>
+    <script src="{% static 'javascript/clickNext.js' %}"></script>
+
+
+
+{{ endblock }}

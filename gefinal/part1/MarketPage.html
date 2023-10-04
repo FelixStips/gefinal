@@ -49,7 +49,7 @@
 
     <script>
         // CALL LIVESEND ON PAGE LOAD
-        window.onload = function() {
+        document.addEventListener("DOMContentLoaded", function (event) {
             liveSend ({
                     "information_type": "load",
                     "sender": js_vars.my_id
