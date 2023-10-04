@@ -7,7 +7,7 @@
 
 
 {% block content %}
-<div class="tab" id="comprehension_q2" style="display: block">
+<div class="tab" style="display: block">
     <div class="card">
         <h5 class="card-header">Question 1</h5>
         <div class="card-body">
@@ -18,7 +18,18 @@
 
             {{ formfield 'quiz1_worker' }}
             {{ formfield 'quiz1_employer' }}
-          </div>
+
+            <div style="margin-top: 20px;"></div>
+            <hr style="border-top: 1px solid #ccc;">
+            <button type="button" class="btn btn-outline-secondary" id="show-info-button" onclick="showInformation()" style="display: block">Click for information on how profits are calculated</button>
+            <button type="button" class="btn btn-outline-secondary" id="hide-info-button" onclick="hideInformation()" style="display: none">Click to hide information</button>
+
+            {% if player.participant.is_employer == True %}
+                {% include '_templates/includes/quizInfo_employer.html' %}
+            {% else %}
+                {% include '_templates/styles/quizInfo_worker.html' %}
+            {% endif %}
+        </div>
     </div>
 </div>
 
@@ -27,7 +38,6 @@
 {{ next_button }}
 
 {% endblock %}
-
 
 {% block scripts %}
 {% endblock %}
