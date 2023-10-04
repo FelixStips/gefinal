@@ -1,0 +1,38 @@
+
+{% load otree static %}
+
+{% block styles %}
+    {% include '_templates/styles/intro_page.html' %}
+{% endblock %}
+
+
+{% block content %}
+<div class="tab" id="comprehension_q3" style="display: block">
+    <div class="card">
+        <h5 class="card-header">Question 3</h5>
+        <div class="card-body">
+            <p>
+                Suppose an employer employed two workers.<br>
+                Worker 1 receives a wage of <b>{{ q3_wage_1 }}</b> and provides <b>{{ q3_effort_received_1 }}</b> effort.<br>
+                Worker 2 receives a wage of <b>{{ q3_wage_2 }}</b> and provides <b>{{ q3_effort_received_2 }}</b> effort.<br>
+            </p>
+             <p>
+                What profits would the employer and workers make in this case?
+            </p>
+
+            {{ formfield 'quiz3_worker1' }}
+            {{ formfield 'quiz3_worker2' }}
+            {{ formfield 'quiz3_employer' }}
+          </div>
+    </div>
+</div>
+
+<br>
+
+{{ next_button }}
+
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}

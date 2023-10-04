@@ -1,0 +1,36 @@
+
+{% load otree static %}
+
+{% block styles %}
+    {% include '_templates/styles/intro_page.html' %}
+{% endblock %}
+
+
+{% block content %}
+<div class="tab" id="comprehension_q2" data-solved="0" style="display: block">
+    <div class="card">
+        <h5 class="card-header">Question 2</h5>
+        <div class="card-body">
+            <p>
+                Suppose an employer employed a worker for a wage of <b>{{ q2_wage }}</b> and requested <b>{{ q2_effort_requested }}</b> effort. <br>
+                The worker decided to provide <b>{{ q2_effort_received }}</b> effort.
+            </p>
+            <p>
+                 What profits would the worker and the employer make in this case?
+            </p>
+
+            {{ formfield 'quiz2_worker' }}
+            {{ formfield 'quiz2_employer' }}
+          </div>
+    </div>
+</div>
+
+<br>
+
+{{ next_button }}
+
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}

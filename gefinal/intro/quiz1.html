@@ -1,0 +1,33 @@
+
+{% load otree static %}
+
+{% block styles %}
+    {% include '_templates/styles/intro_page.html' %}
+{% endblock %}
+
+
+{% block content %}
+<div class="tab" id="comprehension_q2" style="display: block">
+    <div class="card">
+        <h5 class="card-header">Question 1</h5>
+        <div class="card-body">
+            <p>
+                Suppose an employer employed no worker and a worker accepted no job. <br>
+                What profits would the worker and the employer make in this case?
+            </p>
+
+            {{ formfield 'quiz1_worker' }}
+            {{ formfield 'quiz1_employer' }}
+          </div>
+    </div>
+</div>
+
+<br>
+
+{{ next_button }}
+
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}
