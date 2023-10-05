@@ -1,64 +1,11 @@
 
-{{ block content }}
+{% load otree static %}
 
-<style>
-    .underline {
-        text-decoration: underline;
-        margin-top: 20px;
-    }
-    .tab {
-        margin-top: 0.5cm;
-        margin-inside: 1cm;
-    }
-    body {
-        background-color: #f8f9fa;
-        font-family: Arial, sans-serif;
-        color: #333;
-        padding: 10px;
-    }
-    p {
-        margin-bottom: 15px;
-        margin-top: 5px;
-    }
-    .list {
-        margin-top: 0;
-        margin-bottom: 0;
-        padding-left: 30px;
-    }
-    .block-sentence {
-        display: block;
-        text-align: justify;
-    }
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
+{% block styles %}
+    {% include '_templates/styles/intro_page.html' %}
+{% endblock %}
 
-    th, td {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    th {
-        background-color: #f2f2f2;
-        font-weight: bold;
-    }
-
-    tr:nth-child(even) {
-        background-color: #ffffff;
-    }
-
-    tr:last-child td {
-        border-bottom: none;
-    }
-
-    .container {
-        margin: 0 auto;
-        padding: 10px;
-    }
-</style>
-
+{% block content %}
 <div class="tab" id="instructions_1" style="display: block">
     <div class="card">
         <h5 class="card-header">Payment</h5>
@@ -301,15 +248,6 @@
                In this phase, workers choose their effort. <b>The effort requested by employers is not binding</b>.
                Hence, workers can choose <b>{{ name_high_effort }}</b> or <b>{{ name_low_effort }}</b> effort irrespective of the effort indicated in the job offer.
             </p>
-
-            <div style="display: flex; justify-content: center; margin-bottom: 10px">
-                {% if player.participant.currency_is_points == True %}
-                    <img src="{% static 'instruction/worker_points_3.jpg' %}" alt="Worker 3 points" style="max-width: 80%;"/>
-
-                {% else %}
-                    <img src="{% static 'instruction/worker_tokens_3.jpg' %}" alt="Worker 3 tokens" style="max-width: 80%;"/>
-                {% endif %}
-            </div>
             <p class="block-sentence">
                 The page which workers see looks like the one shown above.
                 At the top of the page, workers see the wage they accepted and the effort requested by the employer.
@@ -319,6 +257,14 @@
                 <li> <b>The cost of {{ name_high_effort }} effort is {{ high_effort_points_tokens }} {{ currency_plural }}  </b></li>
                 <li> <b>The cost of {{ name_low_effort }} effort is {{ low_effort_points_tokens }} {{ currency_plural }} </b></li>
             </ul>
+            <div style="display: flex; justify-content: center; margin-bottom: 10px">
+                {% if player.participant.currency_is_points == True %}
+                    <img src="{% static 'instruction/worker_points_3.jpg' %}" alt="Worker 3 points" style="max-width: 80%;"/>
+
+                {% else %}
+                    <img src="{% static 'instruction/worker_tokens_3.jpg' %}" alt="Worker 3 tokens" style="max-width: 80%;"/>
+                {% endif %}
+            </div>
         </div>
     </div>
     <br>
@@ -472,7 +418,7 @@
      </div>
         <br>
     <p>
-        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this); ChangeHeader();">Previous</button>
+        <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToPrevious(this)">Previous</button>
         <button type="button" class="btn-tab btn-secondary" data-offset="1" onclick="MoveToNext(this)" style="float: right;">Next</button>
     </p>
 </div>
@@ -508,12 +454,9 @@
 
 {{ block scripts }}
 
-
-
     <script src="{% static 'javascript/MoveToPrevious.js' %}"></script>
     <script src="{% static 'javascript/MoveToNext.js' %}"></script>
     <script src="{% static 'javascript/clickNext.js' %}"></script>
-
 
 
 {{ endblock }}

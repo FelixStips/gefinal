@@ -142,6 +142,198 @@ class Introduction(Page):
         return session.config['final']
 
 
+class WorkerInstruction(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return not player.participant.is_employer
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        session = player.session
+
+        if player.participant.large_market:
+            players_in_your_group = session.config['size_large_market']
+            employers_in_your_group = session.config['num_employers_large_market']
+            workers_in_your_group = session.config['size_large_market'] - session.config['num_employers_large_market']
+        else:
+            players_in_your_group = session.config['size_small_market']
+            employers_in_your_group = session.config['num_employers_small_market']
+            workers_in_your_group = session.config['size_small_market'] - session.config['num_employers_small_market']
+
+        name_low_effort = session.config['effort_names'][0]
+        name_high_effort = session.config['effort_names'][1]
+        currency_plural = "points" if player.participant.currency_is_points else "tokens"
+        currency = "point" if player.participant.currency_is_points else "token"
+        outside_option_workers_points_tokens = session.config['worker_outside_option']
+        outside_option_employers_points_tokens = session.config['employer_outside_option']
+        low_effort_points_tokens = session.config['effort_costs_points'][0]
+        high_effort_points_tokens = session.config['effort_costs_points'][1]
+        gain_high_effort_1_worker = session.config['MPL_high'][0]
+        gain_low_effort_1_worker = session.config['MPL_low'][0]
+        gain_high_effort_2_workers = session.config['MPL_high'][1]
+        gain_low_effort_2_workers = session.config['MPL_low'][1]
+        exchange_rate = session.config['payout_rate']
+        initial_points_tokens = session.config['showup_fee'] * (1 / session.config['payout_rate'])
+        max_wage = session.config['max_wage']
+        worker_example_wage = session.config['worker_example_wage']
+
+        if player.participant.currency_is_points is False:
+            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config['exchange_rate']
+            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config['exchange_rate']
+            low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
+            high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
+            gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
+            gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
+            gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
+            exchange_rate = exchange_rate * (1/session.config['exchange_rate'])
+            initial_points_tokens = initial_points_tokens * session.config['exchange_rate']
+            max_wage = max_wage * session.config['exchange_rate']
+            worker_example_wage = worker_example_wage * session.config['exchange_rate']
+
+        worker_example_profit_high_effort = worker_example_wage - high_effort_points_tokens
+        worker_example_profit_low_effort = worker_example_wage - low_effort_points_tokens
+
+        total_gain_high_effort_2_workers = gain_high_effort_2_workers + gain_high_effort_2_workers
+        total_gain_mix_effort_2_workers = gain_high_effort_2_workers + gain_low_effort_2_workers
+        total_gain_low_effort_2_workers = gain_low_effort_2_workers + gain_low_effort_2_workers
+        profit_employer_example_1 = total_gain_high_effort_2_workers - 60 - 40
+        profit_employer_example_2 = total_gain_mix_effort_2_workers - 60 - 40
+
+        return dict(
+            profit_employer_example_1=profit_employer_example_1,
+            profit_employer_example_2=profit_employer_example_2,
+            worker_example_profit_high_effort=worker_example_profit_high_effort,
+            worker_example_profit_low_effort=worker_example_profit_low_effort,
+            worker_example_wage=worker_example_wage,
+            players_in_your_group=players_in_your_group,
+            employers_in_your_group=employers_in_your_group,
+            workers_in_your_group=workers_in_your_group,
+            max_wage=max_wage,
+            initial_points_tokens=initial_points_tokens,
+            exchange_rate=exchange_rate,
+            name_low_effort = name_low_effort,
+            name_high_effort = name_high_effort,
+            currency_plural = currency_plural,
+            currency = currency,
+            outside_option_workers_points_tokens=outside_option_workers_points_tokens,
+            low_effort_points_tokens=low_effort_points_tokens,
+            high_effort_points_tokens=high_effort_points_tokens,
+            outside_option_employers_points_tokens=outside_option_employers_points_tokens,
+            gain_high_effort_1_worker=gain_high_effort_1_worker,
+            gain_low_effort_1_worker=gain_low_effort_1_worker,
+            gain_high_effort_2_workers=gain_high_effort_2_workers,
+            gain_low_effort_2_workers=gain_low_effort_2_workers,
+            total_gain_high_effort_2_workers=total_gain_high_effort_2_workers,
+            total_gain_mix_effort_2_workers=total_gain_mix_effort_2_workers,
+            total_gain_low_effort_2_workers=total_gain_low_effort_2_workers,
+            participation_fee=int(session.config['showup_fee']),
+            market_time=session.config['market_timeout_seconds'],
+            worker_outside_option=session.config['worker_outside_option'],
+            employer_outside_option=session.config['employer_outside_option'],
+            total_rounds=int(session.config['total_rounds']),
+            shock_after_rounds=session.config['shock_after_rounds'],
+            rounds_part_two=int(session.config['total_rounds']) - int(session.config['shock_after_rounds']),
+        )
+
+
+class FirmInstruction(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.participant.is_employer
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        session = player.session
+
+        if player.participant.large_market:
+            players_in_your_group = session.config['size_large_market']
+            employers_in_your_group = session.config['num_employers_large_market']
+            workers_in_your_group = session.config['size_large_market'] - session.config['num_employers_large_market']
+        else:
+            players_in_your_group = session.config['size_small_market']
+            employers_in_your_group = session.config['num_employers_small_market']
+            workers_in_your_group = session.config['size_small_market'] - session.config['num_employers_small_market']
+
+        name_low_effort = session.config['effort_names'][0]
+        name_high_effort = session.config['effort_names'][1]
+        currency_plural = "points" if player.participant.currency_is_points else "tokens"
+        currency = "point" if player.participant.currency_is_points else "token"
+        outside_option_workers_points_tokens = session.config['worker_outside_option']
+        outside_option_employers_points_tokens = session.config['employer_outside_option']
+        low_effort_points_tokens = session.config['effort_costs_points'][0]
+        high_effort_points_tokens = session.config['effort_costs_points'][1]
+        gain_high_effort_1_worker = session.config['MPL_high'][0]
+        gain_low_effort_1_worker = session.config['MPL_low'][0]
+        gain_high_effort_2_workers = session.config['MPL_high'][1]
+        gain_low_effort_2_workers = session.config['MPL_low'][1]
+        exchange_rate = session.config['payout_rate']
+        initial_points_tokens = session.config['showup_fee'] * (1 / session.config['payout_rate'])
+        max_wage = session.config['max_wage']
+        worker_example_wage = session.config['worker_example_wage']
+
+        if player.participant.currency_is_points is False:
+            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config[
+                'exchange_rate']
+            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config[
+                'exchange_rate']
+            low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
+            high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
+            gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
+            gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
+            gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
+            exchange_rate = exchange_rate * (1 / session.config['exchange_rate'])
+            initial_points_tokens = initial_points_tokens * session.config['exchange_rate']
+            max_wage = max_wage * session.config['exchange_rate']
+            worker_example_wage = worker_example_wage * session.config['exchange_rate']
+
+        worker_example_profit_high_effort = worker_example_wage - high_effort_points_tokens
+        worker_example_profit_low_effort = worker_example_wage - low_effort_points_tokens
+
+        total_gain_high_effort_2_workers = gain_high_effort_2_workers + gain_high_effort_2_workers
+        total_gain_mix_effort_2_workers = gain_high_effort_2_workers + gain_low_effort_2_workers
+        total_gain_low_effort_2_workers = gain_low_effort_2_workers + gain_low_effort_2_workers
+        profit_employer_example_1 = total_gain_high_effort_2_workers - 60 - 40
+        profit_employer_example_2 = total_gain_mix_effort_2_workers - 60 - 40
+
+        return dict(
+            profit_employer_example_1=profit_employer_example_1,
+            profit_employer_example_2=profit_employer_example_2,
+            worker_example_profit_high_effort=worker_example_profit_high_effort,
+            worker_example_profit_low_effort=worker_example_profit_low_effort,
+            worker_example_wage=worker_example_wage,
+            players_in_your_group=players_in_your_group,
+            employers_in_your_group=employers_in_your_group,
+            workers_in_your_group=workers_in_your_group,
+            max_wage=max_wage,
+            initial_points_tokens=initial_points_tokens,
+            exchange_rate=exchange_rate,
+            name_low_effort=name_low_effort,
+            name_high_effort=name_high_effort,
+            currency_plural=currency_plural,
+            currency=currency,
+            outside_option_workers_points_tokens=outside_option_workers_points_tokens,
+            low_effort_points_tokens=low_effort_points_tokens,
+            high_effort_points_tokens=high_effort_points_tokens,
+            outside_option_employers_points_tokens=outside_option_employers_points_tokens,
+            gain_high_effort_1_worker=gain_high_effort_1_worker,
+            gain_low_effort_1_worker=gain_low_effort_1_worker,
+            gain_high_effort_2_workers=gain_high_effort_2_workers,
+            gain_low_effort_2_workers=gain_low_effort_2_workers,
+            total_gain_high_effort_2_workers=total_gain_high_effort_2_workers,
+            total_gain_mix_effort_2_workers=total_gain_mix_effort_2_workers,
+            total_gain_low_effort_2_workers=total_gain_low_effort_2_workers,
+            participation_fee=int(session.config['showup_fee']),
+            market_time=session.config['market_timeout_seconds'],
+            worker_outside_option=session.config['worker_outside_option'],
+            employer_outside_option=session.config['employer_outside_option'],
+            total_rounds=int(session.config['total_rounds']),
+            shock_after_rounds=session.config['shock_after_rounds'],
+            rounds_part_two=int(session.config['total_rounds']) - int(session.config['shock_after_rounds']),
+        )
+
+
 class quiz1(Page):
     form_model = 'player'
     form_fields = ['quiz1_worker', 'quiz1_employer']
@@ -410,6 +602,8 @@ class WaitToStart(WaitPage):
 
 
 page_sequence = [Introduction,
+                 WorkerInstruction,
+                 FirmInstruction,
                  quiz1,
                  quiz2,
                  quiz3,
