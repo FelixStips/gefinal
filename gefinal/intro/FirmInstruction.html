@@ -279,12 +279,11 @@
         <h5 class="card-header">Private Re-Employment Offers</h5>
         <div class="card-body">
             <p class="block-sentence">
-                You can send a <b>private offer to each worker you employed in the previous round</b>.
-                Before the next round starts, you can decide whether and what private offers to submit.
+                Before the start of the next round, you can send a <b>private offer to each worker you employed in the previous round</b>.
             </p>
             <p class="block-sentence">
-                Private offers work just as public offers: You need to specify a wage and an effort, and then click on "Send Offer".
-                Click "next" once you are done sending private offers. Note that you cannot cancel the offer later on.
+                Private offers can only be seen by the worker you've sent them to.
+                As such, they allow you to <b>establish a longer-term relationship</b> with workers.
             </p>
             <div style="display: flex; justify-content: center; margin-bottom: 10px">
                 {% if player.participant.currency_is_points == True %}
@@ -295,8 +294,8 @@
                 {% endif %}
             </div>
             <p class="block-sentence">
-                A private offer can only be seen by the worker you've sent it to.
-                As such, private offers allow you to <b>establish a longer-term relationship</b> with workers.
+                Private offers work just as public offers: You need to specify a wage and an effort, and then click on "Send Offer".
+                Click "next" once you are done sending private offers. Note that you cannot cancel the offer later on.
             </p>
         </div>
     </div>
