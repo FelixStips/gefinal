@@ -23,7 +23,9 @@ class Player(BasePlayer):
     playerID = models.IntegerField()
     age = models.StringField(
         label="What is your age?")
-    gender = models.StringField(label="What is your gender?", choices=['Female', 'Male', 'Other', 'Prefer not to say'])
+    gender = models.StringField(
+        label="What is your gender?",
+        choices=['Female', 'Male', 'Other', 'Prefer not to say'])
     education = models.StringField(
         label="What is the highest level of education you have completed?",
         choices=['Less than high school', 'High school', 'Some college', 'Bachelor’s degree', 'Master’s degree', 'Doctorate', 'Other', 'Prefer not to say'])
