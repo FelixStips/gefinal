@@ -25,7 +25,7 @@ SESSION_CONFIGS = [
                        'questionnaire2',
                        'end'],
          use_browser_bots=False,
-         num_demo_participants=36,
+         num_demo_participants=6,
          final=True,                                                               # Display instructions
          market_timeout_seconds=150,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
@@ -41,11 +41,11 @@ SESSION_CONFIGS = [
          effort_costs_points=[10, 20],                                             # Effort costs for low and high effort, in points
          total_rounds=16,                                                          # Total number of market rounds
          shock_after_rounds=8,                                                     # Number of rounds before migration shock
-         size_large_market=12,                                                     # Number of players in each large market (note: large and small does not mean anything)
-         size_small_market=12,                                                     # Number of players in small market
-         num_employers_large_market=6,                                             # Number of employers in large market
-         num_employers_small_market=6,                                             # Number of employers in small market
-         migration_large_shock_size=5,                                              # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
+         size_large_market=2,                                                     # Number of players in each large market (note: large and small does not mean anything)
+         size_small_market=2,                                                     # Number of players in small market
+         num_employers_large_market=1,                                             # Number of employers in large market
+         num_employers_small_market=1,                                             # Number of employers in small market
+         migration_large_shock_size=1,                                              # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
          migration_small_shock_size=1,                                             # Number of migrants in small migration shock
          worker_example_wage=50,                                                   # Wage in the worker example in points
     )]

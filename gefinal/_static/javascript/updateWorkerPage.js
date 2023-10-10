@@ -1,4 +1,5 @@
         function updateWorkerPage(worker_information) {
+            console.log("updateWorkerPage", worker_information)
             let {wait, invalid, show_private} = worker_information;
             if (js_vars.is_employer==false) {
                 document.getElementById("trading_mask").style.display = "none";                                         // Hide trading mask

@@ -146,7 +146,8 @@ class WorkerInstruction(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return not player.participant.is_employer
+        session = player.session
+        return not player.participant.is_employer and session.config['final']
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -186,6 +187,7 @@ class WorkerInstruction(Page):
             gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
             gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
             gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
+            gain_low_effort_2_workers = gain_low_effort_2_workers * session.config['exchange_rate']
             exchange_rate = exchange_rate * (1/session.config['exchange_rate'])
             initial_points_tokens = initial_points_tokens * session.config['exchange_rate']
             max_wage = max_wage * session.config['exchange_rate']
@@ -241,7 +243,8 @@ class FirmInstruction(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.participant.is_employer
+        session = player.session
+        return player.participant.is_employer and session.config['final']
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -283,6 +286,7 @@ class FirmInstruction(Page):
             gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
             gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
             gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
+            gain_low_effort_2_workers = gain_low_effort_2_workers * session.config['exchange_rate']
             exchange_rate = exchange_rate * (1 / session.config['exchange_rate'])
             initial_points_tokens = initial_points_tokens * session.config['exchange_rate']
             max_wage = max_wage * session.config['exchange_rate']
@@ -339,6 +343,11 @@ class quiz1(Page):
     form_fields = ['quiz1_worker', 'quiz1_employer']
 
     @staticmethod
+    def is_displayed(player: Player):
+        session = player.session
+        return session.config['final']
+
+    @staticmethod
     def vars_for_template(player: Player):
         session = player.session
 
@@ -363,6 +372,7 @@ class quiz1(Page):
             gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
             gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
             gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
+            gain_low_effort_2_workers = gain_low_effort_2_workers * session.config['exchange_rate']
 
         total_gain_high_effort_2_workers = gain_high_effort_2_workers + gain_high_effort_2_workers
         total_gain_mix_effort_2_workers = gain_high_effort_2_workers + gain_low_effort_2_workers
@@ -407,6 +417,11 @@ class quiz2(Page):
     form_fields = ['quiz2_worker', 'quiz2_employer']
 
     @staticmethod
+    def is_displayed(player: Player):
+        session = player.session
+        return session.config['final']
+
+    @staticmethod
     def vars_for_template(player: Player):
         session = player.session
 
@@ -435,6 +450,7 @@ class quiz2(Page):
             gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
             gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
             gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
+            gain_low_effort_2_workers = gain_low_effort_2_workers * session.config['exchange_rate']
             q2_wage = q2_wage * session.config['exchange_rate']
 
         total_gain_high_effort_2_workers = gain_high_effort_2_workers + gain_high_effort_2_workers
@@ -495,6 +511,11 @@ class quiz3(Page):
     form_fields = ['quiz3_worker1', 'quiz3_worker2', 'quiz3_employer']
 
     @staticmethod
+    def is_displayed(player: Player):
+        session = player.session
+        return session.config['final']
+
+    @staticmethod
     def vars_for_template(player: Player):
         session = player.session
 
@@ -524,6 +545,7 @@ class quiz3(Page):
             gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
             gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
             gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
+            gain_low_effort_2_workers = gain_low_effort_2_workers * session.config['exchange_rate']
             q3_wage_1 = q3_wage_1 * session.config['exchange_rate']
             q3_wage_2 = q3_wage_2 * session.config['exchange_rate']
 
