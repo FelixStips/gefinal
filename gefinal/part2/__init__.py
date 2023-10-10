@@ -795,6 +795,20 @@ class ResultsWaitPage(WaitPage):
         for p in players:
             print('Player', p.participant.playerID, 'has had point payoffs of', p.participant.vars['total_points'][p.round_number-1], 'and token payoffs of', p.participant.vars['total_tokens'][p.round_number-1], 'and played for points:', p.participant.vars['round_for_points'][p.round_number-1])
 
+        for pla in players:
+            if pla.participant.is_employer is False:
+                others = pla.get_others_in_group()
+                try:
+                    pla.employer_payoff_points = [p.payoff_points for p in others if
+                                                     p.participant.playerID == pla.field_maybe_none('matched_with_id')][
+                        0]
+                    pla.employer_payoff_tokens = [p.payoff_tokens for p in others if
+                                                     p.participant.playerID == pla.field_maybe_none('matched_with_id')][
+                        0]
+                except (KeyError, IndexError) as e:
+                    pla.employer_payoff_points = None
+                    pla.employer_payoff_tokens = None
+
         group.average_payoff_firms_points = sum([p.payoff_points for p in players if p.participant.is_employer is True]) / sum([p.participant.is_employer is True for p in players]) if sum([p.participant.is_employer is True for p in players]) > 0 else 0
         group.average_payoff_firms_tokens = sum([p.payoff_tokens for p in players if p.participant.is_employer is True]) / sum([p.participant.is_employer is True for p in players]) if sum([p.participant.is_employer is True for p in players]) > 0 else 0
         group.average_payoff_workers_points = sum([p.payoff_points for p in players if p.participant.is_employer is False]) / sum([p.participant.is_employer is False for p in players]) if sum([p.participant.is_employer is False for p in players]) > 0 else 0
@@ -817,20 +831,6 @@ class Results(Page):
     def vars_for_template(player: Player):
         group = player.group
         session = player.session
-        players = group.get_players()
-
-        if player.participant.is_employer is False:
-            others = player.get_others_in_group()
-            try:
-                player.employer_payoff_points = [p.payoff_points for p in others if
-                                                 p.participant.playerID == player.field_maybe_none('matched_with_id')][
-                    0]
-                player.employer_payoff_tokens = [p.payoff_tokens for p in others if
-                                                 p.participant.playerID == player.field_maybe_none('matched_with_id')][
-                    0]
-            except (KeyError, IndexError) as e:
-                player.employer_payoff_points = None
-                player.employer_payoff_tokens = None
 
         name_high_effort = session.config['effort_names'][1]
         name_low_effort = session.config['effort_names'][0]

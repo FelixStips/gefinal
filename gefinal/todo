@@ -4,11 +4,5 @@
 
 
 
-        window.onload = function() {
-            liveSend ({
-                    "information_type": "load",
-                    "sender": js_vars.my_id
-                });
-            };
 
 
