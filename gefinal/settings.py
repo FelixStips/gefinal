@@ -26,7 +26,7 @@ SESSION_CONFIGS = [
                        'end'],
          use_browser_bots=False,
          num_demo_participants=6,
-         final=True,                                                               # Display instructions
+         final=False,                                                               # Display instructions
          market_timeout_seconds=150,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
          showup_fee=12.0,                                                          # Participation show-up fee
