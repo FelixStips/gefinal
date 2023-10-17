@@ -685,13 +685,10 @@ class ResultsWaitPage(WaitPage):
         accepted_offers = Offer.filter(group=group, status='accepted')
 
         # First update the offers
-        for p in players:  # first update the offers
+        for p in players:
             session = p.session
             for o in accepted_offers:
                 if p.participant.playerID == o.worker_id:
-                    o.effort_given = p.effort_choice
-            for o in offers:
-                if p.participant.playerID == o.worker_id and o.status == 'accepted':
                     o.effort_given = p.effort_choice
 
         # Calculate averages directly from the offers
@@ -840,9 +837,8 @@ class ResultsWaitPage(WaitPage):
             if p.participant.is_employer is False:
                 others = p.get_others_in_group()
                 try:
-                    p.employer_payoff_points = [pl.payoff_points for pl in others if pl.participant.playerID == pl.field_maybe_none('matched_with_id')][0]
-                    p.employer_payoff_tokens = [pl.payoff_tokens for pl in others if pl.participant.playerID == pl.field_maybe_none('matched_with_id')][
-                                0]
+                    p.employer_payoff_points = [o.payoff_points for o in others if o.participant.playerID == p.field_maybe_none('matched_with_id')][0]
+                    p.employer_payoff_tokens = [o.payoff_tokens for o in others if o.participant.playerID == p.field_maybe_none('matched_with_id')][0]
                 except (KeyError, IndexError) as e:
                     p.employer_payoff_points = None
                     p.employer_payoff_tokens = None
@@ -905,8 +901,6 @@ class Results(Page):
             effort_worth = player.field_maybe_none('effort_worth_points')
         else:
             effort_worth = player.field_maybe_none('effort_worth_tokens')
-
-        print('Effort', player.participant.vars['worker1_effort'])
 
         if player.participant.vars['worker1_effort'][player.round_number - 1] == 1:
             worker1_effort = name_high_effort
