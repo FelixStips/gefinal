@@ -427,8 +427,7 @@ class MarketPage(Page):
 
             # Update group
             group.num_unmatched_jobs -= data['jobs_open']
-            print('Unmatched jobs: ', group.num_unmatched_jobs)
-            if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
+            if group.num_unmatched_workers <= 0 or group.num_unmatched_jobs <= 0:
                 group.is_finished = True
 
         elif data['information_type'] == 'offer':

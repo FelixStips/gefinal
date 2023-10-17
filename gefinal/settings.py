@@ -25,7 +25,7 @@ SESSION_CONFIGS = [
                        'questionnaire2',
                        'end'],
          use_browser_bots=False,
-         num_demo_participants=6,
+         num_demo_participants=9,
          final=False,                                                               # Display instructions
          market_timeout_seconds=150,                                               # Duration of market stage in seconds
          countdown_seconds=3,                                                      # Duration of countdown in seconds
@@ -41,8 +41,8 @@ SESSION_CONFIGS = [
          effort_costs_points=[10, 20],                                             # Effort costs for low and high effort, in points
          total_rounds=16,                                                          # Total number of market rounds
          shock_after_rounds=8,                                                     # Number of rounds before migration shock
-         size_large_market=2,                                                     # Number of players in each large market (note: large and small does not mean anything)
-         size_small_market=2,                                                     # Number of players in small market
+         size_large_market=3,                                                     # Number of players in each large market (note: large and small does not mean anything)
+         size_small_market=3,                                                     # Number of players in small market
          num_employers_large_market=1,                                             # Number of employers in large market
          num_employers_small_market=1,                                             # Number of employers in small market
          migration_large_shock_size=1,                                              # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
@@ -74,7 +74,21 @@ PARTICIPANT_FIELDS = ['large_market',
                       'total_tokens',
                       'currency_is_points',
                       'round_for_points',
-                      'round_number',]
+                      'round_number',
+                      'worker1_wage_points',
+                      'worker1_wage_tokens',
+                      'worker1_effort',
+                      'worker1_effort_given',
+                      'worker1_id',
+                      'worker1_profit_points',
+                      'worker1_profit_tokens',
+                      'worker2_wage_points',
+                      'worker2_wage_tokens',
+                      'worker2_effort',
+                      'worker2_effort_given',
+                      'worker2_id',
+                      'worker2_profit_points',
+                      'worker2_profit_tokens',]
 SESSION_FIELDS = []
 
 # ISO-639 code
