@@ -71,6 +71,7 @@ class AnotherInstruction(Page):
 
 
 class AnotherWaitPage(WaitPage):
+    template_name = '_templates/includes/My_WaitPage.html'
     body_text = "Please wait, part 2 will begin shortly."
 
 
