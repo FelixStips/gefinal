@@ -22,7 +22,9 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     playerID = models.IntegerField()
     age = models.StringField(
-        label="What is your age?")
+        label="What is your age?",
+        min=0,
+        max=100)
     gender = models.StringField(
         label="What is your gender?",
         choices=['Female', 'Male', 'Other', 'Prefer not to say'])
