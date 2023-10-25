@@ -47,11 +47,11 @@ class PreResults(Page):
         total_points_filtered = filter(lambda x: x is not None, player.participant.vars['total_points'])
         total_tokens_filtered = filter(lambda x: x is not None, player.participant.vars['total_tokens'])
 
-        print('Player', player.participant.playerID, 'had total payoff of', total_points_filtered, 'points and',
-              total_tokens_filtered, 'tokens.')
+        print('Player', player.participant.playerID, 'had total payoff of', sum(total_points_filtered), 'points and',
+              sum(total_tokens_filtered), 'tokens.')
 
-        player.total_points = sum(filter(lambda x: x is not None, player.participant.vars['total_points']))
-        player.total_tokens = sum(filter(lambda x: x is not None, player.participant.vars['total_tokens']))
+        player.total_points = sum(total_points_filtered)
+        player.total_tokens = sum(total_tokens_filtered)
         player.total_euros = round(
             session.config['payout_rate'] * player.total_points + session.config['showup_fee'],
             2) if player.total_points > 0 else round(session.config['showup_fee'], 2)
@@ -61,6 +61,8 @@ class PreResults(Page):
         player.playerID = player.participant.vars['playerID']
         player.string_role = player.participant.vars['string_role']
 
+        print('We are planning to return payoff of', player.total_tokens, 'tokens,', player.total_points, 'points', 'and', player.euros, 'euros.')
+
 
 class Results(Page):
     form_model = 'player'
@@ -68,6 +70,9 @@ class Results(Page):
 
     @staticmethod
     def vars_for_template(player: Player):
+
+        print('Player', player.participant.playerID, 'had total payoff of', player.participant.vars['total_points'], 'points and', player.participant.vars['total_tokens'], 'tokens.')
+        print('We will return payoff of', player.total_tokens, 'tokens,', player.total_points, 'points', 'and', player.euros, 'euros.')
 
         return dict(
             total_points=player.total_points,
