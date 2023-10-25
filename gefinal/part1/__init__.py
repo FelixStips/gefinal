@@ -796,7 +796,7 @@ class ResultsWaitPage(WaitPage):
                 elif p.num_workers_employed==1:
                     if p.total_effort_received == 0:
                         p.effort_worth_points = session.config['MPL_low'][0]
-                    elif p.total_effort_received == 0:
+                    elif p.total_effort_received == 1:
                         p.effort_worth_points = session.config['MPL_high'][0]
                     else:
                         print('Error: wrong effort received')
@@ -809,8 +809,9 @@ class ResultsWaitPage(WaitPage):
                         p.effort_worth_points = 2 * session.config['MPL_high'][1]                                               # if effort_received is 2, then both workers gave high effort
                     else:
                         print('Error: more than 2 effort received')
+                else:
+                    print('Error: employed', p.num_workers_employed, 'workers')
                 p.effort_worth_tokens = p.effort_worth_points * session.config['exchange_rate']
-
 
         # Update the profits
         for p in players:

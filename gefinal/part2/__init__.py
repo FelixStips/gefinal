@@ -797,7 +797,7 @@ class ResultsWaitPage(WaitPage):
                 elif p.num_workers_employed==1:
                     if p.total_effort_received == 0:
                         p.effort_worth_points = session.config['MPL_low'][0]
-                    elif p.total_effort_received == 0:
+                    elif p.total_effort_received == 1:
                         p.effort_worth_points = session.config['MPL_high'][0]
                     else:
                         print('Error: wrong effort received')

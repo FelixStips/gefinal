@@ -34,28 +34,32 @@ class Player(BasePlayer):
 
 
 # PAGES
-class WaitForOtherPlayers(WaitPage):
-    body_text = "Please wait until all participants finished the experiment."
+class PreResults(Page):
+    form_model = 'player'
+
 
     @staticmethod
-    def after_all_players_arrive(group: Group):
-        session = group.session
-        players = group.get_players()
-        for player in players:
-            player.total_points = sum(filter(None, player.participant.vars['total_points']))
-            player.total_tokens = sum(filter(None, player.participant.vars['total_tokens']))
-            player.total_euros = session.config['payout_rate'] * player.total_points + session.config[
-                'showup_fee'] if player.total_points > 0 else session.config['showup_fee']
-            player.total_points = sum(filter(None, player.participant.vars['total_points']))
-            player.total_tokens = sum(filter(None, player.participant.vars['total_tokens']))
-            player.total_euros = round(
-                session.config['payout_rate'] * player.total_points + session.config['showup_fee'],
-                2) if player.total_points > 0 else round(session.config['showup_fee'], 2)
-            player.large_market = player.participant.vars['large_market']
-            player.small_market = player.participant.vars['small_market']
-            player.is_employer = player.participant.vars['is_employer']
-            player.playerID = player.participant.vars['playerID']
-            player.string_role = player.participant.vars['string_role']
+    def before_next_page(player: Player, timeout_happened):
+        session = player.session
+        print('Player', player.participant.playerID, 'had total payoff of', player.participant.vars['total_points'],
+              'points and', player.participant.vars['total_tokens'], 'tokens.')
+
+        total_points_filtered = filter(lambda x: x is not None, player.participant.vars['total_points'])
+        total_tokens_filtered = filter(lambda x: x is not None, player.participant.vars['total_tokens'])
+
+        print('Player', player.participant.playerID, 'had total payoff of', total_points_filtered, 'points and',
+              total_tokens_filtered, 'tokens.')
+
+        player.total_points = sum(filter(lambda x: x is not None, player.participant.vars['total_points']))
+        player.total_tokens = sum(filter(lambda x: x is not None, player.participant.vars['total_tokens']))
+        player.total_euros = round(
+            session.config['payout_rate'] * player.total_points + session.config['showup_fee'],
+            2) if player.total_points > 0 else round(session.config['showup_fee'], 2)
+        player.large_market = player.participant.vars['large_market']
+        player.small_market = player.participant.vars['small_market']
+        player.is_employer = player.participant.vars['is_employer']
+        player.playerID = player.participant.vars['playerID']
+        player.string_role = player.participant.vars['string_role']
 
 
 class Results(Page):
@@ -81,6 +85,7 @@ class End(Page):
 class Close(Page):
     pass
 
-page_sequence = [Results,
+page_sequence = [PreResults,
+                 Results,
                  End,
                  Close]
