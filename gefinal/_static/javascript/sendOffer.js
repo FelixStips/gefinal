@@ -25,6 +25,7 @@
             let status = 'open';
             let my_id = js_vars.my_id;
             let currency_is_points = js_vars.currency_is_points;
+            try {
             liveSend({
                 "information_type": "offer",
                 "employer_id": my_id,
@@ -34,6 +35,9 @@
                 "job_number": job_offer_number,
                 "currency_is_points": currency_is_points,
             });
+            } catch (err) {
+                console.log('Error in sendOffer' + err);
+            }
         }
         document.getElementById(`effort_input_${job_offer_number}`).value = "";
         document.getElementById(`wage_input_${job_offer_number}`).value = "";

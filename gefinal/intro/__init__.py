@@ -507,7 +507,6 @@ class quiz2(Page):
 
         if values['quiz2_worker'] != worker_profit or values['quiz2_employer'] != employer_profit:
             player.quiz2_tries += 1
-            print("Correct answer:", worker_profit, employer_profit)
             return 'Incorrect. Please try again.'
 
 class quiz3(Page):

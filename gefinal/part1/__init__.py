@@ -270,7 +270,6 @@ class Reemploy(Page):
 
     @staticmethod
     def live_method(player: Player, data):
-        print(data)
         session = player.session
         group = player.group
         if data['information_type'] == 'private_offer':
@@ -305,8 +304,6 @@ class Reemploy(Page):
         for p in players:
             if p.participant.playerID == data['employer_id']:
                 id = p.id_in_group
-
-        print("Will return: to player", id, 'wage_points', wage_points, 'wage_tokens', wage_tokens, 'effort', data['effort'], 'string_effort', string_effort, 'job_number', data['job_number'])
 
         return {id:
             {'information_type': 'received',
@@ -512,7 +509,7 @@ class MarketPage(Page):
                     current_offer[0].timestamp_accepted = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
                 else:
-                    print('offer already accepted or cancelled')
+                    raise Exception('offer already accepted or cancelled')
                     player.invalid = True
 
                 # Update players (this depends on whether the offer is private or not). Here I need the loop!
@@ -578,9 +575,8 @@ class MarketPage(Page):
         elif data['information_type'] == 'load':
             pass
 
-
         else:
-            print('unknown message type: ', data['information_type'])
+            raise Exception('unknown message type: ', data['information_type'])
 
         """
         Now we need to prepare the information to send back to the server. We need to:
@@ -609,7 +605,7 @@ class MarketPage(Page):
                     elif o.job_number == 4:
                         p.offer4 = o.status
                     else:
-                        print('Wrong job number')
+                        raise Exception('Wrong job number')
 
         # Prepare offers list
         offers_to_show = sorted(Offer.filter(group=group, show=True), key=lambda o: o.job_id, reverse=True)
@@ -675,7 +671,7 @@ class WorkPage(Page):
         elif player.field_maybe_none('effort_requested') == 0:
             effort_requested = name_low_effort
         else:
-            print('error: effort_requested not 0 or 1')
+            raise Exception('effort_requested not 0 or 1')
             effort_requested = "error"
         return dict(
             is_employer=player.participant.vars['is_employer'],
@@ -788,7 +784,7 @@ class ResultsWaitPage(WaitPage):
                                 p.participant.vars['worker2_profit_points'].append(worker2_profit_points)
                                 p.participant.vars['worker2_profit_tokens'].append(worker2_profit_tokens)
                 else:
-                    print('Error: more than 2 workers employed')
+                    raise Exception('Error: more than 2 workers employed')
 
             else:                                                                                                       # Workers
                 p.participant.vars['num_workers'].append('NA')
@@ -818,7 +814,7 @@ class ResultsWaitPage(WaitPage):
                     elif p.total_effort_received == 1:
                         p.effort_worth_points = session.config['MPL_high'][0]
                     else:
-                        print('Error: wrong effort received')
+                        raise Exception('Error: wrong effort received')
                 elif p.num_workers_employed==2:
                     if p.total_effort_received == 0:                                                                        # if effort_received is 0, then both workers gave low effort
                         p.effort_worth_points = 2 * session.config['MPL_low'][1]
@@ -827,9 +823,9 @@ class ResultsWaitPage(WaitPage):
                     elif p.total_effort_received == 2:
                         p.effort_worth_points = 2 * session.config['MPL_high'][1]                                               # if effort_received is 2, then both workers gave high effort
                     else:
-                        print('Error: more than 2 effort received')
+                        raise Exception('Error: wrong effort received')
                 else:
-                    print('Error: employed', p.num_workers_employed, 'workers')
+                    raise Exception('Error: employed', p.num_workers_employed, 'workers')
                 p.effort_worth_tokens = p.effort_worth_points * session.config['exchange_rate']
 
         # Update the profits

@@ -31,15 +31,20 @@ function sendPrivateOffer(offer_sent) {
             } else {
                 console.log("Error: job number not 3 or 4")
             }
-            liveSend({
-                "information_type": "private_offer",
-                "employer_id": my_id,
-                "worker_id": worker_id,
-                "wage": wage_inputted,
-                "effort": effort_inputted,
-                "job_number": job_offer_number,
-                "currency_is_points": currency_is_points,
-            });
+            try {
+                liveSend({
+                    "information_type": "private_offer",
+                    "employer_id": my_id,
+                    "worker_id": worker_id,
+                    "wage": wage_inputted,
+                    "effort": effort_inputted,
+                    "job_number": job_offer_number,
+                    "currency_is_points": currency_is_points,
+                });
+            }
+            catch (err) {
+                console.log('Error in sendPrivateOffer' + err);
+            }
         }
         document.getElementById(`effort_input_${job_offer_number}`).value = "";
         document.getElementById(`wage_input_${job_offer_number}`).value = "";
