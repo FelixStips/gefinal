@@ -74,6 +74,7 @@ class Player(BasePlayer):
 
 
 
+
 class Offer(ExtraModel):
     group = models.Link(Group)
     marketID = models.IntegerField()
@@ -86,8 +87,8 @@ class Offer(ExtraModel):
     status = models.StringField()
     show = models.BooleanField()
     private = models.BooleanField()
-    employer_id = models.StringField()
-    worker_id = models.StringField()
+    employer_id = models.IntegerField()
+    worker_id = models.IntegerField()
     wage_points = models.FloatField()
     wage_tokens = models.FloatField()
     effort = models.IntegerField()
@@ -268,6 +269,7 @@ class Reemploy(Page):
 
     @staticmethod
     def live_method(player: Player, data):
+        print(data)
         session = player.session
         group = player.group
         if data['information_type'] == 'private_offer':

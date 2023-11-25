@@ -270,6 +270,7 @@ class Reemploy(Page):
 
     @staticmethod
     def live_method(player: Player, data):
+        print(data)
         session = player.session
         group = player.group
         if data['information_type'] == 'private_offer':
@@ -304,6 +305,8 @@ class Reemploy(Page):
         for p in players:
             if p.participant.playerID == data['employer_id']:
                 id = p.id_in_group
+
+        print("Will return: to player", id, 'wage_points', wage_points, 'wage_tokens', wage_tokens, 'effort', data['effort'], 'string_effort', string_effort, 'job_number', data['job_number'])
 
         return {id:
             {'information_type': 'received',
