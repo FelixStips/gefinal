@@ -171,7 +171,6 @@ def to_dict(offer: Offer):
 
 
 # PAGES
-
 class CheckReemploy(Page):
     form_model = 'player'
     form_fields = ['reemploy']
@@ -1022,14 +1021,14 @@ page_sequence = [CheckReemploy,
 
 def custom_export(players):
     # top row
-    yield ['session_code', 'group.id_in_subsession', 'round', 'job_id', 'employer_id', 'worker_id', 'private',
+    yield ['session_code', 'group.id_in_subsession', 'marketID', 'round', 'job_id', 'employer_id', 'worker_id', 'private',
            'wage_points', 'wage_tokens', 'effort', 'effort_given', 'status', 'timestamp_created', 'timestamp_accepted',
            'timestamp_cancelled']
 
     # data rows
     offers = Offer.filter()
     for offer in offers:
-        yield [offer.group.session.code, offer.group.id_in_subsession, offer.round_number, offer.job_id,
+        yield [offer.group.session.code, offer.group.id_in_subsession, offer.marketID, offer.round_number, offer.job_id,
                offer.employer_id, offer.worker_id, offer.private, offer.wage_points, offer.wage_tokens,
                offer.effort, offer.effort_given, offer.status, offer.timestamp_created, offer.timestamp_accepted,
                offer.timestamp_cancelled]

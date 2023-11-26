@@ -1,7 +1,6 @@
 from otree.api import *
 import time
 import datetime
-import math
 
 doc = """
 Your app description
@@ -71,7 +70,6 @@ class Player(BasePlayer):
     offer2 = models.StringField(initial="empty")
     offer3 = models.StringField(initial="empty")
     offer4 = models.StringField(initial="empty")
-
 
 
 class Offer(ExtraModel):
@@ -635,13 +633,13 @@ class MarketPage(Page):
                 page_information=page_information,
                 worker_information=dict(wait=p.wait,
                                         invalid=p.invalid,
-                                        show_private=p.show_private, ),
+                                        show_private=p.show_private),
                 employer_information=dict(done=p.done,
                                         num_workers_employed=p.num_workers_employed,
                                         offer1=p.offer1,
                                         offer2=p.offer2,
                                         offer3=p.offer3,
-                                        offer4=p.offer4,),
+                                        offer4=p.offer4),
                 market_information=market_information,
                 offers=offers_list,
             )
@@ -1023,5 +1021,3 @@ def custom_export(players):
                offer.employer_id, offer.worker_id, offer.private, offer.wage_points, offer.wage_tokens,
                offer.effort, offer.effort_given, offer.status, offer.timestamp_created, offer.timestamp_accepted,
                offer.timestamp_cancelled]
-
-# NOTE: I DO NOT EXPORT SHOW OR JOB NUMBER, DON'T NEED IT
