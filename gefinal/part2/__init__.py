@@ -887,7 +887,7 @@ class Results(Page):
     def app_after_this_page(player, upcoming_apps):
         session = player.session
         round_part_two = player.round_number + session.config['shock_after_rounds']
-        if round_part_two > player.session.config['total_rounds']:
+        if round_part_two >= player.session.config['total_rounds']:
             return "questionnaire"
 
     @staticmethod

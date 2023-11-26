@@ -876,7 +876,7 @@ class Results(Page):
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
         print('This was round number', player.round_number, 'Shock after round', player.session.config['shock_after_rounds'])
-        if player.round_number > player.session.config['shock_after_rounds']:
+        if player.round_number >= player.session.config['shock_after_rounds']:
             return "midbreak"
 
     @staticmethod
