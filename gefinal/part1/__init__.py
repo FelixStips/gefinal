@@ -875,7 +875,7 @@ class Results(Page):
 
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
-        print('This was round number', player.round_number, 'Shock after round', player.session.config['shock_after_rounds'])
+        #print('This was round number', player.round_number, 'Shock after round', player.session.config['shock_after_rounds'])
         if player.round_number >= player.session.config['shock_after_rounds']:
             return "midbreak"
 
@@ -950,7 +950,23 @@ class Results(Page):
         worker2_payoff_tokens = player.participant.vars['worker2_profit_tokens'][player.round_number - 1]
         worker2_id = player.participant.vars['worker2_id'][player.round_number - 1]
 
+        if player.num_workers_employed == 0:
+            worker1_effort_worth = 0
+            worker2_effort_worth = 0
+        elif player.num_workers_employed == 1 or player.num_workers_employed == 2:
+            worker1_effort_worth = session.config['MPL_high'][player.num_workers_employed - 1] if worker1_effort_given is 1 else session.config['MPL_low'][player.num_workers_employed - 1] if worker1_effort_given is 0 else None
+            worker2_effort_worth = session.config['MPL_high'][player.num_workers_employed - 1] if worker1_effort_given is 1 else session.config['MPL_low'][player.num_workers_employed - 1] if worker1_effort_given is 0 else None
+        else:
+            raise Exception('num_workers_employed is not 0, 1 or 2')
+
+        if player.participant.vars['currency_is_points'] is True:
+            worker1_effort_worth = round(worker1_effort_worth * session.config['exchange_rate'], 1)
+            worker2_effort_worth = round(worker2_effort_worth * session.config['exchange_rate'], 1)
+
+
         return dict(
+            worker1_effort_worth=worker1_effort_worth,
+            worker2_effort_worth=worker2_effort_worth,
             name_low_effort=name_low_effort,
             name_high_effort=name_high_effort,
             round_number=round_number,
