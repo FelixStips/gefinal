@@ -954,12 +954,12 @@ class Results(Page):
             worker1_effort_worth = 0
             worker2_effort_worth = 0
         elif player.num_workers_employed == 1 or player.num_workers_employed == 2:
-            worker1_effort_worth = session.config['MPL_high'][player.num_workers_employed - 1] if worker1_effort_given == 1 else session.config['MPL_low'][player.num_workers_employed - 1] if worker1_effort_given == 0 else None
-            worker2_effort_worth = session.config['MPL_high'][player.num_workers_employed - 1] if worker1_effort_given == 1 else session.config['MPL_low'][player.num_workers_employed - 1] if worker1_effort_given == 0 else None
+            worker1_effort_worth = session.config['MPL_high'][player.num_workers_employed - 1] if worker1_effort_given == 'Normal' else session.config['MPL_low'][player.num_workers_employed - 1] if worker1_effort_given == 'Low' else 0
+            worker2_effort_worth = session.config['MPL_high'][player.num_workers_employed - 1] if worker2_effort_given == 'Normal' else session.config['MPL_low'][player.num_workers_employed - 1] if worker2_effort_given == 'Low' else 0
         else:
             raise Exception('num_workers_employed is not 0, 1 or 2')
 
-        if player.participant.vars['currency_is_points'] is True:
+        if player.participant.vars['currency_is_points'] is False:
             worker1_effort_worth = round(worker1_effort_worth * session.config['exchange_rate'], 1)
             worker2_effort_worth = round(worker2_effort_worth * session.config['exchange_rate'], 1)
 
