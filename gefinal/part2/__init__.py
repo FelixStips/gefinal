@@ -267,6 +267,9 @@ class Reemploy(Page):
     def live_method(player: Player, data):
         session = player.session
         group = player.group
+
+        print('Reemploy live_method', player.participant.vars['playerID'], data)
+
         if data['information_type'] == 'private_offer':
             if data['currency_is_points'] is True:
                 wage_points = data['wage']
@@ -392,6 +395,8 @@ class MarketPage(Page):
         player.invalid = False
         current_datetime = datetime.datetime.now()
 
+        print('Market live_method', player.participant.vars['playerID'], data)
+
         if data['information_type'] == 'done':
 
             """
@@ -479,31 +484,34 @@ class MarketPage(Page):
             - Update group information
             """
 
-            # Check that the offer has not been accepted
+            # Prepare information
+            if data['currency_is_points'] is True:
+                wage_points = data['wage']
+                wage_tokens = session.config['exchange_rate'] * wage_points
+            else:
+                wage_tokens = data['wage']
+                wage_points = wage_tokens / session.config['exchange_rate']
+
+            # Check that the employer can still accept workers
+            for p in group.get_players():
+                if p.participant.playerID == data['employer_id']:
+                    if p.num_workers_accepted >= 2:
+                        print('Employer already accepted 2 workers')
+                        player.invalid = True
+
+            # Check that the offer has not been accepted and enter the loop\
             current_offer = Offer.filter(group=group, job_id=data['job_id'])
+            if current_offer[0].status == 'open' and player.invalid is False:
 
-            if current_offer[0].status == 'open':
-
-                # Prepare information
-                if data['currency_is_points'] is True:
-                    wage_points = data['wage']
-                    wage_tokens = session.config['exchange_rate'] * wage_points
-                else:
-                    wage_tokens = data['wage']
-                    wage_points = wage_tokens / session.config['exchange_rate']
-
-                # Update the offer
-                current_offer = Offer.filter(group=group, job_id=data['job_id'])
-                if current_offer[0].status == 'open':
-                    current_offer[0].wage_points = wage_points if current_offer[0].wage_points is None else current_offer[0].wage_points
-                    current_offer[0].wage_tokens = wage_tokens if current_offer[0].wage_tokens is None else current_offer[0].wage_tokens
-                    current_offer[0].status = 'accepted'
-                    current_offer[0].show = True
-                    current_offer[0].worker_id = player.participant.playerID
-                    current_offer[0].timestamp_accepted = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-                else:
-                    raise Exception('Error: offer already accepted or cancelled')
-                    player.invalid = True
+                # Update offer
+                current_offer[0].wage_points = wage_points if current_offer[0].wage_points is None else \
+                current_offer[0].wage_points
+                current_offer[0].wage_tokens = wage_tokens if current_offer[0].wage_tokens is None else \
+                current_offer[0].wage_tokens
+                current_offer[0].status = 'accepted'
+                current_offer[0].show = True
+                current_offer[0].worker_id = player.participant.playerID
+                current_offer[0].timestamp_accepted = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
                 # Update players (this depends on whether the offer is private or not). Here I need the loop!
                 for p in group.get_players():
@@ -524,20 +532,22 @@ class MarketPage(Page):
                         p.wage_received_tokens = wage_tokens
                         p.effort_requested = data['effort']
                         p.matched_with_id = data['employer_id']
+                    else:
+                        pass
 
-                # Update the group
-                group.num_job_offers -= 1
-                group.num_unmatched_workers -= 1
-                group.num_unmatched_jobs -= 1
-                if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
-                    group.is_finished = True
+                    # Update the group
+                    group.num_job_offers -= 1
+                    group.num_unmatched_workers -= 1
+                    group.num_unmatched_jobs -= 1
+                    if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
+                        group.is_finished = True
 
-            else:
-                for o in current_offer:
-                    o.show = False
-                for p in group.get_players():
-                    if p.participant.playerID == data['worker_id']:
-                        p.invalid = True
+                else:
+                    for o in current_offer:
+                        o.show = False
+                    for p in group.get_players():
+                        if p.participant.playerID == data['worker_id']:
+                            p.invalid = True
 
 
         elif data['information_type'] == 'cancel':
@@ -974,7 +984,6 @@ class Results(Page):
         if player.participant.vars['currency_is_points'] is False:
             worker1_effort_worth = round(worker1_effort_worth * session.config['exchange_rate'], 1)
             worker2_effort_worth = round(worker2_effort_worth * session.config['exchange_rate'], 1)
-
 
         return dict(
             worker1_effort_worth=worker1_effort_worth,
