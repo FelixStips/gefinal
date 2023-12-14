@@ -424,8 +424,6 @@ class MarketPage(Page):
                     p.offer3 = 'cancelled' if p.offer3 != 'accepted' else p.offer3
                     p.offer4 = 'cancelled' if p.offer4 != 'accepted' else p.offer4
 
-
-
             # Update group
             group.num_unmatched_jobs -= data['jobs_open']
             if group.num_unmatched_workers <= 0 or group.num_unmatched_jobs <= 0:
@@ -500,13 +498,15 @@ class MarketPage(Page):
             # Check that the employer can still accept workers
             for p in group.get_players():
                 if p.participant.playerID == data['employer_id']:
-                    if p.num_workers_accepted >= 2:
+                    if p.num_workers_employed >= 2:
                         print('Employer already accepted 2 workers')
                         player.invalid = True
 
             # Check that the offer has not been accepted and enter the loop\
             current_offer = Offer.filter(group=group, job_id=data['job_id'])
             if current_offer[0].status == 'open' and player.invalid is False:
+
+                print('Offer', data['job_id'], ' accepted, employer', data['employer_id'], 'worker', data['worker_id'])
 
                 # Update offer
                 current_offer[0].wage_points = wage_points if current_offer[0].wage_points is None else current_offer[0].wage_points
@@ -546,6 +546,9 @@ class MarketPage(Page):
                     group.is_finished = True
 
             else:
+
+                print('Offer', data['job_id'], 'cannot be accepted, employer', data['employer_id'], 'worker', data['worker_id'])
+
                 for o in current_offer:
                     o.show = False
                 for p in group.get_players():
@@ -651,6 +654,10 @@ class MarketPage(Page):
             )
             for p in group.get_players()
         }
+
+        #print('worker_information for worker', p.wait, p.invalid, p.show_private)
+        #print('employer_information', p.done, p.num_workers_employed, p.offer1, p.offer2, p.offer3, p.offer4)
+        #print('offers', offers_list)
 
         player.invalid = False
 

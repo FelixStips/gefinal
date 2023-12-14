@@ -495,13 +495,16 @@ class MarketPage(Page):
             # Check that the employer can still accept workers
             for p in group.get_players():
                 if p.participant.playerID == data['employer_id']:
-                    if p.num_workers_accepted >= 2:
+                    if p.num_workers_employed >= 2:
                         print('Employer already accepted 2 workers')
                         player.invalid = True
 
             # Check that the offer has not been accepted and enter the loop\
             current_offer = Offer.filter(group=group, job_id=data['job_id'])
             if current_offer[0].status == 'open' and player.invalid is False:
+
+                print('Offer', data['job_id'], ' accepted, employer', data['employer_id'], 'worker', data['worker_id'])
+
 
                 # Update offer
                 current_offer[0].wage_points = wage_points if current_offer[0].wage_points is None else \
@@ -542,12 +545,15 @@ class MarketPage(Page):
                     if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
                         group.is_finished = True
 
-                else:
-                    for o in current_offer:
-                        o.show = False
-                    for p in group.get_players():
-                        if p.participant.playerID == data['worker_id']:
-                            p.invalid = True
+            else:
+
+                print('Offer', data['job_id'], 'cannot be accepted, employer', data['employer_id'], 'worker', data['worker_id'])
+
+                for o in current_offer:
+                    o.show = False
+                for p in group.get_players():
+                    if p.participant.playerID == data['worker_id']:
+                        p.invalid = True
 
 
         elif data['information_type'] == 'cancel':
