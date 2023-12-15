@@ -1,5 +1,5 @@
 function sendPrivateOffer(offer_sent) {
-        console.log("updated")
+        console.log(offer_sent);
         let job_offer_number = parseInt(offer_sent.slice(-1));
         let effort_input_element = document.getElementById(`effort_input_${job_offer_number}`);
         let wage_input_element = document.getElementById(`wage_input_${job_offer_number}`);

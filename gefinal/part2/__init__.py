@@ -291,7 +291,7 @@ class Reemploy(Page):
                 status='open',
                 show=True,
                 effort_given=None,
-                job_id=int(str(group.marketID) + str(player.round_number) + str(group.prvt_job_offer_counter) + str(0)),
+                job_id=int(str(9) + str(group.marketID) + str(player.round_number) + str(group.prvt_job_offer_counter)),
                 job_number=data['job_number'],
                 timestamp_created=current_datetime.strftime("%Y-%m-%d %H:%M:%S"),
             )
