@@ -17,7 +17,8 @@ SESSION_CONFIGS = [
     dict(
          name='Main',
          display_name="Main",
-         app_sequence=['intro',
+         app_sequence=[
+             # 'intro',
                        'part1',
                        'midbreak',
                        'part2',
