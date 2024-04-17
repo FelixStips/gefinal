@@ -1,6 +1,14 @@
 from otree.api import *
 import time
 import datetime
+import otree
+from .logger import logger
+from .market import live_method
+
+
+def market_live_method(player, data):
+    return live_method(player, data, Offer)
+logger.info(f'otree version {otree.__version__}' )
 
 doc = """
 Your app description
@@ -10,7 +18,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'part1'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 10
+    NUM_ROUNDS = 1
 
 
 class Subsession(BaseSubsession):
@@ -39,6 +47,24 @@ class Group(BaseGroup):
     average_payoff_workers_points = models.FloatField()
     average_payoff_workers_tokens = models.FloatField()
 
+class Offer(ExtraModel):
+    group = models.Link(Group)
+    marketID = models.IntegerField()
+    round_number = models.IntegerField()
+    job_id = models.IntegerField()
+    job_number = models.IntegerField()
+    timestamp_created = models.LongStringField()
+    timestamp_accepted = models.LongStringField()
+    timestamp_cancelled = models.LongStringField()
+    status = models.StringField()
+    show = models.BooleanField()
+    private = models.BooleanField()
+    employer_id = models.IntegerField()
+    worker_id = models.IntegerField()
+    wage_points = models.FloatField()
+    wage_tokens = models.FloatField()
+    effort = models.IntegerField()
+    effort_given = models.IntegerField()
 
 class Player(BasePlayer):
     num_workers_employed = models.IntegerField(initial=0, min=0,
@@ -72,24 +98,7 @@ class Player(BasePlayer):
     offer4 = models.StringField(initial="empty")
 
 
-class Offer(ExtraModel):
-    group = models.Link(Group)
-    marketID = models.IntegerField()
-    round_number = models.IntegerField()
-    job_id = models.IntegerField()
-    job_number = models.IntegerField()
-    timestamp_created = models.LongStringField()
-    timestamp_accepted = models.LongStringField()
-    timestamp_cancelled = models.LongStringField()
-    status = models.StringField()
-    show = models.BooleanField()
-    private = models.BooleanField()
-    employer_id = models.IntegerField()
-    worker_id = models.IntegerField()
-    wage_points = models.FloatField()
-    wage_tokens = models.FloatField()
-    effort = models.IntegerField()
-    effort_given = models.IntegerField()
+
 
 
 # FUNCTIONS
@@ -117,8 +126,8 @@ def creating_session(subsession: Subsession):
         matrix.append(players_in_small_market)
 
     subsession.set_group_matrix(matrix)
-    print(subsession.get_group_matrix())
-
+    logger.info(subsession.get_group_matrix())
+    logger.info(f'PART 1 ROUND {subsession.round_number}-----')
     session = subsession.session
     for group in subsession.get_groups():
         if group.get_players()[0].participant.vars['large_market_1'] is True:
@@ -154,27 +163,6 @@ def creating_session(subsession: Subsession):
     #    participant_vars = p.participant.vars
     #    print('Participant', p.participant.id_in_session, 'Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is', participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'], 'small market is', participant_vars['small_market'], 'move to market 1 is', participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
 
-
-def to_dict(offer: Offer):
-    return dict(
-        group_id=offer.group_id,
-        marketID=offer.marketID,
-        round_number=offer.round_number,
-        job_id=offer.job_id,
-        employer_id=offer.employer_id,
-        worker_id=offer.worker_id,
-        private=offer.private,
-        wage_points=offer.wage_points,
-        wage_tokens=offer.wage_tokens,
-        effort=offer.effort,
-        effort_given=offer.effort_given,
-        status=offer.status,
-        show=offer.show,
-        job_number=offer.job_number,
-        timestamp_created=offer.timestamp_created,
-        timestamp_accepted=offer.timestamp_accepted,
-        timestamp_cancelled=offer.timestamp_cancelled,
-    )
 
 
 
@@ -390,279 +378,7 @@ class MarketPage(Page):
         if timeout_happened:
             player.group.is_finished = True
 
-    @staticmethod
-    def live_method(player: Player, data):
-        group = player.group
-        session = player.session
-        player.invalid = False
-        current_datetime = datetime.datetime.now()
-
-        print('Market live_method', player.participant.vars['playerID'], data)
-
-        if data['information_type'] == 'done':
-
-            """
-            'Done' means the employer does not want to send more offers.
-             - We need to cancel all his open offers and change his trading scheme to wait mode.
-             - If all employers are done we finish the round.
-            """
-
-            # Update offers -> Note that here we don't need to loop over players since signal came from employer
-            offers = Offer.filter(group=group)
-            for o in offers:
-                if (o.status == 'open' or o.status == None) and o.employer_id == player.participant.playerID:
-                    o.status = 'cancelled'
-                    o.show = False
-                    o.timestamp_cancelled = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-
-            # Update player info
-            for p in group.get_players():
-                if p.participant.playerID == data['employer_id']:
-                    p.done = True
-                    p.offer1 = 'cancelled' if p.offer1 != 'accepted' else p.offer1
-                    p.offer2 = 'cancelled' if p.offer2 != 'accepted' else p.offer2
-                    p.offer3 = 'cancelled' if p.offer3 != 'accepted' else p.offer3
-                    p.offer4 = 'cancelled' if p.offer4 != 'accepted' else p.offer4
-
-            # Update group
-            group.num_unmatched_jobs -= data['jobs_open']
-            if group.num_unmatched_workers <= 0 or group.num_unmatched_jobs <= 0:
-                group.is_finished = True
-
-        elif data['information_type'] == 'offer':
-            """ 
-            'Offer' means that the employer sent a public offer (private have been done already). We need to
-             - Create a new offer in the database
-             - Change the employer's trading scheme
-             - Update group information
-             """
-
-            # Prepare information
-            if data['currency_is_points'] is True:
-                wage_points = data['wage']
-                wage_tokens = session.config['exchange_rate'] * wage_points
-            else:
-                wage_tokens = data['wage']
-                wage_points = wage_tokens / session.config['exchange_rate']
-
-            # Create a new offer: Public offers have 3 digit ID!
-            Offer.create(
-                group=group,
-                marketID=group.marketID,
-                round_number=player.round_number,
-                job_id=int(str(group.marketID) + str(player.round_number) + str(group.job_offer_counter)),
-                employer_id=player.participant.playerID,
-                worker_id=None,
-                private=False,
-                wage_points=wage_points,
-                wage_tokens=wage_tokens,
-                effort=data['effort'],
-                effort_given=None,
-                status='open',
-                show=True,
-                job_number=data["job_number"],
-                timestamp_created=current_datetime.strftime("%Y-%m-%d %H:%M:%S"),
-            )
-
-            # Update player information (even here I don't need the loop, even the if I wouldn't need in theory..)
-            if player.participant.playerID == data['employer_id']:
-                player.offer1 = 'open' if data['job_number'] == 1 and player.offer1 != 'accepted' else player.offer1
-                player.offer2 = 'open' if data['job_number'] == 2 and player.offer2 != 'accepted' else player.offer2
-                player.offer3 = 'open' if data['job_number'] == 3 and player.offer3 != 'accepted' else player.offer3
-                player.offer4 = 'open' if data['job_number'] == 4 and player.offer4 != 'accepted' else player.offer4
-
-            # Update group information
-            group.job_offer_counter += 1
-            group.num_job_offers += 1
-
-
-        elif data['information_type'] == 'accept':
-
-            """
-            'Accept' means that a worker accepted an offer. This can be a private or public offer! We need to:
-            - check that the offer has not been accepted
-            - Update the offer
-            - Update worker and employer includes
-            - Copy information to worker and employer
-            - Update group information
-            """
-
-            # Prepare information
-            if data['currency_is_points'] is True:
-                wage_points = data['wage']
-                wage_tokens = session.config['exchange_rate'] * wage_points
-            else:
-                wage_tokens = data['wage']
-                wage_points = wage_tokens / session.config['exchange_rate']
-
-            # Check that the employer can still accept workers
-            for p in group.get_players():
-                if p.participant.playerID == data['employer_id']:
-                    if p.num_workers_employed >= 2:
-                        print('Employer already accepted 2 workers')
-                        player.invalid = True
-
-            # Check that the offer has not been accepted and enter the loop\
-            current_offer = Offer.filter(group=group, job_id=data['job_id'])
-            if current_offer[0].status == 'open' and player.invalid is False:
-
-                print('Offer', data['job_id'], ' accepted, employer', data['employer_id'], 'worker', data['worker_id'])
-
-                # Update offer
-                current_offer[0].wage_points = wage_points if current_offer[0].wage_points is None else current_offer[0].wage_points
-                current_offer[0].wage_tokens = wage_tokens if current_offer[0].wage_tokens is None else current_offer[0].wage_tokens
-                current_offer[0].status = 'accepted'
-                current_offer[0].show = True
-                current_offer[0].worker_id = player.participant.playerID
-                current_offer[0].timestamp_accepted = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-
-                # Update players (this depends on whether the offer is private or not). Here I need the loop!
-                for p in group.get_players():
-                    if p.participant.playerID == data['employer_id']:
-                        p.num_workers_employed += 1
-                        p.total_wage_paid_tokens += wage_tokens
-                        p.total_wage_paid_points += wage_points
-                        p.matched_with_id = data['worker_id']
-                        p.offer1 = 'accepted' if data['job_number'] == 1 else p.offer1
-                        p.offer2 = 'accepted' if data['job_number'] == 2 else p.offer2
-                        p.offer3 = 'accepted' if data['job_number'] == 3 else p.offer3
-                        p.offer4 = 'accepted' if data['job_number'] == 4 else p.offer4
-                    elif p.participant.playerID == data['worker_id']:
-                        p.is_employed = True
-                        p.wait = True
-                        p.show_private = False
-                        p.wage_received_points = wage_points
-                        p.wage_received_tokens = wage_tokens
-                        p.effort_requested = data['effort']
-                        p.matched_with_id = data['employer_id']
-                    else:
-                        pass
-
-                # Update the group
-                group.num_job_offers -= 1
-                group.num_unmatched_workers -= 1
-                group.num_unmatched_jobs -= 1
-                if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
-                    group.is_finished = True
-
-            else:
-
-                print('Offer', data['job_id'], 'cannot be accepted, employer', data['employer_id'], 'worker', data['worker_id'])
-
-                for o in current_offer:
-                    o.show = False
-                for p in group.get_players():
-                    if p.participant.playerID == data['worker_id']:
-                        p.invalid = True
-
-        elif data['information_type'] == 'cancel':
-            """
-            'Cancel' means that the employer cancelled an offer. We need to:
-            - Update the offer
-            - Update employer view
-            """
-
-            # Update the offer
-            current_offer = Offer.filter(group=group, job_id=data['job_id'])
-            for o in current_offer:
-                o.status = 'cancelled'
-                o.show = False
-                o.timestamp_cancelled = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-
-            # Update player information
-            if player.participant.playerID == data['employer_id']:
-                player.offer1 = 'cancelled' if data['job_number'] == 1 and player.offer1 != 'accepted' else player.offer1
-                player.offer2 = 'cancelled' if data['job_number'] == 2 and player.offer2 != 'accepted' else player.offer2
-                player.offer3 = 'cancelled' if data['job_number'] == 3 and player.offer3 != 'accepted' else player.offer3
-                player.offer4 = 'cancelled' if data['job_number'] == 4 and player.offer4 != 'accepted' else player.offer4
-
-            # Update group information
-            group.num_job_offers -= 1
-
-        elif data['information_type'] == 'load':
-            pass
-
-        else:
-            raise Exception('unknown message type: ', data['information_type'])
-
-        """
-        Now we need to prepare the information to send back to the server. We need to:
-         - Make sure offers from employers with two accepted offers are not shown
-         - Make sure private offers are only shown to the worker they are intended for
-         - Copy list of private and public offers
-         - Calculate market information
-        """
-
-        # Check whether employer has two accepted offers and remove other offers
-        for p in group.get_players():
-            if p.participant.is_employer is True and p.num_workers_employed == 2:
-                for o in Offer.filter(group=group, employer_id=p.participant.playerID):
-                    if o.status == 'open':
-                        o.status = 'cancelled'
-                        o.show = False
-
-        # Whether to show the private offer
-        for p in group.get_players():
-            for o in Offer.filter(group=group, private=True):
-                if o.worker_id == p.participant.playerID:
-                    p.show_private = True if (o.status == 'open' and p.is_employed is False) else False
-                if o.employer_id == p.participant.playerID:
-                    if o.job_number == 3:
-                        p.offer3 = o.status
-                    elif o.job_number == 4:
-                        p.offer4 = o.status
-                    else:
-                        raise Exception('Wrong job number')
-
-        # Prepare offers list
-        offers_to_show = sorted(Offer.filter(group=group, show=True), key=lambda o: o.job_id, reverse=True)
-        offers_list = [to_dict(o) for o in offers_to_show]
-
-        # Calculate market information
-        public_offers = sorted(Offer.filter(group=group, show=True, private=False), key=lambda o: o.job_id, reverse=True)
-        public_offers_list = [to_dict(o) for o in public_offers]
-
-        market_information = dict(workers_left=group.num_unmatched_workers,
-                                  open_offers=sum(i['status'] == 'open' for i in public_offers_list),
-                                  average_wage_tokens=sum(i['wage_tokens'] for i in public_offers_list) / len(
-                                      public_offers_list) if len(public_offers_list) > 0 else 0,
-                                  average_wage_points=sum(i['wage_points'] for i in public_offers_list) / len(
-                                      public_offers_list) if len(public_offers_list) > 0 else 0,
-                                  average_effort=sum(i['effort'] for i in public_offers_list) / len(public_offers_list) if len(
-                                      public_offers_list) > 0 else 0,
-                                  )
-
-
-        # Prepare information for page display
-        page_information = dict(is_finished=group.is_finished,)
-
-        # Return data
-        data_to_return = {
-            p.id_in_group: dict(
-                page_information=page_information,
-                worker_information=dict(wait=p.wait,
-                                        invalid=p.invalid,
-                                        show_private=p.show_private),
-                employer_information=dict(done=p.done,
-                                        num_workers_employed=p.num_workers_employed,
-                                        offer1=p.offer1,
-                                        offer2=p.offer2,
-                                        offer3=p.offer3,
-                                        offer4=p.offer4),
-                market_information=market_information,
-                offers=offers_list,
-            )
-            for p in group.get_players()
-        }
-
-        #print('worker_information for worker', p.wait, p.invalid, p.show_private)
-        #print('employer_information', p.done, p.num_workers_employed, p.offer1, p.offer2, p.offer3, p.offer4)
-        #print('offers', offers_list)
-
-        player.invalid = False
-
-        return data_to_return
-
+    live_method = 'market_live_method'
 
 class WorkPage(Page):
     form_model = 'player'
@@ -1027,8 +743,8 @@ class Results(Page):
 
 page_sequence = [CheckReemploy,
                  Reemploy,
-                 WaitToStart,
-                 Countdown,
+                 # WaitToStart,
+                 # Countdown,
                  MarketPage,
                  WorkPage,
                  ResultsWaitPage,

@@ -1,7 +1,7 @@
 from otree.api import *
 import time
 import datetime
-
+from part1.logger import logger
 
 doc = """
 Your app description
@@ -113,7 +113,8 @@ def creating_session(subsession: Subsession):
     if players_in_small_market is not []:
         matrix.append(players_in_small_market)
 
-    print(matrix)
+    logger.info(matrix)
+    logger.info(f'PART 2 ROUND {subsession.round_number}-----')
 
     subsession.set_group_matrix(matrix)
 

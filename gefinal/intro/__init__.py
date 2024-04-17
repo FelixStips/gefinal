@@ -1,8 +1,8 @@
 from otree.api import *
 import random
 import datetime
-random.seed(10)
 
+random.seed(10)
 
 doc = """
 """
@@ -63,8 +63,8 @@ def creating_session(subsession: Subsession):
         participant_vars = p.participant.vars
         participant_vars['playerID'] = temp_id_list[(p.id_in_group - 1)]
         participant_vars['large_market'] = False
-        participant_vars['large_market_1'] = False                                                                      # 1st large market will receive small shock
-        participant_vars['large_market_2'] = False                                                                      # 2nd large market will receive large shock
+        participant_vars['large_market_1'] = False  # 1st large market will receive small shock
+        participant_vars['large_market_2'] = False  # 2nd large market will receive large shock
         participant_vars['small_market'] = False
         participant_vars['migrant'] = False
         participant_vars['move_to_market_1'] = False
@@ -117,13 +117,18 @@ def creating_session(subsession: Subsession):
                 participant_vars['string_role'] = 'employer'
             else:
                 participant_vars['string_role'] = 'worker'
-                if participant_vars['playerID'] <= (num_employers_small_market + size_large_market + size_large_market + migration_small_shock_size):
+                if participant_vars['playerID'] <= (
+                        num_employers_small_market + size_large_market + size_large_market + migration_small_shock_size):
                     participant_vars['migrant'] = True
                     participant_vars['move_to_market_1'] = True
-                elif participant_vars['playerID'] <= (num_employers_small_market + size_large_market + size_large_market + migration_small_shock_size + migration_large_shock_size):
+                elif participant_vars['playerID'] <= (
+                        num_employers_small_market + size_large_market + size_large_market + migration_small_shock_size + migration_large_shock_size):
                     participant_vars['migrant'] = True
                     participant_vars['move_to_market_2'] = True
-        print('Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is', participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'], 'small market is', participant_vars['small_market'], 'move to market 1 is', participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
+        print('Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is',
+              participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'],
+              'small market is', participant_vars['small_market'], 'move to market 1 is',
+              participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
 
     """
     size_large_1 = [p.participant.vars['large_market_1'] for p in players].count(True)
@@ -184,15 +189,17 @@ class WorkerInstruction(Page):
         worker_example_wage = session.config['worker_example_wage']
 
         if player.participant.currency_is_points is False:
-            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config['exchange_rate']
-            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config['exchange_rate']
+            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config[
+                'exchange_rate']
+            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config[
+                'exchange_rate']
             low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
             high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
             gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
             gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
             gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
             gain_low_effort_2_workers = gain_low_effort_2_workers * session.config['exchange_rate']
-            exchange_rate = exchange_rate * (1/session.config['exchange_rate'])
+            exchange_rate = exchange_rate * (1 / session.config['exchange_rate'])
             initial_points_tokens = initial_points_tokens * session.config['exchange_rate']
             max_wage = max_wage * session.config['exchange_rate']
             worker_example_wage = worker_example_wage * session.config['exchange_rate']
@@ -218,10 +225,10 @@ class WorkerInstruction(Page):
             max_wage=max_wage,
             initial_points_tokens=initial_points_tokens,
             exchange_rate=exchange_rate,
-            name_low_effort = name_low_effort,
-            name_high_effort = name_high_effort,
-            currency_plural = currency_plural,
-            currency = currency,
+            name_low_effort=name_low_effort,
+            name_high_effort=name_high_effort,
+            currency_plural=currency_plural,
+            currency=currency,
             outside_option_workers_points_tokens=outside_option_workers_points_tokens,
             low_effort_points_tokens=low_effort_points_tokens,
             high_effort_points_tokens=high_effort_points_tokens,
@@ -369,8 +376,10 @@ class quiz1(Page):
         gain_low_effort_2_workers = session.config['MPL_low'][1]
 
         if player.participant.currency_is_points is False:
-            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config['exchange_rate']
-            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config['exchange_rate']
+            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config[
+                'exchange_rate']
+            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config[
+                'exchange_rate']
             low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
             high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
             gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
@@ -383,10 +392,10 @@ class quiz1(Page):
         total_gain_low_effort_2_workers = gain_low_effort_2_workers + gain_low_effort_2_workers
 
         return dict(
-            name_low_effort = name_low_effort,
-            name_high_effort = name_high_effort,
-            currency_plural = currency_plural,
-            currency = currency,
+            name_low_effort=name_low_effort,
+            name_high_effort=name_high_effort,
+            currency_plural=currency_plural,
+            currency=currency,
             outside_option_workers_points_tokens=outside_option_workers_points_tokens,
             low_effort_points_tokens=low_effort_points_tokens,
             high_effort_points_tokens=high_effort_points_tokens,
@@ -409,12 +418,12 @@ class quiz1(Page):
             player.quiz1_tries += 1
             return 'Incorrect. Please try again.'
 
-
     @staticmethod
     def js_vars(player: Player):
         return dict(
-            employer= player.participant.vars['is_employer'],
+            employer=player.participant.vars['is_employer'],
         )
+
 
 class quiz2(Page):
     form_model = 'player'
@@ -447,8 +456,10 @@ class quiz2(Page):
         q2_wage = C.Q2_WAGE
 
         if player.participant.currency_is_points is False:
-            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config['exchange_rate']
-            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config['exchange_rate']
+            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config[
+                'exchange_rate']
+            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config[
+                'exchange_rate']
             low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
             high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
             gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
@@ -477,11 +488,10 @@ class quiz2(Page):
             total_gain_high_effort_2_workers=total_gain_high_effort_2_workers,
             total_gain_mix_effort_2_workers=total_gain_mix_effort_2_workers,
             total_gain_low_effort_2_workers=total_gain_low_effort_2_workers,
-            q2_effort_received = q2_effort_received,
-            q2_effort_requested = q2_effort_requested,
-            q2_wage = q2_wage,
+            q2_effort_received=q2_effort_received,
+            q2_effort_requested=q2_effort_requested,
+            q2_wage=q2_wage,
         )
-
 
     @staticmethod
     def error_message(player: Player, values):
@@ -508,6 +518,7 @@ class quiz2(Page):
         if values['quiz2_worker'] != worker_profit or values['quiz2_employer'] != employer_profit:
             player.quiz2_tries += 1
             return 'Incorrect. Please try again.'
+
 
 class quiz3(Page):
     form_model = 'player'
@@ -541,8 +552,10 @@ class quiz3(Page):
         gain_low_effort_2_workers = session.config['MPL_low'][1]
 
         if player.participant.currency_is_points is False:
-            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config['exchange_rate']
-            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config['exchange_rate']
+            outside_option_workers_points_tokens = outside_option_workers_points_tokens * session.config[
+                'exchange_rate']
+            outside_option_employers_points_tokens = outside_option_employers_points_tokens * session.config[
+                'exchange_rate']
             low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
             high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
             gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
@@ -572,10 +585,10 @@ class quiz3(Page):
             total_gain_high_effort_2_workers=total_gain_high_effort_2_workers,
             total_gain_mix_effort_2_workers=total_gain_mix_effort_2_workers,
             total_gain_low_effort_2_workers=total_gain_low_effort_2_workers,
-            q3_wage_1 = q3_wage_1,
-            q3_wage_2 = q3_wage_2,
-            q3_effort_received_1 = q3_effort_received_1,
-            q3_effort_received_2 = q3_effort_received_2,
+            q3_wage_1=q3_wage_1,
+            q3_wage_2=q3_wage_2,
+            q3_effort_received_1=q3_effort_received_1,
+            q3_effort_received_2=q3_effort_received_2,
         )
 
     @staticmethod
@@ -603,11 +616,12 @@ class quiz3(Page):
             effort_worth = effort_worth * session.config['exchange_rate']
 
         # Calculate profits
-        worker1_profit =  q3_wage_1 - effort_cost_1
-        worker2_profit =  q3_wage_2 - effort_cost_2
+        worker1_profit = q3_wage_1 - effort_cost_1
+        worker2_profit = q3_wage_2 - effort_cost_2
         employer_profit = effort_worth - q3_wage_1 - q3_wage_2
 
-        if values['quiz3_worker1'] != worker1_profit or values['quiz3_worker2'] != worker2_profit or values['quiz3_employer'] != employer_profit:
+        if values['quiz3_worker1'] != worker1_profit or values['quiz3_worker2'] != worker2_profit or values[
+            'quiz3_employer'] != employer_profit:
             player.quiz3_tries += 1
             print("Correct answer:", worker1_profit, worker2_profit, employer_profit)
             return 'Incorrect. Please try again.'
@@ -618,18 +632,18 @@ class WaitToStart(WaitPage):
     template_name = '_templates/includes/My_WaitPage.html'
     body_text = "Waiting for other participants to finish the quiz."
 
-
     @staticmethod
     def is_displayed(player: Player):
         session = player.session
         return session.config['final']
 
 
-
-page_sequence = [Introduction,
-                 WorkerInstruction,
-                 FirmInstruction,
-                 quiz1,
-                 quiz2,
-                 quiz3,
-                 WaitToStart]
+page_sequence = [
+    # Introduction,
+    # WorkerInstruction,
+    # FirmInstruction,
+    # quiz1,
+    # quiz2,
+    # quiz3,
+    # WaitToStart
+]

@@ -18,7 +18,7 @@ SESSION_CONFIGS = [
          name='Main',
          display_name="Main",
          app_sequence=[
-             # 'intro',
+             'intro',
                        'part1',
                        'midbreak',
                        'part2',
