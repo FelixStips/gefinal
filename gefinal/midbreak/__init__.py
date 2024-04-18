@@ -32,7 +32,7 @@ class AnotherIntroduction(Page):
 class AnotherInstruction(Page):
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
-        if player.participant.vars['small_market'] and not player.participant.vars['migrant']:
+        if player.participant.vars['small_market'] and not player.participant.vars['migrant'] and 'questionnaire' in upcoming_apps:
             return "questionnaire"
 
     @staticmethod

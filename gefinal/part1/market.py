@@ -132,7 +132,7 @@ def handle_accept(player, data, Offer, group, current_datetime):
 
     # Check that the offer has not been accepted and enter the loop\
     current_offer = Offer.filter(group=group, job_id=data['job_id'])
-    if current_offer[0].status == 'open' and player.invalid is False:
+    if current_offer and current_offer[0].status == 'open' and player.invalid is False:
 
         print('Offer', data['job_id'], ' accepted, employer', data['employer_id'], 'worker', data['worker_id'])
 

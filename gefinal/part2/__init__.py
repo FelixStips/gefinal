@@ -13,7 +13,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'part2'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1
+    NUM_ROUNDS = 5
 
 
 class Subsession(BaseSubsession):
@@ -778,7 +778,8 @@ page_sequence = [CheckReemploy,
                  MarketPage,
                  WorkPage,
                  ResultsWaitPage,
-                 Results, ]
+                 Results,
+                 ]
 
 
 def custom_export(players):

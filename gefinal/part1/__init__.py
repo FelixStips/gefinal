@@ -18,7 +18,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'part1'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1
+    NUM_ROUNDS = 2
 
 
 class Subsession(BaseSubsession):
@@ -174,6 +174,7 @@ class CheckReemploy(Page):
     @staticmethod
     def is_displayed(player: Player):
         if player.participant.is_employer and player.round_number > 1:
+            # TODO. PHILIPP: replace num_workers on participant.vars to player level
             num_workers = player.participant.vars['num_workers'][player.round_number - 2]
             if num_workers > 0:
                 return True
@@ -605,8 +606,11 @@ class Results(Page):
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
         #print('This was round number', player.round_number, 'Shock after round', player.session.config['shock_after_rounds'])
+
         if player.round_number >= player.session.config['shock_after_rounds']:
-            return "midbreak"
+            if 'midbreak' in upcoming_apps:
+                return 'midbreak'
+
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -744,11 +748,11 @@ class Results(Page):
 page_sequence = [CheckReemploy,
                  Reemploy,
                  WaitToStart,
-                 # Countdown,
+                 Countdown,
                  MarketPage,
-                 # WorkPage,
-                 # ResultsWaitPage,
-                 # Results,
+                 WorkPage,
+                 ResultsWaitPage,
+                 Results,
                  ]
 
 
