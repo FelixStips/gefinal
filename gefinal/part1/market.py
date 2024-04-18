@@ -105,6 +105,7 @@ def handle_offer(player, data, Offer, group, current_datetime):
 
 
 def handle_accept(player, data, Offer, group, current_datetime):
+    logger.info(f'handle_accept {data}')
     """
     'Accept' means that a worker accepted an offer. This can be a private or public offer! We need to:
     - check that the offer has not been accepted
