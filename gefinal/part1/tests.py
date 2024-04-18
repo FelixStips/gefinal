@@ -26,7 +26,7 @@ def call_live_method(method, **kwargs):
     logger.critical(f'live_method {kwargs}')
     group = kwargs['group']
     players = group.get_players()
-    workers = [p for p in players if p.participant.vars["string_role"] == "worker"]
+    workers = [p for p in players if p.participant.vars["string_role"] == "worker" and not p.is_employed ]
     employers = [p for p in players if p.participant.vars["string_role"] == "employer"]
     for i in employers:
         offer = generate_offer(i)
@@ -35,21 +35,13 @@ def call_live_method(method, **kwargs):
     #     lets get offers belonding to the group
         offers = Offer.filter(group=group)
         logger.error(f'how much offers: {len(offers)}')
-    # for p in group.get_players():
-    #     logger.critical(p.participant.vars["string_role"])
-    # method(1, {"offer": 50})
-    # method(2, {"accepted": False})
-    # method(1, {"offer": 60})
-    # retval = method(2, {"accepted": True})
-    # you can do asserts on retval
+    for offer in offers:
+            random_worker = random.choice(workers)
 
 
 class PlayerBot(Bot):
     def play_round(self):
-        # if self.player.participant.vars["string_role"] == "employer":
-        #     res = MarketPage.live_method(self.player,
-        #                        {'information_type': 'offer', 'employer_id': self.player.participant.playerID, 'wage': 22, 'effort': 1, 'status': 'open', 'job_number': 1, 'currency_is_points': True})
-        #
+
 
         logger.info(f'My role is: {self.player.participant.vars["string_role"]}')
         yield MarketPage
