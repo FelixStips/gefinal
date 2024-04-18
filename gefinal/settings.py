@@ -20,11 +20,12 @@ SESSION_CONFIGS = [
          app_sequence=[
              'intro',
                        'part1',
-                       'midbreak',
-                       'part2',
-                       'questionnaire',
-                       'questionnaire2',
-                       'end'],
+                       # 'midbreak',
+                       # 'part2',
+                       # 'questionnaire',
+                       # 'questionnaire2',
+                       # 'end'
+         ],
          use_browser_bots=False,
          num_demo_participants=9,
          final=False,                                                              # Display instructions

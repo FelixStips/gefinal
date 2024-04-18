@@ -378,7 +378,7 @@ class MarketPage(Page):
         if timeout_happened:
             player.group.is_finished = True
 
-    live_method = 'market_live_method'
+    live_method = market_live_method
 
 class WorkPage(Page):
     form_model = 'player'
@@ -743,12 +743,13 @@ class Results(Page):
 
 page_sequence = [CheckReemploy,
                  Reemploy,
-                 # WaitToStart,
+                 WaitToStart,
                  # Countdown,
                  MarketPage,
-                 WorkPage,
-                 ResultsWaitPage,
-                 Results, ]
+                 # WorkPage,
+                 # ResultsWaitPage,
+                 # Results,
+                 ]
 
 
 
