@@ -5,6 +5,7 @@ from otree.live import call_live_method_compat
 from .logger import logger
 from pprint import pprint
 from part1 import Offer
+
 import random
 
 
@@ -83,6 +84,7 @@ def generate_offer(player, job_number=1, currency_is_points=True):
 
 
 def market_live_method(method, **kwargs):
+    Offer = kwargs['Offer']
     group = kwargs['group']
     players = group.get_players()
     workers = [p for p in players if p.participant.vars["string_role"] == "worker" and not p.is_employed]
@@ -104,6 +106,7 @@ def market_live_method(method, **kwargs):
 
 
 def reemploy_live_method(method, **kwargs):
+    Offer = kwargs['Offer']
     logger.error('Reemploy live_method')
     Page = kwargs['page_class']
     group = kwargs['group']
@@ -126,7 +129,7 @@ def reemploy_live_method(method, **kwargs):
 
 def call_live_method(method, **kwargs):
     logger.critical(f'live_method {kwargs}')
-
+    kwargs['Offer'] = Offer
     if kwargs.get('page_class').__name__ == 'MarketPage':
         market_live_method(method, **kwargs)
     if kwargs.get('page_class').__name__ == 'Reemploy':
