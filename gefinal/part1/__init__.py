@@ -8,7 +8,9 @@ from .market import live_method
 
 def market_live_method(player, data):
     return live_method(player, data, Offer)
-logger.info(f'otree version {otree.__version__}' )
+
+
+logger.info(f'otree version {otree.__version__}')
 
 doc = """
 Your app description
@@ -26,18 +28,57 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
+
+    @property
+    def num_unmatched_workers(self):
+        return self.players_in_group - self.employers_in_group
+
+    @property
+    def num_unmatched_jobs(self):
+        return self.employers_in_group * 2
+
+    @property
+    def is_finished(self):
+        return self.round_number == self.session.config['num_rounds']
+
+    @property
+    def num_job_offers(self):
+        return len(Offer.filter(group=self, private=False, show=True))
+
+    @property
+    def job_offer_counter(self):
+        return len(Offer.filter(group=self, private=False, show=True)) + 1
+
+    @property
+    def prvt_job_offer_counter(self):
+        return len(Offer.filter(group=self, private=True, show=True)) + 1
+
+    property
+
+    def players_in_group(self):
+        return self.get_players().count()
+
+    @property
+    def workers(self):
+        return [p for p in self.get_players() if not p.participant.is_employer]
+
+    @property
+    def employers(self):
+        return [p for p in self.get_players() if p.participant.is_employer]
+
+    @property
+    def employers_in_group(self):
+        return len(self.employers)
+
+    @property
+    def workers_in_group(self):
+        return len(self.workers)
+
     marketID = models.IntegerField()
     large_market = models.BooleanField()
     large_market_1 = models.BooleanField()
     large_market_2 = models.BooleanField()
-    is_finished = models.BooleanField(initial=False)
-    num_job_offers = models.IntegerField(initial=0)
-    job_offer_counter = models.IntegerField(initial=0)
-    prvt_job_offer_counter = models.IntegerField(initial=0)
-    players_in_group = models.IntegerField()
-    employers_in_group = models.IntegerField()
-    num_unmatched_workers = models.IntegerField()
-    num_unmatched_jobs = models.IntegerField()
+
     start_timestamp = models.StringField()
     average_wage_points = models.FloatField()
     average_wage_tokens = models.FloatField()
@@ -46,6 +87,7 @@ class Group(BaseGroup):
     average_payoff_firms_tokens = models.FloatField()
     average_payoff_workers_points = models.FloatField()
     average_payoff_workers_tokens = models.FloatField()
+
 
 class Offer(ExtraModel):
     group = models.Link(Group)
@@ -65,6 +107,7 @@ class Offer(ExtraModel):
     wage_tokens = models.FloatField()
     effort = models.IntegerField()
     effort_given = models.IntegerField()
+
 
 class Player(BasePlayer):
     num_workers_employed = models.IntegerField(initial=0, min=0,
@@ -96,9 +139,6 @@ class Player(BasePlayer):
     offer2 = models.StringField(initial="empty")
     offer3 = models.StringField(initial="empty")
     offer4 = models.StringField(initial="empty")
-
-
-
 
 
 # FUNCTIONS
@@ -158,12 +198,10 @@ def creating_session(subsession: Subsession):
             group.num_unmatched_workers = group.players_in_group - session.config['num_employers_small_market']
             group.num_unmatched_jobs = session.config['num_employers_small_market'] * 2
 
-    #players = subsession.get_players()
-    #for p in players:
+    # players = subsession.get_players()
+    # for p in players:
     #    participant_vars = p.participant.vars
     #    print('Participant', p.participant.id_in_session, 'Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is', participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'], 'small market is', participant_vars['small_market'], 'move to market 1 is', participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
-
-
 
 
 # PAGES
@@ -189,7 +227,6 @@ class Reemploy(Page):
         if player.participant.is_employer and player.reemploy == 1:
             return True
 
-
     @staticmethod
     def js_vars(player: Player):
         session = player.session
@@ -198,12 +235,12 @@ class Reemploy(Page):
         else:
             max_wage = session.config['max_wage'] * session.config['exchange_rate']
 
-        return dict (
-            my_id = player.participant.vars['playerID'],
-            worker_id_1 = player.participant.vars['worker1_id'][player.round_number - 2],
-            worker_id_2 = player.participant.vars['worker2_id'][player.round_number - 2],
-            currency_is_points = player.participant.vars['currency_is_points'],
-            max_wage = max_wage,
+        return dict(
+            my_id=player.participant.vars['playerID'],
+            worker_id_1=player.participant.vars['worker1_id'][player.round_number - 2],
+            worker_id_2=player.participant.vars['worker2_id'][player.round_number - 2],
+            currency_is_points=player.participant.vars['currency_is_points'],
+            max_wage=max_wage,
         )
 
     @staticmethod
@@ -296,13 +333,14 @@ class Reemploy(Page):
                 id = p.id_in_group
 
         return {id:
-            {'information_type': 'received',
-            'wage_points': wage_points,
-            'wage_tokens': wage_tokens,
-            'effort': data['effort'],
-            'string_effort': string_effort,
-            'job_number': data['job_number']}
-        }
+                    {'information_type': 'received',
+                     'wage_points': wage_points,
+                     'wage_tokens': wage_tokens,
+                     'effort': data['effort'],
+                     'string_effort': string_effort,
+                     'job_number': data['job_number']}
+                }
+
 
 class WaitToStart(WaitPage):
     template_name = '_templates/includes/My_WaitPage.html'
@@ -331,7 +369,6 @@ class MarketPage(Page):
         current_datetime = datetime.datetime.now()
         group.start_timestamp = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
 
-
     @staticmethod
     def vars_for_template(player: Player):
         session = player.session
@@ -355,7 +392,7 @@ class MarketPage(Page):
                     playerID=player.participant.vars['playerID'],
                     string_role=player.participant.vars['string_role'],
                     name_low_effort=name_low_effort,
-                    name_high_effort=name_high_effort,)
+                    name_high_effort=name_high_effort, )
 
     @staticmethod
     def js_vars(player: Player):
@@ -372,7 +409,7 @@ class MarketPage(Page):
                     string_role=player.participant.vars['string_role'],
                     currency_is_points=player.participant.vars['currency_is_points'],
                     name_low_effort=name_low_effort,
-                    name_high_effort=name_high_effort,)
+                    name_high_effort=name_high_effort, )
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
@@ -380,6 +417,7 @@ class MarketPage(Page):
             player.group.is_finished = True
 
     live_method = market_live_method
+
 
 class WorkPage(Page):
     form_model = 'player'
@@ -450,17 +488,23 @@ class ResultsWaitPage(WaitPage):
                 p.participant.vars['num_workers'].append(p.num_workers_employed)
 
                 # Check that everything works
-                matching_offers = [o for o in offers if p.participant.playerID == o.employer_id and o.status == 'accepted']
+                matching_offers = [o for o in offers if
+                                   p.participant.playerID == o.employer_id and o.status == 'accepted']
                 if len(matching_offers) != p.num_workers_employed:
-                    raise Exception('Number of matching offers does not match the number of workers employed' + str(p.num_workers_employed) + ' ' + str(len(matching_offers)) + ' ' + str(p.participant.playerID))
+                    raise Exception('Number of matching offers does not match the number of workers employed' + str(
+                        p.num_workers_employed) + ' ' + str(len(matching_offers)) + ' ' + str(p.participant.playerID))
                 if len(matching_offers) > 2 or len(matching_offers) < 0:
-                    raise Exception('Number of matching offers is not 1 or 2' + str(p.num_workers_employed) + ' ' + str(len(matching_offers)) + ' ' + str(p.participant.playerID))
+                    raise Exception('Number of matching offers is not 1 or 2' + str(p.num_workers_employed) + ' ' + str(
+                        len(matching_offers)) + ' ' + str(p.participant.playerID))
                 if p.num_workers_employed > 2 or p.num_workers_employed < 0:
-                    raise Exception('Number of employed workers is not 1 or 2' + str(p.num_workers_employed) + ' ' + str(len(matching_offers)) + ' ' + str(p.participant.playerID))
+                    raise Exception(
+                        'Number of employed workers is not 1 or 2' + str(p.num_workers_employed) + ' ' + str(
+                            len(matching_offers)) + ' ' + str(p.participant.playerID))
 
                 if p.num_workers_employed == 0:
                     for i in range(1, 3):
-                        for variable_suffix in ['wage_points', 'wage_tokens', 'effort_given', 'effort', 'id', 'profit_points', 'profit_tokens']:
+                        for variable_suffix in ['wage_points', 'wage_tokens', 'effort_given', 'effort', 'id',
+                                                'profit_points', 'profit_tokens']:
                             p.participant.vars[f'worker{i}_{variable_suffix}'].append('NA')
 
                 elif p.num_workers_employed == 1:
@@ -478,7 +522,8 @@ class ResultsWaitPage(WaitPage):
                         p.participant.vars['worker1_effort'].append(o.effort)
                         p.participant.vars['worker1_id'].append(o.worker_id)
                         worker1_profit_points = o.wage_points - session.config['effort_costs_points'][o.effort_given]
-                        worker1_profit_tokens = o.wage_tokens - session.config['effort_costs_points'][o.effort_given] * session.config['exchange_rate']
+                        worker1_profit_tokens = o.wage_tokens - session.config['effort_costs_points'][o.effort_given] * \
+                                                session.config['exchange_rate']
                         p.participant.vars['worker1_profit_points'].append(worker1_profit_points)
                         p.participant.vars['worker1_profit_tokens'].append(worker1_profit_tokens)
                         p.total_effort_received += o.effort_given
@@ -493,8 +538,10 @@ class ResultsWaitPage(WaitPage):
                             p.participant.vars['worker1_effort_given'].append(o.effort_given)
                             p.participant.vars['worker1_effort'].append(o.effort)
                             p.participant.vars['worker1_id'].append(o.worker_id)
-                            worker1_profit_points = o.wage_points - session.config['effort_costs_points'][o.effort_given]
-                            worker1_profit_tokens = o.wage_tokens - session.config['effort_costs_points'][o.effort_given] * session.config['exchange_rate']
+                            worker1_profit_points = o.wage_points - session.config['effort_costs_points'][
+                                o.effort_given]
+                            worker1_profit_tokens = o.wage_tokens - session.config['effort_costs_points'][
+                                o.effort_given] * session.config['exchange_rate']
                             p.participant.vars['worker1_profit_points'].append(worker1_profit_points)
                             p.participant.vars['worker1_profit_tokens'].append(worker1_profit_tokens)
                         elif p.worker_counter == 2:
@@ -503,12 +550,14 @@ class ResultsWaitPage(WaitPage):
                             p.participant.vars['worker2_effort_given'].append(o.effort_given)
                             p.participant.vars['worker2_effort'].append(o.effort)
                             p.participant.vars['worker2_id'].append(o.worker_id)
-                            worker2_profit_points = o.wage_points - session.config['effort_costs_points'][o.effort_given]
-                            worker2_profit_tokens = o.wage_tokens - session.config['effort_costs_points'][o.effort_given] * session.config['exchange_rate']
+                            worker2_profit_points = o.wage_points - session.config['effort_costs_points'][
+                                o.effort_given]
+                            worker2_profit_tokens = o.wage_tokens - session.config['effort_costs_points'][
+                                o.effort_given] * session.config['exchange_rate']
                             p.participant.vars['worker2_profit_points'].append(worker2_profit_points)
                             p.participant.vars['worker2_profit_tokens'].append(worker2_profit_tokens)
 
-            else:                                                                                                       # Workers
+            else:  # Workers
                 p.participant.vars['num_workers'].append('NA')
                 p.participant.vars['worker1_wage_points'].append('NA')
                 p.participant.vars['worker1_wage_tokens'].append('NA')
@@ -528,22 +577,23 @@ class ResultsWaitPage(WaitPage):
         # Get the total effort received (Note: I already have total wage from market page)
         for p in players:
             if p.participant.vars['is_employer']:
-                if p.num_workers_employed==0:
+                if p.num_workers_employed == 0:
                     p.effort_worth_points = 0
-                elif p.num_workers_employed==1:
+                elif p.num_workers_employed == 1:
                     if p.total_effort_received == 0:
                         p.effort_worth_points = session.config['MPL_low'][0]
                     elif p.total_effort_received == 1:
                         p.effort_worth_points = session.config['MPL_high'][0]
                     else:
                         raise Exception('Error: wrong effort received')
-                elif p.num_workers_employed==2:
-                    if p.total_effort_received == 0:                                                                        # if effort_received is 0, then both workers gave low effort
+                elif p.num_workers_employed == 2:
+                    if p.total_effort_received == 0:  # if effort_received is 0, then both workers gave low effort
                         p.effort_worth_points = 2 * session.config['MPL_low'][1]
-                    elif p.total_effort_received == 1:                                                                      # if effort_received is 1, then one worker gave high effort
+                    elif p.total_effort_received == 1:  # if effort_received is 1, then one worker gave high effort
                         p.effort_worth_points = session.config['MPL_high'][1] + session.config['MPL_low'][1]
                     elif p.total_effort_received == 2:
-                        p.effort_worth_points = 2 * session.config['MPL_high'][1]                                               # if effort_received is 2, then both workers gave high effort
+                        p.effort_worth_points = 2 * session.config['MPL_high'][
+                            1]  # if effort_received is 2, then both workers gave high effort
                     else:
                         raise Exception('Error: wrong effort received')
                 else:
@@ -553,7 +603,7 @@ class ResultsWaitPage(WaitPage):
         # Update the profits
         for p in players:
             p.participant.vars['round_for_points'].append(p.participant.vars['currency_is_points'])
-            if p.participant.is_employer is False:                                                                      # Worker profits
+            if p.participant.is_employer is False:  # Worker profits
                 if p.is_employed:
                     p.effort_cost_points = session.config['effort_costs_points'][p.effort_choice]
                     p.effort_cost_tokens = session.config['effort_costs_points'][p.effort_choice] * session.config[
@@ -563,7 +613,7 @@ class ResultsWaitPage(WaitPage):
                 else:
                     p.payoff_tokens = 0
                     p.payoff_points = 0
-            elif p.participant.is_employer is True:                                                                     # Employer profits
+            elif p.participant.is_employer is True:  # Employer profits
                 p.payoff_tokens = p.effort_worth_tokens - p.total_wage_paid_tokens
                 p.payoff_points = p.effort_worth_points - p.total_wage_paid_points
 
@@ -575,8 +625,10 @@ class ResultsWaitPage(WaitPage):
             if p.participant.is_employer is False:
                 others = p.get_others_in_group()
                 try:
-                    p.employer_payoff_points = [o.payoff_points for o in others if o.participant.playerID == p.field_maybe_none('matched_with_id')][0]
-                    p.employer_payoff_tokens = [o.payoff_tokens for o in others if o.participant.playerID == p.field_maybe_none('matched_with_id')][0]
+                    p.employer_payoff_points = [o.payoff_points for o in others if
+                                                o.participant.playerID == p.field_maybe_none('matched_with_id')][0]
+                    p.employer_payoff_tokens = [o.payoff_tokens for o in others if
+                                                o.participant.playerID == p.field_maybe_none('matched_with_id')][0]
                 except (KeyError, IndexError) as e:
                     p.employer_payoff_points = None
                     p.employer_payoff_tokens = None
@@ -605,12 +657,11 @@ class Results(Page):
 
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
-        #print('This was round number', player.round_number, 'Shock after round', player.session.config['shock_after_rounds'])
+        # print('This was round number', player.round_number, 'Shock after round', player.session.config['shock_after_rounds'])
 
         if player.round_number >= player.session.config['shock_after_rounds']:
             if 'midbreak' in upcoming_apps:
                 return 'midbreak'
-
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -687,8 +738,12 @@ class Results(Page):
             worker1_effort_worth = 0
             worker2_effort_worth = 0
         elif player.num_workers_employed == 1 or player.num_workers_employed == 2:
-            worker1_effort_worth = session.config['MPL_high'][player.num_workers_employed - 1] if worker1_effort_given == 'Normal' else session.config['MPL_low'][player.num_workers_employed - 1] if worker1_effort_given == 'Low' else 0
-            worker2_effort_worth = session.config['MPL_high'][player.num_workers_employed - 1] if worker2_effort_given == 'Normal' else session.config['MPL_low'][player.num_workers_employed - 1] if worker2_effort_given == 'Low' else 0
+            worker1_effort_worth = session.config['MPL_high'][
+                player.num_workers_employed - 1] if worker1_effort_given == 'Normal' else session.config['MPL_low'][
+                player.num_workers_employed - 1] if worker1_effort_given == 'Low' else 0
+            worker2_effort_worth = session.config['MPL_high'][
+                player.num_workers_employed - 1] if worker2_effort_given == 'Normal' else session.config['MPL_low'][
+                player.num_workers_employed - 1] if worker2_effort_given == 'Low' else 0
         else:
             raise Exception('num_workers_employed is not 0, 1 or 2')
 
@@ -756,11 +811,10 @@ page_sequence = [CheckReemploy,
                  ]
 
 
-
-
 def custom_export(players):
     # top row
-    yield ['session_code', 'group.id_in_subsession', 'marketID', 'round', 'job_id', 'employer_id', 'worker_id', 'private',
+    yield ['session_code', 'group.id_in_subsession', 'marketID', 'round', 'job_id', 'employer_id', 'worker_id',
+           'private',
            'wage_points', 'wage_tokens', 'effort', 'effort_given', 'status', 'timestamp_created', 'timestamp_accepted',
            'timestamp_cancelled']
 
