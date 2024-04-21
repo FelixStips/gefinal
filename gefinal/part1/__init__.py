@@ -31,32 +31,34 @@ class Group(BaseGroup):
 
     @property
     def num_unmatched_workers(self):
-        return self.players_in_group - self.employers_in_group
+        unmatched_workers = [w for w in self.workers if w.is_employed]
+        return len(unmatched_workers)
 
     @property
     def num_unmatched_jobs(self):
-        return self.employers_in_group * 2
+        offers = Offer.filter(group=self, status='open')
+        return len(offers)
 
     @property
     def is_finished(self):
-        return self.round_number == self.session.config['num_rounds']
+        return self.num_unmatched_workers <= 0 or self.num_unmatched_jobs <= 0
+
 
     @property
     def num_job_offers(self):
-        return len(Offer.filter(group=self, private=False, show=True))
+        return len(Offer.filter(group=self, private=False, status='open'))
 
     @property
     def job_offer_counter(self):
-        return len(Offer.filter(group=self, private=False, show=True)) + 1
+        return len(Offer.filter(group=self, private=False))
 
     @property
     def prvt_job_offer_counter(self):
-        return len(Offer.filter(group=self, private=True, show=True)) + 1
+        return len(Offer.filter(group=self, private=True))
 
-    property
-
+    @property
     def players_in_group(self):
-        return self.get_players().count()
+        return len(self.get_players())
 
     @property
     def workers(self):
