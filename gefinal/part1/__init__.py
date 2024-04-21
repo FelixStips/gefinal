@@ -43,7 +43,6 @@ class Group(BaseGroup):
     def is_finished(self):
         return self.num_unmatched_workers <= 0 or self.num_unmatched_jobs <= 0
 
-
     @property
     def num_job_offers(self):
         return len(Offer.filter(group=self, private=False, status='open'))
@@ -112,10 +111,22 @@ class Offer(ExtraModel):
 
 
 class Player(BasePlayer):
-    num_workers_employed = models.IntegerField(initial=0, min=0,
-                                               max=2)  # Counter for number of workers the firm employed
-    total_wage_paid_tokens = models.FloatField(initial=0)  # Total wage paid by the firm (in tokens)
-    total_wage_paid_points = models.FloatField(initial=0)  # Total wage paid by the firm (in points)
+    @property
+    def num_workers_employed(self):
+        return len(Offer.filter(group=self.group, employer_id=self.participant.playerID, status='accepted'))
+
+    @property
+    def total_wage_paid_tokens(self):
+        """Total wage paid by the firm (in tokens)"""
+        return sum([o.wage_tokens for o in
+                    Offer.filter(group=self.group, employer_id=self.participant.playerID, status='accepted')])
+
+    @property
+    def total_wage_paid_points(self):
+        """Total wage paid by the firm (in points)"""
+        return sum([o.wage_points for o in
+                    Offer.filter(group=self.group, employer_id=self.participant.playerID, status='accepted')])
+
     total_effort_received = models.IntegerField(initial=0)  # Total effort received by the firm
     effort_cost_points = models.FloatField()  # Effort cost equivalent to the effort level in points
     effort_cost_tokens = models.FloatField()  # Effort cost equivalent to the effort level in tokens
@@ -172,38 +183,35 @@ def creating_session(subsession: Subsession):
     logger.info(f'PART 1 ROUND {subsession.round_number}-----')
     session = subsession.session
     for group in subsession.get_groups():
+
         if group.get_players()[0].participant.vars['large_market_1'] is True:
             group.marketID = 1
             group.large_market = True
             group.large_market_1 = True
             group.large_market_2 = False
-            group.players_in_group = session.config['size_large_market']
-            group.employers_in_group = session.config['num_employers_large_market']
-            group.num_unmatched_workers = group.players_in_group - session.config['num_employers_large_market']
-            group.num_unmatched_jobs = session.config['num_employers_large_market'] * 2
+            # group.players_in_group = session.config['size_large_market']
+            # group.employers_in_group = session.config['num_employers_large_market']
+            # group.num_unmatched_workers = group.players_in_group - session.config['num_employers_large_market']
+            # group.num_unmatched_jobs = session.config['num_employers_large_market'] * 2
         elif group.get_players()[0].participant.vars['large_market_2'] is True:
             group.marketID = 2
             group.large_market = True
             group.large_market_1 = False
             group.large_market_2 = True
-            group.players_in_group = session.config['size_large_market']
-            group.employers_in_group = session.config['num_employers_large_market']
-            group.num_unmatched_workers = group.players_in_group - session.config['num_employers_large_market']
-            group.num_unmatched_jobs = session.config['num_employers_large_market'] * 2
+            # group.players_in_group = session.config['size_large_market']
+            # group.employers_in_group = session.config['num_employers_large_market']
+            # group.num_unmatched_workers = group.players_in_group - session.config['num_employers_large_market']
+            # group.num_unmatched_jobs = session.config['num_employers_large_market'] * 2
         else:
             group.marketID = 3
             group.large_market = False
             group.large_market_1 = False
             group.large_market_2 = False
-            group.players_in_group = session.config['size_small_market']
-            group.employers_in_group = session.config['num_employers_small_market']
-            group.num_unmatched_workers = group.players_in_group - session.config['num_employers_small_market']
-            group.num_unmatched_jobs = session.config['num_employers_small_market'] * 2
+            # group.players_in_group = session.config['size_small_market']
+            # group.employers_in_group = session.config['num_employers_small_market']
+            # group.num_unmatched_workers = group.players_in_group - session.config['num_employers_small_market']
+            # group.num_unmatched_jobs = session.config['num_employers_small_market'] * 2
 
-    # players = subsession.get_players()
-    # for p in players:
-    #    participant_vars = p.participant.vars
-    #    print('Participant', p.participant.id_in_session, 'Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is', participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'], 'small market is', participant_vars['small_market'], 'move to market 1 is', participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
 
 
 # PAGES
@@ -214,10 +222,7 @@ class CheckReemploy(Page):
     @staticmethod
     def is_displayed(player: Player):
         if player.participant.is_employer and player.round_number > 1:
-            # TODO. PHILIPP: replace num_workers on participant.vars to player level
-            num_workers = player.participant.vars['num_workers'][player.round_number - 2]
-            if num_workers > 0:
-                return True
+            return player.in_round(player.round_number - 1).num_workers_employed > 0
 
 
 class Reemploy(Page):
@@ -226,8 +231,7 @@ class Reemploy(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.participant.is_employer and player.reemploy == 1:
-            return True
+        return player.participant.is_employer and player.reemploy == 1
 
     @staticmethod
     def js_vars(player: Player):
@@ -805,7 +809,7 @@ class Results(Page):
 page_sequence = [CheckReemploy,
                  Reemploy,
                  WaitToStart,
-                 Countdown,
+                 # Countdown,
                  MarketPage,
                  WorkPage,
                  ResultsWaitPage,

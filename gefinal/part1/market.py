@@ -290,8 +290,8 @@ def live_method(player, data, Offer):
                               )
 
     # Prepare information for page display
-    page_information = dict(is_finished=group.is_finished, )
-
+    page_information = dict(is_finished=group.is_finished )
+    logger.error(f'IS FINISHED??  {group.is_finished};;;')
     # Return data
     data_to_return = {
         p.id_in_group: dict(
