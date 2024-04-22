@@ -41,7 +41,7 @@ class Group(BaseGroup):
 
     @property
     def is_finished(self):
-        return self.num_unmatched_workers <= 0 or self.num_unmatched_jobs <= 0
+        return all([p.is_finished for p in self.workers]) or all([p.is_finished for p in self.employers])
 
     @property
     def num_job_offers(self):
@@ -111,6 +111,7 @@ class Offer(ExtraModel):
 
 
 class Player(BasePlayer):
+    is_finished = models.BooleanField(initial=False)
     @property
     def num_workers_employed(self):
         return len(Offer.filter(group=self.group, employer_id=self.participant.playerID, status='accepted'))
@@ -124,8 +125,7 @@ class Player(BasePlayer):
     @property
     def total_wage_paid_points(self):
         """Total wage paid by the firm (in points)"""
-        return sum([o.wage_points for o in
-                    Offer.filter(group=self.group, employer_id=self.participant.playerID, status='accepted')])
+        return self.total_wage_paid_tokens / self.session.config['exchange_rate']
 
     total_effort_received = models.IntegerField(initial=0)  # Total effort received by the firm
     effort_cost_points = models.FloatField()  # Effort cost equivalent to the effort level in points
@@ -366,6 +366,9 @@ class MarketPage(Page):
     timer_text = 'The market phase will end in:'
 
     @staticmethod
+    def is_displayed(player: Player):
+        return not player.is_finished
+    @staticmethod
     def get_timeout_seconds(player: Player):
         session = player.session
         return session.config['market_timeout_seconds']
@@ -420,7 +423,7 @@ class MarketPage(Page):
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         if timeout_happened:
-            player.group.is_finished = True
+            player.is_finished = True
 
     live_method = market_live_method
 

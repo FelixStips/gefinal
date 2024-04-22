@@ -31,27 +31,8 @@ def handle_done(player, data, Offer, group, current_datetime):
      - If all employers are done we finish the round.
     """
 
-    # Update offers -> Note that here we don't need to loop over players since signal came from employer
-    offers = Offer.filter(group=group)
-    for o in offers:
-        if (o.status == 'open' or o.status == None) and o.employer_id == player.participant.playerID:
-            o.status = 'cancelled'
-            o.show = False
-            o.timestamp_cancelled = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+    player.is_finished = True
 
-    # Update player info
-    for p in group.get_players():
-        if p.participant.playerID == data['employer_id']:
-            p.done = True
-            p.offer1 = 'cancelled' if p.offer1 != 'accepted' else p.offer1
-            p.offer2 = 'cancelled' if p.offer2 != 'accepted' else p.offer2
-            p.offer3 = 'cancelled' if p.offer3 != 'accepted' else p.offer3
-            p.offer4 = 'cancelled' if p.offer4 != 'accepted' else p.offer4
-
-    # Update group
-    group.num_unmatched_jobs -= data['jobs_open']
-    if group.num_unmatched_workers <= 0 or group.num_unmatched_jobs <= 0:
-        group.is_finished = True
     return True
 
 
@@ -89,7 +70,7 @@ def handle_offer(player, data, Offer, group, current_datetime):
         job_number=data["job_number"],
         timestamp_created=current_datetime.strftime("%Y-%m-%d %H:%M:%S"),
     )
-    logger.info(f'offer {offer}')
+
 
     # Update player information (even here I don't need the loop, even the if I wouldn't need in theory..)
     if player.participant.playerID == data['employer_id']:
@@ -98,9 +79,7 @@ def handle_offer(player, data, Offer, group, current_datetime):
         player.offer3 = 'open' if data['job_number'] == 3 and player.offer3 != 'accepted' else player.offer3
         player.offer4 = 'open' if data['job_number'] == 4 and player.offer4 != 'accepted' else player.offer4
 
-    # Update group information
-    group.job_offer_counter += 1
-    group.num_job_offers += 1
+
     return True
 
 
@@ -127,6 +106,7 @@ def handle_accept(player, data, Offer, group, current_datetime):
     for p in group.get_players():
         if p.participant.playerID == data['employer_id']:
             if p.num_workers_employed >= 2:
+                p.is_finished = True
                 print('Employer already accepted 2 workers')
                 player.invalid = True
 
@@ -145,13 +125,14 @@ def handle_accept(player, data, Offer, group, current_datetime):
         current_offer[0].show = True
         current_offer[0].worker_id = player.participant.playerID
         current_offer[0].timestamp_accepted = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+        player.is_finished = True
 
         # Update players (this depends on whether the offer is private or not). Here I need the loop!
         for p in group.get_players():
             if p.participant.playerID == data['employer_id']:
-                p.num_workers_employed += 1
-                p.total_wage_paid_tokens += wage_tokens
-                p.total_wage_paid_points += wage_points
+                if p.num_workers_employed >= 2:
+                    p.is_finished = True
+
                 p.matched_with_id = data['worker_id']
                 p.offer1 = 'accepted' if data['job_number'] == 1 else p.offer1
                 p.offer2 = 'accepted' if data['job_number'] == 2 else p.offer2
@@ -159,6 +140,7 @@ def handle_accept(player, data, Offer, group, current_datetime):
                 p.offer4 = 'accepted' if data['job_number'] == 4 else p.offer4
             elif p.participant.playerID == data['worker_id']:
                 p.is_employed = True
+                p.is_finished = True
                 p.wait = True
                 p.show_private = False
                 p.wage_received_points = wage_points
@@ -168,12 +150,7 @@ def handle_accept(player, data, Offer, group, current_datetime):
             else:
                 pass
 
-        # Update the group
-        group.num_job_offers -= 1
-        group.num_unmatched_workers -= 1
-        group.num_unmatched_jobs -= 1
-        if group.num_unmatched_workers == 0 or group.num_unmatched_jobs == 0:
-            group.is_finished = True
+
 
     else:
         logger.info('Offer', data['job_id'], 'cannot be accepted, employer', data['employer_id'], 'worker',
@@ -208,8 +185,6 @@ def handle_cancel(player, data, Offer, group, current_datetime):
         player.offer3 = 'cancelled' if data['job_number'] == 3 and player.offer3 != 'accepted' else player.offer3
         player.offer4 = 'cancelled' if data['job_number'] == 4 and player.offer4 != 'accepted' else player.offer4
 
-    # Update group information
-    group.num_job_offers -= 1
     return True
 
 
@@ -251,7 +226,7 @@ def live_method(player, data, Offer):
 
     # Check whether employer has two accepted offers and remove other offers
     for p in group.get_players():
-        if p.participant.is_employer is True and p.num_workers_employed == 2:
+        if p.participant.is_employer is True and p.num_workers_employed >= 2:
             for o in Offer.filter(group=group, employer_id=p.participant.playerID):
                 if o.status == 'open':
                     o.status = 'cancelled'
@@ -290,12 +265,12 @@ def live_method(player, data, Offer):
                               )
 
     # Prepare information for page display
-    page_information = dict(is_finished=group.is_finished )
-    logger.error(f'IS FINISHED??  {group.is_finished};;;')
+    page_information = dict(is_finished=player.is_finished)
+
     # Return data
     data_to_return = {
         p.id_in_group: dict(
-            page_information=page_information,
+            page_information=dict(is_finished=p.is_finished or p.group.is_finished,),
             worker_information=dict(wait=p.wait,
                                     invalid=p.invalid,
                                     show_private=p.show_private),
