@@ -53,6 +53,7 @@ def creating_session(subsession: Subsession):
 
     session = subsession.session
     participants = session.get_participants()
+    temp_id_list = random.sample(range(1, len(participants) + 1), len(participants))
 
     size_large_market = session.config['size_large_market']
     size_small_market = session.config['size_small_market']
@@ -69,8 +70,12 @@ def creating_session(subsession: Subsession):
     large_market_members = large_market_1 + large_market_2
     assign_property(large_market_members, 'market_type', MarketType.LARGE)
     assign_property(large_market_members, 'currency_is_points', True)
+    assign_property(large_market_1, 'large_market_1', True)
+    assign_property(large_market_2, 'large_market_2', True)
+
 
     assign_property(small_market, 'market_type', MarketType.SMALL)
+    assign_property(small_market, 'small_market', True)
     assign_property(small_market, 'currency_is_points', False)
 
 
@@ -95,7 +100,9 @@ def creating_session(subsession: Subsession):
 
 
     for p in players:
+
         participant_vars = p.participant.vars
+        participant_vars['playerID'] = temp_id_list[(p.id_in_group - 1)]
         participant_vars['total_points'] = []
         participant_vars['total_tokens'] = []
         participant_vars['round_for_points'] = []
@@ -117,9 +124,9 @@ def creating_session(subsession: Subsession):
         p.date = str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
         print('Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is',
-              participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'],
-              'small market is', participant_vars['small_market'], 'move to market 1 is',
-              participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
+              participant_vars.get('large_market_1'), 'large market 2 is', participant_vars.get('large_market_2'),
+              'small market is', participant_vars.get('small_market'), 'move to market 1 is',
+              participant_vars.get('move_to_market_1'), 'move to market 2 is', participant_vars.get('move_to_market_2'))
 
 
 
