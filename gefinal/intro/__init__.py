@@ -1,7 +1,7 @@
 from otree.api import *
 import random
 import datetime
-
+from .utils import split_list_by_lengths, assign_property, PersonRole, MarketType
 random.seed(10)
 
 doc = """
@@ -50,31 +50,55 @@ def creating_session(subsession: Subsession):
     This function defines which market players will be in, whether they will workers or employers, and which market they will be moved to.
     """
     players = subsession.get_players()
-    num_participants = len(players)
-    temp_id_list = random.sample(range(1, num_participants + 1), num_participants)
+
     session = subsession.session
+    participants = session.get_participants()
+
     size_large_market = session.config['size_large_market']
+    size_small_market = session.config['size_small_market']
     num_employers_large_market = session.config['num_employers_large_market']
     num_employers_small_market = session.config['num_employers_small_market']
     migration_small_shock_size = session.config['migration_small_shock_size']
     migration_large_shock_size = session.config['migration_large_shock_size']
 
+    # some checks before we good to go:
+    assert migration_small_shock_size + migration_large_shock_size == size_small_market - num_employers_small_market, 'Number of migrants should be equal to number of workers in small market'
+
+    # splitting to markets
+    large_market_1, large_market_2, small_market = split_list_by_lengths(participants, [size_large_market, size_large_market])
+    large_market_members = large_market_1 + large_market_2
+    assign_property(large_market_members, 'market_type', MarketType.LARGE)
+    assign_property(large_market_members, 'currency_is_points', True)
+
+    assign_property(small_market, 'market_type', MarketType.SMALL)
+    assign_property(small_market, 'currency_is_points', False)
+
+
+    # then for each market splitting to workers and employers
+    lm1_employers, lm1_workers = split_list_by_lengths(large_market_1, [num_employers_large_market])
+    lm2_employers, lm2_workers = split_list_by_lengths(large_market_2, [num_employers_large_market])
+    sm_employers, sm_workers = split_list_by_lengths(small_market, [num_employers_small_market])
+    all_employers = lm1_employers + lm2_employers + sm_employers
+    all_workers = lm1_workers + lm2_workers + sm_workers
+    assign_property(all_employers, 'is_employer', True)
+    assign_property(all_workers, 'is_employer', False)
+    assign_property(all_employers, 'string_role', PersonRole.EMPLOYER)
+    assign_property(all_workers, 'string_role', PersonRole.WORKER)
+
+    # then for small market splitting to migrants
+
+    migrants1, migrants2 = split_list_by_lengths(sm_workers, [migration_small_shock_size])
+    assign_property(migrants1+migrants2, 'migrant', True)
+    assign_property(migrants1, 'move_to_market_1', True)
+    assign_property(migrants2, 'move_to_market_2', True)
+
+
+
     for p in players:
         participant_vars = p.participant.vars
-        participant_vars['playerID'] = temp_id_list[(p.id_in_group - 1)]
-        participant_vars['large_market'] = False
-        participant_vars['large_market_1'] = False  # 1st large market will receive small shock
-        participant_vars['large_market_2'] = False  # 2nd large market will receive large shock
-        participant_vars['small_market'] = False
-        participant_vars['migrant'] = False
-        participant_vars['move_to_market_1'] = False
-        participant_vars['move_to_market_2'] = False
-        participant_vars['is_employer'] = False
-        participant_vars['currency_is_points'] = False
         participant_vars['total_points'] = []
         participant_vars['total_tokens'] = []
         participant_vars['round_for_points'] = []
-        participant_vars['round_number'] = 0
         participant_vars['num_workers'] = []
         participant_vars['worker1_wage_points'] = []
         participant_vars['worker1_wage_tokens'] = []
@@ -91,56 +115,12 @@ def creating_session(subsession: Subsession):
         participant_vars['worker2_profit_points'] = []
         participant_vars['worker2_profit_tokens'] = []
         p.date = str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        if participant_vars['playerID'] <= size_large_market:
-            participant_vars['large_market'] = True
-            participant_vars['large_market_1'] = True
-            participant_vars['currency_is_points'] = True
-            if participant_vars['playerID'] <= num_employers_large_market:
-                participant_vars['is_employer'] = True
-                participant_vars['string_role'] = 'employer'
-            else:
-                participant_vars['string_role'] = 'worker'
-        elif participant_vars['playerID'] <= (2 * size_large_market):
-            participant_vars['large_market'] = True
-            participant_vars['large_market_2'] = True
-            participant_vars['currency_is_points'] = True
-            if participant_vars['playerID'] <= (size_large_market + num_employers_large_market):
-                participant_vars['is_employer'] = True
-                participant_vars['string_role'] = 'employer'
-            else:
-                participant_vars['string_role'] = 'worker'
-        else:
-            participant_vars['small_market'] = True
-            participant_vars['currency_is_points'] = False
-            if participant_vars['playerID'] <= (num_employers_small_market + size_large_market + size_large_market):
-                participant_vars['is_employer'] = True
-                participant_vars['string_role'] = 'employer'
-            else:
-                participant_vars['string_role'] = 'worker'
-                if participant_vars['playerID'] <= (
-                        num_employers_small_market + size_large_market + size_large_market + migration_small_shock_size):
-                    participant_vars['migrant'] = True
-                    participant_vars['move_to_market_1'] = True
-                elif participant_vars['playerID'] <= (
-                        num_employers_small_market + size_large_market + size_large_market + migration_small_shock_size + migration_large_shock_size):
-                    participant_vars['migrant'] = True
-                    participant_vars['move_to_market_2'] = True
+
         print('Player ID', participant_vars['playerID'], 'is a', participant_vars['string_role'], 'large market 1 is',
               participant_vars['large_market_1'], 'large market 2 is', participant_vars['large_market_2'],
               'small market is', participant_vars['small_market'], 'move to market 1 is',
               participant_vars['move_to_market_1'], 'move to market 2 is', participant_vars['move_to_market_2'])
 
-    """
-    size_large_1 = [p.participant.vars['large_market_1'] for p in players].count(True)
-    size_large_2 = [p.participant.vars['large_market_2'] for p in players].count(True)
-    size_small = [p.participant.vars['small_market'] for p in players].count(True)
-    move_to_1 = [p.participant.vars['move_to_market_1'] for p in players].count(True)
-    move_to_2 = [p.participant.vars['move_to_market_2'] for p in players].count(True)
-
-    print('Large market 1 will have', size_large_1, 'players and will receive', move_to_1, 'migrants')
-    print('Large market 2 will have', size_large_2, 'players and will receive', move_to_2, 'migrants')
-    print('Small market will have', size_small, 'players')
-    """
 
 
 # PAGES

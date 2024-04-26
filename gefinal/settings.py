@@ -19,12 +19,12 @@ SESSION_CONFIGS = [
         display_name="Main",
         app_sequence=[
             'intro',
-            'part1',
-            'midbreak',
-            'part2',
-            'questionnaire',
-            'questionnaire2',
-            'end'
+            # 'part1',
+            # 'midbreak',
+            # 'part2',
+            # 'questionnaire',
+            # 'questionnaire2',
+            # 'end'
         ],
         use_browser_bots=False,
         num_demo_participants=9,

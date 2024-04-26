@@ -156,9 +156,7 @@ class Player(BasePlayer):
 
 # FUNCTIONS
 def creating_session(subsession: Subsession):
-    players_in_all_groups = []
-    for group in subsession.get_groups():
-        players_in_all_groups.extend(group.get_players())
+    all_participants = subsession.session.get_participants()
 
     # group matrix numbers are based on player.id_in_subsession
     players_in_large_market_1 = [p.id_in_subsession for p in players_in_all_groups if
