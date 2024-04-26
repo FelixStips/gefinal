@@ -19,10 +19,9 @@ SESSION_CONFIGS = [
         display_name="Main",
         app_sequence=[
             'intro',
-            # 'part1',
-            # 'midbreak',
-            # 'part2',
-            # 'questionnaire',
+            'market_stage',
+
+            'questionnaire',
             # 'questionnaire2',
             # 'end'
         ],
@@ -42,7 +41,7 @@ SESSION_CONFIGS = [
         effort_names=['Low', 'Normal'],  # Names of effort levels
         effort_costs_points=[10, 20],  # Effort costs for low and high effort, in points
         total_rounds=13,  # Total number of market rounds
-        shock_after_rounds=3,  # Number of rounds before migration shock
+        shock_after_rounds=1,  # Number of rounds before migration shock
         size_large_market=3,  # Number of players in each large market (note: large and small does not mean anything)
         size_small_market=3,  # Number of players in small market
         num_employers_large_market=1,  # Number of employers in large market

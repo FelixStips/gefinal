@@ -18,9 +18,9 @@ Your app description
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'part1'
+    NAME_IN_URL = 'market_stage'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 3
+    NUM_ROUNDS = 4
 
 
 class Subsession(BaseSubsession):
@@ -31,11 +31,13 @@ class Group(BaseGroup):
 
     @property
     def num_unmatched_workers(self):
+        # TODO: this one is WRONG
         unmatched_workers = [w for w in self.workers if w.is_employed]
         return len(unmatched_workers)
 
     @property
     def num_unmatched_jobs(self):
+        # TODO: this one is WRONG
         offers = Offer.filter(group=self, status='open')
         return len(offers)
 
@@ -112,6 +114,7 @@ class Offer(ExtraModel):
 
 class Player(BasePlayer):
     is_finished = models.BooleanField(initial=False)
+
     @property
     def num_workers_employed(self):
         return len(Offer.filter(group=self.group, employer_id=self.participant.playerID, status='accepted'))
@@ -156,60 +159,43 @@ class Player(BasePlayer):
 
 # FUNCTIONS
 def creating_session(subsession: Subsession):
-    all_participants = subsession.session.get_participants()
+    players = subsession.get_players()
+    shock_after_rounds = subsession.session.config['shock_after_rounds']
+    assert shock_after_rounds <= C.NUM_ROUNDS, 'Shock after rounds cannot be larger than the number of rounds'
+    if subsession.round_number <= shock_after_rounds:
+        players_in_large_market_1 = [p for p in players if p.participant.vars.get('large_market_1')]
+        players_in_large_market_2 = [p for p in players if p.participant.vars.get('large_market_2')]
+        players_in_small_market = [p for p in players if p.participant.vars.get('small_market')]
+        subsession.set_group_matrix([players_in_large_market_1, players_in_large_market_2, players_in_small_market])
 
-    # group matrix numbers are based on player.id_in_subsession
-    players_in_large_market_1 = [p.id_in_subsession for p in players_in_all_groups if
-                                 p.participant.vars['large_market_1'] is True or p.participant.vars[
-                                     'large_market_1'] is None]
-    players_in_large_market_2 = [p.id_in_subsession for p in players_in_all_groups if
-                                 p.participant.vars['large_market_2'] is True or p.participant.vars[
-                                     'large_market_2'] is None]
-    players_in_small_market = [p.id_in_subsession for p in players_in_all_groups if
-                               p.participant.vars['large_market'] is False]
+        logger.info(subsession.get_group_matrix())
+        logger.info(f'PART 1 ROUND {subsession.round_number}-----')
+    else:
+        players_in_large_market_1 = [p for p in players if
+                                     p.participant.vars.get('large_market_1') or p.participant.vars.get(
+                                         'move_to_market_1')]
+        players_in_large_market_2 = [p for p in players if
+                                     p.participant.vars.get('large_market_2') or p.participant.vars.get(
+                                         'move_to_market_2')]
+        players_in_small_market = [p for p in players if
+                                   p not in players_in_large_market_1 and p not in players_in_large_market_2]
+        logger.critical(f' {players_in_small_market=}')
+        for p in players_in_small_market:
+            p.participant.vars['skip_game'] = True
 
-    matrix = []
-    if players_in_large_market_1 is not []:
-        matrix.append(players_in_large_market_1)
-    if players_in_large_market_2 is not []:
-        matrix.append(players_in_large_market_2)
-    if players_in_small_market is not []:
-        matrix.append(players_in_small_market)
+        subsession.set_group_matrix([players_in_large_market_1, players_in_large_market_2, players_in_small_market])
+        logger.info(subsession.get_group_matrix())
+        logger.info(f'PART 2 ROUND {subsession.round_number}-----')
 
-    subsession.set_group_matrix(matrix)
-    logger.info(subsession.get_group_matrix())
-    logger.info(f'PART 1 ROUND {subsession.round_number}-----')
-    session = subsession.session
-    for group in subsession.get_groups():
-
-        if group.get_players()[0].participant.vars['large_market_1'] is True:
-            group.marketID = 1
-            group.large_market = True
-            group.large_market_1 = True
-            group.large_market_2 = False
-            # group.players_in_group = session.config['size_large_market']
-            # group.employers_in_group = session.config['num_employers_large_market']
-            # group.num_unmatched_workers = group.players_in_group - session.config['num_employers_large_market']
-            # group.num_unmatched_jobs = session.config['num_employers_large_market'] * 2
-        elif group.get_players()[0].participant.vars['large_market_2'] is True:
-            group.marketID = 2
-            group.large_market = True
-            group.large_market_1 = False
-            group.large_market_2 = True
-            # group.players_in_group = session.config['size_large_market']
-            # group.employers_in_group = session.config['num_employers_large_market']
-            # group.num_unmatched_workers = group.players_in_group - session.config['num_employers_large_market']
-            # group.num_unmatched_jobs = session.config['num_employers_large_market'] * 2
-        else:
-            group.marketID = 3
-            group.large_market = False
-            group.large_market_1 = False
-            group.large_market_2 = False
-            # group.players_in_group = session.config['size_small_market']
-            # group.employers_in_group = session.config['num_employers_small_market']
-            # group.num_unmatched_workers = group.players_in_group - session.config['num_employers_small_market']
-            # group.num_unmatched_jobs = session.config['num_employers_small_market'] * 2
-
+    p1 = players_in_large_market_1[0]
+    p2 = players_in_large_market_2[0]
+    p3 = players_in_small_market[0]
+    p1.group.marketID = 1
+    p2.group.marketID = 2
+    p3.group.marketID = 3
+    p1.group.large_market = True
+    p2.group.large_market = True
+    p3.group.large_market = False
 
 
 # PAGES
@@ -366,6 +352,7 @@ class MarketPage(Page):
     @staticmethod
     def is_displayed(player: Player):
         return not player.is_finished
+
     @staticmethod
     def get_timeout_seconds(player: Player):
         session = player.session
@@ -662,13 +649,13 @@ class Results(Page):
     form_model = 'player'
     timeout_seconds = 60
 
+
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
-        # print('This was round number', player.round_number, 'Shock after round', player.session.config['shock_after_rounds'])
 
-        if player.round_number >= player.session.config['shock_after_rounds']:
-            if 'midbreak' in upcoming_apps:
-                return 'midbreak'
+        if (player.session.config.get('shock_after_rounds') == player.round_number and
+                player.participant.vars.get('skip_game')):
+            return upcoming_apps[0]
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -807,15 +794,84 @@ class Results(Page):
         )
 
 
-page_sequence = [CheckReemploy,
-                 Reemploy,
-                 WaitToStart,
-                 # Countdown,
-                 MarketPage,
-                 WorkPage,
-                 ResultsWaitPage,
-                 Results,
-                 ]
+class MidPage(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == player.session.config['shock_after_rounds'] + 1
+
+
+class AnotherIntroduction(MidPage):
+    pass
+
+
+class AnotherInstruction(MidPage):
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        session = player.session
+        print(session.config.get('exchange_rate'))
+        income_diff = False if session.config.get('exchange_rate') == 1 else True
+
+        if player.participant.vars.get('large_market_1') or player.participant.vars.get('move_to_market_1'):
+            size_market = session.config.get('size_large_market', 0) + session.config.get('migration_small_shock_size',
+                                                                                          0)
+            num_employers = session.config.get('num_employers_large_market', 0)
+            num_workers = session.config.get('size_large_market', 0) + session.config.get('migration_small_shock_size',
+                                                                                          0) - \
+                          session.config.get('num_employers_large_market', 0)
+            shock_size = session.config.get('migration_small_shock_size', 0)
+        elif player.participant.vars.get('large_market_2') or player.participant.vars.get('move_to_market_2'):
+            size_market = session.config.get('size_small_market', 0) + session.config.get('migration_large_shock_size',
+                                                                                          0)
+            num_employers = session.config.get('num_employers_large_market', 0)
+            num_workers = session.config.get('size_small_market', 0) + session.config.get('migration_large_shock_size',
+                                                                                          0) - \
+                          session.config.get('num_employers_large_market', 0)
+            shock_size = session.config.get('migration_large_shock_size', 0)
+        else:
+            size_market = session.config.get('size_small_market', 0)
+            num_employers = session.config.get('num_employers_small_market', 0)
+            num_workers = session.config.get('size_small_market', 0) - session.config.get('num_employers_small_market',
+                                                                                          0) - \
+                          2 * session.config.get('migration_large_shock_size', 0)
+            shock_size = 0
+
+        return dict(
+            income_diff=income_diff,
+            size_market=size_market,
+            num_employers=num_employers,
+            num_workers=num_workers,
+            is_employer=player.participant.vars.get('is_employer'),
+            shock_size=shock_size,
+            num_rounds_left=C.NUM_ROUNDS - session.config.get('shock_after_rounds', C.NUM_ROUNDS),
+            migrant=player.participant.vars.get('migrant'),
+            large_market=player.participant.vars.get('large_market'),
+        )
+
+
+class AnotherWaitPage(WaitPage):
+    template_name = '_templates/includes/My_WaitPage.html'
+    body_text = "Please wait, part 2 will begin shortly."
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == player.session.config['shock_after_rounds'] + 1
+
+
+page_sequence = [
+    AnotherIntroduction,
+    AnotherInstruction,
+    AnotherWaitPage,
+    CheckReemploy,
+    Reemploy,
+    WaitToStart,
+    # Countdown,
+    MarketPage,
+    WorkPage,
+    ResultsWaitPage,
+    Results,
+
+]
 
 
 def custom_export(players):

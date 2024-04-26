@@ -4,7 +4,7 @@ from otree.api import Bot
 from otree.live import call_live_method_compat
 from .logger import logger
 from pprint import pprint
-from part1 import Offer
+from market_stage import Offer
 
 import random
 

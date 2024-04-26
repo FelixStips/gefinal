@@ -120,7 +120,9 @@ class Behavioral3(Page):
 
 
 
-page_sequence = [SocioDemographic,
-                 Behavioral1,
-                 Behavioral2,
-                 Behavioral3]
+page_sequence = [
+    SocioDemographic,
+    #              Behavioral1,
+    #              Behavioral2,
+    #              Behavioral3
+]
