@@ -31,8 +31,8 @@ class Group(BaseGroup):
 
     @property
     def num_unmatched_workers(self):
-        # TODO: this one is WRONG
-        unmatched_workers = [w for w in self.workers if w.is_employed]
+
+        unmatched_workers = [w for w in self.workers if not w.is_employed]
         return len(unmatched_workers)
 
     @property
@@ -205,6 +205,8 @@ class CheckReemploy(Page):
 
     @staticmethod
     def is_displayed(player: Player):
+        if  player.round_number == player.session.config['shock_after_rounds'] + 1:
+            return False
         if player.participant.is_employer and player.round_number > 1:
             return player.in_round(player.round_number - 1).num_workers_employed > 0
 
@@ -215,6 +217,8 @@ class Reemploy(Page):
 
     @staticmethod
     def is_displayed(player: Player):
+        if  player.round_number == player.session.config['shock_after_rounds'] + 1:
+            return False
         return player.participant.is_employer and player.reemploy == 1
 
     @staticmethod
@@ -671,8 +675,13 @@ class Results(Page):
         effort_string = name_high_effort if player.field_maybe_none('effort_choice') == 1 else (
             name_low_effort if player.field_maybe_none('effort_choice') == 0 else "")
         round_number = player.round_number
-        rounds_left = session.config['shock_after_rounds'] - round_number
-        part = 2 if round_number > session.config['shock_after_rounds'] else 1
+        if round_number <= session.config['shock_after_rounds']:
+            rounds_left = session.config['shock_after_rounds'] - round_number
+            part = 2
+        else:
+            rounds_left = C.NUM_ROUNDS- round_number
+            part = 2
+
         average_wage_points = round(group.average_wage_points, 1) if group.average_wage_points is not None else None
         average_wage_tokens = round(group.average_wage_tokens, 1) if group.average_wage_tokens is not None else None
         average_profit_points = round(group.average_payoff_firms_points,
@@ -843,7 +852,7 @@ class AnotherInstruction(MidPage):
             num_workers=num_workers,
             is_employer=player.participant.vars.get('is_employer'),
             shock_size=shock_size,
-            num_rounds_left=C.NUM_ROUNDS - session.config.get('shock_after_rounds', C.NUM_ROUNDS),
+            num_rounds_left=C.NUM_ROUNDS - (session.config.get('shock_after_rounds', C.NUM_ROUNDS)),
             migrant=player.participant.vars.get('migrant'),
             large_market=player.participant.vars.get('large_market'),
         )

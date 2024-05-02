@@ -6,17 +6,17 @@
             <p style="margin-bottom:0cm; margin-top: 0.3cm">
                 Your total profit from all rounds so far is <b>{{ total_payoff_points }}</b> points.
             </p>
-            <p style="margin-bottom:0cm; margin-top: 0.2cm">
-                This was round number <b>{{ round_number }}</b>. There are {{ rounds_left }} rounds left in part {{ part }}.
-            </p>
-        {% else %}
-            <p style="margin-bottom:0cm; margin-top: 0.3cm">
+          {% else %}
+        <p style="margin-bottom:0cm; margin-top: 0.3cm">
                 Your total profit from all rounds so far is <b>{{ total_payoff_tokens }}</b> tokens.
             </p>
+         {% endif %}
+
+
         <p style="margin-bottom:0cm; margin-top: 0.2cm">
                 This was round number <b>{{ round_number }}</b>. There are {{ rounds_left }} rounds left in part {{ part }}.
             </p>
-        {% endif %}
+
     </div>
  </div>
 </div>
