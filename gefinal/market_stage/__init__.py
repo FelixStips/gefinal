@@ -320,7 +320,7 @@ class Reemploy(Page):
             )
         string_effort = session.config['effort_names'][data['effort']]
         players = group.get_players()
-        group.prvt_job_offer_counter += 1
+
 
         for p in players:
             if p.participant.playerID == data['employer_id']:
