@@ -4,6 +4,7 @@ import datetime
 import otree
 from .logger import logger
 from .market import live_method
+from pprint import pprint
 
 
 def market_live_method(player, data):
@@ -31,13 +32,11 @@ class Group(BaseGroup):
 
     @property
     def num_unmatched_workers(self):
-
         unmatched_workers = [w for w in self.workers if not w.is_employed]
         return len(unmatched_workers)
 
     @property
     def num_unmatched_jobs(self):
-        # TODO: this one is WRONG
         offers = Offer.filter(group=self, status='open')
         return len(offers)
 
@@ -205,7 +204,7 @@ class CheckReemploy(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if  player.round_number == player.session.config['shock_after_rounds'] + 1:
+        if player.round_number == player.session.config['shock_after_rounds'] + 1:
             return False
         if player.participant.is_employer and player.round_number > 1:
             return player.in_round(player.round_number - 1).num_workers_employed > 0
@@ -217,7 +216,7 @@ class Reemploy(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if  player.round_number == player.session.config['shock_after_rounds'] + 1:
+        if player.round_number == player.session.config['shock_after_rounds'] + 1:
             return False
         return player.participant.is_employer and player.reemploy == 1
 
@@ -320,7 +319,6 @@ class Reemploy(Page):
             )
         string_effort = session.config['effort_names'][data['effort']]
         players = group.get_players()
-
 
         for p in players:
             if p.participant.playerID == data['employer_id']:
@@ -653,14 +651,6 @@ class Results(Page):
     form_model = 'player'
     timeout_seconds = 60
 
-
-    @staticmethod
-    def app_after_this_page(player, upcoming_apps):
-
-        if (player.session.config.get('shock_after_rounds') == player.round_number and
-                player.participant.vars.get('skip_game')):
-            return upcoming_apps[0]
-
     @staticmethod
     def vars_for_template(player: Player):
         group = player.group
@@ -679,7 +669,7 @@ class Results(Page):
             rounds_left = session.config['shock_after_rounds'] - round_number
             part = 2
         else:
-            rounds_left = C.NUM_ROUNDS- round_number
+            rounds_left = C.NUM_ROUNDS - round_number
             part = 2
 
         average_wage_points = round(group.average_wage_points, 1) if group.average_wage_points is not None else None
@@ -818,7 +808,7 @@ class AnotherInstruction(MidPage):
     @staticmethod
     def vars_for_template(player: Player):
         session = player.session
-        print(session.config.get('exchange_rate'))
+
         income_diff = False if session.config.get('exchange_rate') == 1 else True
 
         if player.participant.vars.get('large_market_1') or player.participant.vars.get('move_to_market_1'):
@@ -845,7 +835,8 @@ class AnotherInstruction(MidPage):
                           2 * session.config.get('migration_large_shock_size', 0)
             shock_size = 0
 
-        return dict(
+        res = dict(
+            skip_game=player.participant.vars.get('skip_game', False),
             income_diff=income_diff,
             size_market=size_market,
             num_employers=num_employers,
@@ -854,8 +845,19 @@ class AnotherInstruction(MidPage):
             shock_size=shock_size,
             num_rounds_left=C.NUM_ROUNDS - (session.config.get('shock_after_rounds', C.NUM_ROUNDS)),
             migrant=player.participant.vars.get('migrant'),
+            # TODO: PHILIPP, we have an issue with setting up the migrant value
             large_market=player.participant.vars.get('large_market'),
         )
+        pprint(res)
+        print('$' * 100)
+        return res
+
+    @staticmethod
+    def app_after_this_page(player, upcoming_apps):
+
+        if (player.session.config.get('shock_after_rounds') + 1 == player.round_number and
+                player.participant.vars.get('skip_game')):
+            return upcoming_apps[0]
 
 
 class AnotherWaitPage(WaitPage):

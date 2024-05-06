@@ -3,7 +3,7 @@ import random
 import datetime
 from .utils import split_list_by_lengths, assign_property, PersonRole, MarketType
 random.seed(10)
-
+from market_stage import logger
 doc = """
 """
 
@@ -69,6 +69,7 @@ def creating_session(subsession: Subsession):
     large_market_1, large_market_2, small_market = split_list_by_lengths(participants, [size_large_market, size_large_market])
     large_market_members = large_market_1 + large_market_2
     assign_property(large_market_members, 'market_type', MarketType.LARGE)
+    assign_property(large_market_members, 'large_market', True)
     assign_property(large_market_members, 'currency_is_points', True)
     assign_property(large_market_1, 'large_market_1', True)
     assign_property(large_market_2, 'large_market_2', True)
@@ -93,7 +94,11 @@ def creating_session(subsession: Subsession):
     # then for small market splitting to migrants
 
     migrants1, migrants2 = split_list_by_lengths(sm_workers, [migration_small_shock_size])
+    logger.critical(f'Migrants1: {migrants1}')
+    logger.critical(f'Migrants2: {migrants2}')
     assign_property(migrants1+migrants2, 'migrant', True)
+    for m in migrants1+migrants2:
+        print(f'Migrant: {m.code} ; {m.vars.get("migrant")}')
     assign_property(migrants1, 'move_to_market_1', True)
     assign_property(migrants2, 'move_to_market_2', True)
 
