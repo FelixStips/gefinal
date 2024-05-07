@@ -876,7 +876,7 @@ page_sequence = [
     CheckReemploy,
     Reemploy,
     WaitToStart,
-    # Countdown,
+    Countdown,
     MarketPage,
     WorkPage,
     ResultsWaitPage,
