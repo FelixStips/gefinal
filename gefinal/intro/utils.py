@@ -1,11 +1,11 @@
 import random
-from enum import StrEnum
+from enum import Enum
 
-class MarketType(StrEnum):
+class MarketType(str, Enum):
     SMALL = "small_market"
     LARGE = "large_market"
 
-class PersonRole(StrEnum):
+class PersonRole(str, Enum):
     EMPLOYER = "employer"
     WORKER = "worker"
 
