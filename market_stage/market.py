@@ -153,8 +153,12 @@ def handle_accept(player, data, Offer, group, current_datetime):
 
 
     else:
-        logger.info('Offer', data['job_id'], 'cannot be accepted, employer', data['employer_id'], 'worker',
-                    data['worker_id'])
+        # rewrite the following with f string
+        job_id = data.get('job_id', 'unknown')
+        employer_id = data.get('employer_id', 'unknown')
+        worker_id = data.get('worker_id', 'unknown')
+
+        logger.info(f"Offer {job_id} cannot be accepted, employer {employer_id}, worker {worker_id}")
 
         for o in current_offer:
             o.show = False

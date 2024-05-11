@@ -5,7 +5,7 @@ import otree
 from .logger import logger
 from .market import live_method
 from pprint import pprint
-
+from os import environ
 
 def market_live_method(player, data):
     return live_method(player, data, Offer)
@@ -21,7 +21,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'market_stage'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 4
+    NUM_ROUNDS = environ.get('NUM_ROUNDS', 10)
 
 
 class Subsession(BaseSubsession):
