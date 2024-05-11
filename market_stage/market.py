@@ -201,7 +201,7 @@ def live_method(player, data, Offer):
     player.invalid = False
     logger.info(f'live_method {data}')
     group = player.group
-    logger.info(f'group size! {len(group.get_players())}')
+
     current_datetime = datetime.datetime.now()
 
     # Function dispatch dictionary
