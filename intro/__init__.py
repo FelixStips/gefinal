@@ -45,7 +45,7 @@ class Player(BasePlayer):
 
 
 # FUNCTIONS
-def creating_session(subsession: Subsession):
+def setting_session(subsession: Subsession):
     """
     This function defines which market players will be in, whether they will workers or employers, and which market they will be moved to.
     """
@@ -626,9 +626,13 @@ class WaitToStart(WaitPage):
     def is_displayed(player: Player):
         session = player.session
         return session.config['final']
+class FirstWP(WaitPage):
+    wait_for_all_groups = True
+    after_all_players_arrive = 'setting_session'
 
 
 page_sequence = [
+    FirstWP,
     # Introduction,
     # WorkerInstruction,
     # FirmInstruction,

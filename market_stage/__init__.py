@@ -157,7 +157,7 @@ class Player(BasePlayer):
 
 
 # FUNCTIONS
-def creating_session(subsession: Subsession):
+def setting_session(subsession: Subsession):
     players = subsession.get_players()
     shock_after_rounds = subsession.session.config['shock_after_rounds']
     assert shock_after_rounds <= C.NUM_ROUNDS, 'Shock after rounds cannot be larger than the number of rounds'
@@ -867,9 +867,12 @@ class AnotherWaitPage(WaitPage):
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number == player.session.config['shock_after_rounds'] + 1
-
+class FirstWP(WaitPage):
+    wait_for_all_groups = True
+    after_all_players_arrive = 'setting_session'
 
 page_sequence = [
+    FirstWP,
     AnotherIntroduction,
     AnotherInstruction,
     AnotherWaitPage,
