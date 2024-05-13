@@ -91,23 +91,23 @@ def market_live_method(method, **kwargs):
     employers = [p for p in players if p.participant.vars["string_role"] == "employer"]
     for i in employers:
         offer = generate_offer(i)
-        logger.critical(f'Offer: {offer}')
+        logger.info(f'Offer: {offer}')
         res = method(i.id_in_group, offer)
         #     lets get offers belonding to the group
         offers = Offer.filter(group=group)
-        logger.error(f'how much offers: {len(offers)}')
+
     for offer in offers:
         if workers:
             random_worker = random.choice(workers)
             acceptance = accept_offer(offer, random_worker)
-            logger.critical(f'Acceptance: {acceptance}')
+            logger.info(f'Acceptance: {acceptance}')
             res = method(random_worker.id_in_group, acceptance)
             workers = [p for p in players if p.participant.vars["string_role"] == "worker" and not p.is_employed]
 
 
 def reemploy_live_method(method, **kwargs):
     Offer = kwargs['Offer']
-    logger.error('Reemploy live_method')
+    logger.info('Reemploy live_method')
     Page = kwargs['page_class']
     group = kwargs['group']
     players = group.get_players()
@@ -122,13 +122,13 @@ def reemploy_live_method(method, **kwargs):
 
         private_offers = create_private_offers(full_vars)
         for o in private_offers:
-            logger.error(f'private_offer {o}')
+            logger.info(f'private_offer {o}')
             res = method(i.id_in_group, o)
-            logger.error('*' * 100)
+
 
 
 def call_live_method(method, **kwargs):
-    logger.critical(f'live_method {kwargs}')
+    logger.info(f'live_method {kwargs}')
     kwargs['Offer'] = Offer
     if kwargs.get('page_class').__name__ == 'MarketPage':
         market_live_method(method, **kwargs)
@@ -138,7 +138,7 @@ def call_live_method(method, **kwargs):
 
 class PlayerBot(Bot):
     def play_round(self):
-        logger.info(f'My role is: {self.player.participant.vars["string_role"]}')
+
         if self.player.participant.is_employer and self.player.round_number > 1:
             num_workers = self.player.participant.vars['num_workers'][self.player.round_number - 2]
             if num_workers > 0:

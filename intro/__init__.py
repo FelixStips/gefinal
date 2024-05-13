@@ -94,11 +94,9 @@ def creating_session(subsession: Subsession):
     # then for small market splitting to migrants
 
     migrants1, migrants2 = split_list_by_lengths(sm_workers, [migration_small_shock_size])
-    logger.critical(f'Migrants1: {migrants1}')
-    logger.critical(f'Migrants2: {migrants2}')
+
     assign_property(migrants1+migrants2, 'migrant', True)
-    for m in migrants1+migrants2:
-        print(f'Migrant: {m.code} ; {m.vars.get("migrant")}')
+
     assign_property(migrants1, 'move_to_market_1', True)
     assign_property(migrants2, 'move_to_market_2', True)
 

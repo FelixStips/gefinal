@@ -5,7 +5,7 @@ import otree
 from .logger import logger
 from .market import live_method
 from pprint import pprint
-
+from os import environ
 
 def market_live_method(player, data):
     return live_method(player, data, Offer)
@@ -21,7 +21,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'market_stage'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 10
+    NUM_ROUNDS = environ.get('NUM_ROUNDS', 10)
 
 
 class Subsession(BaseSubsession):
@@ -168,7 +168,7 @@ def creating_session(subsession: Subsession):
         subsession.set_group_matrix([players_in_large_market_1, players_in_large_market_2, players_in_small_market])
 
         logger.info(subsession.get_group_matrix())
-        logger.info(f'PART 1 ROUND {subsession.round_number}-----')
+
     else:
         players_in_large_market_1 = [p for p in players if
                                      p.participant.vars.get('large_market_1') or p.participant.vars.get(
@@ -178,13 +178,13 @@ def creating_session(subsession: Subsession):
                                          'move_to_market_2')]
         players_in_small_market = [p for p in players if
                                    p not in players_in_large_market_1 and p not in players_in_large_market_2]
-        logger.critical(f' {players_in_small_market=}')
+        logger.info(f' {players_in_small_market=}')
         for p in players_in_small_market:
             p.participant.vars['skip_game'] = True
 
         subsession.set_group_matrix([players_in_large_market_1, players_in_large_market_2, players_in_small_market])
         logger.info(subsession.get_group_matrix())
-        logger.info(f'PART 2 ROUND {subsession.round_number}-----')
+
 
     p1 = players_in_large_market_1[0]
     p2 = players_in_large_market_2[0]
