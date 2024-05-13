@@ -147,10 +147,6 @@ def handle_accept(player, data, Offer, group, current_datetime):
                 p.wage_received_tokens = wage_tokens
                 p.effort_requested = data['effort']
                 p.matched_with_id = data['employer_id']
-            else:
-                pass
-
-
 
     else:
         # rewrite the following with f string

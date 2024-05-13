@@ -667,7 +667,7 @@ class Results(Page):
         round_number = player.round_number
         if round_number <= session.config['shock_after_rounds']:
             rounds_left = session.config['shock_after_rounds'] - round_number
-            part = 2
+            part = 1
         else:
             rounds_left = C.NUM_ROUNDS - round_number
             part = 2
