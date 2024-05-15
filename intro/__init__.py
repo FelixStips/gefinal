@@ -152,7 +152,7 @@ class WorkerInstruction(Page):
     def vars_for_template(player: Player):
         session = player.session
 
-        if player.participant.large_market:
+        if player.participant.vars.get('large_market'):
             players_in_your_group = session.config['size_large_market']
             employers_in_your_group = session.config['num_employers_large_market']
             workers_in_your_group = session.config['size_large_market'] - session.config['num_employers_large_market']
@@ -234,7 +234,7 @@ class WorkerInstruction(Page):
             market_time=session.config['market_timeout_seconds'],
             worker_outside_option=session.config['worker_outside_option'],
             employer_outside_option=session.config['employer_outside_option'],
-            total_rounds=int(session.config['total_rounds']),
+            total_rounds=int(session.config.get('total_rounds', 0)),
             shock_after_rounds=session.config['shock_after_rounds'],
             rounds_part_two=int(session.config['total_rounds']) - int(session.config['shock_after_rounds']),
         )
