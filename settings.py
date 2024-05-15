@@ -46,7 +46,7 @@ SESSION_CONFIGS = [
         size_small_market=11,  # Number of players in small market
         num_employers_large_market=5,  # Number of employers in large market
         num_employers_small_market=5,  # Number of employers in small market
-        migration_large_shock_size=1,
+        migration_large_shock_size=5,
         # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
         migration_small_shock_size=1,  # Number of migrants in small migration shock
         worker_example_wage=50,  # Wage in the worker example in points
