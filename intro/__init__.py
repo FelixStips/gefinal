@@ -251,7 +251,7 @@ class FirmInstruction(Page):
     def vars_for_template(player: Player):
         session = player.session
 
-        if player.participant.large_market:
+        if player.participant.vars.get('large_market'):
             players_in_your_group = session.config['size_large_market']
             employers_in_your_group = session.config['num_employers_large_market']
             workers_in_your_group = session.config['size_large_market'] - session.config['num_employers_large_market']
