@@ -26,7 +26,7 @@ SESSION_CONFIGS = [
         ],
         use_browser_bots=False,
         num_demo_participants=9,
-        final=False,  # Display instructions
+        final=True,  # Display instructions
 
         market_timeout_seconds=120,  # Duration of market stage in seconds
 
@@ -41,11 +41,11 @@ SESSION_CONFIGS = [
         MPL_low=[32, 28],  # Revenue low effort for 1 or 2 workers
         effort_names=['Low', 'Normal'],  # Names of effort levels
         effort_costs_points=[10, 20],  # Effort costs for low and high effort, in points
-        shock_after_rounds=1,  # Number of rounds before migration shock
-        size_large_market=3,  # Number of players in each large market (note: large and small does not mean anything)
-        size_small_market=3,  # Number of players in small market
-        num_employers_large_market=1,  # Number of employers in large market
-        num_employers_small_market=1,  # Number of employers in small market
+        shock_after_rounds=4,  # Number of rounds before migration shock
+        size_large_market=11,  # Number of players in each large market (note: large and small does not mean anything)
+        size_small_market=11,  # Number of players in small market
+        num_employers_large_market=5,  # Number of employers in large market
+        num_employers_small_market=5,  # Number of employers in small market
         migration_large_shock_size=1,
         # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
         migration_small_shock_size=1,  # Number of migrants in small migration shock
