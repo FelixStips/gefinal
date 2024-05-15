@@ -629,11 +629,11 @@ class WaitToStart(WaitPage):
 
 
 page_sequence = [
-    # Introduction,
-    # WorkerInstruction,
-    # FirmInstruction,
-    # quiz1,
-    # quiz2,
-    # quiz3,
-    # WaitToStart
+     Introduction,
+     WorkerInstruction,
+     FirmInstruction,
+     quiz1,
+     quiz2,
+     quiz3,
+     WaitToStart
 ]
