@@ -20,14 +20,13 @@ SESSION_CONFIGS = [
         app_sequence=[
             'intro',
             'market_stage',
-
             'questionnaire',
-            # 'questionnaire2',
-            # 'end'
+            'questionnaire2',
+            'end'
         ],
         use_browser_bots=False,
         num_demo_participants=9,
-        final=False,  # Display instructions
+        final=True,  # Display instructions
         market_timeout_seconds=120,  # Duration of market stage in seconds
         countdown_seconds=3,  # Duration of countdown in seconds
         showup_fee=12.0,  # Participation show-up fee
