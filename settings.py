@@ -25,7 +25,7 @@ SESSION_CONFIGS = [
             'end'
         ],
         use_browser_bots=False,
-        num_demo_participants=9,
+        num_demo_participants=33,
         final=True,  # Display instructions
 
         market_timeout_seconds=120,  # Duration of market stage in seconds
