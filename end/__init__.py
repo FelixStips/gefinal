@@ -57,9 +57,9 @@ class PreResults(Page):
         else:
             player.total_euros = round(session.config['showup_fee'], 2)
 
-        player.large_market = player.participant.vars['large_market']
-        player.small_market = player.participant.vars['small_market']
-        player.is_employer = player.participant.vars['is_employer']
+        player.large_market = player.participant.vars.get('large_market', False)
+        player.small_market = player.participant.vars.get('small_market', False)
+        player.is_employer = player.participant.vars.get('is_employer', False)
         player.playerID = player.participant.vars['playerID']
         player.string_role = player.participant.vars['string_role']
 
