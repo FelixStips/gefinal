@@ -126,7 +126,6 @@ def reemploy_live_method(method, **kwargs):
             res = method(i.id_in_group, o)
 
 
-
 def call_live_method(method, **kwargs):
     logger.info(f'live_method {kwargs}')
     kwargs['Offer'] = Offer
@@ -138,20 +137,28 @@ def call_live_method(method, **kwargs):
 
 class PlayerBot(Bot):
     def play_round(self):
+        shock_round_number = self.player.session.config['shock_after_rounds'] + 1
+        skip_game = self.player.in_round(shock_round_number).skip_game
+        if not skip_game:
+            shock_round = self.player.round_number == self.player.session.config['shock_after_rounds'] + 1
+            if shock_round:
+                yield AnotherIntroduction,
+                yield AnotherInstruction,
 
-        if self.player.participant.is_employer and self.player.round_number > 1:
-            num_workers = self.player.participant.vars['num_workers'][self.player.round_number - 2]
-            if num_workers > 0:
-                yield CheckReemploy, dict(reemploy=random.randint(0, 1))
-        if self.player.participant.is_employer and self.player.reemploy == 1:
-            yield Reemploy
+            if not self.player.skip_game:
+                if not shock_round:
+                    if self.player.participant.is_employer and self.player.round_number > 1:
+                        num_workers = self.player.in_round(self.player.round_number - 1).num_workers_employed
+                        if num_workers > 0:
+                            yield CheckReemploy, dict(reemploy=random.randint(0, 1))
+                    if self.player.participant.is_employer and self.player.reemploy == 1:
+                        yield Reemploy
 
-        yield Submission(Countdown, check_html=False)
-
-        yield MarketPage
-        if self.player.is_employed:
-            yield WorkPage, dict(effort_choice=random.randint(0, 1))
-        yield Results
+                yield Submission(Countdown, check_html=False)
+                yield MarketPage
+                if self.player.is_employed:
+                    yield WorkPage, dict(effort_choice=random.randint(0, 1))
+                yield Results
 
 # making private offers
 # Reemploy live_method 4 {'information_type': 'private_offer', 'employer_id': 4, 'worker_id': 5, 'wage': 77, 'effort': 1, 'job_number': 3, 'currency_is_points': True}

@@ -112,6 +112,7 @@ class Offer(ExtraModel):
 
 
 class Player(BasePlayer):
+    skip_game = models.BooleanField(initial=False)
     is_finished = models.BooleanField(initial=False)
 
     @property
@@ -852,6 +853,12 @@ class AnotherInstruction(MidPage):
         print('$' * 100)
         return res
 
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        if (player.session.config.get('shock_after_rounds') + 1 == player.round_number and
+                player.participant.vars.get('skip_game')):
+            player.skip_game = True
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
 
