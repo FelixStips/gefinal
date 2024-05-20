@@ -21,8 +21,8 @@ SESSION_CONFIGS = [
             'intro',
             'market_stage',
             'questionnaire',
-            # 'questionnaire2',
-            # 'end'
+            'questionnaire2',
+            'end',
         ],
         use_browser_bots=False,
         num_demo_participants=33,
