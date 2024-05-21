@@ -6,6 +6,7 @@ from .logger import logger
 from .market import live_method
 from pprint import pprint
 from os import environ
+import math
 
 def market_live_method(player, data):
     return live_method(player, data, Offer)
@@ -21,7 +22,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'market_stage'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = int(environ.get('NUM_ROUNDS', 10))
+    NUM_ROUNDS = int(environ.get('NUM_ROUNDS', 2))
 
 
 class Subsession(BaseSubsession):
@@ -809,6 +810,25 @@ class AnotherInstruction(MidPage):
     @staticmethod
     def vars_for_template(player: Player):
         session = player.session
+        group = player.group
+
+        name_low_effort = session.config['effort_names'][0]
+        name_high_effort = session.config['effort_names'][1]
+
+        average_wage = sum([g.average_wage_points for g in group.in_previous_rounds()]) / session.config.get(
+            'shock_after_rounds')
+        average_effort = (sum([g.average_effort for g in group.in_previous_rounds()]) * 100) / session.config.get(
+            'shock_after_rounds')
+        average_wage = 0 if average_wage is None else int(average_wage)
+        average_effort = 0 if average_effort is None else int(average_effort)
+        effort_caller = math.floor(average_wage / 5) - 1
+        print(effort_caller)
+        predicted_effort = session.config['predicted_effort'][effort_caller]
+
+        if player.participant.vars.get('small_market') is True:
+            average_wage = 0
+            average_effort = 0
+            predicted_effort = 0
 
         income_diff = False if session.config.get('exchange_rate') == 1 else True
 
@@ -844,9 +864,13 @@ class AnotherInstruction(MidPage):
             num_workers=num_workers,
             is_employer=player.participant.vars.get('is_employer'),
             shock_size=shock_size,
+            name_low_effort=name_low_effort,
+            name_high_effort=name_high_effort,
             num_rounds_left=C.NUM_ROUNDS - (session.config.get('shock_after_rounds', C.NUM_ROUNDS)),
             migrant=player.participant.vars.get('migrant'),
-            # TODO: PHILIPP, we have an issue with setting up the migrant value
+            average_wage=average_wage,
+            average_effort=average_effort,
+            predicted_effort=predicted_effort,
             large_market=player.participant.vars.get('large_market'),
         )
         pprint(res)
