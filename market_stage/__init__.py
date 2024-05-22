@@ -823,6 +823,7 @@ class AnotherInstruction(MidPage):
         average_effort = 0 if average_effort is None else int(average_effort)
         effort_caller = math.floor(average_wage / 5) - 1
         print(effort_caller)
+        print('$' * 100)
         predicted_effort = session.config['predicted_effort'][effort_caller]
 
         if player.participant.vars.get('small_market') is True:
