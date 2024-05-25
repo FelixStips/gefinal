@@ -115,7 +115,9 @@ class Offer(ExtraModel):
 class Player(BasePlayer):
     skip_game = models.BooleanField(initial=False)
     is_finished = models.BooleanField(initial=False)
-
+    average_wage_points = models.FloatField()
+    average_wage_tokens = models.FloatField()
+    average_effort = models.FloatField()
     @property
     def num_workers_employed(self):
         return len(Offer.filter(group=self.group, employer_id=self.participant.playerID, status='accepted'))
@@ -478,6 +480,11 @@ class ResultsWaitPage(WaitPage):
         group.average_effort = sum([p.effort_choice for p in players if p.is_employed]) / sum(
             [p.is_employed for p in players]) if sum([p.is_employed for p in players]) > 0 else 0
 
+        for p in players:
+            p.average_wage_points = group.average_wage_points
+            p.average_wage_tokens = group.average_wage_tokens
+            p.average_effort = group.average_effort
+
         # Get the player data from the offers (Note: this is ugly, but I want to store everything in participant to manage re-employment in the following round)
         for p in players:
             p.participant.vars['round_number'] = p.round_number
@@ -815,9 +822,9 @@ class AnotherInstruction(MidPage):
         name_low_effort = session.config['effort_names'][0]
         name_high_effort = session.config['effort_names'][1]
 
-        average_wage = sum([g.average_wage_points for g in group.in_previous_rounds()]) / session.config.get(
+        average_wage = sum([p.field_maybe_none('average_wage_points') or 0 for p in player.in_previous_rounds()]) / session.config.get(
             'shock_after_rounds')
-        average_effort = (sum([g.average_effort for g in group.in_previous_rounds()]) * 100) / session.config.get(
+        average_effort = (sum([p.average_effort for p in  player.in_previous_rounds()]) * 100) / session.config.get(
             'shock_after_rounds')
         average_wage = 0 if average_wage is None else int(average_wage)
         average_effort = 0 if average_effort is None else int(average_effort)
