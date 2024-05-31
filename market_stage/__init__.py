@@ -22,7 +22,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'market_stage'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = int(environ.get('NUM_ROUNDS', 10))
+    NUM_ROUNDS = int(environ.get('NUM_ROUNDS', 16))
 
 
 class Subsession(BaseSubsession):
