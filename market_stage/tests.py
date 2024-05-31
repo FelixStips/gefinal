@@ -112,7 +112,7 @@ def reemploy_live_method(method, **kwargs):
     group = kwargs['group']
     players = group.get_players()
     employers = [p for p in players if p.participant.vars["string_role"] == "employer"]
-    eligible_employers = [p for p in employers if p.participant.is_employer and p.reemploy == 1]
+    eligible_employers = [p for p in employers if p.participant.vars.get('is_employer') and p.reemploy == 1]
     for i in eligible_employers:
         necessary_vars = ['max_wage', 'num_workers', 'wage_1', 'wage_2', 'playerID', ]
         nesessary_js_vars = ['currency_is_points', 'my_id', 'worker_id_1', 'worker_id_2']
@@ -147,11 +147,11 @@ class PlayerBot(Bot):
 
             if not self.player.skip_game:
                 if not shock_round:
-                    if self.player.participant.is_employer and self.player.round_number > 1:
+                    if self.player.participant.vars.get('is_employer') and self.player.round_number > 1:
                         num_workers = self.player.in_round(self.player.round_number - 1).num_workers_employed
                         if num_workers > 0:
                             yield CheckReemploy, dict(reemploy=random.randint(0, 1))
-                    if self.player.participant.is_employer and self.player.reemploy == 1:
+                    if self.player.participant.vars.get('is_employer') and self.player.reemploy == 1:
                         yield Reemploy
 
                 yield Submission(Countdown, check_html=False)

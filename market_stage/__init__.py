@@ -8,6 +8,7 @@ from pprint import pprint
 from os import environ
 import math
 
+
 def market_live_method(player, data):
     return live_method(player, data, Offer)
 
@@ -118,6 +119,7 @@ class Player(BasePlayer):
     average_wage_points = models.FloatField()
     average_wage_tokens = models.FloatField()
     average_effort = models.FloatField()
+
     @property
     def num_workers_employed(self):
         return len(Offer.filter(group=self.group, employer_id=self.participant.playerID, status='accepted'))
@@ -189,7 +191,6 @@ def creating_session(subsession: Subsession):
         subsession.set_group_matrix([players_in_large_market_1, players_in_large_market_2, players_in_small_market])
         logger.info(subsession.get_group_matrix())
 
-
     p1 = players_in_large_market_1[0]
     p2 = players_in_large_market_2[0]
     p3 = players_in_small_market[0]
@@ -210,7 +211,7 @@ class CheckReemploy(Page):
     def is_displayed(player: Player):
         if player.round_number == player.session.config['shock_after_rounds'] + 1:
             return False
-        if player.participant.is_employer and player.round_number > 1:
+        if player.participant.vars.get('is_employer') and player.round_number > 1:
             return player.in_round(player.round_number - 1).num_workers_employed > 0
 
 
@@ -222,7 +223,7 @@ class Reemploy(Page):
     def is_displayed(player: Player):
         if player.round_number == player.session.config['shock_after_rounds'] + 1:
             return False
-        return player.participant.is_employer and player.reemploy == 1
+        return player.participant.vars.get('is_employer') and player.reemploy == 1
 
     @staticmethod
     def js_vars(player: Player):
@@ -489,7 +490,7 @@ class ResultsWaitPage(WaitPage):
         for p in players:
             p.participant.vars['round_number'] = p.round_number
             p.participant.vars['round_for_points'].append(p.participant.vars['currency_is_points'])
-            if p.participant.is_employer is True:
+            if p.participant.vars.get('is_employer'):
                 p.participant.vars['num_workers'].append(p.num_workers_employed)
 
                 # Check that everything works
@@ -608,7 +609,7 @@ class ResultsWaitPage(WaitPage):
         # Update the profits
         for p in players:
             p.participant.vars['round_for_points'].append(p.participant.vars['currency_is_points'])
-            if p.participant.is_employer is False:  # Worker profits
+            if not p.participant.vars.get('is_employer'):  # Worker profits
                 if p.is_employed:
                     p.effort_cost_points = session.config['effort_costs_points'][p.effort_choice]
                     p.effort_cost_tokens = session.config['effort_costs_points'][p.effort_choice] * session.config[
@@ -618,7 +619,7 @@ class ResultsWaitPage(WaitPage):
                 else:
                     p.payoff_tokens = 0
                     p.payoff_points = 0
-            elif p.participant.is_employer is True:  # Employer profits
+            elif p.participant.vars.get('is_employer'):  # Employer profits
                 p.payoff_tokens = p.effort_worth_tokens - p.total_wage_paid_tokens
                 p.payoff_points = p.effort_worth_points - p.total_wage_paid_points
 
@@ -627,7 +628,7 @@ class ResultsWaitPage(WaitPage):
 
         # Now update the profits of your employer (to show on the results page)
         for p in players:
-            if p.participant.is_employer is False:
+            if not p.participant.vars.get('is_employer'):
                 others = p.get_others_in_group()
                 try:
                     p.employer_payoff_points = [o.payoff_points for o in others if
@@ -639,21 +640,21 @@ class ResultsWaitPage(WaitPage):
                     p.employer_payoff_tokens = None
 
         group.average_payoff_firms_points = sum(
-            [p.payoff_points for p in players if p.participant.is_employer is True]) / sum(
-            [p.participant.is_employer is True for p in players]) if sum(
-            [p.participant.is_employer is True for p in players]) > 0 else 0
+            [p.payoff_points for p in players if p.participant.vars.get('is_employer')]) / sum(
+            [p.participant.vars.get('is_employer') for p in players]) if sum(
+            [p.participant.vars.get('is_employer') is True for p in players]) > 0 else 0
         group.average_payoff_firms_tokens = sum(
-            [p.payoff_tokens for p in players if p.participant.is_employer is True]) / sum(
-            [p.participant.is_employer is True for p in players]) if sum(
-            [p.participant.is_employer is True for p in players]) > 0 else 0
+            [p.payoff_tokens for p in players if p.participant.vars.get('is_employer') ]) / sum(
+            [p.participant.vars.get('is_employer') is True for p in players]) if sum(
+            [p.participant.vars.get('is_employer') is True for p in players]) > 0 else 0
         group.average_payoff_workers_points = sum(
-            [p.payoff_points for p in players if p.participant.is_employer is False]) / sum(
-            [p.participant.is_employer is False for p in players]) if sum(
-            [p.participant.is_employer is False for p in players]) > 0 else 0
+            [p.payoff_points for p in players if not p.participant.vars.get('is_employer') ]) / sum(
+            [p.participant.vars.get('is_employer') is False for p in players]) if sum(
+            [p.participant.vars.get('is_employer') is False for p in players]) > 0 else 0
         group.average_payoff_workers_tokens = sum(
-            [p.payoff_tokens for p in players if p.participant.is_employer is False]) / sum(
-            [p.participant.is_employer is False for p in players]) if sum(
-            [p.participant.is_employer is False for p in players]) > 0 else 0
+            [p.payoff_tokens for p in players if not p.participant.vars.get('is_employer') ]) / sum(
+            [p.participant.vars.get('is_employer') is False for p in players]) if sum(
+            [p.participant.vars.get('is_employer') is False for p in players]) > 0 else 0
 
 
 class Results(Page):
@@ -761,7 +762,7 @@ class Results(Page):
             round_number=round_number,
             rounds_left=rounds_left,
             part=part,
-            is_employer=player.participant.is_employer,
+            is_employer=player.participant.vars.get('is_employer'),
             is_employed=player.is_employed,
             num_workers=player.num_workers_employed,
             worker_counter=player.field_maybe_none('worker_counter'),
@@ -822,9 +823,10 @@ class AnotherInstruction(MidPage):
         name_low_effort = session.config['effort_names'][0]
         name_high_effort = session.config['effort_names'][1]
 
-        average_wage = sum([p.field_maybe_none('average_wage_points') or 0 for p in player.in_previous_rounds()]) / session.config.get(
+        average_wage = sum(
+            [p.field_maybe_none('average_wage_points') or 0 for p in player.in_previous_rounds()]) / session.config.get(
             'shock_after_rounds')
-        average_effort = (sum([p.average_effort for p in  player.in_previous_rounds()]) * 100) / session.config.get(
+        average_effort = (sum([p.average_effort for p in player.in_previous_rounds()]) * 100) / session.config.get(
             'shock_after_rounds')
         average_wage = 0 if average_wage is None else int(average_wage)
         average_effort = 0 if average_effort is None else int(average_effort)
@@ -885,12 +887,12 @@ class AnotherInstruction(MidPage):
         print('$' * 100)
         return res
 
-
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
         if (player.session.config.get('shock_after_rounds') + 1 == player.round_number and
                 player.participant.vars.get('skip_game')):
             player.skip_game = True
+
     @staticmethod
     def app_after_this_page(player, upcoming_apps):
 

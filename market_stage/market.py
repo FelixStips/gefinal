@@ -226,7 +226,7 @@ def live_method(player, data, Offer):
 
     # Check whether employer has two accepted offers and remove other offers
     for p in group.get_players():
-        if p.participant.is_employer is True and p.num_workers_employed >= 2:
+        if p.participant.vars.get('is_employer') is True and p.num_workers_employed >= 2:
             for o in Offer.filter(group=group, employer_id=p.participant.playerID):
                 if o.status == 'open':
                     o.status = 'cancelled'
