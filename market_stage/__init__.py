@@ -63,11 +63,11 @@ class Group(BaseGroup):
 
     @property
     def workers(self):
-        return [p for p in self.get_players() if not p.participant.is_employer]
+        return [p for p in self.get_players() if not p.participant.vars.get('is_employer', False)]
 
     @property
     def employers(self):
-        return [p for p in self.get_players() if p.participant.is_employer]
+        return [p for p in self.get_players() if p.participant.vars.get('is_employer', False)]
 
     @property
     def employers_in_group(self):
