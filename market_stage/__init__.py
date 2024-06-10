@@ -609,7 +609,19 @@ class ResultsWaitPage(WaitPage):
                         raise Exception('Error: wrong effort received')
                 else:
                     raise Exception('Error: employed', p.num_workers_employed, 'workers')
+
                 p.effort_worth_tokens = p.effort_worth_points * session.config['exchange_rate']
+
+
+        # Undo doubling of effort worth for the small market
+        for p in players:
+            if p.is_employer is True:
+                print('Re-correcting effort worth. Player', p.participant.playerID, 'round', p.round_number, 'points,', p.participant.vars['currency_is_points'])
+                if p.participant.currency_is_points is False and p.round_number <= session.config['shock_after_rounds']:
+                        print('Effort worth before:', p.effort_worth_tokens, 'points:', p.effort_worth_points)
+                        p.effort_worth_points = p.effort_worth_points / session.config['exchange_rate']
+                        p.effort_worth_tokens = p.effort_worth_tokens / session.config['exchange_rate']
+                        print('Effort worth after:', p.effort_worth_tokens, 'points:', p.effort_worth_points)
 
         # Update the profits
         for p in players:
@@ -755,7 +767,7 @@ class Results(Page):
         else:
             raise Exception('num_workers_employed is not 0, 1 or 2')
 
-        if player.participant.vars['currency_is_points'] is False:
+        if player.participant.vars['currency_is_points'] is False & player.round_number > session.config['shock_after_rounds']:
             worker1_effort_worth = round(worker1_effort_worth * session.config['exchange_rate'], 1)
             worker2_effort_worth = round(worker2_effort_worth * session.config['exchange_rate'], 1)
 
