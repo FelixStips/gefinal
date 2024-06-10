@@ -32,6 +32,15 @@ class Player(BasePlayer):
     email = models.StringField(label="""Please enter <b>your PayPal email address</b> below, so that we can transfer the money to your account.""",)
     feedback = models.StringField(label="""If you want to provide some feedback on the experiment, use the field below.""",)
 
+# FUNCTION
+def creating_session(subsession: Subsession):
+    for p in subsession.get_players():
+        p.is_employer = p.participant.vars.get('is_employer', False)
+        p.large_market = p.participant.vars.get('large_market', False)
+        p.small_market = p.participant.vars.get('small_market', False)
+        p.playerID = p.participant.vars['playerID']
+        p.string_role = p.participant.vars['string_role']
+
 
 # PAGES
 class PreResults(Page):
@@ -57,12 +66,6 @@ class PreResults(Page):
         else:
             player.total_euros = round(session.config['showup_fee'], 2)
 
-        player.large_market = player.participant.vars.get('large_market', False)
-        player.small_market = player.participant.vars.get('small_market', False)
-        player.is_employer = player.participant.vars.get('is_employer', False)
-        player.playerID = player.participant.vars['playerID']
-        player.string_role = player.participant.vars['string_role']
-
         print('We are planning to return payoff of', player.total_tokens, 'tokens,', player.total_points, 'points', 'and', player.total_euros, 'euros.')
 
 
@@ -73,7 +76,7 @@ class Results(Page):
     @staticmethod
     def vars_for_template(player: Player):
 
-        print('Player', player.participant.playerID, 'had total payoff of', player.participant.vars['total_points'], 'points and', player.participant.vars['total_tokens'], 'tokens.')
+        print('Player', player.playerID, 'had total payoff of', player.participant.vars['total_points'], 'points and', player.participant.vars['total_tokens'], 'tokens.')
         print('We will return payoff of', player.total_tokens, 'tokens,', player.total_points, 'points', 'and', player.total_euros, 'euros.')
 
         return dict(
