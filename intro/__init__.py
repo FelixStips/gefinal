@@ -42,6 +42,11 @@ class Player(BasePlayer):
     quiz3_worker2 = models.IntegerField(label="Worker 2 profit")
     quiz3_employer = models.IntegerField(label="Employer profit")
     quiz3_tries = models.IntegerField(initial=0)
+    quiz2_worker_tokens = models.IntegerField(label="Worker profit")
+    quiz2_employer_tokens = models.IntegerField(label="Employer profit")
+    quiz3_worker1_tokens = models.IntegerField(label="Worker 1 profit")
+    quiz3_worker2_tokens = models.IntegerField(label="Worker 2 profit")
+    quiz3_employer_tokens = models.IntegerField(label="Employer profit")
 
 
 # FUNCTIONS
@@ -185,10 +190,10 @@ class WorkerInstruction(Page):
                 'exchange_rate']
             low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
             high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
-            gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
-            gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
-            gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
-            gain_low_effort_2_workers = gain_low_effort_2_workers * session.config['exchange_rate']
+            gain_high_effort_1_worker = gain_high_effort_1_worker
+            gain_low_effort_1_worker = gain_low_effort_1_worker
+            gain_high_effort_2_workers = gain_high_effort_2_workers
+            gain_low_effort_2_workers = gain_low_effort_2_workers
             exchange_rate = exchange_rate * (1 / session.config['exchange_rate'])
             initial_points_tokens = initial_points_tokens * session.config['exchange_rate']
             max_wage = max_wage * session.config['exchange_rate']
@@ -284,10 +289,10 @@ class FirmInstruction(Page):
                 'exchange_rate']
             low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
             high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
-            gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
-            gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
-            gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
-            gain_low_effort_2_workers = gain_low_effort_2_workers * session.config['exchange_rate']
+            gain_high_effort_1_worker = gain_high_effort_1_worker
+            gain_low_effort_1_worker = gain_low_effort_1_worker
+            gain_high_effort_2_workers = gain_high_effort_2_workers
+            gain_low_effort_2_workers = gain_low_effort_2_workers
             exchange_rate = exchange_rate * (1 / session.config['exchange_rate'])
             initial_points_tokens = initial_points_tokens * session.config['exchange_rate']
             max_wage = max_wage * session.config['exchange_rate']
@@ -372,10 +377,10 @@ class quiz1(Page):
                 'exchange_rate']
             low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
             high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
-            gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
-            gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
-            gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
-            gain_low_effort_2_workers = gain_low_effort_2_workers * session.config['exchange_rate']
+            gain_high_effort_1_worker = gain_high_effort_1_worker
+            gain_low_effort_1_worker = gain_low_effort_1_worker
+            gain_high_effort_2_workers = gain_high_effort_2_workers
+            gain_low_effort_2_workers = gain_low_effort_2_workers
 
         total_gain_high_effort_2_workers = gain_high_effort_2_workers + gain_high_effort_2_workers
         total_gain_mix_effort_2_workers = gain_high_effort_2_workers + gain_low_effort_2_workers
@@ -417,7 +422,7 @@ class quiz1(Page):
 
 class quiz2(Page):
     form_model = 'player'
-    form_fields = ['quiz2_worker', 'quiz2_employer']
+    form_fields = ['quiz2_worker', 'quiz2_employer', 'quiz2_worker_tokens', 'quiz2_employer_tokens']
 
     @staticmethod
     def is_displayed(player: Player):
@@ -452,10 +457,10 @@ class quiz2(Page):
                 'exchange_rate']
             low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
             high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
-            gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
-            gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
-            gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
-            gain_low_effort_2_workers = gain_low_effort_2_workers * session.config['exchange_rate']
+            gain_high_effort_1_worker = gain_high_effort_1_worker
+            gain_low_effort_1_worker = gain_low_effort_1_worker
+            gain_high_effort_2_workers = gain_high_effort_2_workers
+            gain_low_effort_2_workers = gain_low_effort_2_workers
             q2_wage = q2_wage * session.config['exchange_rate']
 
         total_gain_high_effort_2_workers = gain_high_effort_2_workers + gain_high_effort_2_workers
@@ -484,6 +489,13 @@ class quiz2(Page):
         )
 
     @staticmethod
+    def get_form_fields(player):
+        if player.participant.currency_is_points:
+            return ['quiz2_worker', 'quiz2_employer']
+        else:
+            return ['quiz2_worker_tokens', 'quiz2_employer_tokens']
+
+    @staticmethod
     def error_message(player: Player, values):
         print('values', values)
         session = player.session
@@ -500,19 +512,26 @@ class quiz2(Page):
         if player.participant.currency_is_points is False:
             q2_wage = q2_wage * session.config['exchange_rate']
             effort_cost = effort_cost * session.config['exchange_rate']
-            effort_worth = effort_worth * session.config['exchange_rate']
+            effort_worth = effort_worth
 
         worker_profit = q2_wage - effort_cost
         employer_profit = effort_worth - q2_wage
 
-        if values['quiz2_worker'] != worker_profit or values['quiz2_employer'] != employer_profit:
-            player.quiz2_tries += 1
-            return 'Incorrect. Please try again.'
+        if player.participant.currency_is_points:
+            if values['quiz2_worker'] != worker_profit or values['quiz2_employer'] != employer_profit:
+                print('Correct answer: worker profit', worker_profit, 'employer profit', employer_profit)
+                player.quiz2_tries += 1
+                return 'Incorrect. Please try again.'
+        else:
+            if values['quiz2_worker_tokens'] != worker_profit or values['quiz2_employer_tokens'] != employer_profit:
+                print('Correct answer: worker profit', worker_profit, 'employer profit', employer_profit)
+                player.quiz2_tries += 1
+                return 'Incorrect. Please try again.'
 
 
 class quiz3(Page):
     form_model = 'player'
-    form_fields = ['quiz3_worker1', 'quiz3_worker2', 'quiz3_employer']
+    form_fields = ['quiz3_worker1', 'quiz3_worker2', 'quiz3_employer', 'quiz3_worker1_tokens', 'quiz3_worker2_tokens', 'quiz3_employer_tokens']
 
     @staticmethod
     def is_displayed(player: Player):
@@ -548,10 +567,10 @@ class quiz3(Page):
                 'exchange_rate']
             low_effort_points_tokens = low_effort_points_tokens * session.config['exchange_rate']
             high_effort_points_tokens = high_effort_points_tokens * session.config['exchange_rate']
-            gain_high_effort_1_worker = gain_high_effort_1_worker * session.config['exchange_rate']
-            gain_low_effort_1_worker = gain_low_effort_1_worker * session.config['exchange_rate']
-            gain_high_effort_2_workers = gain_high_effort_2_workers * session.config['exchange_rate']
-            gain_low_effort_2_workers = gain_low_effort_2_workers * session.config['exchange_rate']
+            gain_high_effort_1_worker = gain_high_effort_1_worker
+            gain_low_effort_1_worker = gain_low_effort_1_worker
+            gain_high_effort_2_workers = gain_high_effort_2_workers
+            gain_low_effort_2_workers = gain_low_effort_2_workers
             q3_wage_1 = q3_wage_1 * session.config['exchange_rate']
             q3_wage_2 = q3_wage_2 * session.config['exchange_rate']
 
@@ -582,6 +601,14 @@ class quiz3(Page):
         )
 
     @staticmethod
+    def get_form_fields(player):
+        if player.participant.currency_is_points:
+            return ['quiz3_worker1', 'quiz3_worker2', 'quiz3_employer']
+        else:
+            return ['quiz3_worker1_tokens', 'quiz3_worker2_tokens', 'quiz3_employer_tokens']
+
+
+    @staticmethod
     def error_message(player: Player, values):
         session = player.session
 
@@ -603,18 +630,23 @@ class quiz3(Page):
             q3_wage_2 = q3_wage_2 * session.config['exchange_rate']
             effort_cost_1 = effort_cost_1 * session.config['exchange_rate']
             effort_cost_2 = effort_cost_2 * session.config['exchange_rate']
-            effort_worth = effort_worth * session.config['exchange_rate']
+            effort_worth = effort_worth
 
         # Calculate profits
         worker1_profit = q3_wage_1 - effort_cost_1
         worker2_profit = q3_wage_2 - effort_cost_2
         employer_profit = effort_worth - q3_wage_1 - q3_wage_2
 
-        if values['quiz3_worker1'] != worker1_profit or values['quiz3_worker2'] != worker2_profit or values[
-            'quiz3_employer'] != employer_profit:
-            player.quiz3_tries += 1
-            print("Correct answer:", worker1_profit, worker2_profit, employer_profit)
-            return 'Incorrect. Please try again.'
+        if player.participant.currency_is_points:
+            if values['quiz3_worker1'] != worker1_profit or values['quiz3_worker2'] != worker2_profit or values['quiz3_employer'] != employer_profit:
+                player.quiz3_tries += 1
+                print("Correct answer:", worker1_profit, worker2_profit, employer_profit)
+                return 'Incorrect. Please try again.'
+        else:
+            if values['quiz3_worker1_tokens'] != worker1_profit or values['quiz3_worker2_tokens'] != worker2_profit or values['quiz3_employer_tokens'] != employer_profit:
+                player.quiz3_tries += 1
+                print("Correct answer:", worker1_profit, worker2_profit, employer_profit)
+                return 'Incorrect. Please try again.'
 
 
 class WaitToStart(WaitPage):

@@ -18,16 +18,23 @@ def quiz2_resp_gen(self):
     if player.participant.currency_is_points is False:
         q2_wage = q2_wage * session.config['exchange_rate']
         effort_cost = effort_cost * session.config['exchange_rate']
-        effort_worth = effort_worth * session.config['exchange_rate']
+        effort_worth = effort_worth
 
     worker_profit = q2_wage - effort_cost
     employer_profit = effort_worth - q2_wage
-    return dict(
-        quiz2_worker=worker_profit,
 
-        quiz2_employer=employer_profit,
-    )
+    if player.participant.currency_is_points:
+        return dict(
+            quiz2_worker=worker_profit,
 
+            quiz2_employer=employer_profit,
+        )
+    else:
+        return dict(
+            quiz2_worker_tokens=worker_profit,
+
+            quiz2_employer_tokens=employer_profit,
+        )
 
 def gen_resp_3(player):
     session = player.session
@@ -50,15 +57,21 @@ def gen_resp_3(player):
         q3_wage_2 = q3_wage_2 * session.config['exchange_rate']
         effort_cost_1 = effort_cost_1 * session.config['exchange_rate']
         effort_cost_2 = effort_cost_2 * session.config['exchange_rate']
-        effort_worth = effort_worth * session.config['exchange_rate']
+        effort_worth = effort_worth
 
     # Calculate profits
     worker1_profit = q3_wage_1 - effort_cost_1
     worker2_profit = q3_wage_2 - effort_cost_2
     employer_profit = effort_worth - q3_wage_1 - q3_wage_2
-    return dict(quiz3_worker1=worker1_profit,
-                quiz3_worker2=worker2_profit,
-                quiz3_employer=employer_profit)
+
+    if player.participant.currency_is_points:
+        return dict(quiz3_worker1=worker1_profit,
+                    quiz3_worker2=worker2_profit,
+                    quiz3_employer=employer_profit)
+    else:
+        return dict(quiz3_worker1_tokens=worker1_profit,
+                    quiz3_worker2_tokens=worker2_profit,
+                    quiz3_employer_tokens=employer_profit)
 
 
 class PlayerBot(Bot):
