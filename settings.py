@@ -18,7 +18,7 @@ SESSION_CONFIGS = [
         name='main',
         display_name="Main",
         app_sequence=[
-            # 'intro',
+            'intro',
             'market_stage',
             # 'questionnaire',
             # 'questionnaire2',
@@ -44,12 +44,12 @@ SESSION_CONFIGS = [
         effort_names=['Low', 'Normal'],  # Names of effort levels
         effort_costs_points=[10, 20],  # Effort costs for low and high effort, in points
         total_rounds=16,
-        shock_after_rounds=8,  # Number of rounds before migration shock
-        size_large_market=11,  # Number of players in each large market (note: large and small does not mean anything)
-        size_small_market=11,  # Number of players in small market
-        num_employers_large_market=3,  # Number of employers in large market
-        num_employers_small_market=3,  # Number of employers in small market
-        migration_large_shock_size=3,
+        shock_after_rounds=1,  # Number of rounds before migration shock
+        size_large_market=3,  # Number of players in each large market (note: large and small does not mean anything)
+        size_small_market=3,  # Number of players in small market
+        num_employers_large_market=1,  # Number of employers in large market
+        num_employers_small_market=1,  # Number of employers in small market
+        migration_large_shock_size=1,
         # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
         migration_small_shock_size=1,  # Number of migrants in small migration shock
         worker_example_wage=50,  # Wage in the worker example in points
