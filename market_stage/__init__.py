@@ -64,7 +64,7 @@ class Group(BaseGroup):
 
     @property
     def workers(self):
-        return [p for p in self.get_players() if not p.participant.vars.get('is_employer', False)]
+        return [p for p in self.get_players() if not p.is_employer]
 
     @property
     def employers(self):
@@ -114,6 +114,7 @@ class Offer(ExtraModel):
 
 
 class Player(BasePlayer):
+    is_employer = models.BooleanField()
     skip_game = models.BooleanField(initial=False)
     is_finished = models.BooleanField(initial=False)
     average_wage_points = models.FloatField()
@@ -164,6 +165,9 @@ class Player(BasePlayer):
 
 # FUNCTIONS
 def creating_session(subsession: Subsession):
+    for p in subsession.get_player():
+        p.is_employer = p.participant.vars.get('is_employer', False)
+
     players = subsession.get_players()
     shock_after_rounds = subsession.session.config['shock_after_rounds']
     assert shock_after_rounds <= C.NUM_ROUNDS, 'Shock after rounds cannot be larger than the number of rounds'

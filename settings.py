@@ -18,14 +18,14 @@ SESSION_CONFIGS = [
         name='main',
         display_name="Main",
         app_sequence=[
-            'intro',
+            # 'intro',
             'market_stage',
-            'questionnaire',
-            'questionnaire2',
-            'end',
+            # 'questionnaire',
+            # 'questionnaire2',
+            # 'end',
         ],
         use_browser_bots=False,
-        num_demo_participants=33,
+        num_demo_participants=9,
         final=True,  # Display instructions
 
         predicted_effort=[0, 0, 0, 0, 3, 8, 13, 18, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 71, 76],
@@ -47,9 +47,9 @@ SESSION_CONFIGS = [
         shock_after_rounds=8,  # Number of rounds before migration shock
         size_large_market=11,  # Number of players in each large market (note: large and small does not mean anything)
         size_small_market=11,  # Number of players in small market
-        num_employers_large_market=5,  # Number of employers in large market
-        num_employers_small_market=5,  # Number of employers in small market
-        migration_large_shock_size=5,
+        num_employers_large_market=3,  # Number of employers in large market
+        num_employers_small_market=3,  # Number of employers in small market
+        migration_large_shock_size=3,
         # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
         migration_small_shock_size=1,  # Number of migrants in small migration shock
         worker_example_wage=50,  # Wage in the worker example in points

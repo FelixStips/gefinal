@@ -19,8 +19,12 @@ class Subsession(BaseSubsession):
 class Group(BaseGroup):
     pass
 
+def creating_session(subsession: Subsession):
+    for p in subsession.get_player():
+        p.is_employer = p.participant.vars.get('is_employer', False)
 
 class Player(BasePlayer):
+    is_employer = models.BooleanField()
     large_market = models.BooleanField()
     small_market = models.BooleanField()
     is_employer = models.BooleanField()
