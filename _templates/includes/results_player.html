@@ -4,7 +4,7 @@
 
 
     {% if player.participant.currency_is_points %}
-        {% if is_employer  %}
+        {% if player.is_employer  %}
             {% if num_workers == 0 %}
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
                 You did not employ any workers this round. You made a profit of <b>{{ player.payoff_points }}</b> points this round.
@@ -54,12 +54,12 @@
 
             {% endif %}
         {% else %}
-            {% if is_employed  %}
+            {% if player.is_employed  %}
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
                 You were employed this round:
                 <ul style="margin-top: -5px;">
                     <li>
-                        You received a wage of <b>{{ wage_received_points }}</b> points and provided <b>{{ effort_choice }}</b> effort.
+                        You received a wage of <b>{{ player.wage_received_points }}</b> points and provided <b>{{ effort_choice }}</b> effort.
                     </li>
                     <li>
                         You made a profit of <b>{{ player.payoff_points }}</b> points this round.
@@ -77,7 +77,7 @@
         {% endif %}
 
     {% else %}
-        {% if is_employer  %}
+        {% if player.is_employer  %}
             {% if num_workers == 0 %}
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
                 You did not employ any workers this round. You made a profit of <b>{{ player.payoff_tokens }}</b> tokens this round.
@@ -120,12 +120,12 @@
                 </p>
             {% endif %}
         {% else %}
-            {% if is_employed  %}
+            {% if player.is_employed  %}
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
                 You were employed this round:
                 <ul style="margin-top: -5px;">
                     <li>
-                        You received a wage of <b>{{ wage_received_tokens }}</b> tokens and provided <b>{{ effort_choice }}</b> effort.
+                        You received a wage of <b>{{ player.wage_received_tokens }}</b> tokens and provided <b>{{ effort_choice }}</b> effort.
                     </li>
                     <li>
                         You made a profit of <b>{{ player.payoff_tokens }}</b> tokens this round.
