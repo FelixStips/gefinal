@@ -26,12 +26,12 @@ SESSION_CONFIGS = [
         ],
         use_browser_bots=False,
         num_demo_participants=9,
-        final=True,  # Display instructions
+        final=False,  # Display instructions
 
         predicted_effort=[0, 0, 0, 0, 3, 8, 13, 18, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 71, 76],
         # Predicted effort in part 2
 
-        market_timeout_seconds=120,  # Duration of market stage in seconds
+        market_timeout_seconds=1,  # Duration of market stage in seconds
         countdown_seconds=3,  # Duration of countdown in seconds
         showup_fee=12.0,  # Participation show-up fee
         payout_rate=0.01,  # Payout rate: 1 point = X Pounds

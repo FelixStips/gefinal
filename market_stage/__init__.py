@@ -122,8 +122,58 @@ class Player(BasePlayer):
     average_effort = models.FloatField()
 
     @property
+    def effort_description(self):
+        name_high_effort = session.config['effort_names'][1]
+        name_low_effort = session.config['effort_names'][0]
+
+        p.participant.vars['worker1_effort_given'].append(o.effort_given)
+        p.participant.vars['worker1_effort'].append(o.effort)
+
+    @property
+    def get_accepted_offers(self):
+        return Offer.filter(group=self.group, employer_id=self.participant.playerID, status='accepted')
+
+    @property
+    def get_workers(self):
+        if self.num_workers_employed == 0:
+            return []
+        else:
+            workers_ids = [o.worker_id for o in self.get_accepted_offers]
+            return [p for p in self.group.get_players() if p.participant.playerID in workers_ids]
+
+    def get_worker_offer(self):
+        """
+        For employed workers, get the offer they accepted
+        :return: Offer
+        """
+        if self.is_employed:
+            return Offer.filter(group=self.group,
+                                worker_id=self.participant.playerID,
+                                status='accepted')[0]
+
+    def get_worker_params(self):
+        """
+        For employed workers, get the parameters of the offer they accepted
+        :return: dict
+        """
+        offer = self.get_worker_offer()
+        if not offer:
+            return {}
+        profit_points = offer.wage_points - self.session.config['effort_costs_points'][offer.effort_given]
+        profit_tokens = offer.wage_tokens - self.session.config['effort_costs_points'][offer.effort_given] * \
+                        self.session.config['exchange_rate']
+        return {
+            'wage_points': offer.wage_points,
+            'wage_tokens': offer.wage_tokens,
+            'effort_given': offer.effort_given,
+            'id': offer.worker_id,
+            'profit_points': profit_points,
+            'profit_tokens': profit_tokens,
+        }
+
+    @property
     def num_workers_employed(self):
-        return len(Offer.filter(group=self.group, employer_id=self.participant.playerID, status='accepted'))
+        return len(self.get_accepted_offers)
 
     @property
     def total_wage_paid_tokens(self):
@@ -165,7 +215,6 @@ class Player(BasePlayer):
 
 # FUNCTIONS
 def creating_session(subsession: Subsession):
-
     players = subsession.get_players()
     for p in players:
         p.is_employer = p.participant.vars.get('is_employer', False)
@@ -612,16 +661,16 @@ class ResultsWaitPage(WaitPage):
 
                 p.effort_worth_tokens = p.effort_worth_points * session.config['exchange_rate']
 
-
         # Undo doubling of effort worth for the small market
         for p in players:
             if p.is_employer is True:
-                print('Re-correcting effort worth. Player', p.participant.playerID, 'round', p.round_number, 'points,', p.participant.vars['currency_is_points'])
+                print('Re-correcting effort worth. Player', p.participant.playerID, 'round', p.round_number, 'points,',
+                      p.participant.vars['currency_is_points'])
                 if p.participant.currency_is_points is False and p.round_number <= session.config['shock_after_rounds']:
-                        print('Effort worth before:', p.effort_worth_tokens, 'points:', p.effort_worth_points)
-                        p.effort_worth_points = p.effort_worth_points / session.config['exchange_rate']
-                        p.effort_worth_tokens = p.effort_worth_tokens / session.config['exchange_rate']
-                        print('Effort worth after:', p.effort_worth_tokens, 'points:', p.effort_worth_points)
+                    print('Effort worth before:', p.effort_worth_tokens, 'points:', p.effort_worth_points)
+                    p.effort_worth_points = p.effort_worth_points / session.config['exchange_rate']
+                    p.effort_worth_tokens = p.effort_worth_tokens / session.config['exchange_rate']
+                    print('Effort worth after:', p.effort_worth_tokens, 'points:', p.effort_worth_points)
 
         # Update the profits
         for p in players:
@@ -661,15 +710,15 @@ class ResultsWaitPage(WaitPage):
             [p.is_employer for p in players]) if sum(
             [p.is_employer is True for p in players]) > 0 else 0
         group.average_payoff_firms_tokens = sum(
-            [p.payoff_tokens for p in players if p.is_employer ]) / sum(
+            [p.payoff_tokens for p in players if p.is_employer]) / sum(
             [p.is_employer is True for p in players]) if sum(
             [p.is_employer is True for p in players]) > 0 else 0
         group.average_payoff_workers_points = sum(
-            [p.payoff_points for p in players if not p.is_employer ]) / sum(
+            [p.payoff_points for p in players if not p.is_employer]) / sum(
             [p.is_employer is False for p in players]) if sum(
             [p.is_employer is False for p in players]) > 0 else 0
         group.average_payoff_workers_tokens = sum(
-            [p.payoff_tokens for p in players if not p.is_employer ]) / sum(
+            [p.payoff_tokens for p in players if not p.is_employer]) / sum(
             [p.is_employer is False for p in players]) if sum(
             [p.is_employer is False for p in players]) > 0 else 0
 
@@ -677,11 +726,29 @@ class ResultsWaitPage(WaitPage):
 class Results(Page):
     form_model = 'player'
     timeout_seconds = 60
-
+    @property
+    def part(self):
+        if self.round_number <= self.session.config['shock_after_rounds']:
+            part = 1
+        else:
+            part = 2
+        return part
+    @property
+    def rounds_left(self):
+        if self.part == 1:
+            return self.session.config['shock_after_rounds'] - self.round_number
+        else:
+            return C.NUM_ROUNDS - self.round_number
     @staticmethod
     def vars_for_template(player: Player):
         group = player.group
         session = player.session
+        # if player.is_employer:
+        #     pass
+        #     return
+        # else:
+        #     pass
+        #     return
 
         name_high_effort = session.config['effort_names'][1]
         name_low_effort = session.config['effort_names'][0]
@@ -710,7 +777,7 @@ class Results(Page):
         average_income_tokens = round(group.average_payoff_workers_tokens,
                                       1) if group.average_payoff_workers_tokens is not None else None
 
-        if player.participant.vars['currency_is_points'] is True:
+        if player.participant.vars['currency_is_points']:
             effort_worth = player.field_maybe_none('effort_worth_points')
         else:
             effort_worth = player.field_maybe_none('effort_worth_tokens')
@@ -767,7 +834,8 @@ class Results(Page):
         else:
             raise Exception('num_workers_employed is not 0, 1 or 2')
 
-        if player.participant.vars['currency_is_points'] is False & player.round_number > session.config['shock_after_rounds']:
+        if player.participant.vars['currency_is_points'] is False & player.round_number > session.config[
+            'shock_after_rounds']:
             worker1_effort_worth = round(worker1_effort_worth * session.config['exchange_rate'], 1)
             worker2_effort_worth = round(worker2_effort_worth * session.config['exchange_rate'], 1)
 
@@ -776,9 +844,6 @@ class Results(Page):
             worker2_effort_worth=worker2_effort_worth,
             name_low_effort=name_low_effort,
             name_high_effort=name_high_effort,
-            round_number=round_number,
-            rounds_left=rounds_left,
-            part=part,
             is_employer=player.is_employer,
             is_employed=player.is_employed,
             num_workers=player.num_workers_employed,

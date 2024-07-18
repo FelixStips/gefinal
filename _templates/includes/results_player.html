@@ -3,8 +3,8 @@
         <h6 class="card-subtitle mb-2 text-muted">Your Results</h6>
 
 
-    {% if player.participant.currency_is_points == True %}
-        {% if is_employer == True %}
+    {% if player.participant.currency_is_points %}
+        {% if is_employer  %}
             {% if num_workers == 0 %}
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
                 You did not employ any workers this round. You made a profit of <b>{{ player.payoff_points }}</b> points this round.
@@ -54,7 +54,7 @@
 
             {% endif %}
         {% else %}
-            {% if is_employed == True %}
+            {% if is_employed  %}
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
                 You were employed this round:
                 <ul style="margin-top: -5px;">
@@ -77,7 +77,7 @@
         {% endif %}
 
     {% else %}
-        {% if is_employer == True %}
+        {% if is_employer  %}
             {% if num_workers == 0 %}
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
                 You did not employ any workers this round. You made a profit of <b>{{ player.payoff_tokens }}</b> tokens this round.
@@ -120,7 +120,7 @@
                 </p>
             {% endif %}
         {% else %}
-            {% if is_employed == True %}
+            {% if is_employed  %}
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
                 You were employed this round:
                 <ul style="margin-top: -5px;">
