@@ -5,17 +5,17 @@
 
     {% if player.participant.currency_is_points %}
         {% if player.is_employer  %}
-            {% if num_workers == 0 %}
+            {% if player.num_workers_employed == 0 %}
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
                 You did not employ any workers this round. You made a profit of <b>{{ player.payoff_points }}</b> points this round.
             </p>
 
-            {% elif num_workers == 1 %}
+            {% elif player.num_workers_employed == 1 %}
             <p style="margin-bottom:0.3cm; margin-top:0.3cm">
                 You made a profit of <b>{{ player.payoff_points }}</b> points in this round.
             </p>
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
-                You concluded <b>{{ num_workers }}</b> work contract:
+                You concluded <b>{{ player.num_workers_employed }}</b> work contract:
                 <ul style="margin-top: -2px;">
                     <li>
                         You paid a wage of <b>{{ worker1_wage_points }}</b> points and expected {{ worker1_effort }} effort.
@@ -32,7 +32,7 @@
                 You made a profit of <b>{{ player.payoff_points }}</b> points in this round.
             </p>
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
-                You concluded <b>{{ num_workers }}</b> work contracts:
+                You concluded <b>{{ player.num_workers_employed }}</b> work contracts:
                 <ul style="margin-top: -2px;">
                     <li>
                         You paid a wage of <b>{{ worker1_wage_points }}</b> points and expected {{ worker1_effort }} effort.
@@ -65,7 +65,7 @@
                         You made a profit of <b>{{ player.payoff_points }}</b> points this round.
                     </li>
                     <li>
-                        Your employer made a profit of <b>{{ employer_payoff_points }}</b> points this round.
+                        Your employer made a profit of <b>{{ player.employer_payoff_points }}</b> points this round.
                     </li>
                 </ul>
              </p>
@@ -78,17 +78,17 @@
 
     {% else %}
         {% if player.is_employer  %}
-            {% if num_workers == 0 %}
+            {% if player.num_workers_employed == 0 %}
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
                 You did not employ any workers this round. You made a profit of <b>{{ player.payoff_tokens }}</b> tokens this round.
             </p>
 
-            {% elif num_workers == 1 %}
+            {% elif player.num_workers_employed == 1 %}
             <p style="margin-bottom:0.3cm; margin-top:0.3cm">
                 You made a profit of <b>{{ player.payoff_tokens }}</b> tokens in this round.
             </p>
             <p style="margin-bottom:0.3cm; margin-top: 0.3cm">
-                You concluded <b>{{ num_workers }}</b> work contract:
+                You concluded <b>{{ player.num_workers_employed }}</b> work contract:
                 <ul style="margin-top: -2px;">
                     <li>
                         You paid a wage of <b>{{ worker1_wage_tokens }}</b> tokens and expected {{ worker1_effort }} effort.<br>
@@ -103,7 +103,7 @@
             <p style="margin-bottom:0.3cm; margin-top:0.3cm">
                 You made a profit of <b>{{ player.payoff_tokens }}</b> tokens in this round.
             </p>
-                You concluded <b>{{ num_workers }}</b> work contracts:
+                You concluded <b>{{ player.num_workers_employed }}</b> work contracts:
                 <ul style="margin-top: -2px;">
                    <li>
                        You paid a wage of <b>{{ worker1_wage_tokens }}</b> tokens and expected {{ worker1_effort }} effort.
@@ -131,7 +131,7 @@
                         You made a profit of <b>{{ player.payoff_tokens }}</b> tokens this round.
                     </li>
                     <li>
-                        Your employer made a profit of <b>{{ employer_payoff_tokens }}</b> tokens this round.
+                        Your employer made a profit of <b>{{ player.employer_payoff_tokens }}</b> tokens this round.
                     </li>
                 </ul>
              </p>

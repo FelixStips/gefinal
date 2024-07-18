@@ -20,7 +20,7 @@ SESSION_CONFIGS = [
         app_sequence=[
             'intro',
             'market_stage',
-            # 'questionnaire',
+            'questionnaire',
             # 'questionnaire2',
             # 'end',
         ],
