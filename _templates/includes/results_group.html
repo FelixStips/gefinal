@@ -10,7 +10,7 @@
     <tr>
       <td style="padding-left: 25px;">Average wage</td>
       <td>
-        {% if player.participant.currency_is_points == True %}
+        {% if participant.currency_is_points  %}
             {{ average_wage_points }}
         {% else %}
             {{ average_wage_tokens }}
@@ -24,7 +24,7 @@
     <tr>
       <td style="padding-left: 25px;">Average firm profit</td>
       <td>
-        {% if player.participant.currency_is_points == True %}
+        {% if participant.currency_is_points  %}
             {{ average_profit_points }}
         {% else %}
             {{ average_profit_tokens }}
@@ -34,7 +34,7 @@
     <tr>
       <td style="padding-left: 25px;">Average worker profit</td>
       <td>
-        {% if player.participant.currency_is_points == True %}
+        {% if participant.currency_is_points  %}
             {{ average_income_points }}
         {% else %}
             {{ average_income_tokens }}
