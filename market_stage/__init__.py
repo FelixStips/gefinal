@@ -291,62 +291,52 @@ class Reemploy(Page):
             max_wage = session.config['max_wage']
         else:
             max_wage = session.config['max_wage'] * session.config['exchange_rate']
-
+        worker_dict = Reemploy.get_worker_data(player)
         return dict(
+            **worker_dict,
             my_id=player.participant.vars['playerID'],
-            worker_id_1=player.participant.vars['worker1_id'][player.round_number - 2],
-            worker_id_2=player.participant.vars['worker2_id'][player.round_number - 2],
             currency_is_points=player.participant.vars['currency_is_points'],
             max_wage=max_wage,
         )
+    @staticmethod
+    def get_worker_data(player):
+        prev_player = player.in_round(player.round_number - 1)
+        workers = prev_player.get_workers()
+        worker_dict = dict()
+        for i,j in enumerate(workers, start=1):
+            params = j.get_worker_params()
+            if player.participant.currency_is_points:
+                worker_dict[f'wage_{i}'] = params.get('wage_points')
+            else:
+                worker_dict[f'wage_{i}'] = j.get('wage_tokens')
+            worker_dict[f'effort_given_{i}_string'] = params.get('effort_given_description')
+            worker_dict[f'worker_id_{i}'] = j.participant.playerID
+        return worker_dict
 
     @staticmethod
     def vars_for_template(player: Player):
         session = player.session
-
-        num_workers = player.participant.vars['num_workers'][player.round_number - 2]
-        if num_workers == 1:
-            effort_given_1 = player.participant.vars['worker1_effort_given'][player.round_number - 2]
-            effort_given_1_string = session.config['effort_names'][effort_given_1]
-            effort_given_2 = 999
-            effort_given_2_string = ''
-            if player.participant.currency_is_points:
-                max_wage = session.config['max_wage']
-                wage_1 = player.participant.vars['worker1_wage_points'][player.round_number - 2]
-                wage_2 = 999
-            else:
-                max_wage = session.config['max_wage'] * session.config['exchange_rate']
-                wage_1 = player.participant.vars['worker1_wage_tokens'][player.round_number - 2]
-                wage_2 = 999
-        if num_workers == 2:
-            effort_given_1 = player.participant.vars['worker1_effort_given'][player.round_number - 2]
-            effort_given_1_string = session.config['effort_names'][effort_given_1]
-            effort_given_2 = player.participant.vars['worker2_effort_given'][player.round_number - 2]
-            effort_given_2_string = session.config['effort_names'][effort_given_2]
-            if player.participant.currency_is_points:
-                max_wage = session.config['max_wage']
-                wage_1 = player.participant.vars['worker1_wage_points'][player.round_number - 2]
-                wage_2 = player.participant.vars['worker2_wage_points'][player.round_number - 2]
-            else:
-                max_wage = session.config['max_wage'] * session.config['exchange_rate']
-                wage_1 = player.participant.vars['worker1_wage_tokens'][player.round_number - 2]
-                wage_2 = player.participant.vars['worker2_wage_tokens'][player.round_number - 2]
-
+        prev_player = player.in_round(player.round_number - 1)
+        workers = prev_player.get_workers()
+        num_workers = len(workers)
         name_low_effort = session.config['effort_names'][0]
         name_high_effort = session.config['effort_names'][1]
-        currency_plural = "points" if player.participant.currency_is_points else "tokens"
 
+        if player.participant.currency_is_points:
+            currency_plural = "points"
+            max_wage = session.config['max_wage']
+        else:
+            currency_plural = "tokens"
+            max_wage = session.config['max_wage'] * session.config['exchange_rate']
+        worker_dict = Reemploy.get_worker_data(player)
         return dict(
-            currency_plural=currency_plural,
-            max_wage=int(max_wage),
-            wage_1=int(wage_1),
-            wage_2=int(wage_2),
-            effort_given_1_string=effort_given_1_string,
-            effort_given_2_string=effort_given_2_string,
+            **worker_dict,
             num_workers=num_workers,
             name_low_effort=name_low_effort,
             name_high_effort=name_high_effort,
             playerID=player.participant.vars['playerID'],
+            currency_plural=currency_plural,
+            max_wage=int(max_wage),
         )
 
     @staticmethod
@@ -566,78 +556,16 @@ class ResultsWaitPage(WaitPage):
                         'Number of employed workers is not 1 or 2' + str(p.num_workers_employed) + ' ' + str(
                             len(matching_offers)) + ' ' + str(p.participant.playerID))
 
-                if p.num_workers_employed == 0:
-                    for i in range(1, 3):
-                        for variable_suffix in ['wage_points', 'wage_tokens', 'effort_given', 'effort', 'id',
-                                                'profit_points', 'profit_tokens']:
-                            p.participant.vars[f'worker{i}_{variable_suffix}'].append('NA')
+
 
                 elif p.num_workers_employed == 1:
-                    p.participant.vars['worker2_wage_points'].append('NA')
-                    p.participant.vars['worker2_wage_tokens'].append('NA')
-                    p.participant.vars['worker2_effort_given'].append('NA')
-                    p.participant.vars['worker2_effort'].append('NA')
-                    p.participant.vars['worker2_id'].append('NA')
-                    p.participant.vars['worker2_profit_points'].append('NA')
-                    p.participant.vars['worker2_profit_tokens'].append('NA')
                     for o in matching_offers:
-                        p.participant.vars['worker1_wage_points'].append(o.wage_points)
-                        p.participant.vars['worker1_wage_tokens'].append(o.wage_tokens)
-                        p.participant.vars['worker1_effort_given'].append(o.effort_given)
-                        p.participant.vars['worker1_effort'].append(o.effort)
-                        p.participant.vars['worker1_id'].append(o.worker_id)
-                        worker1_profit_points = o.wage_points - session.config['effort_costs_points'][o.effort_given]
-                        worker1_profit_tokens = o.wage_tokens - session.config['effort_costs_points'][o.effort_given] * \
-                                                session.config['exchange_rate']
-                        p.participant.vars['worker1_profit_points'].append(worker1_profit_points)
-                        p.participant.vars['worker1_profit_tokens'].append(worker1_profit_tokens)
                         p.total_effort_received += o.effort_given
                 elif p.num_workers_employed == 2:
                     p.worker_counter = 0
                     for o in matching_offers:
                         p.total_effort_received += o.effort_given
                         p.worker_counter += 1
-                        if p.worker_counter == 1:
-                            p.participant.vars['worker1_wage_points'].append(o.wage_points)
-                            p.participant.vars['worker1_wage_tokens'].append(o.wage_tokens)
-                            p.participant.vars['worker1_effort_given'].append(o.effort_given)
-                            p.participant.vars['worker1_effort'].append(o.effort)
-                            p.participant.vars['worker1_id'].append(o.worker_id)
-                            worker1_profit_points = o.wage_points - session.config['effort_costs_points'][
-                                o.effort_given]
-                            worker1_profit_tokens = o.wage_tokens - session.config['effort_costs_points'][
-                                o.effort_given] * session.config['exchange_rate']
-                            p.participant.vars['worker1_profit_points'].append(worker1_profit_points)
-                            p.participant.vars['worker1_profit_tokens'].append(worker1_profit_tokens)
-                        elif p.worker_counter == 2:
-                            p.participant.vars['worker2_wage_points'].append(o.wage_points)
-                            p.participant.vars['worker2_wage_tokens'].append(o.wage_tokens)
-                            p.participant.vars['worker2_effort_given'].append(o.effort_given)
-                            p.participant.vars['worker2_effort'].append(o.effort)
-                            p.participant.vars['worker2_id'].append(o.worker_id)
-                            worker2_profit_points = o.wage_points - session.config['effort_costs_points'][
-                                o.effort_given]
-                            worker2_profit_tokens = o.wage_tokens - session.config['effort_costs_points'][
-                                o.effort_given] * session.config['exchange_rate']
-                            p.participant.vars['worker2_profit_points'].append(worker2_profit_points)
-                            p.participant.vars['worker2_profit_tokens'].append(worker2_profit_tokens)
-
-            else:  # Workers
-                p.participant.vars['num_workers'].append('NA')
-                p.participant.vars['worker1_wage_points'].append('NA')
-                p.participant.vars['worker1_wage_tokens'].append('NA')
-                p.participant.vars['worker1_effort_given'].append('NA')
-                p.participant.vars['worker1_effort'].append('NA')
-                p.participant.vars['worker1_id'].append('NA')
-                p.participant.vars['worker1_profit_points'].append('NA')
-                p.participant.vars['worker1_profit_tokens'].append('NA')
-                p.participant.vars['worker2_wage_points'].append('NA')
-                p.participant.vars['worker2_wage_tokens'].append('NA')
-                p.participant.vars['worker2_effort_given'].append('NA')
-                p.participant.vars['worker2_effort'].append('NA')
-                p.participant.vars['worker2_id'].append('NA')
-                p.participant.vars['worker2_profit_points'].append('NA')
-                p.participant.vars['worker2_profit_tokens'].append('NA')
 
         # Get the total effort received (Note: I already have total wage from market page)
         for p in players:
