@@ -13,6 +13,8 @@ ROOMS = [
     ),
 ]
 
+# git add .; git commit -m 'whatever'; git push origin main
+
 SESSION_CONFIGS = [
     dict(
         name='main',
@@ -25,7 +27,7 @@ SESSION_CONFIGS = [
             # 'end',
         ],
         use_browser_bots=False,
-        num_demo_participants=9,
+        num_demo_participants=33,
         final=False,  # Display instructions
 
         predicted_effort=[0, 0, 0, 0, 3, 8, 13, 18, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 71, 76],
