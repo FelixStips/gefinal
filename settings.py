@@ -31,7 +31,7 @@ SESSION_CONFIGS = [
         predicted_effort=[0, 0, 0, 0, 3, 8, 13, 18, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 71, 76],
         # Predicted effort in part 2
 
-        market_timeout_seconds=1,  # Duration of market stage in seconds
+        market_timeout_seconds=150,  # Duration of market stage in seconds
         countdown_seconds=3,  # Duration of countdown in seconds
         showup_fee=12.0,  # Participation show-up fee
         payout_rate=0.01,  # Payout rate: 1 point = X Pounds
@@ -45,11 +45,11 @@ SESSION_CONFIGS = [
         effort_costs_points=[10, 20],  # Effort costs for low and high effort, in points
         total_rounds=16,
         shock_after_rounds=1,  # Number of rounds before migration shock
-        size_large_market=3,  # Number of players in each large market (note: large and small does not mean anything)
-        size_small_market=3,  # Number of players in small market
-        num_employers_large_market=1,  # Number of employers in large market
-        num_employers_small_market=1,  # Number of employers in small market
-        migration_large_shock_size=1,
+        size_large_market=11,  # Number of players in each large market (note: large and small does not mean anything)
+        size_small_market=11,  # Number of players in small market
+        num_employers_large_market=5,  # Number of employers in large market
+        num_employers_small_market=5,  # Number of employers in small market
+        migration_large_shock_size=5,
         # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
         migration_small_shock_size=1,  # Number of migrants in small migration shock
         worker_example_wage=50,  # Wage in the worker example in points
