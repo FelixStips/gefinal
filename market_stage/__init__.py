@@ -308,7 +308,7 @@ class Reemploy(Page):
             if player.participant.currency_is_points:
                 worker_dict[f'wage_{i}'] = params.get('wage_points')
             else:
-                worker_dict[f'wage_{i}'] = j.get('wage_tokens')
+                worker_dict[f'wage_{i}'] = params.get('wage_tokens')
             worker_dict[f'effort_given_{i}_string'] = params.get('effort_given_description')
             worker_dict[f'worker_id_{i}'] = j.participant.playerID
         return worker_dict
