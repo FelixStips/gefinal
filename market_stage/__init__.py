@@ -188,7 +188,6 @@ class Player(BasePlayer):
     effort_cost_points = models.FloatField()  # Effort cost equivalent to the effort level in points
     effort_cost_tokens = models.FloatField()  # Effort cost equivalent to the effort level in tokens
     effort_worth_points = models.FloatField()  # Effort worth of the firm (in points)
-    effort_worth_tokens = models.FloatField()  # Effort worth of the firm (in tokens)
     payoff_points = models.FloatField(initial=0)  # Payoff of the firm (in points)
     payoff_tokens = models.FloatField(initial=0)  # Payoff of the firm (in tokens)
     is_employed = models.BooleanField(initial=False)  # Boolean for whether the worker is employed
@@ -275,7 +274,7 @@ class CheckReemploy(Page):
 
 
 class Reemploy(Page):
-    timeout_seconds = 120
+    timeout_seconds = 90
     form_model = 'player'
 
     @staticmethod
@@ -592,19 +591,6 @@ class ResultsWaitPage(WaitPage):
                 else:
                     raise Exception('Error: employed', p.num_workers_employed, 'workers')
 
-                p.effort_worth_tokens = p.effort_worth_points * session.config['exchange_rate']
-
-        # Undo doubling of effort worth for the small market
-        for p in players:
-            if p.is_employer is True:
-                print('Re-correcting effort worth. Player', p.participant.playerID, 'round', p.round_number, 'points,',
-                      p.participant.vars['currency_is_points'])
-                if p.participant.currency_is_points is False and p.round_number <= session.config['shock_after_rounds']:
-                    print('Effort worth before:', p.effort_worth_tokens, 'points:', p.effort_worth_points)
-                    p.effort_worth_points = p.effort_worth_points / session.config['exchange_rate']
-                    p.effort_worth_tokens = p.effort_worth_tokens / session.config['exchange_rate']
-                    print('Effort worth after:', p.effort_worth_tokens, 'points:', p.effort_worth_points)
-
         # Update the profits
         for p in players:
             p.participant.vars['round_for_points'].append(p.participant.vars['currency_is_points'])
@@ -619,7 +605,7 @@ class ResultsWaitPage(WaitPage):
                     p.payoff_tokens = 0
                     p.payoff_points = 0
             elif p.is_employer:  # Employer profits
-                p.payoff_tokens = p.effort_worth_tokens - p.total_wage_paid_tokens
+                p.payoff_tokens = p.effort_worth_points - p.total_wage_paid_tokens
                 p.payoff_points = p.effort_worth_points - p.total_wage_paid_points
 
             p.participant.vars['total_points'].append(p.payoff_points)
