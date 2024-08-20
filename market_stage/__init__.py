@@ -646,14 +646,16 @@ class ResultsWaitPage(WaitPage):
             [p.payoff_tokens for p in players if p.is_employer]) / sum(
             [p.is_employer is True for p in players]) if sum(
             [p.is_employer is True for p in players]) > 0 else 0
-        group.average_payoff_workers_points = sum(
-            [p.payoff_points for p in players if not p.is_employer]) / sum(
-            [p.is_employer is False for p in players]) if sum(
-            [p.is_employer is False for p in players]) > 0 else 0
-        group.average_payoff_workers_tokens = sum(
-            [p.payoff_tokens for p in players if not p.is_employer]) / sum(
-            [p.is_employer is False for p in players]) if sum(
-            [p.is_employer is False for p in players]) > 0 else 0
+        workers = group.workers
+        if len(workers) == 0:
+            group.average_payoff_workers_points = 0
+            group.average_payoff_workers_tokens = 0
+        else:
+            group.average_payoff_workers_points = sum(
+                [p.payoff_points for p in workers]) / len(workers)
+            group.average_payoff_workers_tokens = sum(
+                [p.payoff_tokens for p in workers]) / len(workers)
+
 
 
 class Results(Page):
@@ -707,9 +709,9 @@ class Results(Page):
             for i, j in enumerate(workers, start=1):
                 temp_res = j.get_worker_params()
                 if j.effort_choice == 0:
-                    costs = session.config['MPL_high']
-                else:
                     costs = session.config['MPL_low']
+                else:
+                    costs = session.config['MPL_high']
                 temp_res['effort_worth'] = costs[num_workers - 1]
 
                 # lets change all the keys in dict adding 'worker<i>_'
