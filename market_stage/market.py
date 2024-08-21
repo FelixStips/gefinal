@@ -132,8 +132,7 @@ def handle_accept(player, data, Offer, group, current_datetime):
             if p.participant.playerID == data['employer_id']:
                 if p.num_workers_employed >= 2:
                     p.is_finished = True
-
-                p.matched_with_id = data['worker_id']
+               # p.matched_with_id = data['worker_id']
                 p.offer1 = 'accepted' if data['job_number'] == 1 else p.offer1
                 p.offer2 = 'accepted' if data['job_number'] == 2 else p.offer2
                 p.offer3 = 'accepted' if data['job_number'] == 3 else p.offer3

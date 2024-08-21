@@ -555,8 +555,6 @@ class ResultsWaitPage(WaitPage):
                         'Number of employed workers is not 1 or 2' + str(p.num_workers_employed) + ' ' + str(
                             len(matching_offers)) + ' ' + str(p.participant.playerID))
 
-
-
                 elif p.num_workers_employed == 1:
                     for o in matching_offers:
                         p.total_effort_received += o.effort_given
@@ -605,9 +603,12 @@ class ResultsWaitPage(WaitPage):
                     p.payoff_tokens = 0
                     p.payoff_points = 0
             elif p.is_employer:  # Employer profits
-                p.payoff_tokens = p.effort_worth_points - p.total_wage_paid_tokens
-                p.payoff_points = p.effort_worth_points - p.total_wage_paid_points
-
+                if p.participant.vars['currency_is_points'] is True:
+                    p.payoff_points = p.effort_worth_points - p.total_wage_paid_points
+                    p.payoff_tokens = p.payoff_points * session.config['exchange_rate']
+                else:
+                    p.payoff_tokens = p.effort_worth_points - p.total_wage_paid_tokens
+                    p.payoff_points = p.payoff_tokens / session.config['exchange_rate']
             p.participant.vars['total_points'].append(p.payoff_points)
             p.participant.vars['total_tokens'].append(p.payoff_tokens)
 
