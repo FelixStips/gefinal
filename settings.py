@@ -23,12 +23,12 @@ SESSION_CONFIGS = [
             'intro',
             'market_stage',
             'questionnaire',
-            # 'questionnaire2',
-            # 'end',
+            'questionnaire2',
+            'end',
         ],
         use_browser_bots=False,
         num_demo_participants=33,
-        final=False,  # Display instructions
+        final=True,  # Display instructions
 
         predicted_effort=[0, 0, 0, 0, 3, 8, 13, 18, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 71, 76],
         # Predicted effort in part 2
