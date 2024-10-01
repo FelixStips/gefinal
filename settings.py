@@ -30,8 +30,7 @@ SESSION_CONFIGS = [
         num_demo_participants=33,
         final=True,  # Display instructions
 
-        predicted_effort=[0, 0, 0, 0, 3, 8, 13, 18, 22, 27, 32, 37, 42, 47, 52, 57, 62, 67, 71, 76],
-        # Predicted effort in part 2
+        predicted_effort=[0, 0, 4, 8, 13, 17, 21, 25, 29, 33, 37, 41, 45, 50, 54, 58, 62, 66, 70, 74], # Predicted effort in part 2
 
         market_timeout_seconds=150,  # Duration of market stage in seconds
         countdown_seconds=3,  # Duration of countdown in seconds

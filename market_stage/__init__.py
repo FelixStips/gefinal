@@ -735,7 +735,8 @@ class AnotherInstruction(MidPage):
         average_wage = 0 if average_wage is None else int(average_wage)
         average_effort = 0 if average_effort is None else int(average_effort)
         effort_caller = math.floor(average_wage / 5) - 1
-        print(effort_caller)
+        effort_caller = 0 if effort_caller < 0 else effort_caller
+        print('effort caller:', effort_caller)
         print('$' * 100)
         predicted_effort = session.config['predicted_effort'][effort_caller]
 
