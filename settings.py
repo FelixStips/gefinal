@@ -30,7 +30,7 @@ SESSION_CONFIGS = [
         num_demo_participants=33,
         final=True,  # Display instructions
 
-        predicted_effort=[0, 0, 4, 8, 13, 17, 21, 25, 29, 33, 37, 41, 45, 50, 54, 58, 62, 66, 70, 74], # Predicted effort in part 2
+        predicted_effort=[1, 5, 10, 14, 19, 23, 28, 32, 37, 41, 46, 50, 55, 59, 64, 68, 73, 77, 82, 86], # Predicted effort in part 2
 
         market_timeout_seconds=150,  # Duration of market stage in seconds
         countdown_seconds=3,  # Duration of countdown in seconds
@@ -50,8 +50,7 @@ SESSION_CONFIGS = [
         size_small_market=11,  # Number of players in small market
         num_employers_large_market=5,  # Number of employers in large market
         num_employers_small_market=5,  # Number of employers in small market
-        migration_large_shock_size=5,
-        # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
+        migration_large_shock_size=5,  # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
         migration_small_shock_size=1,  # Number of migrants in small migration shock
         worker_example_wage=50,  # Wage in the worker example in points
     )]
