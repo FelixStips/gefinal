@@ -27,7 +27,6 @@ class Player(BasePlayer):
     is_employer = models.BooleanField()
     large_market = models.BooleanField()
     small_market = models.BooleanField()
-    is_employer = models.BooleanField()
     playerID = models.IntegerField()
     string_role = models.StringField()
     total_points = models.FloatField()

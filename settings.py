@@ -15,20 +15,23 @@ ROOMS = [
 
 # git add .; git commit -m 'whatever'; git push origin main
 
+
+
 SESSION_CONFIGS = [
     dict(
         name='main',
         display_name="Main",
-        app_sequence=[
+        app_sequence = [
             'intro',
             'market_stage',
+            'prequestionnaire',
             'questionnaire',
             'questionnaire2',
             'end',
         ],
         use_browser_bots=False,
-        num_demo_participants=33,
-        final=True,  # Display instructions
+        num_demo_participants=9,
+        final=False,  # Display instructions
 
         predicted_effort=[1, 5, 10, 14, 19, 23, 28, 32, 37, 41, 46, 50, 55, 59, 64, 68, 73, 77, 82, 86], # Predicted effort in part 2
 
@@ -44,13 +47,13 @@ SESSION_CONFIGS = [
         MPL_low=[80, 70],  # Revenue low effort for 1 or 2 workers
         effort_names=['Low', 'Normal'],  # Names of effort levels
         effort_costs_points=[10, 20],  # Effort costs for low and high effort, in points
-        total_rounds=16,
-        shock_after_rounds=8,  # Number of rounds before migration shock
-        size_large_market=11,  # Number of players in each large market (note: large and small does not mean anything)
-        size_small_market=11,  # Number of players in small market
-        num_employers_large_market=5,  # Number of employers in large market
-        num_employers_small_market=5,  # Number of employers in small market
-        migration_large_shock_size=5,  # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
+        total_rounds=2,
+        shock_after_rounds=1,  # Number of rounds before migration shock
+        size_large_market=3,  # Number of players in each large market (note: large and small does not mean anything)
+        size_small_market=3,  # Number of players in small market
+        num_employers_large_market=1,  # Number of employers in large market
+        num_employers_small_market=1,  # Number of employers in small market
+        migration_large_shock_size=1,  # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
         migration_small_shock_size=1,  # Number of migrants in small migration shock
         worker_example_wage=50,  # Wage in the worker example in points
     )]

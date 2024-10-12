@@ -21,7 +21,7 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
     playerID = models.IntegerField()
-    age = models.StringField(
+    age = models.IntegerField(
         label="What is your age?",
         min=0,
         max=100)
