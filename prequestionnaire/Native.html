@@ -14,19 +14,142 @@
 </style>
 
 
-    <div class="card">
-        <div class="card-body">
-            <p>
-                We would like to know more about your experience in part 2 (after the mid-break).
-            </p>
-            <p>
-                Please answer all questions considering <u>your experiences during the second part</u> of the experiment.
-            </p>
-        </div>
+<div class="card">
+    <div class="card-body">
+        <p>
+            We would like to know more about your experience in part 2 (after the mid-break).
+        </p>
+        <p>
+            Please answer all questions considering <u>your experiences during the second part</u> of the experiment.
+        </p>
     </div>
+</div>
+<br><br>
 
 
-    <br>
+<div class="card">
+  <div class="card-body">
+
+        {% formfield 'nat_motivation_change' %}
+        <br>
+
+
+
+
+        {% formfield 'nat_wage_perception' %}
+        <br>
+        <div id="wage_increase" style="display: none;">
+            {% formfield 'nat_wage_increase_percentage' %}
+             <br>
+        </div>
+        <div id="wage_decrease" style="display: none;">
+            {% formfield 'nat_wage_decrease_percentage' %}
+             <br>
+        </div>
+
+        {% formfield 'nat_wage_fairness' %}
+        <br>
+
+        {% formfield 'nat_wage_adjustment_reasonable' %}
+        <br>
+
+        {% formfield 'nat_unemployment_risk' %}
+        <br>
+
+        <p>
+            6. Which of the following emotions did you experience in response to the arrival of new workers in the market? <br>
+            (Please select all that apply)
+        </p>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="1" name="Threatened">
+          <label class="form-check-label">Threatened</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="1" name="Confident">
+          <label class="form-check-label">Confident</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="1" name="Resentful_employers">
+          <label class="form-check-label">Resentful toward employers</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="1" name="Resentful_workers">
+          <label class="form-check-label">Resentful toward workers</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="1" name="Grateful_employers">
+          <label class="form-check-label">Grateful toward employers</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="1" name="Grateful_workers">
+          <label class="form-check-label">Grateful toward workers</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="1" name="Indifferent">
+          <label class="form-check-label">Indifferent</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="1" name="Other">
+          <label class="form-check-label">Other</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="1" name="No_emotion">
+          <label class="form-check-label">No emotion</label>
+        </div>
+ </div>
+</div>
+
+
+
+    <br><br>
     {{ next_button }}
 
 {{ endblock }}
+
+{% block scripts %}
+
+    <script>
+        // Function to show/hide fields based on nat_wage_perception choice
+        function updateWageFields() {
+            const wagePerception = document.querySelector('input[name="nat_wage_perception"]:checked');
+
+            if (wagePerception) {
+                // Get the selected value
+                const selectedValue = wagePerception.value;
+
+                // Show/hide fields based on the selected value (1 = increase, 2 = decrease)
+                if (selectedValue === 'higher') {
+                    document.getElementById('wage_increase').style.display = 'block';
+                    document.getElementById('wage_decrease').style.display = 'none';
+                } else if (selectedValue === 'lower') {
+                    document.getElementById('wage_increase').style.display = 'none';
+                    document.getElementById('wage_decrease').style.display = 'block';
+                } else {
+                    // Hide both if neither option is selected
+                    document.getElementById('wage_increase').style.display = 'none';
+                    document.getElementById('wage_decrease').style.display = 'none';
+                }
+            }
+        }
+
+        // Attach event listeners to all radio buttons in nat_wage_perception
+        document.querySelectorAll('input[name="nat_wage_perception"]').forEach(function(elem) {
+            elem.addEventListener('change', updateWageFields);
+        });
+
+        // Call the function on page load to ensure the correct field is shown
+        window.onload = function() {
+            updateWageFields();
+        };
+    </script>
+
+{% endblock %}

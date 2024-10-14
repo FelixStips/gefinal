@@ -14,8 +14,8 @@ ROOMS = [
 ]
 
 # git add .; git commit -m 'whatever'; git push origin main
-
-
+# otree resetdb --noinput
+# otree test
 
 SESSION_CONFIGS = [
     dict(
@@ -29,9 +29,9 @@ SESSION_CONFIGS = [
             'questionnaire2',
             'end',
         ],
-        use_browser_bots=False,
+        use_browser_bots=True,
         num_demo_participants=9,
-        final=False,  # Display instructions
+        final=True,  # Display instructions
 
         predicted_effort=[1, 5, 10, 14, 19, 23, 28, 32, 37, 41, 46, 50, 55, 59, 64, 68, 73, 77, 82, 86], # Predicted effort in part 2
 

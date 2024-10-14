@@ -13,28 +13,43 @@
   }
 </style>
 
-    <div class="card">
-        <div class="card-body">
-            <p>
-                We would like to know more about your experience in part 2 (after the mid-break).
-            </p>
-            <p>
-                Please answer all questions considering <u>your experiences during the second part</u> of the experiment.
-            </p>
-        </div>
+
+<div class="card">
+    <div class="card-body">
+        <p>
+            We would like to know more about your experience in part 2 (after the mid-break).
+        </p>
+        <p>
+            Please answer all questions considering <u>your experiences during the second part</u> of the experiment.
+        </p>
     </div>
-
-<br>
-
-<br>
+</div>
+<br><br>
 
 
-    Employer
+<div class="card">
+  <div class="card-body">
 
-<br>
+        {% formfield 'empl_effort_expectation' %}
+        <br>
+
+        {% formfield 'empl_retaining_workers' %}
+        <br>
+
+        {% formfield 'empl_hiring_confidence' %}
+        <br>
+
+        {% formfield 'empl_strategy' %}
+        <br>
+
+ </div>
+</div>
 
 
-    <br>
+
+    <br><br>
     {{ next_button }}
 
 {{ endblock }}
+
+

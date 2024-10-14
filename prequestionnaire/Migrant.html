@@ -5,7 +5,7 @@
 {{ block content }}
 
 <style>
-         body {
+    body {
     background-color: #f8f9fa;
     font-family: Arial, sans-serif;
     color: #333;
@@ -14,19 +14,89 @@
 </style>
 
 
-    <div class="card">
-        <div class="card-body">
-            <p>
-                We would like to know more about your experience in part 2 (after the mid-break).
-            </p>
-            <p>
-                Please answer all questions considering <u>your experiences during the second part</u> of the experiment.
-            </p>
-        </div>
+<div class="card">
+    <div class="card-body">
+        <p>
+            We would like to know more about your experience in part 2 (after the mid-break).
+        </p>
+        <p>
+            Please answer all questions considering <u>your experiences during the second part</u> of the experiment.
+        </p>
     </div>
+</div>
+<br><br>
 
 
-    <br>
+<div class="card">
+  <div class="card-body">
+
+        {% formfield 'mig_wage_perception' %}
+
+        <div id="wage_increase" style="display: none;">
+            {% formfield 'mig_wage_increase_percentage' %}
+             <br>
+        </div>
+        <div id="wage_decrease" style="display: none;">
+            {% formfield 'mig_wage_decrease_percentage' %}
+             <br>
+        </div>
+
+        {% formfield 'mig_motivation_change' %}
+        <br>
+
+      {% formfield 'mig_motivation_evolution' %}
+        <br>
+
+
+        {% formfield 'mig_pressure_to_work_harder' %}
+        <br>
+
+
+ </div>
+</div>
+
+
+
+    <br><br>
     {{ next_button }}
 
 {{ endblock }}
+
+{% block scripts %}
+
+    <script>
+        // Function to show/hide fields based on nat_wage_perception choice
+        function updateWageFields() {
+            const wagePerception = document.querySelector('input[name="mig_wage_perception"]:checked');
+
+            if (wagePerception) {
+                // Get the selected value
+                const selectedValue = wagePerception.value;
+
+                // Show/hide fields based on the selected value (1 = increase, 2 = decrease)
+                if (selectedValue === 'higher') {
+                    document.getElementById('wage_increase').style.display = 'block';
+                    document.getElementById('wage_decrease').style.display = 'none';
+                } else if (selectedValue === 'lower') {
+                    document.getElementById('wage_increase').style.display = 'none';
+                    document.getElementById('wage_decrease').style.display = 'block';
+                } else {
+                    // Hide both if neither option is selected
+                    document.getElementById('wage_increase').style.display = 'none';
+                    document.getElementById('wage_decrease').style.display = 'none';
+                }
+            }
+        }
+
+        // Attach event listeners to all radio buttons in nat_wage_perception
+        document.querySelectorAll('input[name="mig_wage_perception"]').forEach(function(elem) {
+            elem.addEventListener('change', updateWageFields);
+        });
+
+        // Call the function on page load to ensure the correct field is shown
+        window.onload = function() {
+            updateWageFields();
+        };
+    </script>
+
+{% endblock %}
