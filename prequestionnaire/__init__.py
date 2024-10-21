@@ -98,7 +98,7 @@ class Player(BasePlayer):
             "I don’t know"
         ],
         label="3. How confident were you in your ability to hire workers in each round?",
-        widget=widgets.RadioSelectHorizontal
+        widget=widgets.RadioSelect
     )
     empl_strategy = models.StringField(
         choices=[
