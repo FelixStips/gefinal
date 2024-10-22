@@ -31,7 +31,7 @@ SESSION_CONFIGS = [
         ],
         use_browser_bots=False,
         num_demo_participants=33,
-        final=False,  # Display instructions
+        final=True,  # Display instructions
 
         predicted_effort=[1, 5, 10, 14, 19, 23, 28, 32, 37, 41, 46, 50, 55, 59, 64, 68, 73, 77, 82, 86], # Predicted effort in part 2
 
