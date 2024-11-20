@@ -1,3 +1,3 @@
 # gefinal
 
-Work in progress, not recommended to use.
+Use at own responsibility and initiative if you decide to.
