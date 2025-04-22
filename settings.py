@@ -30,8 +30,8 @@ SESSION_CONFIGS = [
             'end',
         ],
         use_browser_bots=False,
-        num_demo_participants=12,
-        final=False,  # Display instructions
+        num_demo_participants=33,
+        final=True,  # Display instructions
 
         predicted_effort=[1, 5, 10, 14, 19, 23, 28, 32, 37, 41, 46, 50, 55, 59, 64, 68, 73, 77, 82, 86], # Predicted effort in part 2
 
@@ -47,13 +47,13 @@ SESSION_CONFIGS = [
         MPL_low=[80, 70],  # Revenue low effort for 1 or 2 workers
         effort_names=['Low', 'Normal'],  # Names of effort levels
         effort_costs_points=[10, 20],  # Effort costs for low and high effort, in points
-        total_rounds=16,
-        shock_after_rounds=2,  # Number of rounds before migration shock
-        size_large_market=4,  # Number of players in each large market (note: large and small does not mean anything)
-        size_small_market=4,  # Number of players in small market
-        num_employers_large_market=2,  # Number of employers in large market
-        num_employers_small_market=2,  # Number of employers in small market
-        migration_large_shock_size=1,  # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
+        total_rounds=6,
+        shock_after_rounds=3,  # Number of rounds before migration shock
+        size_large_market=11,  # Number of players in each large market (note: large and small does not mean anything)
+        size_small_market=11,  # Number of players in small market
+        num_employers_large_market=5,  # Number of employers in large market
+        num_employers_small_market=5,  # Number of employers in small market
+        migration_large_shock_size=5,  # Number of migrants in large migration shock (note: large and small shock should be equal to workers in small market)
         migration_small_shock_size=1,  # Number of migrants in small migration shock
         worker_example_wage=50,  # Wage in the worker example in points
     )]
